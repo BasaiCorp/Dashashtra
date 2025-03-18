@@ -10,26 +10,26 @@
     "secret": "change this website session secret password, make sure to change this for your website's security"
   },
   "pterodactyl": {
-    "domain": "https://panel.example.com",
-    "key": "your-api-key-here"
+    "domain": "https://panel.flaxynodes.fun",
+    "key": "ptla_tZ14ckDk3SRfrOHj90ube5ldxueVcUwAwcJQOOCO8ZE"
   },
   "database": "database.sqlite",
   "api": {
     "client": {
-       "api": {
-         "enabled": true,
-         "code": "api token here, anyone who has access to this token can ran administrator settings"
-       },
-       "bot": {
-         "token": "MTM1MTAzOTU3OTM3Mjc4MTcxMA.Gr58UG.L9l6xOufNmdjQrA2jxORu0-0qKVrDArA1yxDTo",
-         "guildId": "1338843953520443407",
-         "prefix": "!",
-         "joinguild": {
-           "_comment": "The Discord bot must be in these servers and have invite permissions.",
-           "enabled": false,
-           "guildid": ["1338843953520443407", "1299405261496123402"],
-           "forcejoin": false,
-           "registeredrole": null
+      "api": {
+        "enabled": true,
+        "code": "api token here, anyone who has access to this token can ran administrator settings"
+      },
+      "bot": {
+        "token": "MTM1MTAzOTU3OTM3Mjc4MTcxMA.Gr58UG.L9l6xOufNmdjQrA2jxORu0-0qKVrDArA1yxDTo",
+        "guildId": "1338843953520443407",
+        "prefix": "fn!",
+        "joinguild": {
+          "_comment": "The Discord bot must be in these servers and have invite permissions.",
+          "enabled": false,
+          "guildid": ["1338843953520443407", "1299405261496123402"],
+          "forcejoin": false,
+          "registeredrole": null
         }
       },
       "webhook": {
@@ -82,9 +82,7 @@
       },
       "ratelimits": {
         "enabled": true,
-
         "trust x-forwarded-for": true,
-
         "requests": 30,
         "per second": 60
       },
@@ -102,7 +100,6 @@
       "locations": {
         "1": {
           "name": "Location Name",
-
           "_comment": "Make 'package' be null to allow anyone with enough resources in their plan to create a server with this location. Also, make the 'package' variable an array, like [], with the location names with quotes to make a user be required to have a plan in order to use the package.",
           "package": null
         }
@@ -189,27 +186,23 @@
       "_comment": "You can make an arc.io widget on https://arc.io. You can get money using arc.io.",
       "enabled": false,
       "widgetid": "arc.io widget id here",
-
-        "afk page": {
-          "_comment": "This will not effect any current arc.io sessions, and will require a restart to kick everyone out of the websocket sesison.",
-          "_comment2": "Make sure coins are enabled if you choose to enable this option!",
-          "enabled": false,
-
-          "_comment3": "If you change the path, you need to restart for it to take full effect.",
-          "path": "afkwspath",
-
-          "_comment4": "This afk page will give the users [coins variable] coins every [every variable] seconds.",
-          "every": 60,
-
-          "_comment5": "The coins variable is meant to not be under 1. There may be bugs if the coins variable is less than 1.",
-          "coins": 1
-        }
+      "afk page": {
+        "_comment": "This will not effect any current arc.io sessions, and will require a restart to kick everyone out of the websocket sesison.",
+        "_comment2": "Make sure coins are enabled if you choose to enable this option!",
+        "enabled": false,
+        "_comment3": "If you change the path, you need to restart for it to take full effect.",
+        "path": "afkwspath",
+        "_comment4": "This afk page will give the users [coins variable] coins every [every variable] seconds.",
+        "every": 60,
+        "_comment5": "The coins variable is meant to not be under 1. There may be bugs if the coins variable is less than 1.",
+        "coins": 1
+      }
     }
   },
   "discord": {
-    "client_id": "your-client-id",
-    "client_secret": "your-client-secret",
+    "client_id": "1351039579372781710",
+    "client_secret": "pcmnRi3Edk5ZHg6xO1wP4bqdIpWvjtHE",
     "callback_url": "http://localhost:3000/auth/discord/callback",
-    "guild_id": "your-guild-id"
+    "guild_id": "1338843953520443407"
   }
 }
