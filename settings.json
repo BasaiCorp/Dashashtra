@@ -1,14 +1,17 @@
 {
-  "version": "0.4.4-alpha",
+  "version": "0.1.2",
   "defaulttheme": "default",
   "auththeme": "custom",
   "website": {
+    "name": "Flaxy Nodes",
+    "url": "http://localhost:3000",
     "port": 3000,
+    "favicon": "https://cdn.discordapp.com/attachments/1234567890/1234567890/logo.png",
     "secret": "change this website session secret password, make sure to change this for your website's security"
   },
   "pterodactyl": {
-    "domain": "https://panel.flaxynodes.fun",
-    "key": "ptla_tZ14ckDk3SRfrOHj90ube5ldxueVcUwAwcJQOOCO8ZE"
+    "domain": "https://panel.example.com",
+    "key": "your-api-key-here"
   },
   "database": "database.sqlite",
   "api": {
@@ -30,12 +33,10 @@
         }
       },
       "webhook": {
-        "_comment": "URL of the webhook to send messages to.",
-        "webhook_url": "",
+        "enabled": true,
+        "url": "your-webhook-url",
         "auditlogs": {
-          "_comment": "This feature allows you to log actions, and get an overview of a users actions (only works if done with dashactyl, not ptero)",
-          "enabled": false,
-          "_comment2": "The types of notifications disabled. Values: ADMIN, LOGIN, SERVER, COUPONREDEEM",
+          "enabled": true,
           "disabled": []
         }
       },
@@ -48,8 +49,9 @@
         "regen": true,
         "server": {
           "create": true,
-          "modify": true,
-          "delete": true
+          "delete": true,
+          "suspend": true,
+          "unsuspend": true
         },
         "overresourcessuspend": false,
         "renewsuspendsystem": {
@@ -57,6 +59,11 @@
           "enabled": false,
           "time": 3600,
           "cost": 0
+        },
+        "user": {
+          "create": true,
+          "delete": true,
+          "update": true
         }
       },
       "oauth2": {
@@ -198,5 +205,11 @@
           "coins": 1
         }
     }
+  },
+  "discord": {
+    "client_id": "your-client-id",
+    "client_secret": "your-client-secret",
+    "callback_url": "http://localhost:3000/auth/discord/callback",
+    "guild_id": "your-guild-id"
   }
 }

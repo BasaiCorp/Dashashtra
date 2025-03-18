@@ -447,13 +447,13 @@
 												<%= server.id %>
 											</td>
 											<td class="px-6 py-4">
-												<%= server.name %>
+												<%= server.name || 'Unnamed Server' %>
 											</td>
 											<td class="px-6 py-4">
-												<%= server.user %>
+												<%= server.user || 'Unknown User' %>
 											</td>
 											<td class="px-6 py-4">
-												<%= server.node %>
+												<%= server.node || 'Unknown Node' %>
 											</td>
 											<td class="px-6 py-4">
 												<% if (server.suspended) { %>
@@ -464,9 +464,9 @@
 											</td>
 											<td class="px-6 py-4">
 												<small>
-													RAM: <%= server.limits.memory %>MB<br>
-													CPU: <%= server.limits.cpu %>%<br>
-													Disk: <%= server.limits.disk %>MB
+													RAM: <%= server.limits?.memory || 0 %>MB<br>
+													CPU: <%= server.limits?.cpu || 0 %>%<br>
+													Disk: <%= server.limits?.disk || 0 %>MB
 												</small>
 											</td>
 											<td class="px-6 py-4 flex gap-2">
@@ -537,23 +537,23 @@
 														<form action="/admin/servers/<%= server.id %>/build" method="POST">
 															<div class="mb-3">
 																<label class="form-label">Memory Limit (MB)</label>
-																<input type="number" class="form-control" name="memory" value="<%= server.limits.memory %>" required>
+																<input type="number" class="form-control" name="memory" value="<%= server.limits?.memory || 0 %>" required>
 															</div>
 															<div class="mb-3">
 																<label class="form-label">CPU Limit (%)</label>
-																<input type="number" class="form-control" name="cpu" value="<%= server.limits.cpu %>" required>
+																<input type="number" class="form-control" name="cpu" value="<%= server.limits?.cpu || 0 %>" required>
 															</div>
 															<div class="mb-3">
 																<label class="form-label">Disk Space (MB)</label>
-																<input type="number" class="form-control" name="disk" value="<%= server.limits.disk %>" required>
+																<input type="number" class="form-control" name="disk" value="<%= server.limits?.disk || 0 %>" required>
 															</div>
 															<div class="mb-3">
 																<label class="form-label">Swap Space (MB)</label>
-																<input type="number" class="form-control" name="swap" value="<%= server.limits.swap %>" required>
+																<input type="number" class="form-control" name="swap" value="<%= server.limits?.swap || 0 %>" required>
 															</div>
 															<div class="mb-3">
 																<label class="form-label">IO Priority</label>
-																<input type="number" class="form-control" name="io" value="<%= server.limits.io %>" required>
+																<input type="number" class="form-control" name="io" value="<%= server.limits?.io || 0 %>" required>
 															</div>
 															<button type="submit" class="btn btn-primary">Save Changes</button>
 														</form>

@@ -8,6 +8,7 @@ const ejs = require("ejs");
 const adminjs = require("./admin.js");
 const renew = require("./renewal.js");
 const path = require('path');
+const chalk = require('chalk');
 
 // Helper function to convert hex to decimal
 function hexToDecimal(hex) {
@@ -314,6 +315,105 @@ router.get("/delete", async (req, res) => {
     await db.delete("server-" + req.query.id);
 
     res.redirect(theme.settings.redirect.serverdeletion || "/");
+});
+
+// Edit server route
+router.get('/edit/:id', async (req, res) => {
+    if (!req.session.userinfo || !req.session.pterodactyl) {
+        return res.redirect('/login');
+    }
+
+    try {
+        const serverId = req.params.id;
+        const theme = indexjs.get(req);
+
+        // Get server details
+        const server = await getServerById(serverId);
+        if (!server) {
+            return res.redirect('/servers?err=SERVERNOTFOUND');
+        }
+
+        // Check if user owns this server
+        if (server.user !== req.session.pterodactyl.id) {
+            return res.redirect('/servers?err=NOTOWNER');
+        }
+
+        // Render the edit page
+        ejs.renderFile(
+            `./themes/${theme.name}/edit.ejs`,
+            await eval(indexjs.renderdataeval),
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[SERVERS] Error rendering edit page:`));
+                    console.log(err);
+                    return res.send("An error has occurred while loading the edit page. Please contact an administrator to fix this.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error(chalk.red('[SERVERS] Error loading edit page:'), error);
+        res.redirect('/servers?err=LOADERROR');
+    }
+});
+
+// Update server route
+router.put('/:id', async (req, res) => {
+    if (!req.session.userinfo || !req.session.pterodactyl) {
+        return res.status(401).json({ success: false, error: 'Not authenticated' });
+    }
+
+    try {
+        const serverId = req.params.id;
+        const { name, description, cpu, memory, disk } = req.body;
+
+        // Validate input
+        if (!name || isNaN(cpu) || isNaN(memory) || isNaN(disk)) {
+            return res.status(400).json({ success: false, error: 'Invalid input' });
+        }
+
+        // Get server details
+        const server = await getServerById(serverId);
+        if (!server) {
+            return res.status(404).json({ success: false, error: 'Server not found' });
+        }
+
+        // Check if user owns this server
+        if (server.user !== req.session.pterodactyl.id) {
+            return res.status(403).json({ success: false, error: 'Not authorized' });
+        }
+
+        // Update server details
+        await updateServerDetails(serverId, {
+            name,
+            description,
+            user: server.user,
+            external_id: server.external_id
+        });
+
+        // Update server build
+        await updateServerBuild(serverId, {
+            cpu,
+            memory,
+            disk,
+            swap: 0,
+            io: 500,
+            threads: null,
+            oom_disabled: false,
+            allocation_id: server.allocation,
+            feature_limits: {
+                databases: 0,
+                backups: 0,
+                allocations: 1
+            }
+        });
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error(chalk.red('[SERVERS] Error updating server:'), error);
+        res.status(500).json({ success: false, error: 'Failed to update server' });
+    }
 });
 
 // Export the router

@@ -75,7 +75,7 @@
         "footerad": true,
         "faviconlink": "https://camo.githubusercontent.com/d2e9b4ddcf7618efa123961ae270f7eaa83362f8/68747470733a2f2f6d656469612e646973636f72646170702e6e65742f6174746163686d656e74732f3730363937303631373437313330333736312f3736383630363132323134373730383936382f707465726f64616374796c2d70616e656c2e706e67",
         "home": {
-            "title": "Home - Dashactyl",
+            "title": "Home - Flaxy Nodes",
             "buttontext": {
                 "loggedin": {
                     "text": "Dashboard",
@@ -83,41 +83,46 @@
                 },
                 "loggedout": {
                     "_note": "This below supports HTML encoding.",
-
                     "text": "<img src=\"https://i.imgur.com/EYGXn9D.png\" width=\"25\" /> Login with Discord",
                     "link": "/login"
                 }
             }
         },
         "dashboard": {
-            "title": "Dashboard - Dashactyl"
+            "title": "Dashboard - Flaxy Nodes"
         },
         "servers": {
             "title": {
-                "list": "Servers - Dashactyl",
-                "create": "Create Server - Dashactyl",
-                "modify": "Modify Server - Dashactyl"
+                "list": "Servers - Flaxy Nodes",
+                "create": "Create Server - Flaxy Nodes",
+                "modify": "Modify Server - Flaxy Nodes"
             }
         },
-        "error": {
-            "title": "404 - Dashactyl"
+        "login": {
+            "title": "Login - Flaxy Nodes"
+        },
+        "register": {
+            "title": "Register - Flaxy Nodes"
         },
         "admin": {
             "title": {
-                "default": "Admin - Dashactyl"
+                "default": "Admin - Flaxy Nodes"
             }
         },
         "store": {
-            "title": "Store - Dashactyl"
+            "title": "Store - Flaxy Nodes"
         },
         "arcio": {
-            "title": "AFK Page - Dashactyl"
-        },
-        "maintenance": {
-            "title": "Maintenance - Dashactyl"
+            "title": "AFK Page - Flaxy Nodes"
         },
         "redeem": {
-            "title": "Redeem - Dashactyl"
+            "title": "Redeem - Flaxy Nodes"
+        },
+        "error": {
+            "title": "404 - Flaxy Nodes"
+        },
+        "maintenance": {
+            "title": "Maintenance - Flaxy Nodes"
         }
     }
 }

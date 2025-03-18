@@ -6,6 +6,7 @@ const fs = require("fs");
 const indexjs = require("../index.js");
 const ejs = require("ejs");
 const chalk = require('chalk');
+const db = require("../db.js");
 const { getUsers, getUserById, updateUser } = require('./fetch_users');
 const { getServers, getServerById, updateServerDetails, updateServerBuild, suspendServer, unsuspendServer, deleteServer } = require('./fetch_servers');
 const { getNodes, getNodeById, getNodeAllocations } = require('./fetch_nodes');
@@ -40,6 +41,11 @@ function hexToDecimal(hex) {
 // Middleware to check if user is admin
 async function checkAdmin(req, res, next) {
     try {
+        // First check if user is already marked as admin in session
+        if (req.session && req.session.isAdmin) {
+            return next();
+        }
+
         if (!req.session || !req.session.pterodactyl) {
             console.log(chalk.yellow('[ADMIN] Unauthorized access attempt - No session'));
             return res.redirect('/login');
@@ -95,27 +101,53 @@ router.get('/', checkAdmin, async (req, res) => {
             getUsers(),
             getServers()
         ]);
-
-        // Calculate statistics
-        const stats = {
-            totalUsers: users.length,
-            totalServers: servers.length,
-            activeServers: servers.filter(s => !s.suspended).length,
-            suspendedServers: servers.filter(s => s.suspended).length
-        };
-
-        res.render('admin/dashboard', {
-            title: 'Admin Dashboard',
-            users,
-            servers,
-            stats
-        });
+        
+        // Format server data to match template expectations
+        const formattedServers = servers.map(server => ({
+            ...server,
+            limits: {
+                memory: server.limits?.memory || 0,
+                cpu: server.limits?.cpu || 0,
+                disk: server.limits?.disk || 0,
+                swap: server.limits?.swap || 0,
+                io: server.limits?.io || 0
+            },
+            name: server.name || 'Unnamed Server',
+            description: server.description || '',
+            external_id: server.external_id || '',
+            suspended: server.suspended || false,
+            user: server.user || 'Unknown User',
+            node: server.node || 'Unknown Node'
+        }));
+        
+        // Get theme and render admin page
+        let theme = indexjs.get(req);
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        // Add users and servers to render data
+        renderData.users = users;
+        renderData.servers = formattedServers;
+        renderData.totalUsers = users.length;
+        renderData.totalServers = formattedServers.length;
+        renderData.activeUsers = Math.floor(users.length * 0.8); // Placeholder - replace with actual data
+        renderData.revenue = Math.floor(Math.random() * 5000); // Placeholder - replace with actual data
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/${theme.settings.pages.admin || 'admin.ejs'}`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[ADMIN] Error rendering admin page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the admin page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
     } catch (error) {
-        console.error(chalk.red('[ADMIN] Error loading admin dashboard:'), error);
-        res.status(500).render('404', { 
-            title: 'Error',
-            error: 'An error occurred while loading the admin dashboard.'
-        });
+        console.error(chalk.red('[ADMIN] Error in admin dashboard:'), error);
+        res.status(500).send("An error occurred while loading the admin dashboard. Please try again later.");
     }
 });
 

@@ -18,7 +18,19 @@ const defaultthemesettings = {
   pages: {},
   mustbeloggedin: [],
   mustbeadmin: [],
-  variables: {}
+  variables: {
+    home: {
+      name: "Flaxy Nodes",
+      title: "Flaxy Nodes - Premium Game Server Hosting",
+      description: "Premium game server hosting with unbeatable performance, reliability, and support. Start your gaming journey today."
+    },
+    store: {
+      title: "Store - Flaxy Nodes"
+    },
+    error: {
+      title: "Error - Flaxy Nodes"
+    }
+  }
 };
 
 module.exports.renderdataeval =
@@ -107,27 +119,9 @@ const ejs = require("ejs");
 const session = require("express-session");
 const indexjs = require("./index.js");
 
-// Import API routes
-const adminRoutes = require('./api/admin.js');
-
-// Register API routes
-app.use('/admin', adminRoutes.router);
-
-// Add middleware for parsing request bodies
-app.use(express.json({
-  inflate: true,
-  limit: '500kb',
-  reviver: null,
-  strict: true,
-  type: 'application/json',
-  verify: undefined
-}));
-
-// Add middleware for parsing form data
-app.use(express.urlencoded({ 
-  extended: true,
-  limit: '500kb'
-}));
+// Set up view engine
+app.set('view engine', 'ejs');
+app.set('views', './themes');
 
 // Sets up saving session data.
 let sessionStore;
@@ -161,6 +155,81 @@ app.use(session({
     cookie: {
         maxAge: 86400000 // 24 hours
     }
+}));
+
+// Root route handler
+app.get('/', async (req, res) => {
+    console.log('[ROOT] Processing request for root path');
+    
+    // If user is logged in and has valid Pterodactyl session, redirect to dashboard
+    if (req.session && req.session.userinfo && req.session.pterodactyl) {
+        try {
+            const user = await db.users.getUserById(req.session.userinfo.id);
+            if (user && user.pterodactyl_id === req.session.pterodactyl.id) {
+                console.log('[ROOT] User is logged in with valid session, redirecting to dashboard');
+                return res.redirect("/dashboard");
+            } else {
+                // Invalid session, clear it
+                req.session.destroy();
+            }
+        } catch (error) {
+            console.error('[ROOT] Error validating user session:', error);
+            req.session.destroy();
+        }
+    }
+    
+    // For non-logged-in users or invalid sessions, show the onboarding page
+    let theme = indexjs.get(req);
+    console.log(`[ROOT] Selected theme: ${theme.name}`);
+    console.log(`[ROOT] Theme index page: ${theme.settings.index}`);
+    
+    try {
+        console.log('[ROOT] Evaluating render data');
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        console.log('[ROOT] Rendering index page');
+        ejs.renderFile(
+            `./themes/${theme.name}/${theme.settings.index}`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[WEBSITE] Error rendering index page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the homepage. Please contact an administrator.");
+                }
+                console.log('[ROOT] Successfully rendered, sending response');
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.log(chalk.red(`[WEBSITE] Error processing index page:`), error);
+        return res.send("An error occurred while preparing data for the homepage. Please try again.");
+    }
+});
+
+// Import API routes
+const adminRoutes = require('./api/admin.js');
+const serverRoutes = require('./api/servers.js');
+
+// Register API routes
+app.use('/admin', adminRoutes.router);
+app.use('/api/servers', serverRoutes.router);
+
+// Add middleware for parsing request bodies
+app.use(express.json({
+  inflate: true,
+  limit: '500kb',
+  reviver: null,
+  strict: true,
+  type: 'application/json',
+  verify: undefined
+}));
+
+// Add middleware for parsing form data
+app.use(express.urlencoded({ 
+  extended: true,
+  limit: '500kb'
 }));
 
 // Load the website.
@@ -390,57 +459,6 @@ apifiles.forEach(file => {
     }
 });
 
-// Direct route handler for the root path - MUST be defined before API routes
-app.get('/', async (req, res) => {
-    console.log('[ROOT] Processing request for root path');
-    
-    // If user is logged in and has valid Pterodactyl session, redirect to dashboard
-    if (req.session.userinfo && req.session.pterodactyl) {
-        try {
-            const user = await db.users.getUserById(req.session.userinfo.id);
-            if (user && user.pterodactyl_id === req.session.pterodactyl.id) {
-                console.log('[ROOT] User is logged in with valid session, redirecting to dashboard');
-                return res.redirect("/dashboard");
-            } else {
-                // Invalid session, clear it
-                req.session.destroy();
-            }
-        } catch (error) {
-            console.error('[ROOT] Error validating user session:', error);
-            req.session.destroy();
-        }
-    }
-    
-    // For non-logged-in users or invalid sessions, show the onboarding page
-    let theme = indexjs.get(req);
-    console.log(`[ROOT] Selected theme: ${theme.name}`);
-    console.log(`[ROOT] Theme index page: ${theme.settings.index}`);
-    
-    try {
-        console.log('[ROOT] Evaluating render data');
-        const renderData = await eval(indexjs.renderdataeval);
-        
-        console.log('[ROOT] Rendering index page');
-        ejs.renderFile(
-            `./themes/${theme.name}/${theme.settings.index}`, 
-            renderData,
-            null,
-            function (err, str) {
-                if (err) {
-                    console.log(chalk.red(`[WEBSITE] Error rendering index page:`));
-                    console.log(err);
-                    return res.send("An error occurred while loading the homepage. Please contact an administrator.");
-                }
-                console.log('[ROOT] Successfully rendered, sending response');
-                res.send(str);
-            }
-        );
-    } catch (error) {
-        console.log(chalk.red(`[WEBSITE] Error processing index page:`), error);
-        return res.send("An error occurred while preparing data for the homepage. Please try again.");
-    }
-});
-
 // Explicit route handlers for login and register pages
 app.get('/login', async (req, res) => {
     console.log('[LOGIN] Processing request for login page');
@@ -578,7 +596,7 @@ app.all("*", async (req, res, next) => {
   }
 
   // Validate Pterodactyl session if it exists
-  if (req.session.pterodactyl) {
+  if (req.session && req.session.pterodactyl && req.session.userinfo) {
     try {
       const user = await db.users.getUserById(req.session.userinfo.id);
       if (!user || user.pterodactyl_id !== req.session.pterodactyl.id) {
@@ -597,7 +615,7 @@ app.all("*", async (req, res, next) => {
   
   // Add this to ensure root redirects to the onboarding page
   if (req._parsedUrl.pathname === "/") {
-    if (req.session.userinfo && req.session.pterodactyl) {
+    if (req.session && req.session.userinfo && req.session.pterodactyl) {
       return res.redirect("/dashboard");
     }
     // Default to showing the onboarding page (index.ejs) to non-logged-in users
@@ -605,7 +623,7 @@ app.all("*", async (req, res, next) => {
   
   // Allow regular users to access pages that require login
   if (theme.settings.mustbeloggedin.includes(req._parsedUrl.pathname)) {
-    if (!req.session.userinfo || !req.session.pterodactyl) {
+    if (!req.session || !req.session.userinfo || !req.session.pterodactyl) {
       return res.redirect("/login" + (req._parsedUrl.pathname.slice(0, 1) == "/" ? "?redirect=" + req._parsedUrl.pathname.slice(1) : ""));
     }
   }
@@ -618,7 +636,7 @@ app.all("*", async (req, res, next) => {
     }
     
     // For other routes that require admin access
-    if (!req.session.userinfo || !req.session.pterodactyl) {
+    if (!req.session || !req.session.userinfo || !req.session.pterodactyl) {
       return res.redirect("/login");
     }
     

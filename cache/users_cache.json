@@ -182,7 +182,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-18T08:15:19+00:00",
+                "updated_at": "2025-03-18T08:39:07+00:00",
                 "created_at": "2025-03-17T12:26:34+00:00"
               }
             }
@@ -504,8 +504,8 @@
                   "backups": 0
                 },
                 "user": 9,
-                "node": 2,
-                "allocation": 36,
+                "node": 1,
+                "allocation": 5,
                 "nest": 1,
                 "egg": 2,
                 "container": {
@@ -518,12 +518,12 @@
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
+                    "P_SERVER_LOCATION": "IN",
                     "P_SERVER_UUID": "8081c0b9-0399-46ee-8a8a-e0b0fd151b50",
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-18T07:05:35+00:00",
+                "updated_at": "2025-03-18T08:30:23+00:00",
                 "created_at": "2025-03-17T08:37:37+00:00"
               }
             }
@@ -1395,7 +1395,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-17T10:26:35+00:00",
+                "updated_at": "2025-03-18T08:50:41+00:00",
                 "created_at": "2025-03-17T10:11:00+00:00"
               }
             }

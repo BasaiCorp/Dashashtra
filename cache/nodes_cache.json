@@ -82,7 +82,7 @@
                 "alias": "in-1.flaxynodes.fun",
                 "port": 25569,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -93,7 +93,7 @@
                 "alias": "in-1.flaxynodes.fun",
                 "port": 25570,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -379,6 +379,55 @@
             {
               "object": "server",
               "attributes": {
+                "id": 6,
+                "external_id": null,
+                "uuid": "8081c0b9-0399-46ee-8a8a-e0b0fd151b50",
+                "identifier": "8081c0b9",
+                "name": "DEMON [20 april]",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 0,
+                  "swap": 0,
+                  "disk": 0,
+                  "io": 500,
+                  "cpu": 0,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 0
+                },
+                "user": 9,
+                "node": 1,
+                "allocation": 5,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "IN",
+                    "P_SERVER_UUID": "8081c0b9-0399-46ee-8a8a-e0b0fd151b50",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-18T08:30:23+00:00",
+                "created_at": "2025-03-17T08:37:37+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
                 "id": 34,
                 "external_id": null,
                 "uuid": "b5c25e97-f052-4d1e-87e9-4cba59949cf7",
@@ -656,7 +705,7 @@
                 "alias": "in2.flaxynodes.fun",
                 "port": 3004,
                 "notes": null,
-                "assigned": true
+                "assigned": false
               }
             },
             {
@@ -1771,55 +1820,6 @@
             {
               "object": "server",
               "attributes": {
-                "id": 6,
-                "external_id": null,
-                "uuid": "8081c0b9-0399-46ee-8a8a-e0b0fd151b50",
-                "identifier": "8081c0b9",
-                "name": "DEMON [20 april]",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 9,
-                "node": 2,
-                "allocation": 36,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "8081c0b9-0399-46ee-8a8a-e0b0fd151b50",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-18T07:05:35+00:00",
-                "created_at": "2025-03-17T08:37:37+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
                 "id": 7,
                 "external_id": null,
                 "uuid": "f41c9d35-a655-4b32-865d-818c25ed404f",
@@ -2254,7 +2254,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-17T10:26:35+00:00",
+                "updated_at": "2025-03-18T08:50:41+00:00",
                 "created_at": "2025-03-17T10:11:00+00:00"
               }
             },
@@ -2695,7 +2695,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-18T08:15:19+00:00",
+                "updated_at": "2025-03-18T08:39:07+00:00",
                 "created_at": "2025-03-17T12:26:34+00:00"
               }
             },
