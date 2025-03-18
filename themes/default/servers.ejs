@@ -1,389 +1,537 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="icon" type="image/png" href="<%= extra.faviconlink %>"/>
-    <title><%= extra.servers.title.list %></title>
-    <% if (settings.api.arcio.enabled == true) { %>
-        <script async src="https://arc.io/widget.min.js#<%= settings.api.arcio.widgetid %>"></script>
-    <% } %>	
-	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-
-	<!-- Fonts and icons -->
-	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>My Servers - <%= extra.home.name %></title>
+	<link rel="icon" type="image/png" href="<%= extra.faviconlink %>"/>
+	
+	<!-- Fonts and Icons -->
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	
+	<!-- Tailwind CSS -->
+	<script src="https://cdn.tailwindcss.com"></script>
 	<script>
-		WebFont.load({
-			google: {"families":["Lato:300,400,700,900"]},
-			custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['/assets/css/fonts.min.css']},
-			active: function() {
-				sessionStorage.fonts = true;
+		tailwind.config = {
+			darkMode: 'class',
+			theme: {
+				extend: {
+					fontFamily: {
+						sans: ['Inter', 'sans-serif'],
+					},
+					colors: {
+						primary: {
+							50: '#f0f9ff',
+							100: '#e0f2fe',
+							200: '#bae6fd',
+							300: '#7dd3fc',
+							400: '#38bdf8',
+							500: '#0ea5e9',
+							600: '#0284c7',
+							700: '#0369a1',
+							800: '#075985',
+							900: '#0c4a6e',
+							950: '#082f49',
+						},
+						dark: {
+							base: '#111827',
+							light: '#1F2937',
+							lighter: '#374151',
+							card: '#1E293B'
+						}
+					},
+					animation: {
+						'fade-in': 'fadeIn 0.5s ease-in-out',
+						'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+					},
+					keyframes: {
+						fadeIn: {
+							'0%': { opacity: '0' },
+							'100%': { opacity: '1' },
+						}
+					}
+				}
+			}
+		}
+	</script>
+	
+	<style>
+		body {
+			background-color: #0f172a;
+			color: #f1f5f9;
+			font-family: 'Inter', sans-serif;
+		}
+		.navbar {
+			background-color: rgba(15, 23, 42, 0.7);
+			backdrop-filter: blur(10px);
+			border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+		}
+		.sidebar {
+			background-color: #1e293b;
+			border-right: 1px solid rgba(148, 163, 184, 0.1);
+			transition: all 0.3s ease;
+		}
+		.card {
+			background-color: #1e293b;
+			border: 1px solid rgba(148, 163, 184, 0.1);
+			transition: all 0.3s ease;
+		}
+		.card:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+		}
+		.stat-card {
+			border: 1px solid rgba(148, 163, 184, 0.1);
+		}
+		.gradient-border {
+			position: relative;
+			border-radius: 0.5rem;
+			z-index: 0;
+			overflow: hidden;
+			padding: 1px;
+		}
+		.gradient-border::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			border-radius: 0.5rem;
+			padding: 2px;
+			background: linear-gradient(45deg, #0ea5e9, #8b5cf6, #ec4899);
+			-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+			-webkit-mask-composite: xor;
+			mask-composite: exclude;
+			z-index: -1;
+		}
+		.main-content {
+			animation: fadeIn 0.5s ease-in-out;
+		}
+		@keyframes fadeIn {
+			0% { opacity: 0; }
+			100% { opacity: 1; }
+		}
+		
+		/* Custom Scrollbar */
+		::-webkit-scrollbar {
+			width: 8px;
+		}
+		::-webkit-scrollbar-track {
+			background: #1e293b;
+		}
+		::-webkit-scrollbar-thumb {
+			background: #475569;
+			border-radius: 4px;
+		}
+		::-webkit-scrollbar-thumb:hover {
+			background: #64748b;
+		}
+		
+		.server-card {
+			transition: all 0.3s ease;
+		}
+		.server-card:hover {
+			transform: translateY(-2px);
+		}
+		
+		.status-dot {
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			display: inline-block;
+			margin-right: 6px;
+		}
+		.status-running {
+			background-color: #10b981;
+		}
+		.status-starting {
+			background-color: #f59e0b;
+		}
+		.status-stopping {
+			background-color: #f59e0b;
+		}
+		.status-offline {
+			background-color: #6b7280;
+		}
+	</style>
+</head>
+<body class="min-h-screen">
+	<!-- Calculate server resources -->
+	<%
+		let ram = 0;
+		let disk = 0;
+		let cpu = 0;
+		let servers = 0;
+		
+		if (pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data) {
+			servers = pterodactyl.relationships.servers.data.length;
+			
+			for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
+				ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
+				disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
+				cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
+			}
+		}
+		
+		const userData = {
+			id: userinfo.id,
+			username: userinfo.username || userinfo.email.split('@')[0],
+			email: userinfo.email,
+			isAdmin: typeof req.session !== 'undefined' ? req.session.isAdmin : false
+		};
+		
+		const packageData = typeof packages !== 'undefined' ? packages : {
+			ram: 0,
+			disk: 0,
+			cpu: 0,
+			servers: 0
+		};
+	%>
+
+	<!-- Navbar -->
+	<nav class="navbar fixed w-full h-16 z-10 px-4 py-2.5 flex items-center justify-between">
+		<div class="flex items-center">
+			<button id="sidebarBtn" class="sm:hidden mr-2 text-gray-300 hover:text-white">
+				<i class="fas fa-bars text-xl"></i>
+			</button>
+			<a href="/" class="flex items-center">
+				<img src="<%= extra.faviconlink %>" class="h-8 mr-3" alt="Logo">
+				<span class="self-center text-xl font-semibold whitespace-nowrap"><%= extra.home.name %></span>
+			</a>
+		</div>
+		
+		<div class="flex items-center gap-4">
+			<div class="relative inline-block">
+				<button id="dropdownBtn" class="flex items-center px-3 py-2 text-sm font-medium text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none">
+					<span class="mr-2"><%= userData.username %></span>
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+					</svg>
+				</button>
+				<div id="dropdownMenu" class="hidden absolute right-0 mt-2 bg-gray-800 rounded-lg shadow-lg overflow-hidden z-20" style="min-width: 10rem;">
+					<ul class="py-1 text-sm text-gray-200">
+						<li>
+							<a href="/settings" class="block px-4 py-2 hover:bg-gray-700">Settings</a>
+						</li>
+						<% if (userData.isAdmin) { %>
+						<li>
+							<a href="/admin" class="block px-4 py-2 hover:bg-gray-700">Admin Panel</a>
+						</li>
+						<% } %>
+						<li>
+							<a href="/auth/logout" class="block px-4 py-2 hover:bg-gray-700 text-red-400">Logout</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</nav>
+	
+	<!-- Sidebar and Main Content -->
+	<div class="flex h-screen pt-16">
+		<!-- Sidebar -->
+		<aside id="sidebar" class="fixed left-0 top-16 h-full z-10 w-64 transition-transform -translate-x-full sm:translate-x-0">
+			<div class="h-full px-3 pb-4 overflow-y-auto sidebar">
+				<ul class="space-y-2 pt-4 font-medium">
+					<li>
+						<a href="/dashboard" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
+							<i class="fas fa-gauge-high w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
+							<span class="ms-3">Dashboard</span>
+						</a>
+					</li>
+					<li>
+						<a href="/servers" class="flex items-center p-3 text-white rounded-lg bg-primary-600 group">
+							<i class="fas fa-server w-5 h-5 text-white transition duration-75"></i>
+							<span class="ms-3">My Servers</span>
+						</a>
+					</li>
+					<li>
+						<a href="/create" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
+							<i class="fas fa-plus w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
+							<span class="ms-3">Create Server</span>
+						</a>
+					</li>
+					<li>
+						<a href="/store" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
+							<i class="fas fa-shopping-cart w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
+							<span class="ms-3">Resource Store</span>
+						</a>
+					</li>
+					<li>
+						<a href="/redeem" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
+							<i class="fas fa-gift w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
+							<span class="ms-3">Redeem Coupon</span>
+						</a>
+					</li>
+				</ul>
+				
+				<div class="pt-4 mt-4 border-t border-gray-700">
+					<div class="px-3 py-4 rounded-lg bg-gray-800">
+						<h3 class="text-sm font-medium text-gray-400 mb-2">Resource Limits</h3>
+						<div class="space-y-3">
+							<!-- RAM Usage -->
+							<div>
+								<div class="flex justify-between text-xs mb-1">
+									<span>RAM: <%= ram %>MB</span>
+									<span><%= packageData.ram %>MB</span>
+								</div>
+								<div class="w-full bg-gray-700 rounded-full h-1.5">
+									<div class="bg-blue-500 h-1.5 rounded-full" style="width: <%= Math.min(100, (ram / (packageData.ram || 1)) * 100) %>%"></div>
+								</div>
+							</div>
+							
+							<!-- Disk Usage -->
+							<div>
+								<div class="flex justify-between text-xs mb-1">
+									<span>Disk: <%= disk %>MB</span>
+									<span><%= packageData.disk %>MB</span>
+								</div>
+								<div class="w-full bg-gray-700 rounded-full h-1.5">
+									<div class="bg-green-500 h-1.5 rounded-full" style="width: <%= Math.min(100, (disk / (packageData.disk || 1)) * 100) %>%"></div>
+								</div>
+							</div>
+							
+							<!-- CPU Usage -->
+							<div>
+								<div class="flex justify-between text-xs mb-1">
+									<span>CPU: <%= cpu %>%</span>
+									<span><%= packageData.cpu %>%</span>
+								</div>
+								<div class="w-full bg-gray-700 rounded-full h-1.5">
+									<div class="bg-purple-500 h-1.5 rounded-full" style="width: <%= Math.min(100, (cpu / (packageData.cpu || 1)) * 100) %>%"></div>
+								</div>
+							</div>
+							
+							<!-- Server Count -->
+							<div>
+								<div class="flex justify-between text-xs mb-1">
+									<span>Servers: <%= servers %></span>
+									<span><%= packageData.servers %></span>
+								</div>
+								<div class="w-full bg-gray-700 rounded-full h-1.5">
+									<div class="bg-amber-500 h-1.5 rounded-full" style="width: <%= Math.min(100, (servers / (packageData.servers || 1)) * 100) %>%"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</aside>
+		
+		<!-- Main Content -->
+		<div class="p-4 sm:ml-64 pt-5 w-full main-content">
+			<div class="p-4">
+				<!-- Page Header -->
+				<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+					<div>
+						<h1 class="text-3xl font-bold mb-2">My Servers</h1>
+						<p class="text-gray-400">Manage your game servers and applications.</p>
+					</div>
+					<a href="/create" class="mt-4 md:mt-0 inline-flex items-center justify-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-800 font-medium rounded-lg text-sm">
+						<i class="fas fa-plus mr-2"></i>
+						Create Server
+					</a>
+				</div>
+				
+				<!-- Server List -->
+				<% if (pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data && pterodactyl.relationships.servers.data.length > 0) { %>
+					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+						<% pterodactyl.relationships.servers.data.forEach(server => { %>
+							<div class="server-card bg-dark-card rounded-lg border border-gray-700 overflow-hidden">
+								<div class="p-5">
+									<div class="flex justify-between items-start mb-4">
+										<h2 class="text-xl font-semibold text-white"><%= server.attributes.name %></h2>
+										<div class="flex items-center text-xs font-medium text-gray-400">
+											<span class="status-dot status-<%= server.attributes.status || 'offline' %>"></span>
+											<span class="capitalize"><%= server.attributes.status || 'offline' %></span>
+										</div>
+									</div>
+									
+									<div class="space-y-3 mb-4">
+										<div>
+											<h3 class="text-xs font-medium text-gray-400 mb-1">Resources</h3>
+											<div class="grid grid-cols-3 gap-3">
+												<div class="text-center p-2 bg-gray-800 rounded-lg">
+													<div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mb-1.5 mx-auto">
+														<i class="fas fa-memory text-blue-400"></i>
+													</div>
+													<p class="text-sm font-medium text-white"><%= server.attributes.limits.memory %>MB</p>
+													<p class="text-xs text-gray-400">RAM</p>
+												</div>
+												
+												<div class="text-center p-2 bg-gray-800 rounded-lg">
+													<div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center mb-1.5 mx-auto">
+														<i class="fas fa-hdd text-green-400"></i>
+													</div>
+													<p class="text-sm font-medium text-white"><%= server.attributes.limits.disk %>MB</p>
+													<p class="text-xs text-gray-400">Disk</p>
+												</div>
+												
+												<div class="text-center p-2 bg-gray-800 rounded-lg">
+													<div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mb-1.5 mx-auto">
+														<i class="fas fa-microchip text-purple-400"></i>
+													</div>
+													<p class="text-sm font-medium text-white"><%= server.attributes.limits.cpu %>%</p>
+													<p class="text-xs text-gray-400">CPU</p>
+												</div>
+											</div>
+										</div>
+										
+										<div>
+											<div class="flex items-center justify-between text-xs mb-1">
+												<span class="font-medium text-gray-400">Server ID</span>
+												<span class="text-gray-300"><%= server.attributes.identifier.substring(0, 8) %>...</span>
+											</div>
+										</div>
+									</div>
+									
+									<div class="flex gap-2">
+										<a href="<%= settings.pterodactyl.domain %>/server/<%= server.attributes.identifier %>" target="_blank" 
+											class="flex-1 inline-flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 text-white font-medium rounded-lg text-sm">
+											<i class="fas fa-terminal mr-2"></i>
+											Console
+										</a>
+										<a href="/servers/edit/<%= server.attributes.id %>" 
+											class="inline-flex items-center justify-center px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg text-sm">
+											<i class="fas fa-edit"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						<% }); %>
+					</div>
+				<% } else { %>
+					<div class="bg-dark-card border border-gray-700 rounded-lg p-10 text-center">
+						<div class="w-20 h-20 rounded-full mx-auto mb-6 bg-gray-800 flex items-center justify-center">
+							<i class="fas fa-server text-3xl text-gray-400"></i>
+						</div>
+						<h2 class="text-xl font-semibold mb-3">No Servers Found</h2>
+						<p class="text-gray-400 mb-6 max-w-md mx-auto">You haven't created any servers yet. Get started by creating your first game server.</p>
+						<a href="/create" class="inline-flex items-center justify-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-800 font-medium rounded-lg text-sm">
+							<i class="fas fa-plus mr-2"></i>
+							Create First Server
+						</a>
+					</div>
+				<% } %>
+				
+				<!-- Resources Section -->
+				<div class="mt-8">
+					<h2 class="text-xl font-semibold mb-6">Resource Management</h2>
+					
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<!-- Resource Stats -->
+						<div class="bg-dark-card rounded-lg border border-gray-700 p-6">
+							<h3 class="text-lg font-medium mb-4">Your Resources</h3>
+							
+							<div class="space-y-5">
+								<!-- RAM Usage -->
+								<div>
+									<div class="flex justify-between mb-2">
+										<span class="text-gray-400">RAM</span>
+										<span class="text-gray-300"><%= ram %>MB / <%= packageData.ram %>MB</span>
+									</div>
+									<div class="w-full bg-gray-700 rounded-full h-2.5">
+										<div class="bg-blue-500 h-2.5 rounded-full" style="width: <%= Math.min(100, (ram / (packageData.ram || 1)) * 100) %>%"></div>
+									</div>
+								</div>
+								
+								<!-- Disk Usage -->
+								<div>
+									<div class="flex justify-between mb-2">
+										<span class="text-gray-400">Disk</span>
+										<span class="text-gray-300"><%= disk %>MB / <%= packageData.disk %>MB</span>
+									</div>
+									<div class="w-full bg-gray-700 rounded-full h-2.5">
+										<div class="bg-green-500 h-2.5 rounded-full" style="width: <%= Math.min(100, (disk / (packageData.disk || 1)) * 100) %>%"></div>
+									</div>
+								</div>
+								
+								<!-- CPU Usage -->
+								<div>
+									<div class="flex justify-between mb-2">
+										<span class="text-gray-400">CPU</span>
+										<span class="text-gray-300"><%= cpu %>% / <%= packageData.cpu %>%</span>
+									</div>
+									<div class="w-full bg-gray-700 rounded-full h-2.5">
+										<div class="bg-purple-500 h-2.5 rounded-full" style="width: <%= Math.min(100, (cpu / (packageData.cpu || 1)) * 100) %>%"></div>
+									</div>
+								</div>
+								
+								<!-- Server Count -->
+								<div>
+									<div class="flex justify-between mb-2">
+										<span class="text-gray-400">Servers</span>
+										<span class="text-gray-300"><%= servers %> / <%= packageData.servers %></span>
+									</div>
+									<div class="w-full bg-gray-700 rounded-full h-2.5">
+										<div class="bg-amber-500 h-2.5 rounded-full" style="width: <%= Math.min(100, (servers / (packageData.servers || 1)) * 100) %>%"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Quick Actions -->
+						<div class="bg-dark-card rounded-lg border border-gray-700 p-6">
+							<h3 class="text-lg font-medium mb-4">Need More Resources?</h3>
+							<p class="text-gray-400 mb-6">Upgrade your plan or purchase additional resources from our store.</p>
+							
+							<div class="space-y-4">
+								<a href="/store" class="flex items-center p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
+									<div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center mr-4">
+										<i class="fas fa-shopping-cart text-green-400"></i>
+									</div>
+									<div>
+										<h4 class="text-white font-medium">Visit Resource Store</h4>
+										<p class="text-sm text-gray-400">Purchase additional RAM, Disk, and CPU</p>
+									</div>
+									<i class="fas fa-chevron-right ml-auto text-gray-400"></i>
+								</a>
+								
+								<a href="/redeem" class="flex items-center p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
+									<div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center mr-4">
+										<i class="fas fa-gift text-purple-400"></i>
+									</div>
+									<div>
+										<h4 class="text-white font-medium">Redeem Coupon</h4>
+										<p class="text-sm text-gray-400">Use a coupon code to get free resources</p>
+									</div>
+									<i class="fas fa-chevron-right ml-auto text-gray-400"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		// Dropdown menu toggle
+		const dropdownBtn = document.getElementById('dropdownBtn');
+		const dropdownMenu = document.getElementById('dropdownMenu');
+		
+		dropdownBtn.addEventListener('click', () => {
+			dropdownMenu.classList.toggle('hidden');
+		});
+		
+		// Close dropdown when clicking outside
+		document.addEventListener('click', (event) => {
+			if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+				dropdownMenu.classList.add('hidden');
 			}
 		});
-	</script>
-
-	<!-- CSS Files -->
-	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/assets/css/atlantis.min.css">
-
-	<!-- CSS Just for demo purpose, don't include it in your project -->
-	<link rel="stylesheet" href="/assets/css/demo.css">
-</head>
-<body data-background-color="dark">
-	<div class="wrapper">
-		<div class="main-header">
-			<!-- Logo Header -->
-			<div class="logo-header" data-background-color="dark2">
-				
-				<a href="/dashboard" class="logo">
-					<p style="color:white;" class="navbar-brand"><%= extra.home.name %></p>
-				</a>
-				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon">
-						<i class="icon-menu"></i>
-					</span>
-				</button>
-				<button class="topbar-toggler more"><i class="icon-options-vertical"></i></button>
-				<div class="nav-toggle">
-					<button class="btn btn-toggle toggle-sidebar">
-						<i class="icon-menu"></i>
-					</button>
-				</div>
-			</div>
-			<!-- End Logo Header -->
-
-			<!-- Navbar Header -->
-			<nav class="navbar navbar-header navbar-expand-lg" data-background-color="dark">
-				
-				<div class="container-fluid">
-					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-						<li class="nav-item dropdown hidden-caret">
-							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
-								<div class="avatar-sm">
-									<img src="https://cdn.discordapp.com/avatars/<%= req.session.userinfo.id%>/<%= req.session.userinfo.avatar%>.jpg?size=1024" alt="..." class="avatar-img rounded-circle">
-								</div>
-							</a>
-							<ul class="dropdown-menu dropdown-user animated fadeIn">
-								<div class="dropdown-user-scroll scrollbar-outer">
-									<li>
-										<div class="user-box">
-											<div class="avatar-lg"><img src="https://cdn.discordapp.com/avatars/<%= req.session.userinfo.id%>/<%= req.session.userinfo.avatar%>.jpg?size=1024" alt="image profile" class="avatar-img rounded"></div>
-											<div class="u-text">
-												<h4><%= req.session.userinfo.username%>#<%= req.session.userinfo.discriminator %></h4>
-												<p class="text-muted"><%= req.session.userinfo.email%></p>
-											</div>
-										</div>
-									</li>
-									<li>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="/regen">Reset Password</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="/logout">Logout</a>
-									</li>
-								</div>
-							</ul>
-						</li>
-					</ul>
-				</div>
-			</nav>
-			<!-- End Navbar -->
-		</div>
-
-		<!-- Sidebar -->
-		<div class="sidebar sidebar-style-2" data-background-color="dark2">
-			<div class="sidebar-wrapper scrollbar scrollbar-inner">
-				<div class="sidebar-content">
-					<div class="user">
-						<div class="avatar-sm float-left mr-2">
-							<img src="https://cdn.discordapp.com/avatars/<%= req.session.userinfo.id%>/<%= req.session.userinfo.avatar%>.jpg?size=1024" alt="..." class="avatar-img rounded-circle">
-						</div>
-						<div class="info">
-							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
-								<span>
-									<%= req.session.userinfo.username%>#<%= req.session.userinfo.discriminator %>
-
-									<span class="user-level"><%= coins %> coin<%= coins == 1 ? "" : "s" %></span>
-
-								</span>
-							</a>
-						</div>
-					</div>
-					<ul class="nav nav-primary">
-						<li class="nav-item">
-							<a href="/dashboard" class="collapsed">
-								<i class="fas fa-home"></i>
-								<p>Dashboard</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="/servers/new" class="collapsed">
-								<i class="fas fa-plus-square"></i>
-								<p>New Server</p>
-							</a>
-						</li>
-						<li class="nav-item active">
-							<a href="javascript:void(0)" class="collapsed">
-								<i class="fas fa-server"></i>
-								<p>View Servers</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="/store" class="collapsed">
-								<i class="fas fa-shopping-bag"></i>
-								<p>Shop</p>
-							</a>
-						</li>
-                    <% if (settings.api.arcio["afk page"].enabled == true) { %>
-						<li class="nav-item">
-							<a href="/afk" class="collapsed">
-								<i class="fas fa-coins"></i>
-								<p>AFK Page</p>
-							</a>
-						</li>                    
-                    <% } %>
-						<li class="nav-item">
-							<a href="/redeem" class="collapsed">
-								<i class="fas fa-qrcode"></i>
-								<p>Redeem Coupon Code</p>
-							</a>
-						</li>    
-						<li class="nav-item">
-							<a href="/regen" class="collapsed">
-                                <i class="fas fa-redo-alt"></i>
-								<p>Regenerate Password</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="<%= settings.pterodactyl.domain %>" class="collapsed">
-                                <i class="fas fa-external-link-square-alt"></i>
-								<p>Pterodactyl Panel</p>
-							</a>
-						</li>
-                    <% if (pterodactyl.root_admin == true) { %>
-						<li class="nav-item">
-							<a href="/admin" class="collapsed">
-                                <i class="fas fa-user-cog"></i>
-								<p>Admin</p>
-							</a>
-						</li>
-                    <% } %>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<!-- End Sidebar -->
-        <%
-            let ram = 0;
-            let disk = 0;
-            let cpu = 0;
-            let servers = pterodactyl.relationships.servers.data.length;
-            for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
-                ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
-                disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
-                cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
-            }
-        %>
-		<div class="main-panel">
-			<div class="content">
-				<div class="page-inner">
-					<div class="mt-2 mb-4">
-						<h2 class="text-white pb-2">Welcome back, <%= req.session.userinfo.username%>!</h2>
-                <% if (req.session.newaccount || req.session.password) { %>
-                    <% if (req.session.newaccount) { %>
-						<h5 class="text-white op-7 mb-4">A new account has been created for you on the Pterodactyl Panel.</h5>
-                    <% } %>
-                    <% if (req.session.password) { %>
-                        <h5 class="text-white op-7 mb-4">Your new password is <strong><%= req.session.password %></strong>! Make sure to keep this password in a safe place.</h5>
-                    <% } %>
-                <% } %>
-					</div>
-					<div class="row">
-						<div class="col-sm-6 col-md-3">
-							<div class="card card-stats card-primary card-round">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-5">
-											<div class="icon-big text-center">
-												<i class="fas fa-memory"></i>
-											</div>
-										</div>
-										<div class="col-7 col-stats">
-											<div class="numbers">
-												<p class="card-category">RAM</p>
-												<h4 class="card-title"><%= ram %>MB / <%= (packages ? packages.ram : 0) + extraresources.ram %>MB</h4>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6 col-md-3">
-							<div class="card card-stats card-info card-round">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-5">
-											<div class="icon-big text-center">
-												<i class="far fa-save"></i>
-											</div>
-										</div>
-										<div class="col-7 col-stats">
-											<div class="numbers">
-												<p class="card-category">DISK</p>
-												<h4 class="card-title"><%= disk %>MB / <%= (packages ? packages.disk : 0) + extraresources.disk %>MB</h4>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6 col-md-3">
-							<div class="card card-stats card-success card-round">
-								<div class="card-body ">
-									<div class="row">
-										<div class="col-5">
-											<div class="icon-big text-center">
-												<i class="fas fa-microchip"></i>
-											</div>
-										</div>
-										<div class="col-7 col-stats">
-											<div class="numbers">
-												<p class="card-category">CPU</p>
-												<h4 class="card-title"><%= cpu %>% / <%= (packages ? packages.cpu : 0) + extraresources.cpu %>%</h4>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6 col-md-3">
-							<div class="card card-stats card-secondary card-round">
-								<div class="card-body ">
-									<div class="row">
-										<div class="col-5">
-											<div class="icon-big text-center">
-												<i class="fas fa-server"></i>
-											</div>
-										</div>
-										<div class="col-7 col-stats">
-											<div class="numbers">
-												<p class="card-category">Servers</p>
-												<h4 class="card-title"><%= servers %> server<%= servers == 1 ? "" : "s" %> / <%= (packages ? packages.servers : 0) + extraresources.servers %> server<%= (packages ? packages.servers : 0) + extraresources.servers == 1 ? "" : "s" %></h4>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="card-title">Servers</div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                          <thead>
-                                            <tr>
-                                              <th> Server Name </th>
-                                              <th> RAM </th>
-                                              <th> DISK </th>
-                                              <th> CPU </th>
-                                              <th> Manage </th>
-                                            </tr>
-                                          </thead>
-                                          <% for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) { %>
-                                              <tbody>
-                                              <tr>
-                                                  <td><%= pterodactyl.relationships.servers.data[i].attributes.name.length > 15 ? pterodactyl.relationships.servers.data[i].attributes.name.slice(0, 12) + "..." : pterodactyl.relationships.servers.data[i].attributes.name %></td>
-                                                  <td><%= pterodactyl.relationships.servers.data[i].attributes.limits.memory %>MB</td>
-                                                  <td><%= pterodactyl.relationships.servers.data[i].attributes.limits.disk %>MB</td>
-                                                  <td><%= pterodactyl.relationships.servers.data[i].attributes.limits.cpu %>%</td>
-                                                  <td><a href="/servers/edit?id=<%= pterodactyl.relationships.servers.data[i].attributes.id %>" class="btn btn-success">Edit</a>&nbsp;&nbsp;&nbsp;<a href="/delete?id=<%= pterodactyl.relationships.servers.data[i].attributes.id %>" class="btn btn-danger">Delete</a>&nbsp;&nbsp;&nbsp;<% if (settings.api.client.allow.renewsuspendsystem.enabled) { %><a href="/renew?id=<%= pterodactyl.relationships.servers.data[i].attributes.id %>" rel="noopener noreferrer" class="btn btn-success">Renew</a><% } else { %><a href="<%= settings.pterodactyl.domain %>/server/<%= pterodactyl.relationships.servers.data[i].attributes.identifier %>" target="_blank" rel="noopener noreferrer" class="btn btn-success">Link</a><% } %></td>
-                                              </tr>
-                                              </tbody>
-                                          <% } %>
-                                        </table>
-                                      </div>
-                                </div>
-                            </div>
-                        </div>
-					</div>
-				</div>
-			</div>
-          </div>
-		</div>
-	  </div>
-    </body>
-  </html>
-
-		<!-- End Custom template -->
-	</div>
-	<!--   Core JS Files   -->
-	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>
-	<script src="/assets/js/core/popper.min.js"></script>
-	<script src="/assets/js/core/bootstrap.min.js"></script>
-
-	<!-- jQuery UI -->
-	<script src="/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
-	<script src="/assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
-
-	<!-- jQuery Scrollbar -->
-	<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
-
-	<!-- Chart JS -->
-	<script src="/assets/js/plugin/chart.js/chart.min.js"></script>
-
-	<!-- jQuery Sparkline -->
-	<script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
-	<!-- Chart Circle -->
-	<script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
-
-	<!-- Datatables -->
-	<script src="/assets/js/plugin/datatables/datatables.min.js"></script>
-
-	<!-- Bootstrap Notify -->
-	<script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
-	<!-- jQuery Vector Maps -->
-	<script src="/assets/js/plugin/jqvmap/jquery.vmap.min.js"></script>
-	<script src="/assets/js/plugin/jqvmap/maps/jquery.vmap.world.js"></script>
-
-	<!-- Sweet Alert -->
-	<script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
-
-	<!-- Atlantis JS -->
-	<script src="/assets/js/atlantis.min.js"></script>
-
-
-	<script>
-		$('#lineChart').sparkline([102,109,120,99,110,105,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
-
-		$('#lineChart2').sparkline([99,125,122,105,110,124,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
-
-		$('#lineChart3').sparkline([105,103,123,100,95,105,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
+		
+		// Mobile sidebar toggle
+		const sidebarBtn = document.getElementById('sidebarBtn');
+		const sidebar = document.getElementById('sidebar');
+		
+		if (sidebarBtn) {
+			sidebarBtn.addEventListener('click', () => {
+				sidebar.classList.toggle('-translate-x-full');
+			});
+		}
 	</script>
 </body>
 </html>

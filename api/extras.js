@@ -1,54 +1,69 @@
 const settings = require("../settings.json");
-const fs = require('fs');
-
+const express = require('express');
+const router = express.Router();
 const indexjs = require("../index.js");
-const arciotext = (require("./arcio.js")).text;
 const fetch = require('node-fetch');
+const fs = require('fs');
+const ejs = require("ejs");
 
-module.exports.load = async function(app, db) {
-  app.get("/panel", async (req, res) => {
+// Helper function to generate random password
+function makeid(length) {
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+// Panel redirect route
+router.get("/panel", async (req, res) => {
     res.redirect(settings.pterodactyl.domain);
-  });
+});
 
-  app.get("/regen", async (req, res) => {
+// Password regeneration route
+router.get("/regen", async (req, res) => {
     if (!req.session.pterodactyl) return res.redirect("/login");
     
     let newsettings = JSON.parse(fs.readFileSync("./settings.json"));
+    if (newsettings.api.client.allow.regen !== true) {
+        return res.send("You cannot regenerate your password currently.");
+    }
 
-    if (newsettings.api.client.allow.regen !== true) return res.send("You cannot regenerate your password currently.");
+    let newpassword = makeid(newsettings.api.client.passwordgenerator.length);
+    
+    if (newsettings.api.client.passwordgenerator.signup == true) {
+        if (newsettings.api.client.passwordgenerator.dictionary == true) {
+            newpassword = makeid(newsettings.api.client.passwordgenerator["length"]);
+        }
+    }
 
-    let newpassword = makeid(newsettings.api.client.passwordgenerator["length"]);
-    req.session.password = newpassword;
-
+    let userinfo = req.session.pterodactyl;
+    
     await fetch(
-      settings.pterodactyl.domain + "/api/application/users/" + req.session.pterodactyl.id,
-      {
-        method: "patch",
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": `Bearer ${settings.pterodactyl.key}`
-        },
-        body: JSON.stringify({
-          username: req.session.pterodactyl.username,
-          email: req.session.pterodactyl.email,
-          first_name: req.session.pterodactyl.first_name,
-          last_name: req.session.pterodactyl.last_name,
-          password: newpassword
-        })
-      }
+        `${settings.pterodactyl.domain}/api/application/users/${userinfo.id}`,
+        {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${settings.pterodactyl.key}`
+            },
+            body: JSON.stringify({
+                username: userinfo.username,
+                email: userinfo.email,
+                first_name: userinfo.first_name,
+                last_name: userinfo.last_name,
+                password: newpassword
+            })
+        }
     );
 
     let theme = indexjs.get(req);
-    res.redirect(theme.settings.redirect.regenpassword || "/")
-  });
-};
+    res.redirect(theme.settings.redirect.regenpassword ?? "/");
+});
 
-function makeid(length) {
-  let result = '';
-  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-     result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
+// Export the router
+module.exports = {
+    router: router
+};

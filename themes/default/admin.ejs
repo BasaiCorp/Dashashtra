@@ -1,563 +1,727 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="icon" type="image/png" href="<%= extra.faviconlink %>"/>
-    <title><%= extra.admin.title.default %></title>
-    <% if (settings.api.arcio.enabled == true) { %>
-        <script async src="https://arc.io/widget.min.js#<%= settings.api.arcio.widgetid %>"></script>
-    <% } %>	
-	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-
-	<!-- Fonts and icons -->
-	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin Panel - <%= extra.home.name %></title>
+	<link rel="icon" type="image/png" href="<%= extra.faviconlink %>"/>
+	
+	<!-- Fonts and Icons -->
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	
+	<!-- Tailwind CSS -->
+	<script src="https://cdn.tailwindcss.com"></script>
 	<script>
-		WebFont.load({
-			google: {"families":["Lato:300,400,700,900"]},
-			custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['/assets/css/fonts.min.css']},
-			active: function() {
-				sessionStorage.fonts = true;
+		tailwind.config = {
+			darkMode: 'class',
+			theme: {
+				extend: {
+					fontFamily: {
+						sans: ['Inter', 'sans-serif'],
+					},
+					colors: {
+						primary: {
+							50: '#f0f9ff',
+							100: '#e0f2fe',
+							200: '#bae6fd',
+							300: '#7dd3fc',
+							400: '#38bdf8',
+							500: '#0ea5e9',
+							600: '#0284c7',
+							700: '#0369a1',
+							800: '#075985',
+							900: '#0c4a6e',
+							950: '#082f49',
+						},
+						dark: {
+							base: '#111827',
+							light: '#1F2937',
+							lighter: '#374151',
+							card: '#1E293B'
+						}
+					},
+					animation: {
+						'fade-in': 'fadeIn 0.5s ease-in-out',
+						'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+					},
+					keyframes: {
+						fadeIn: {
+							'0%': { opacity: '0' },
+							'100%': { opacity: '1' },
+						}
+					}
+				}
+			}
+		}
+	</script>
+	
+	<style>
+		body {
+			background-color: #0f172a;
+			color: #f1f5f9;
+			font-family: 'Inter', sans-serif;
+		}
+		.navbar {
+			background-color: rgba(15, 23, 42, 0.7);
+			backdrop-filter: blur(10px);
+			border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+		}
+		.sidebar {
+			background-color: #1e293b;
+			border-right: 1px solid rgba(148, 163, 184, 0.1);
+			transition: all 0.3s ease;
+		}
+		.card {
+			background-color: #1e293b;
+			border: 1px solid rgba(148, 163, 184, 0.1);
+			transition: all 0.3s ease;
+		}
+		.card:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+		}
+		.stat-card {
+			border: 1px solid rgba(148, 163, 184, 0.1);
+		}
+		.gradient-border {
+			position: relative;
+			border-radius: 0.5rem;
+			z-index: 0;
+			overflow: hidden;
+			padding: 1px;
+		}
+		.gradient-border::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			border-radius: 0.5rem;
+			padding: 2px;
+			background: linear-gradient(45deg, #0ea5e9, #8b5cf6, #ec4899);
+			-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+			-webkit-mask-composite: xor;
+			mask-composite: exclude;
+			z-index: -1;
+		}
+		.main-content {
+			animation: fadeIn 0.5s ease-in-out;
+		}
+		@keyframes fadeIn {
+			0% { opacity: 0; }
+			100% { opacity: 1; }
+		}
+		
+		/* Custom Scrollbar */
+		::-webkit-scrollbar {
+			width: 8px;
+		}
+		::-webkit-scrollbar-track {
+			background: #1e293b;
+		}
+		::-webkit-scrollbar-thumb {
+			background: #475569;
+			border-radius: 4px;
+		}
+		::-webkit-scrollbar-thumb:hover {
+			background: #64748b;
+		}
+		
+		.active-nav {
+			background-color: #0284c7;
+			color: white;
+		}
+	</style>
+</head>
+<body class="min-h-screen">
+	<!-- User Data Preparation -->
+	<%
+		const userData = {
+			id: req.session.userinfo.id,
+			username: req.session.userinfo.username || req.session.userinfo.email.split('@')[0],
+			email: req.session.userinfo.email,
+			discriminator: req.session.userinfo.discriminator,
+			avatar: req.session.userinfo.avatar,
+			isAdmin: typeof req.session !== 'undefined' ? req.session.isAdmin : false
+		};
+		
+		// Set up admin stats based on available data
+		const totalUsers = typeof req.session.allUsers !== 'undefined' ? req.session.allUsers.length : 0;
+		const totalServers = typeof req.session.allServers !== 'undefined' ? req.session.allServers.length : 0;
+		const activeUsers = Math.floor(totalUsers * 0.8); // Placeholder - replace with actual data
+		const revenue = Math.floor(Math.random() * 5000); // Placeholder - replace with actual data
+	%>
+
+	<!-- Navbar -->
+	<nav class="navbar fixed w-full h-16 z-10 px-4 py-2.5 flex items-center justify-between">
+		<div class="flex items-center">
+			<button id="sidebarBtn" class="sm:hidden mr-2 text-gray-300 hover:text-white">
+				<i class="fas fa-bars text-xl"></i>
+			</button>
+			<a href="/" class="flex items-center">
+				<img src="<%= extra.faviconlink %>" class="h-8 mr-3" alt="Logo">
+				<span class="self-center text-xl font-semibold whitespace-nowrap"><%= extra.home.name %></span>
+			</a>
+		</div>
+		
+		<div class="flex items-center gap-4">
+			<div class="relative inline-block">
+				<button id="dropdownBtn" class="flex items-center px-3 py-2 text-sm font-medium text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none">
+					<img src="https://cdn.discordapp.com/avatars/<%= userData.id %>/<%= userData.avatar %>.jpg?size=128" class="w-6 h-6 mr-2 rounded-full">
+					<span class="mr-2"><%= userData.username %></span>
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+					</svg>
+				</button>
+				<div id="dropdownMenu" class="hidden absolute right-0 mt-2 bg-gray-800 rounded-lg shadow-lg overflow-hidden z-20" style="min-width: 10rem;">
+					<ul class="py-1 text-sm text-gray-200">
+						<li>
+							<a href="/dashboard" class="block px-4 py-2 hover:bg-gray-700">Dashboard</a>
+						</li>
+						<li>
+							<a href="/settings" class="block px-4 py-2 hover:bg-gray-700">Settings</a>
+						</li>
+						<li>
+							<a href="/auth/logout" class="block px-4 py-2 hover:bg-gray-700 text-red-400">Logout</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</nav>
+	
+	<!-- Sidebar and Main Content -->
+	<div class="flex h-screen pt-16">
+		<!-- Sidebar -->
+		<aside id="sidebar" class="fixed left-0 top-16 h-full z-10 w-64 transition-transform -translate-x-full sm:translate-x-0">
+			<div class="h-full px-3 pb-4 overflow-y-auto sidebar">
+				<ul class="space-y-2 pt-4 font-medium">
+					<li>
+						<a href="/dashboard" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
+							<i class="fas fa-gauge-high w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
+							<span class="ms-3">Dashboard</span>
+						</a>
+					</li>
+					<li>
+						<a href="/admin" class="flex items-center p-3 text-white rounded-lg bg-primary-600 group">
+							<i class="fas fa-shield-alt w-5 h-5 text-white transition duration-75"></i>
+							<span class="ms-3">Admin Panel</span>
+						</a>
+					</li>
+					<li>
+						<a href="/admin/users" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
+							<i class="fas fa-users w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
+							<span class="ms-3">Users</span>
+						</a>
+					</li>
+					<li>
+						<a href="/admin/servers" class="flex items-center p-3 text-white rounded-lg bg-primary-600 group">
+							<i class="fas fa-server w-5 h-5 text-white transition duration-75"></i>
+							<span class="ms-3">Servers</span>
+						</a>
+					</li>
+					<li>
+						<a href="/admin/coupons" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
+							<i class="fas fa-gift w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
+							<span class="ms-3">Coupons</span>
+						</a>
+					</li>
+					<li>
+						<a href="/admin/packages" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
+							<i class="fas fa-box w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
+							<span class="ms-3">Packages</span>
+						</a>
+					</li>
+					<li>
+						<a href="/admin/settings" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
+							<i class="fas fa-cog w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
+							<span class="ms-3">Settings</span>
+						</a>
+					</li>
+					<li>
+						<a href="/admin/logs" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
+							<i class="fas fa-list w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
+							<span class="ms-3">Logs</span>
+						</a>
+					</li>
+				</ul>
+				
+				<div class="pt-4 mt-4 border-t border-gray-700">
+					<div class="px-3 py-4 rounded-lg bg-gray-800">
+						<h3 class="text-sm font-medium text-gray-400 mb-2">System Status</h3>
+						<div class="space-y-3">
+							<div class="flex items-center gap-2 text-sm">
+								<div class="w-3 h-3 bg-green-500 rounded-full"></div>
+								<span>API: Online</span>
+							</div>
+							<div class="flex items-center gap-2 text-sm">
+								<div class="w-3 h-3 bg-green-500 rounded-full"></div>
+								<span>Panel: Online</span>
+							</div>
+							<div class="flex items-center gap-2 text-sm">
+								<div class="w-3 h-3 bg-green-500 rounded-full"></div>
+								<span>Database: Online</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</aside>
+		
+		<!-- Main Content -->
+		<div class="p-4 sm:ml-64 pt-5 w-full main-content">
+			<div class="p-4">
+				<!-- Welcome Message -->
+				<div class="mb-6">
+					<h1 class="text-3xl font-bold mb-2">Server Management</h1>
+					<p class="text-gray-400">Manage your servers and platform settings.</p>
+				</div>
+				
+				<!-- Stats Cards -->
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+					<!-- Total Users Card -->
+					<div class="gradient-border">
+						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center space-x-3">
+									<div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center">
+										<i class="fas fa-users text-xl text-blue-400"></i>
+									</div>
+									<div>
+										<h3 class="text-sm font-medium text-gray-400">Total Users</h3>
+										<p class="text-2xl font-semibold"><%= totalUsers %></p>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900 text-blue-200">
+										+3% <i class="fas fa-arrow-up ml-1"></i>
+									</span>
+								</div>
+							</div>
+							<p class="mt-2 text-xs text-gray-400">Total registered users on the platform</p>
+						</div>
+					</div>
+
+					<!-- Active Users Card -->
+					<div class="gradient-border">
+						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center space-x-3">
+									<div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center">
+										<i class="fas fa-user-check text-xl text-green-400"></i>
+									</div>
+									<div>
+										<h3 class="text-sm font-medium text-gray-400">Active Users</h3>
+										<p class="text-2xl font-semibold"><%= activeUsers %></p>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-900 text-green-200">
+										+5% <i class="fas fa-arrow-up ml-1"></i>
+									</span>
+								</div>
+							</div>
+							<p class="mt-2 text-xs text-gray-400">Users active in the past 30 days</p>
+						</div>
+					</div>
+
+					<!-- Total Servers Card -->
+					<div class="gradient-border">
+						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center space-x-3">
+									<div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center">
+										<i class="fas fa-server text-xl text-purple-400"></i>
+									</div>
+									<div>
+										<h3 class="text-sm font-medium text-gray-400">Total Servers</h3>
+										<p class="text-2xl font-semibold"><%= totalServers %></p>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-900 text-purple-200">
+										+7% <i class="fas fa-arrow-up ml-1"></i>
+									</span>
+								</div>
+							</div>
+							<p class="mt-2 text-xs text-gray-400">Total servers deployed on the platform</p>
+						</div>
+					</div>
+
+					<!-- Revenue Card -->
+					<div class="gradient-border">
+						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center space-x-3">
+									<div class="w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center">
+										<i class="fas fa-dollar-sign text-xl text-amber-400"></i>
+									</div>
+									<div>
+										<h3 class="text-sm font-medium text-gray-400">Monthly Revenue</h3>
+										<p class="text-2xl font-semibold">$<%= revenue %></p>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-900 text-amber-200">
+										+12% <i class="fas fa-arrow-up ml-1"></i>
+									</span>
+								</div>
+							</div>
+							<p class="mt-2 text-xs text-gray-400">Revenue generated this month</p>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Quick Actions -->
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+					<div class="card rounded-lg p-6 bg-dark-card border border-gray-700">
+						<div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center mb-4">
+							<i class="fas fa-user-plus text-blue-400"></i>
+						</div>
+						<h3 class="text-lg font-semibold mb-2">Add User</h3>
+						<p class="text-gray-400 mb-4">Create a new user account with custom resources.</p>
+						<a href="/admin/users/add" class="inline-flex items-center text-sm font-medium text-blue-400 hover:text-blue-300">
+							Add user
+							<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+							</svg>
+						</a>
+					</div>
+					
+					<div class="card rounded-lg p-6 bg-dark-card border border-gray-700">
+						<div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mb-4">
+							<i class="fas fa-gift text-green-400"></i>
+						</div>
+						<h3 class="text-lg font-semibold mb-2">Create Coupon</h3>
+						<p class="text-gray-400 mb-4">Generate new coupon codes for your users.</p>
+						<a href="/admin/coupons/add" class="inline-flex items-center text-sm font-medium text-green-400 hover:text-green-300">
+							Create coupon
+							<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+							</svg>
+						</a>
+					</div>
+					
+					<div class="card rounded-lg p-6 bg-dark-card border border-gray-700">
+						<div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mb-4">
+							<i class="fas fa-box text-purple-400"></i>
+						</div>
+						<h3 class="text-lg font-semibold mb-2">Create Package</h3>
+						<p class="text-gray-400 mb-4">Define new resource packages for the store.</p>
+						<a href="/admin/packages/add" class="inline-flex items-center text-sm font-medium text-purple-400 hover:text-purple-300">
+							Create package
+							<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+							</svg>
+						</a>
+					</div>
+				</div>
+				
+				<!-- Server List -->
+				<div class="bg-dark-card rounded-lg border border-gray-700 p-6 mb-8">
+					<div class="flex items-center justify-between mb-6">
+						<h2 class="text-xl font-semibold">Server List</h2>
+						<a href="/admin/servers" class="text-sm text-blue-400 hover:text-blue-300">View all</a>
+					</div>
+					
+					<% if (typeof req.session.allServers !== 'undefined' && req.session.allServers.length > 0) { %>
+						<div class="overflow-x-auto">
+							<table class="w-full text-sm text-left text-gray-300">
+								<thead class="text-xs uppercase bg-gray-700 text-gray-300">
+									<tr>
+										<th scope="col" class="px-6 py-3 rounded-l-lg">ID</th>
+										<th scope="col" class="px-6 py-3">Name</th>
+										<th scope="col" class="px-6 py-3">User</th>
+										<th scope="col" class="px-6 py-3">Node</th>
+										<th scope="col" class="px-6 py-3">Status</th>
+										<th scope="col" class="px-6 py-3">Resources</th>
+										<th scope="col" class="px-6 py-3">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									<% req.session.allServers.forEach(server => { %>
+										<tr class="border-b border-gray-700">
+											<td class="px-6 py-4 font-medium whitespace-nowrap text-white">
+												<%= server.id %>
+											</td>
+											<td class="px-6 py-4">
+												<%= server.name %>
+											</td>
+											<td class="px-6 py-4">
+												<%= server.user %>
+											</td>
+											<td class="px-6 py-4">
+												<%= server.node %>
+											</td>
+											<td class="px-6 py-4">
+												<% if (server.suspended) { %>
+													<span class="badge bg-danger">Suspended</span>
+												<% } else { %>
+													<span class="badge bg-success">Active</span>
+												<% } %>
+											</td>
+											<td class="px-6 py-4">
+												<small>
+													RAM: <%= server.limits.memory %>MB<br>
+													CPU: <%= server.limits.cpu %>%<br>
+													Disk: <%= server.limits.disk %>MB
+												</small>
+											</td>
+											<td class="px-6 py-4 flex gap-2">
+												<div class="btn-group">
+													<button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editServerModal<%= server.id %>">
+														<i class="fas fa-edit"></i>
+													</button>
+													<% if (server.suspended) { %>
+														<form action="/admin/servers/<%= server.id %>/unsuspend" method="POST" class="d-inline">
+															<button type="submit" class="btn btn-sm btn-success">
+																<i class="fas fa-play"></i>
+															</button>
+														</form>
+													<% } else { %>
+														<form action="/admin/servers/<%= server.id %>/suspend" method="POST" class="d-inline">
+															<button type="submit" class="btn btn-sm btn-warning">
+																<i class="fas fa-pause"></i>
+															</button>
+														</form>
+													<% } %>
+													<form action="/admin/servers/<%= server.id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this server?');">
+														<button type="submit" class="btn btn-sm btn-danger">
+															<i class="fas fa-trash"></i>
+														</button>
+													</form>
+												</div>
+											</td>
+										</tr>
+
+										<!-- Edit Server Modal -->
+										<div class="modal fade" id="editServerModal<%= server.id %>" tabindex="-1">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title">Edit Server: <%= server.name %></h5>
+														<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+													</div>
+													<div class="modal-body">
+														<form action="/admin/servers/<%= server.id %>/details" method="POST">
+															<div class="mb-3">
+																<label class="form-label">Name</label>
+																<input type="text" class="form-control" name="name" value="<%= server.name %>" required>
+															</div>
+															<div class="mb-3">
+																<label class="form-label">Description</label>
+																<textarea class="form-control" name="description" rows="3"><%= server.description %></textarea>
+															</div>
+															<div class="mb-3">
+																<label class="form-label">External ID</label>
+																<input type="text" class="form-control" name="external_id" value="<%= server.external_id %>">
+															</div>
+															<button type="submit" class="btn btn-primary">Save Changes</button>
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<!-- Edit Build Modal -->
+										<div class="modal fade" id="editBuildModal<%= server.id %>" tabindex="-1">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title">Edit Server Build: <%= server.name %></h5>
+														<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+													</div>
+													<div class="modal-body">
+														<form action="/admin/servers/<%= server.id %>/build" method="POST">
+															<div class="mb-3">
+																<label class="form-label">Memory Limit (MB)</label>
+																<input type="number" class="form-control" name="memory" value="<%= server.limits.memory %>" required>
+															</div>
+															<div class="mb-3">
+																<label class="form-label">CPU Limit (%)</label>
+																<input type="number" class="form-control" name="cpu" value="<%= server.limits.cpu %>" required>
+															</div>
+															<div class="mb-3">
+																<label class="form-label">Disk Space (MB)</label>
+																<input type="number" class="form-control" name="disk" value="<%= server.limits.disk %>" required>
+															</div>
+															<div class="mb-3">
+																<label class="form-label">Swap Space (MB)</label>
+																<input type="number" class="form-control" name="swap" value="<%= server.limits.swap %>" required>
+															</div>
+															<div class="mb-3">
+																<label class="form-label">IO Priority</label>
+																<input type="number" class="form-control" name="io" value="<%= server.limits.io %>" required>
+															</div>
+															<button type="submit" class="btn btn-primary">Save Changes</button>
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+									<% }); %>
+								</tbody>
+							</table>
+						</div>
+					<% } else { %>
+						<div class="text-center py-10">
+							<div class="w-16 h-16 bg-gray-700 rounded-full mx-auto mb-4 flex items-center justify-center">
+								<i class="fas fa-server text-2xl text-gray-400"></i>
+							</div>
+							<h3 class="text-lg font-medium mb-2">No Servers Found</h3>
+							<p class="text-gray-400 mb-4 max-w-md mx-auto">There are no servers registered on the platform yet.</p>
+						</div>
+					<% } %>
+				</div>
+				
+				<!-- Recent Activity & System Logs -->
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+					<!-- Recent Activity -->
+					<div class="bg-dark-card rounded-lg border border-gray-700 p-6">
+						<h2 class="text-xl font-semibold mb-6">Recent Activity</h2>
+						<div class="text-gray-400 space-y-4">
+							<div class="flex items-start gap-4">
+								<div class="w-10 h-10 flex-shrink-0 bg-blue-900 rounded-full flex items-center justify-center">
+									<i class="fas fa-user-plus text-blue-400"></i>
+								</div>
+								<div>
+									<p class="text-white font-medium">New user registered</p>
+									<p class="text-sm">User123 joined the platform</p>
+									<p class="text-xs text-gray-500 mt-1">Just now</p>
+								</div>
+							</div>
+							
+							<div class="flex items-start gap-4">
+								<div class="w-10 h-10 flex-shrink-0 bg-green-900 rounded-full flex items-center justify-center">
+									<i class="fas fa-server text-green-400"></i>
+								</div>
+								<div>
+									<p class="text-white font-medium">New server created</p>
+									<p class="text-sm">User456 created a new Minecraft server</p>
+									<p class="text-xs text-gray-500 mt-1">2 hours ago</p>
+								</div>
+							</div>
+							
+							<div class="flex items-start gap-4">
+								<div class="w-10 h-10 flex-shrink-0 bg-purple-900 rounded-full flex items-center justify-center">
+									<i class="fas fa-shopping-cart text-purple-400"></i>
+								</div>
+								<div>
+									<p class="text-white font-medium">Package purchased</p>
+									<p class="text-sm">User789 purchased the Premium package</p>
+									<p class="text-xs text-gray-500 mt-1">5 hours ago</p>
+								</div>
+							</div>
+							
+							<div class="flex items-start gap-4">
+								<div class="w-10 h-10 flex-shrink-0 bg-red-900 rounded-full flex items-center justify-center">
+									<i class="fas fa-exclamation-circle text-red-400"></i>
+								</div>
+								<div>
+									<p class="text-white font-medium">Server error detected</p>
+									<p class="text-sm">High CPU usage detected on Node #3</p>
+									<p class="text-xs text-gray-500 mt-1">1 day ago</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- System Logs -->
+					<div class="bg-dark-card rounded-lg border border-gray-700 p-6">
+						<h2 class="text-xl font-semibold mb-6">System Logs</h2>
+						<div class="space-y-3 text-sm">
+							<div class="p-3 rounded-lg bg-gray-800">
+								<div class="flex items-center justify-between mb-1">
+									<span class="text-gray-400 font-medium">System</span>
+									<span class="text-xs text-gray-500">Today, 10:45 AM</span>
+								</div>
+								<p class="text-gray-300">Database backup completed successfully</p>
+							</div>
+							
+							<div class="p-3 rounded-lg bg-gray-800">
+								<div class="flex items-center justify-between mb-1">
+									<span class="text-green-400 font-medium">Success</span>
+									<span class="text-xs text-gray-500">Today, 09:30 AM</span>
+								</div>
+								<p class="text-gray-300">API rate limit increased to 100 req/min</p>
+							</div>
+							
+							<div class="p-3 rounded-lg bg-gray-800">
+								<div class="flex items-center justify-between mb-1">
+									<span class="text-yellow-400 font-medium">Warning</span>
+									<span class="text-xs text-gray-500">Yesterday, 11:20 PM</span>
+								</div>
+								<p class="text-gray-300">High memory usage detected (85%)</p>
+							</div>
+							
+							<div class="p-3 rounded-lg bg-gray-800">
+								<div class="flex items-center justify-between mb-1">
+									<span class="text-red-400 font-medium">Error</span>
+									<span class="text-xs text-gray-500">Yesterday, 08:15 PM</span>
+								</div>
+								<p class="text-gray-300">Failed login attempt from suspicious IP</p>
+							</div>
+						</div>
+						
+						<div class="mt-4 flex justify-end">
+							<a href="/admin/logs" class="text-sm text-blue-400 hover:text-blue-300 inline-flex items-center">
+								View all logs
+								<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+								</svg>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		// Dropdown menu toggle
+		const dropdownBtn = document.getElementById('dropdownBtn');
+		const dropdownMenu = document.getElementById('dropdownMenu');
+		
+		dropdownBtn.addEventListener('click', () => {
+			dropdownMenu.classList.toggle('hidden');
+		});
+		
+		// Close dropdown when clicking outside
+		document.addEventListener('click', (event) => {
+			if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+				dropdownMenu.classList.add('hidden');
 			}
 		});
-	</script>
-
-	<!-- CSS Files -->
-	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/assets/css/atlantis.min.css">
-
-	<!-- CSS Just for demo purpose, don't include it in your project -->
-	<link rel="stylesheet" href="/assets/css/demo.css">
-</head>
-<body data-background-color="dark">
-	<div class="wrapper">
-		<div class="main-header">
-			<!-- Logo Header -->
-			<div class="logo-header" data-background-color="dark2">
-				
-				<a href="/dashboard" class="logo">
-					<p style="color:white;" class="navbar-brand"><%= extra.home.name %></p>
-				</a>
-				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon">
-						<i class="icon-menu"></i>
-					</span>
-				</button>
-				<button class="topbar-toggler more"><i class="icon-options-vertical"></i></button>
-				<div class="nav-toggle">
-					<button class="btn btn-toggle toggle-sidebar">
-						<i class="icon-menu"></i>
-					</button>
-				</div>
-			</div>
-			<!-- End Logo Header -->
-
-			<!-- Navbar Header -->
-			<nav class="navbar navbar-header navbar-expand-lg" data-background-color="dark">
-				
-				<div class="container-fluid">
-					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-						<li class="nav-item dropdown hidden-caret">
-							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
-								<div class="avatar-sm">
-									<img src="https://cdn.discordapp.com/avatars/<%= req.session.userinfo.id%>/<%= req.session.userinfo.avatar%>.jpg?size=1024" alt="..." class="avatar-img rounded-circle">
-								</div>
-							</a>
-							<ul class="dropdown-menu dropdown-user animated fadeIn">
-								<div class="dropdown-user-scroll scrollbar-outer">
-									<li>
-										<div class="user-box">
-											<div class="avatar-lg"><img src="https://cdn.discordapp.com/avatars/<%= req.session.userinfo.id%>/<%= req.session.userinfo.avatar%>.jpg?size=1024" alt="image profile" class="avatar-img rounded"></div>
-											<div class="u-text">
-												<h4><%= req.session.userinfo.username%>#<%= req.session.userinfo.discriminator %></h4>
-												<p class="text-muted"><%= req.session.userinfo.email%></p>
-											</div>
-										</div>
-									</li>
-									<li>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="/regen">Reset Password</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="/logout">Logout</a>
-									</li>
-								</div>
-							</ul>
-						</li>
-					</ul>
-				</div>
-			</nav>
-			<!-- End Navbar -->
-		</div>
-
-		<!-- Sidebar -->
-		<div class="sidebar sidebar-style-2" data-background-color="dark2">
-			<div class="sidebar-wrapper scrollbar scrollbar-inner">
-				<div class="sidebar-content">
-					<div class="user">
-						<div class="avatar-sm float-left mr-2">
-							<img src="https://cdn.discordapp.com/avatars/<%= req.session.userinfo.id%>/<%= req.session.userinfo.avatar%>.jpg?size=1024" alt="..." class="avatar-img rounded-circle">
-						</div>
-						<div class="info">
-							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
-								<span>
-									<%= req.session.userinfo.username%>#<%= req.session.userinfo.discriminator %>
-
-									<span class="user-level"><%= coins %> coin<%= coins == 1 ? "" : "s" %></span>
-								</span>
-							</a>
-						</div>
-					</div>
-					<ul class="nav nav-primary">
-						<li class="nav-item">
-							<a href="/dashboard" class="collapsed">
-								<i class="fas fa-home"></i>
-								<p>Dashboard</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="/servers/new" class="collapsed">
-								<i class="fas fa-plus-square"></i>
-								<p>New Server</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="/servers" class="collapsed">
-								<i class="fas fa-server"></i>
-								<p>View Servers</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="/store" class="collapsed">
-								<i class="fas fa-shopping-bag"></i>
-								<p>Shop</p>
-							</a>
-						</li>
-                    <% if (settings.api.arcio["afk page"].enabled == true) { %>
-						<li class="nav-item">
-							<a href="/afk" class="collapsed">
-								<i class="fas fa-coins"></i>
-								<p>AFK Page</p>
-							</a>
-						</li>                    
-                    <% } %>
-						<li class="nav-item">
-							<a href="/redeem" class="collapsed">
-								<i class="fas fa-qrcode"></i>
-								<p>Redeem Coupon Code</p>
-							</a>
-						</li>    
-						<li class="nav-item">
-							<a href="/regen" class="collapsed">
-                                <i class="fas fa-redo-alt"></i>
-								<p>Regenerate Password</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="<%= settings.pterodactyl.domain %>" class="collapsed">
-                                <i class="fas fa-external-link-square-alt"></i>
-								<p>Pterodactyl Panel</p>
-							</a>
-						</li>
-                    <% if (pterodactyl.root_admin == true) { %>
-						<li class="nav-item active">
-							<a href="javascript:void(0)" class="collapsed">
-                                <i class="fas fa-user-cog"></i>
-								<p>Admin</p>
-							</a>
-						</li>
-                    <% } %>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<!-- End Sidebar -->
-        <%
-            let ram = 0;
-            let disk = 0;
-            let cpu = 0;
-            let servers = pterodactyl.relationships.servers.data.length;
-            for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
-                ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
-                disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
-                cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
-            }
-        %>
-		<div class="main-panel">
-			<div class="content">
-				<div class="page-inner">
-					<div class="mt-2 mb-4">
-						<h2 class="text-white pb-2">Welcome back, <%= req.session.userinfo.username%>!</h2>
-                        <% if (req.query.err) { %>
-                            <% if (req.query.err !== "none") { %>
-                                <h5 class="text-white op-7 mb-4">
-                                    <% if (req.query.err == "MISSINGID") { %>
-                                        You have not provided the Discord user ID.
-                                    <% } else if (req.query.err == "INVALIDID" || req.query.err == "MISSINGID") { %>
-                                        You have provided a Discord user ID that does not exist, or has not signed up on the dashboard.
-				    <% } else if (req.query.err == "CREATECOUPONINVALIDCHARACTERS") { %>
-					One of the characters you entered in coupon creation was invalid, please try again.
-				    <% } else if (req.query.err == "REVOKECOUPONCANNOTFINDCODE") { %>
-					One of the characters you entered in coupon revoke was invalid, please try again.
-				    <% } else if (req.query.err == "CREATECOUPONEMPTY") { %>
-					While creating your coupon you did not specify to give any resources or coins.
-				    <% } else if (req.query.err == "CREATECOUPONLESSTHANONE") { %>
-					While creating your coupon you tried to give less then one in RAM, DISK, CPU and/or coins.
-                                    <% } else if (req.query.err == "MISSINGVARIABLES") { %>
-                                        You have not provided either ram, disk, cpu, and/or servers.
-                                    <% } else if (req.query.err == "REMOVEACCOUNTMISSINGID") { %>
-                                        You have not specified an id to remove from the panel
-                                    <% } else if (req.query.err == "MISSINGCOINS") { %>
-                                        You have not provided the coin amount.
-                                    <% } else if (req.query.err == "RAMSIZE" || req.query.err == "DISKSIZE" || req.query.err == "CPUSIZE" || req.query.err == "SERVERSIZE") { %>
-                                        The RAM, disk, CPU and servers number cannot be less than 0 nor above 999999999999999.
-                                    <% } else if (req.query.err == "INVALIDCOINNUMBER") { %>
-                                        The coin amount must be a number.
-                                    <% } else if (req.query.err == "COINSIZE") { %>
-                                        The coin amount canno tbe less than 0 and must be above 999999999999999.
-                                    <% } else if (req.query.err == "NOIP") { %>
-                                        There is no IP saved for that user.
-                                    <% } else if(req.query.err == "NONE" && req.query.ip !== undefined) { %>
-                                        IP: <%= req.query.ip %>
-                                    <% } else { %>
-                                        Stop admin abusing.
-                                    <% } %>
-                                </h5>
-                            <% } %>
-                        <% } %>
-				    <% if (req.query.code) { %>
-					<h5 class="text-white op-7 mb-4">
-					You have created a coupon code with the name of: <%= req.query.code %>
-					</h5>
-				    <% } %>
-
-					</div>
-					<div class="row">
-						<div class="col-sm-6 col-md-3">
-							<div class="card card-stats card-primary card-round">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-5">
-											<div class="icon-big text-center">
-												<i class="fas fa-memory"></i>
-											</div>
-										</div>
-										<div class="col-7 col-stats">
-											<div class="numbers">
-												<p class="card-category">RAM</p>
-												<h4 class="card-title"><%= ram %>MB / <%= (packages ? packages.ram : 0) + extraresources.ram %>MB</h4>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6 col-md-3">
-							<div class="card card-stats card-info card-round">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-5">
-											<div class="icon-big text-center">
-												<i class="far fa-save"></i>
-											</div>
-										</div>
-										<div class="col-7 col-stats">
-											<div class="numbers">
-												<p class="card-category">DISK</p>
-												<h4 class="card-title"><%= disk %>MB / <%= (packages ? packages.disk : 0) + extraresources.disk %>MB</h4>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6 col-md-3">
-							<div class="card card-stats card-success card-round">
-								<div class="card-body ">
-									<div class="row">
-										<div class="col-5">
-											<div class="icon-big text-center">
-												<i class="fas fa-microchip"></i>
-											</div>
-										</div>
-										<div class="col-7 col-stats">
-											<div class="numbers">
-												<p class="card-category">CPU</p>
-												<h4 class="card-title"><%= cpu %>% / <%= (packages ? packages.cpu : 0) + extraresources.cpu %>%</h4>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6 col-md-3">
-							<div class="card card-stats card-secondary card-round">
-								<div class="card-body ">
-									<div class="row">
-										<div class="col-5">
-											<div class="icon-big text-center">
-												<i class="fas fa-server"></i>
-											</div>
-										</div>
-										<div class="col-7 col-stats">
-											<div class="numbers">
-												<p class="card-category">Servers</p>
-												<h4 class="card-title"><%= servers %> server<%= servers == 1 ? "" : "s" %> / <%= (packages ? packages.servers : 0) + extraresources.servers %> server<%= (packages ? packages.servers : 0) + extraresources.servers == 1 ? "" : "s" %></h4>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-                    <div class="row">
-                        <div class="col-md-12 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="card-title">Dashactyl Version</div>
-                                </div>
-                                <div class="card-body">
-                                    <center><p id="latestversion"><span style="margin-left: 5%;">Fetching...</span></p></center>
-                                    <script>
-                                        fetch("https://real2two.github.io/dashactyl/version")
-                                            .then(res => Promise.resolve(res.json()).then(ver => {
-                                                let currentver = "<%= settings.version.replace(/"/g, `\\\\"`) %>";
-                                                if (ver.version == currentver) {
-                                                    document.getElementById("latestversion").innerHTML = `<span style="margin-left: 5%;">You are running Dashactyl version <code>${currentver}</code>. Your dashboard is up-to-date!</span>`;
-												} else if (ver.prerelease == currentver) {
-                                                    document.getElementById("latestversion").innerHTML = `<span style="margin-left: 5%;">You are running a pre-release instance of Dashactyl on version <code>${currentver}</code>. Your dashboard is up-to-date!</span>`;
-                                                } else {
-                                                    document.getElementById("latestversion").innerHTML = `<span style="margin-left: 5%;">Your dashboard is <b>not up-to-date!</b> The latest version is <code>${ver.version}</code> (or <code>${ver.prerelease}</code> for pre-releases) and you are currently running version <code><%= settings.version %></code>.</span>`;
-                                                };
-                                            }));
-                                    </script>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                        <div class="row" id="proBanner">
-                            <div class="col-12">
-                          </div>
-                        </div>  
-                        <div class="row">
-                          <div class="col-md-12 grid-margin stretch-card">
-                            <div class="card">
-                              <div class="card-body">
-                                <h4 class="card-title">Change someone's package.</h4>
-                                <p>Discord User ID: <input class="form-control" id="id" placeholder="0000000000000000"></p>
-                                <p>Package: <select class="form-control" id="package">
-                                    <option value="">Default Plan (Currently: <%= settings.api.client.packages.default %>)</option>
-                                    <% for (let [name, value] of Object.entries(settings.api.client.packages.list)) { %>
-                                        <option value="<%= name %>"><%= name %> (RAM: <%= value.ram %>MB, Disk: <%= value.disk %>MB, CPU: <%= value.cpu %>%, Servers: <%= value.servers %>)</option>
-                                    <% } %>
-                                </select></p>
-                                <button onclick="submitForm()" class="btn btn-primary">Change</button>
-
-                                <script>
-                                    async function submitForm() {
-                                        let id = encodeURIComponent(document.getElementById("id").value);
-                                        let packagename = encodeURIComponent(document.getElementById("package").value);
-                                        window.location.href = "/setplan?id=" + id + "&package=" + packagename
-                                    }
-                                </script>
-
-                              </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="card col-md-12 grid-margin stretch-card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Change someone's extra resources.</h4>
-                                    <form action="/setresources">
-                                        <label for="id">Discord User ID:</label>
-                                        <input class="form-control" name="id" placeholder="0000000000000000"><br><br>
-                                        <label for="ram">RAM:</label>
-                                        <input class="form-control" name="ram" type="number"><br><br>
-                                        <label for="disk">Disk:</label>
-                                        <input class="form-control" name="disk" type="number"><br><br>
-                                        <label for="cpu">CPU:</label>
-                                        <input class="form-control" name="cpu" type="number"><br><br>
-                                        <label for="servers">Servers:</label>
-                                        <input class="form-control" name="servers" type="number"><br><br>
-                                        <button type="submit" class="btn btn-primary">Change</button>
-                                    </form>
-                                </div>
-                              </div>
-                              <div class="card col-md-12 grid-margin stretch-card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Set coins.</h4>
-                                    <form action="/setcoins">
-                                        <label for="id">Discord User ID:</label>
-                                        <input class="form-control" name="id" placeholder="0000000000000000"><br><br>
-                                        <label for="coins">Coins:</label>
-                                        <input class="form-control" name="coins" type="number"><br><br>
-                                        <button type="submit" class="btn btn-primary">Set</button>
-                                    </form>
-                                </div>
-                              </div>
-                              <div class="card col-md-12 grid-margin stretch-card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Add coins.</h4>
-                                    <form action="/addcoins">
-                                        <label for="id">Discord User ID:</label>
-                                        <input class="form-control" name="id" placeholder="0000000000000000"><br><br>
-                                        <label for="coins">Coins:</label>
-                                        <input class="form-control" name="coins" type="number"><br><br>
-                                        <button type="submit" class="btn btn-primary">Add</button>
-                                    </form>
-                                </div>
-                              </div>
-
-                            <% if(settings.api.client.oauth2.ip["duplicate check"] == true) { %>
-                              <div class="card col-md-12 grid-margin stretch-card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Get IP.</h4>
-                                    <form action="/getip">
-                                        <label for="id">Discord User ID:</label>
-                                        <input class="form-control" name="id" placeholder="0000000000000000"><br><br>
-                                        <button type="submit" class="btn btn-primary">Get</button>
-                                    </form>
-                                </div>
-                              </div>
-                            <% } %>
-
-							<div class="card col-md-12 grid-margin stretch-card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Create/Modify Coupon</h4>
-                                    <form action="/create_coupon">
-                                        <label for="code">Code:</label>
-                                        <input class="form-control" name="code" placeholder="Leave this empty to generate a random code."><br><br>
-                                        <label for="coins">Coins:</label>
-                                        <input class="form-control" name="coins" type="number"><br><br>
-                                        <label for="ram">RAM:</label>
-                                        <input class="form-control" name="ram" type="number"><br><br>
-                                        <label for="disk">Disk:</label>
-                                        <input class="form-control" name="disk" type="number"><br><br>
-                                        <label for="cpu">CPU:</label>
-                                        <input class="form-control" name="cpu" type="number"><br><br>
-                                        <label for="servers">Servers:</label>
-                                        <input class="form-control" name="servers" type="number"><br><br>
-                                        <button type="submit" class="btn btn-primary">Create</button>
-                                    </form>
-                                </div>
-                            </div>
-
-							<div class="card col-md-12 grid-margin stretch-card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Revoke Coupon</h4>
-                                    <form action="/revoke_coupon">
-                                        <label for="code">Code:</label>
-                                        <input class="form-control" name="code"><br><br>
-                                        <button type="submit" class="btn btn-primary">Revoke</button>
-                                    </form>
-                                </div>
-                            </div>
-
-							<div class="card col-md-12 grid-margin stretch-card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Remove Account</h4>
-									<p>This only removes the account from the database, and does not delete the account.<br>This feature has not been tested with the renewal feature.</p>
-                                    <form action="/remove_account">
-                                        <label for="id">Discord ID:</label>
-                                        <input class="form-control" name="id"><br><br>
-                                        <button type="submit" class="btn btn-primary">Remove</button>
-                                    </form>
-                                </div>
-                            </div>
-
-							<div class="card col-md-12 grid-margin stretch-card">
-                                <div class="card-body">
-                                    <h4 class="card-title">User Information</h4>
-
-									<label for="id">Discord ID:</label>
-									<input class="form-control" name="id" id="userinfoid"><br><br>
-									<button type="submit" class="btn btn-primary" onclick="getUserInfo()">Get</button>
-
-									<script>
-										async function getUserInfo() {
-											let userinfo = await fetch("/userinfo?id=" + document.getElementById("userinfoid").value);
-											alert(await userinfo.text())
-										}
-									</script>
-                                </div>
-                            </div>
-
-							
-					</div>
-				</div>
-			</div>
-          </div>
-		</div>
-	  </div>
-    </body>
-  </html>
-
-		<!-- End Custom template -->
-	</div>
-	<!--   Core JS Files   -->
-	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>
-	<script src="/assets/js/core/popper.min.js"></script>
-	<script src="/assets/js/core/bootstrap.min.js"></script>
-
-	<!-- jQuery UI -->
-	<script src="/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
-	<script src="/assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
-
-	<!-- jQuery Scrollbar -->
-	<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
-
-	<!-- Chart JS -->
-	<script src="/assets/js/plugin/chart.js/chart.min.js"></script>
-
-	<!-- jQuery Sparkline -->
-	<script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
-	<!-- Chart Circle -->
-	<script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
-
-	<!-- Datatables -->
-	<script src="/assets/js/plugin/datatables/datatables.min.js"></script>
-
-	<!-- Bootstrap Notify -->
-	<script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
-	<!-- jQuery Vector Maps -->
-	<script src="/assets/js/plugin/jqvmap/jquery.vmap.min.js"></script>
-	<script src="/assets/js/plugin/jqvmap/maps/jquery.vmap.world.js"></script>
-
-	<!-- Sweet Alert -->
-	<script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
-
-	<!-- Atlantis JS -->
-	<script src="/assets/js/atlantis.min.js"></script>
-
-
-	<script>
-		$('#lineChart').sparkline([102,109,120,99,110,105,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
+		
+		// Mobile sidebar toggle
+		const sidebarBtn = document.getElementById('sidebarBtn');
+		const sidebar = document.getElementById('sidebar');
+		
+		if (sidebarBtn) {
+			sidebarBtn.addEventListener('click', () => {
+				sidebar.classList.toggle('-translate-x-full');
+			});
+		}
+		
+		// Card hover effects
+		document.querySelectorAll('.card').forEach(card => {
+			card.addEventListener('mouseenter', function() {
+				this.classList.add('transform', '-translate-y-1');
+			});
+			
+			card.addEventListener('mouseleave', function() {
+				this.classList.remove('transform', '-translate-y-1');
+			});
 		});
-
-		$('#lineChart2').sparkline([99,125,122,105,110,124,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
-
-		$('#lineChart3').sparkline([105,103,123,100,95,105,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
+		
+		// Confirm user deletion
+		function confirmDeleteUser(userId) {
+			if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+				window.location.href = `/admin/users/delete/${userId}`;
+			}
+		}
 	</script>
 </body>
 </html>

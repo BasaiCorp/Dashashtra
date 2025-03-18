@@ -1,27 +1,30 @@
 {
   "version": "0.4.4-alpha",
   "defaulttheme": "default",
+  "auththeme": "custom",
   "website": {
-    "port": 80,
+    "port": 3000,
     "secret": "change this website session secret password, make sure to change this for your website's security"
   },
   "pterodactyl": {
-    "domain": "pterodactyl panel domain",
-    "key": "pterodactyl panel admin api key with all read and writes"
+    "domain": "https://panel.flaxynodes.fun",
+    "key": "ptla_tZ14ckDk3SRfrOHj90ube5ldxueVcUwAwcJQOOCO8ZE"
   },
   "database": "database.sqlite",
   "api": {
     "client": {
        "api": {
-         "enabled": false,
+         "enabled": true,
          "code": "api token here, anyone who has access to this token can ran administrator settings"
        },
        "bot": {
-         "token": "bot token",
+         "token": "MTM1MTAzOTU3OTM3Mjc4MTcxMA.Gr58UG.L9l6xOufNmdjQrA2jxORu0-0qKVrDArA1yxDTo",
+         "guildId": "1338843953520443407",
+         "prefix": "!",
          "joinguild": {
            "_comment": "The Discord bot must be in these servers and have invite permissions.",
            "enabled": false,
-           "guildid": ["guild id", "another guild id"],
+           "guildid": ["1338843953520443407", "1299405261496123402"],
            "forcejoin": false,
            "registeredrole": null
         }
@@ -58,20 +61,15 @@
       },
       "oauth2": {
         "_comment": "Go to https://discord.dev/ and create an application to set these up.",
-        "id": "discord oauth2 application id",
-        "secret": "discord oauth2 application secret",
-        "link": "discord oauth2 application link without the '/callback'",
-        "callbackpath": "/callback",
+        "id": "1351039579372781710",
+        "secret": "pcmnRi3Edk5ZHg6xO1wP4bqdIpWvjtHE",
+        "link": "http://localhost:3000",
+        "callbackpath": "/auth/discord/callback",
         "prompt": true,
-
         "ip": {
           "trust x-forwarded-for": true,
           "block": [],
-
-          "_comment": "'duplicate check' is an anti-alt check by IPs.",
           "duplicate check": false,
-
-          "_comment2": "'cookie alt check' is an anti-alt check by cookies.",
           "cookie alt check": true
         }
       },

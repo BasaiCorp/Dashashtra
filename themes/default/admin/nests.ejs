@@ -1,0 +1,300 @@
+<%- include('../parts/header.ejs', { title: title }) %>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Nests & Eggs Management</h1>
+            
+            <!-- Nests Section -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Nests</h5>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createNestModal">
+                        Create New Nest
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Eggs</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% nests.forEach(function(nest) { %>
+                                    <tr>
+                                        <td><%= nest.id %></td>
+                                        <td><%= nest.name %></td>
+                                        <td><%= nest.description %></td>
+                                        <td><%= eggs[nest.id] ? eggs[nest.id].length : 0 %></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info" onclick="editNest('<%= nest.id %>')">Edit</button>
+                                            <button class="btn btn-sm btn-danger" onclick="deleteNest('<%= nest.id %>')">Delete</button>
+                                            <button class="btn btn-sm btn-success" onclick="showEggs('<%= nest.id %>')">View Eggs</button>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Eggs Section -->
+            <div id="eggsSection" class="card mb-4" style="display: none;">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Eggs for Nest: <span id="currentNestName"></span></h5>
+                    <button type="button" class="btn btn-primary" onclick="showCreateEggModal()">
+                        Create New Egg
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="eggsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Docker Image</th>
+                                    <th>Startup Command</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Eggs will be loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Nest Modal -->
+<div class="modal fade" id="createNestModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Nest</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/admin/nests" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nestName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="nestName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nestDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="nestDescription" name="description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Nest</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Nest Modal -->
+<div class="modal fade" id="editNestModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Nest</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editNestForm" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" id="editNestId" name="id">
+                    <div class="mb-3">
+                        <label for="editNestName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="editNestName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editNestDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editNestDescription" name="description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Create Egg Modal -->
+<div class="modal fade" id="createEggModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Egg</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="createEggForm" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" id="createEggNestId" name="nest_id">
+                    <div class="mb-3">
+                        <label for="eggName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="eggName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eggDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="eggDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dockerImage" class="form-label">Docker Image</label>
+                        <input type="text" class="form-control" id="dockerImage" name="docker_image" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="startupCmd" class="form-label">Startup Command</label>
+                        <input type="text" class="form-control" id="startupCmd" name="startup" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Egg</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Egg Modal -->
+<div class="modal fade" id="editEggModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Egg</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editEggForm" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" id="editEggNestId" name="nest_id">
+                    <input type="hidden" id="editEggId" name="egg_id">
+                    <div class="mb-3">
+                        <label for="editEggName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="editEggName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editEggDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editEggDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDockerImage" class="form-label">Docker Image</label>
+                        <input type="text" class="form-control" id="editDockerImage" name="docker_image" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editStartupCmd" class="form-label">Startup Command</label>
+                        <input type="text" class="form-control" id="editStartupCmd" name="startup" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentNestId = null;
+
+function editNest(nestId) {
+    const nest = nests.find(n => n.id === nestId);
+    if (nest) {
+        document.getElementById('editNestId').value = nest.id;
+        document.getElementById('editNestName').value = nest.name;
+        document.getElementById('editNestDescription').value = nest.description;
+        document.getElementById('editNestForm').action = `/admin/nests/${nest.id}?_method=PUT`;
+        new bootstrap.Modal(document.getElementById('editNestModal')).show();
+    }
+}
+
+function deleteNest(nestId) {
+    if (confirm('Are you sure you want to delete this nest? This will also delete all eggs in this nest.')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/admin/nests/${nestId}?_method=DELETE`;
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+function showEggs(nestId) {
+    currentNestId = nestId;
+    const nest = nests.find(n => n.id === nestId);
+    document.getElementById('currentNestName').textContent = nest.name;
+    
+    const tbody = document.querySelector('#eggsTable tbody');
+    tbody.innerHTML = '';
+    
+    if (eggs[nestId]) {
+        eggs[nestId].forEach(egg => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${egg.id}</td>
+                    <td>${egg.name}</td>
+                    <td>${egg.description}</td>
+                    <td>${egg.docker_image}</td>
+                    <td>${egg.startup}</td>
+                    <td>
+                        <button class="btn btn-sm btn-info" onclick="editEgg('${egg.id}')">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteEgg('${egg.id}')">Delete</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+    
+    document.getElementById('eggsSection').style.display = 'block';
+}
+
+function showCreateEggModal() {
+    document.getElementById('createEggNestId').value = currentNestId;
+    document.getElementById('createEggForm').action = `/admin/nests/${currentNestId}/eggs`;
+    new bootstrap.Modal(document.getElementById('createEggModal')).show();
+}
+
+function editEgg(eggId) {
+    const egg = eggs[currentNestId].find(e => e.id === eggId);
+    if (egg) {
+        document.getElementById('editEggNestId').value = currentNestId;
+        document.getElementById('editEggId').value = egg.id;
+        document.getElementById('editEggName').value = egg.name;
+        document.getElementById('editEggDescription').value = egg.description;
+        document.getElementById('editDockerImage').value = egg.docker_image;
+        document.getElementById('editStartupCmd').value = egg.startup;
+        document.getElementById('editEggForm').action = `/admin/nests/${currentNestId}/eggs/${egg.id}?_method=PUT`;
+        new bootstrap.Modal(document.getElementById('editEggModal')).show();
+    }
+}
+
+function deleteEgg(eggId) {
+    if (confirm('Are you sure you want to delete this egg?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/admin/nests/${currentNestId}/eggs/${eggId}?_method=DELETE`;
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+// Make nests and eggs data available to JavaScript
+const nests = <%- JSON.stringify(nests) %>;
+const eggs = <%- JSON.stringify(eggs) %>;
+</script>
+
+<%- include('../parts/footer.ejs') %> 

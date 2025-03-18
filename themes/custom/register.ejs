@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/themes/custom/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Register - <%= settings.website.name %></title>
+</head>
+<body>
+    <div class="main1">
+        <div class="main2">
+            <h1 class="title">Flaxy Nodes</h1>
+            <div class="label-b">
+                <div class="labels ls">
+                    <a href="/login">Login</a><p>Register</p>
+                </div>
+            </div>
+            <div class="main">
+                <div class="fields">
+                    <input type="text" placeholder="Username" class="username box" id="username">
+                    <input type="email" placeholder="Email" class="email-r box" id="email">
+                    <div class="second snn">
+                        <input type="text" placeholder="First Name" class="fn" id="firstName">
+                        <input type="text" placeholder="Last Name" class="ln" id="lastName">
+                    </div>
+                    <input type="password" placeholder="Password" class="password box" id="password">
+                    <input type="password" placeholder="Confirm Password" class="password box" id="confirmPassword">
+                </div>
+                <div class="tnc">
+                    <input type="checkbox" name="agree" id="checkbox"> <p>I agree Terms & Conditions</p>
+                </div>
+                <div class="buttons">
+                    <button type="button" id="registerButton">Register</button>
+                </div>
+                <div class="buttons" style="margin-top: 10px;">
+                    <a href="/auth/discord" class="discord-button" style="text-decoration: none;">
+                        <button type="button" style="border-radius: 12px;">
+                            <i class="fab fa-discord"></i> Register with Discord
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <p id="toastMessage"></p>
+    </div>
+
+    <script>
+        document.getElementById('registerButton').addEventListener('click', async () => {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const agreeCheck = document.getElementById('checkbox').checked;
+            
+            // Basic validation
+            if (!username || !email || !firstName || !lastName || !password || !confirmPassword) {
+                showToast('Please fill in all fields');
+                return;
+            }
+
+            if (!agreeCheck) {
+                showToast('Please agree to Terms & Conditions');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match!');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showToast('Password must be at least 6 characters long!');
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showToast('Please enter a valid email address');
+                return;
+            }
+
+            try {
+                const response = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username,
+                        email,
+                        firstName,
+                        lastName,
+                        password
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    window.location.href = '/dashboard';
+                } else {
+                    showToast(data.error || 'Registration failed');
+                }
+            } catch (error) {
+                showToast('An error occurred. Please try again.');
+            }
+        });
+
+        // Live password validation
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            
+            if (password && confirmPassword && password !== confirmPassword) {
+                this.style.borderColor = 'red';
+            } else {
+                this.style.borderColor = '';
+            }
+        });
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html> 

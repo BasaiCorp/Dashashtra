@@ -8,7 +8,7 @@
         "deleteserver": "/servers",
         "updateservers": "/dashboard",
         "createserver": "/servers",
-        "failedcreateserver": "/servers/new",
+        "failedcreateserver": "/create",
         "modifyserver": "/servers",
         "failedmodifyserver": "/servers/edit",
         "setplan": "/admin",
@@ -44,10 +44,13 @@
         "removeaccountsuccess": "/admin"
     },
     "pages": {
+        "": "index.ejs",
         "dashboard": "dashboard.ejs",
         "servers": "servers.ejs",
         "servers/new": "create.ejs",
         "servers/edit": "edit.ejs",
+        "login": "login.ejs",
+        "register": "register.ejs",
         "admin": "admin.ejs",
         "store": "store.ejs",
         "afk": "arcio.ejs",

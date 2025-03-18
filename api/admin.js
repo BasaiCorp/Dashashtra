@@ -1,693 +1,701 @@
 const settings = require("../settings.json");
+const express = require('express');
+const router = express.Router();
+const fetch = require('node-fetch');
+const fs = require("fs");
+const indexjs = require("../index.js");
+const ejs = require("ejs");
+const chalk = require('chalk');
+const { getUsers, getUserById, updateUser } = require('./fetch_users');
+const { getServers, getServerById, updateServerDetails, updateServerBuild, suspendServer, unsuspendServer, deleteServer } = require('./fetch_servers');
+const { getNodes, getNodeById, getNodeAllocations } = require('./fetch_nodes');
+const { getNests, getEggs, getNestById, getEggById, createNest, updateNest, deleteNest, createEgg, updateEgg, deleteEgg } = require('./fetch_eggs');
 
 if (settings.pterodactyl) if (settings.pterodactyl.domain) {
     if (settings.pterodactyl.domain.slice(-1) == "/") settings.pterodactyl.domain = settings.pterodactyl.domain.slice(0, -1);
 };
 
-const fetch = require('node-fetch');
-const fs = require("fs");
-const indexjs = require("../index.js");
-const arciotext = (require("./arcio.js")).text;
-const adminjs = require("./admin.js");
-const ejs = require("ejs");
-const chalk = require('chalk');
-
-module.exports.load = async function(app, db) {
-    app.get("/setcoins", async (req, res) => {
-        let theme = indexjs.get(req);
-
-        if (!req.session.pterodactyl) return four0four(req, res, theme);
-
-        let cacheaccount = await fetch(
-            settings.pterodactyl.domain + "/api/application/users/" + (await db.get("users-" + req.session.userinfo.id)) + "?include=servers",
-            {
-            method: "get",
-            headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
-            }
-        );
-        if (await cacheaccount.statusText == "Not Found") return four0four(req, res, theme);
-        let cacheaccountinfo = JSON.parse(await cacheaccount.text());
-
-        req.session.pterodactyl = cacheaccountinfo.attributes;
-        if (cacheaccountinfo.attributes.root_admin !== true) return four0four(req, res, theme);
-
-        let failredirect = theme.settings.redirect.failedsetcoins || "/";
-
-        let id = req.query.id;
-        let coins = req.query.coins;
-
-        if (!id) return res.redirect(failredirect + "?err=MISSINGID");
-        if (!(await db.get("users-" + req.query.id))) return res.redirect(`${failredirect}?err=INVALIDID`);
-        
-        if (!coins) return res.redirect(failredirect + "?err=MISSINGCOINS");
-
-        coins = parseFloat(coins);
-
-        if (isNaN(coins)) return res.redirect(failredirect + "?err=INVALIDCOINNUMBER");
-
-        if (coins < 0 || coins > 999999999999999) return res.redirect(`${failredirect}?err=COINSIZE`);
-
-        if (coins == 0) {
-            await db.delete("coins-" + id)
-        } else {
-            await db.set("coins-" + id, coins);
-        }
-
-        let successredirect = theme.settings.redirect.setcoins || "/";
-        res.redirect(successredirect + "?err=none");
-
-        let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
-
-        if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
-            let username = cacheaccountinfo.attributes.username;
-            let tag = `${cacheaccountinfo.attributes.first_name}${cacheaccountinfo.attributes.last_name}`
-            let params = JSON.stringify({
-                embeds: [
-                    {
-                        title: "Coins Set",
-                        description: `**__User:__** ${id} (<@${id}>)\n**__Admin:__** ${tag} (<@${req.session.userinfo.id}>)\n\n**Coins:** ${coins}`,
-                        color: hexToDecimal("#ffff00")
-                    }
-                ]
-            })
-            fetch(`${newsettings.api.client.webhook.webhook_url}`, {
-                method: "POST",
-                headers: {
-                    'Content-type': 'application/json',
-                },
-                body: params
-            }).catch(e => console.warn(chalk.red("[WEBSITE] There was an error sending to the webhook: " + e)));
-        }
-    });
-
-    app.get("/addcoins", async (req, res) => {
-        let theme = indexjs.get(req);
-
-        if (!req.session.pterodactyl) return four0four(req, res, theme);
-
-        let cacheaccount = await fetch(
-            settings.pterodactyl.domain + "/api/application/users/" + (await db.get("users-" + req.session.userinfo.id)) + "?include=servers",
-            {
-            method: "get",
-            headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
-            }
-        );
-        if (await cacheaccount.statusText == "Not Found") return four0four(req, res, theme);
-        let cacheaccountinfo = JSON.parse(await cacheaccount.text());
-
-        req.session.pterodactyl = cacheaccountinfo.attributes;
-        if (cacheaccountinfo.attributes.root_admin !== true) return four0four(req, res, theme);
-
-        let failredirect = theme.settings.redirect.failedsetcoins || "/";
-
-        let id = req.query.id;
-        let coins = req.query.coins;
-
-        if (!id) return res.redirect(failredirect + "?err=MISSINGID");
-        if (!(await db.get("users-" + req.query.id))) return res.redirect(`${failredirect}?err=INVALIDID`);
-        
-        if (!coins) return res.redirect(failredirect + "?err=MISSINGCOINS");
-
-        let currentcoins = await db.get("coins-" + id) || 0;
-
-        coins = currentcoins + parseFloat(coins);
-
-        if (isNaN(coins)) return res.redirect(failredirect + "?err=INVALIDCOINNUMBER");
-
-        if (coins < 0 || coins > 999999999999999) return res.redirect(`${failredirect}?err=COINSIZE`);
-
-        if (coins == 0) {
-            await db.delete("coins-" + id)
-        } else {
-            await db.set("coins-" + id, coins);
-        }
-
-        let successredirect = theme.settings.redirect.setcoins || "/";
-        res.redirect(successredirect + "?err=none");
-
-        let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
-
-        if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
-            let username = cacheaccountinfo.attributes.username;
-            let tag = `${cacheaccountinfo.attributes.first_name}${cacheaccountinfo.attributes.last_name}`
-            let params = JSON.stringify({
-                embeds: [
-                    {
-                        title: "Coins Add",
-                        description: `**__User:__** ${id} (<@${id}>)\n**__Admin:__** ${tag} (<@${req.session.userinfo.id}>)\n\n**Coins:** ${currentcoins} (new: ${coins})`,
-                        color: hexToDecimal("#ffff00")
-                    }
-                ]
-            })
-            fetch(`${newsettings.api.client.webhook.webhook_url}`, {
-                method: "POST",
-                headers: {
-                    'Content-type': 'application/json',
-                },
-                body: params
-            }).catch(e => console.warn(chalk.red("[WEBSITE] There was an error sending to the webhook: " + e)));
-        }
-    });
-
-    app.get("/setresources", async (req, res) => {
-        let theme = indexjs.get(req);
-    
-        if (!req.session.pterodactyl) return four0four(req, res, theme);
-        
-        let cacheaccount = await fetch(
-            settings.pterodactyl.domain + "/api/application/users/" + (await db.get("users-" + req.session.userinfo.id)) + "?include=servers",
-            {
-              method: "get",
-              headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
-            }
-        );
-        if (await cacheaccount.statusText == "Not Found") return four0four(req, res, theme);
-        let cacheaccountinfo = JSON.parse(await cacheaccount.text());
-    
-        req.session.pterodactyl = cacheaccountinfo.attributes;
-        if (cacheaccountinfo.attributes.root_admin !== true) return four0four(req, res, theme);
-    
-        let failredirect = theme.settings.redirect.failedsetresources || "/";
-    
-        if (!req.query.id) return res.redirect(`${failredirect}?err=MISSINGID`);
-    
-        if (!(await db.get("users-" + req.query.id))) return res.redirect(`${failredirect}?err=INVALIDID`);
-    
-        let successredirect = theme.settings.redirect.setresources || "/";
-    
-        if (req.query.ram || req.query.disk || req.query.cpu || req.query.servers) {
-            let ramstring = req.query.ram;
-            let diskstring = req.query.disk;
-            let cpustring = req.query.cpu;
-            let serversstring = req.query.servers;
-            let id = req.query.id;
-
-            let currentextra = await db.get("extra-" + req.query.id);
-            let extra;
-
-            if (typeof currentextra == "object") {
-                extra = currentextra;
-            } else {
-                extra = {
-                    ram: 0,
-                    disk: 0,
-                    cpu: 0,
-                    servers: 0
-                }
-            }
-
-            if (ramstring) {
-                let ram = parseFloat(ramstring);
-                if (ram < 0 || ram > 999999999999999) {
-                    return res.redirect(`${failredirect}?err=RAMSIZE`);
-                }
-                extra.ram = ram;
-            }
-            
-            if (diskstring) {
-                let disk = parseFloat(diskstring);
-                if (disk < 0 || disk > 999999999999999) {
-                    return res.redirect(`${failredirect}?err=DISKSIZE`);
-                }
-                extra.disk = disk;
-            }
-            
-            if (cpustring) {
-                let cpu = parseFloat(cpustring);
-                if (cpu < 0 || cpu > 999999999999999) {
-                    return res.redirect(`${failredirect}?err=CPUSIZE`);
-                }
-                extra.cpu = cpu;
-            }
-
-            if (serversstring) {
-                let servers = parseFloat(serversstring);
-                if (servers < 0 || servers > 999999999999999) {
-                    return res.redirect(`${failredirect}?err=SERVERSIZE`);
-                }
-                extra.servers = servers;
-            }
-            
-            if (extra.ram == 0 && extra.disk == 0 && extra.cpu == 0 && extra.servers == 0) {
-                await db.delete("extra-" + req.query.id);
-            } else {
-                await db.set("extra-" + req.query.id, extra);
-            }
-
-            adminjs.suspend(req.query.id);
-
-            // Just copy this and put it in the other endpoints
-            let username = cacheaccountinfo.attributes.username;
-            let tag = `${cacheaccountinfo.attributes.first_name}${cacheaccountinfo.attributes.last_name}`
-
-            let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
-
-            if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
-                let params = JSON.stringify({
-                    embeds: [
-                        {
-                            title: "Resources Added",
-                            description: `**__User:__** ${id} (<@${id}>)\n**__Admin:__** ${tag} (<@${req.session.userinfo.id}>)\n\n**Quantity:**\n- ${ramstring}MB RAM\n- ${diskstring}MB Disk\n- ${serversstring} Servers\n- ${cpustring}% CPU`,
-                            color: hexToDecimal("#ffff00")
-                        }
-                    ]
-                })
-                fetch(`${newsettings.api.client.webhook.webhook_url}`, {
-                    method: "POST",
-                    headers: {
-                        'Content-type': 'application/json',
-                    },
-                    body: params
-                }).catch(e => console.warn(chalk.red("[WEBHOOK] There was an error sending a message to the webhook:\n" + e)))
-            }
-            return res.redirect(successredirect + "?err=none");
-        } else {
-            res.redirect(`${failredirect}?err=MISSINGVARIABLES`);
-        }
-    });
-
-
-    app.get("/setplan", async (req, res) => {
-        let theme = indexjs.get(req);
-
-        if (!req.session.pterodactyl) return four0four(req, res, theme);
-        
-        let cacheaccount = await fetch(
-            settings.pterodactyl.domain + "/api/application/users/" + (await db.get("users-" + req.session.userinfo.id)) + "?include=servers",
-            {
-            method: "get",
-            headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
-            }
-        );
-        if (await cacheaccount.statusText == "Not Found") return four0four(req, res, theme);
-        let cacheaccountinfo = JSON.parse(await cacheaccount.text());
-
-        req.session.pterodactyl = cacheaccountinfo.attributes;
-        if (cacheaccountinfo.attributes.root_admin !== true) return four0four(req, res, theme);
-
-        let failredirect = theme.settings.redirect.failedsetplan || "/";
-
-        if (!req.query.id) return res.redirect(`${failredirect}?err=MISSINGID`);
-
-        if (!(await db.get("users-" + req.query.id))) return res.redirect(`${failredirect}?err=INVALIDID`);
-
-        let successredirect = theme.settings.redirect.setplan || "/";
-
-        if (!req.query.package) {
-            await db.delete("package-" + req.query.id);
-            adminjs.suspend(req.query.id);
-            let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
-
-            if(newsettings.api.client.webhook.auditlogs.enabled === true && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
-                let id = req.query.id;
-                let username = cacheaccountinfo.attributes.username;
-                let tag = `${cacheaccountinfo.attributes.first_name}${cacheaccountinfo.attributes.last_name}`
-                let params = JSON.stringify({
-                    embeds: [
-                        {
-                            title: "Package Changed",
-                            description: `**__User:__** ${id} (<@${id}>)\n**__Admin:__** ${tag} (<@${req.session.userinfo.id}>)\n\n**Package:** ${req.query.package}`,
-                            color: hexToDecimal("#ffff00")
-                        }
-                    ]
-                })
-                fetch(`${newsettings.api.client.webhook.webhook_url}`, {
-                    method: "POST",
-                    headers: {
-                        'Content-type': 'application/json',
-                    },
-                    body: params
-                }).catch(e => console.warn(chalk.red("[WEBHOOK] There was an error sending a message to the webhook:\n" + e)));
-            }
-
-            return res.redirect(successredirect + "?err=none");
-        } else {
-            let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
-            if (!newsettings.api.client.packages.list[req.query.package]) return res.redirect(`${failredirect}?err=INVALIDPACKAGE`);
-            await db.set("package-" + req.query.id, req.query.package);
-            adminjs.suspend(req.query.id);
-            
-            if(newsettings.api.client.webhook.auditlogs.enabled === true && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
-                let id = req.query.id;
-                let username = cacheaccountinfo.attributes.username;
-                let tag = `${cacheaccountinfo.attributes.first_name}${cacheaccountinfo.attributes.last_name}`
-                let params = JSON.stringify({
-                    embeds: [
-                        {
-                            title: "Package Changed",
-                            description: `**__User:__** ${id} (<@${id}>)\n**__Admin:__** ${tag} (<@${req.session.userinfo.id}>)\n\n**Package:** ${req.query.package}`,
-                            color: hexToDecimal("#ffff00")
-                        }
-                    ]
-                })
-                fetch(`${newsettings.api.client.webhook.webhook_url}`, {
-                    method: "POST",
-                    headers: {
-                        'Content-type': 'application/json',
-                    },
-                    body: params
-                }).catch(e => console.warn(chalk.red("[WEBHOOK] There was an error sending a message to the webhook:\n" + e)));
-            }
-            return res.redirect(successredirect + "?err=none");
-        }
-    });
-    
-    app.get("/getip", async (req, res) => {
-        let theme = indexjs.get(req);
-
-        if (!req.session.pterodactyl) return four0four(req, res, theme);
-
-        let cacheaccount = await fetch(
-            settings.pterodactyl.domain + "/api/application/users/" + (await db.get("users-" + req.session.userinfo.id)) + "?include=servers",
-            {
-            method: "get",
-            headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
-            }
-        );
-        if (await cacheaccount.statusText == "Not Found") return four0four(req, res, theme);
-        let cacheaccountinfo = JSON.parse(await cacheaccount.text());
-
-        req.session.pterodactyl = cacheaccountinfo.attributes;
-        if (cacheaccountinfo.attributes.root_admin !== true) return four0four(req, res, theme);
-
-        let failredirect = theme.settings.redirect.failedgetip || "/";
-        let successredirect = theme.settings.redirect.getip || "/";
-        if (!req.query.id) return res.redirect(`${failredirect}?err=MISSINGID`);
-
-        if (!(await db.get("users-" + req.query.id))) return res.redirect(`${failredirect}?err=INVALIDID`);
-
-        if (!(await db.get("ip-" + req.query.id))) return res.redirect(`${failredirect}?err=NOIP`);
-        let ip = await db.get("ip-" + req.query.id);
-        return res.redirect(successredirect + "?err=NONE&ip=" + ip)
-    });
-
-    app.get("/create_coupon", async (req, res) => {
-        let theme = indexjs.get(req);
-
-        if (!req.session.pterodactyl) return four0four(req, res, theme);
-        
-        let cacheaccount = await fetch(
-            settings.pterodactyl.domain + "/api/application/users/" + (await db.get("users-" + req.session.userinfo.id)) + "?include=servers",
-            {
-            method: "get",
-            headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
-            }
-        );
-        if (await cacheaccount.statusText == "Not Found") return four0four(req, res, theme);
-        let cacheaccountinfo = JSON.parse(await cacheaccount.text());
-
-        req.session.pterodactyl = cacheaccountinfo.attributes;
-        if (cacheaccountinfo.attributes.root_admin !== true) return four0four(req, res, theme);
-
-        let code = req.query.code ? req.query.code.slice(0, 200) : Math.random().toString(36).substring(2, 15);
-
-        if (!code.match(/^[a-z0-9]+$/i)) return res.redirect(theme.settings.redirect.couponcreationfailed + "?err=CREATECOUPONINVALIDCHARACTERS");
-
-        let coins = req.query.coins || 0;
-        let ram = req.query.ram || 0;
-        let disk = req.query.disk || 0;
-        let cpu = req.query.cpu || 0;
-        let servers = req.query.servers || 0;
-
-        coins = parseFloat(coins);
-        ram = parseFloat(ram);
-        disk = parseFloat(disk);
-        cpu = parseFloat(cpu);
-        servers = parseFloat(servers);
-
-        if (coins < 0) return res.redirect(theme.settings.redirect.couponcreationfailed + "?err=CREATECOUPONLESSTHANONE");
-        if (ram < 0) return res.redirect(theme.settings.redirect.couponcreationfailed + "?err=CREATECOUPONLESSTHANONE");
-        if (disk < 0) return res.redirect(theme.settings.redirect.couponcreationfailed + "?err=CREATECOUPONLESSTHANONE");
-        if (cpu < 0) return res.redirect(theme.settings.redirect.couponcreationfailed + "?err=CREATECOUPONLESSTHANONE");
-        if (servers < 0) return res.redirect(theme.settings.redirect.couponcreationfailed + "?err=CREATECOUPONLESSTHANONE");
-
-        if (!coins && !ram && !disk && !cpu && !servers) return res.redirect(theme.settings.redirect.couponcreationfailed + "?err=CREATECOUPONEMPTY");
-
-        await db.set("coupon-" + code, {
-            coins: coins,
-            ram: ram,
-            disk: disk,
-            cpu: cpu,
-            servers: servers
-        });
-
-        res.redirect(theme.settings.redirect.couponcreationsuccess + "?code=" + code)
-
-        let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
-
-        if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
-            let username = cacheaccountinfo.attributes.username;
-            let tag = `${cacheaccountinfo.attributes.first_name}${cacheaccountinfo.attributes.last_name}`
-            let params = JSON.stringify({
-                embeds: [
-                    {
-                        title: "Created Coupon",
-                        description: `**__Admin:__** ${tag} (<@${req.session.userinfo.id}>)\n__**Code:**__ ${code}\n\n**Coins:** ${coins} coin${coins == 1 ? "": "s"}\n**RAM:** ${ram}MB\n**Disk:** ${disk}MB\n**CPU:** ${cpu}%\n**Servers:** ${servers} server${servers == 1 ? "": "s"}`,
-                        color: hexToDecimal("#ffff00")
-                    }
-                ]
-            })
-            fetch(`${newsettings.api.client.webhook.webhook_url}`, {
-                method: "POST",
-                headers: {
-                    'Content-type': 'application/json',
-                },
-                body: params
-            }).catch(e => console.warn(chalk.red("[WEBSITE] There was an error sending to the webhook: " + e)));
-        }
-    });
-
-    app.get("/revoke_coupon", async (req, res) => {
-        let theme = indexjs.get(req);
-
-        if (!req.session.pterodactyl) return four0four(req, res, theme);
-        
-        let cacheaccount = await fetch(
-            settings.pterodactyl.domain + "/api/application/users/" + (await db.get("users-" + req.session.userinfo.id)) + "?include=servers",
-            {
-            method: "get",
-            headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
-            }
-        );
-        if (await cacheaccount.statusText == "Not Found") return four0four(req, res, theme);
-        let cacheaccountinfo = JSON.parse(await cacheaccount.text());
-
-        req.session.pterodactyl = cacheaccountinfo.attributes;
-        if (cacheaccountinfo.attributes.root_admin !== true) return four0four(req, res, theme);
-
-        let code = req.query.code;
-
-        if (!code.match(/^[a-z0-9]+$/i)) return res.redirect(theme.settings.redirect.couponrevokefailed + "?err=REVOKECOUPONCANNOTFINDCODE");
-
-        if (!(await db.get("coupon-" + code))) return res.redirect(theme.settings.redirect.couponrevokefailed + "?err=REVOKECOUPONCANNOTFINDCODE");
-
-        await db.delete("coupon-" + code);
-
-        res.redirect(theme.settings.redirect.couponrevokesuccess + "?revokedcode=true");
-        
-        let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
-
-        if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
-            let username = cacheaccountinfo.attributes.username;
-            let tag = `${cacheaccountinfo.attributes.first_name}${cacheaccountinfo.attributes.last_name}`
-            let params = JSON.stringify({
-                embeds: [
-                    {
-                        title: "Revoked Coupon",
-                        description: `**__Admin:__** ${tag} (<@${req.session.userinfo.id}>)\n__**Code:**__ ${code}`,
-                        color: hexToDecimal("#ffff00")
-                    }
-                ]
-            })
-            fetch(`${newsettings.api.client.webhook.webhook_url}`, {
-                method: "POST",
-                headers: {
-                    'Content-type': 'application/json',
-                },
-                body: params
-            }).catch(e => console.warn(chalk.red("[WEBSITE] There was an error sending to the webhook: " + e)));
-        }
-    });
-
-    app.get("/remove_account", async (req, res) => {
-        let theme = indexjs.get(req);
-
-        if (!req.session.pterodactyl) return four0four(req, res, theme);
-        
-        let cacheaccount = await fetch(
-            settings.pterodactyl.domain + "/api/application/users/" + (await db.get("users-" + req.session.userinfo.id)) + "?include=servers",
-            {
-                method: "get",
-                headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
-            }
-        );
-        if (await cacheaccount.statusText == "Not Found") return four0four(req, res, theme);
-        let cacheaccountinfo = JSON.parse(await cacheaccount.text());
-
-        req.session.pterodactyl = cacheaccountinfo.attributes;
-        if (cacheaccountinfo.attributes.root_admin !== true) return four0four(req, res, theme);
-
-        // This doesn't delete the account and doesn't touch the renewal system.
-
-        if (!req.query.id) return res.redirect(theme.settings.redirect.removeaccountfailed + "?err=REMOVEACCOUNTMISSINGID");
-
-        let discordid = req.query.id;
-        let pteroid = await db.get("users-" + discordid);
-
-        // Remove IP.
-
-        let selected_ip = await db.get("ip-" + discordid);
-
-        if (selected_ip) {
-        let allips = await db.get("ips") || [];
-        allips = allips.filter(ip => ip !== selected_ip);
-
-        if (allips.length == 0) {
-            await db.delete("ips");
-        } else {
-            await db.set("ips", allips);
-        }
-
-        await db.delete("ip-" + discordid);
-        }
-
-        // Remove user.
-
-        let userids = await db.get("users") || [];
-        userids = userids.filter(user => user !== pteroid);
-
-        if (userids.length == 0) {
-        await db.delete("users");
-        } else {
-        await db.set("users", userids);
-        }
-
-        await db.delete("users-" + discordid);
-
-        // Remove coins/resources.
-
-        await db.delete("coins-" + discordid);
-        await db.delete("extra-" + discordid);
-        await db.delete("package-" + discordid);
-
-        res.redirect(theme.settings.redirect.removeaccountsuccess + "?success=REMOVEACCOUNT");
-
-        let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
-
-        if(newsettings.api.client.webhook.auditlogs.enabled && !newsettings.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
-            let username = cacheaccountinfo.attributes.username;
-            let tag = `${cacheaccountinfo.attributes.first_name}${cacheaccountinfo.attributes.last_name}`
-            let params = JSON.stringify({
-                embeds: [
-                    {
-                        title: "Removed Account",
-                        description: `**__User__:** ${discordid} (<@${discordid}>)\n**__Admin:__** ${tag} (<@${req.session.userinfo.id}>)\n\n**Pterodactyl Panel ID**: ${pteroid}`,
-                        color: hexToDecimal("#ffff00")
-                    }
-                ]
-            })
-            fetch(`${newsettings.api.client.webhook.webhook_url}`, {
-                method: "POST",
-                headers: {
-                    'Content-type': 'application/json',
-                },
-                body: params
-            }).catch(e => console.warn(chalk.red("[WEBSITE] There was an error sending to the webhook: " + e)));
-        }
-    });
-
-    app.get("/userinfo", async (req, res) => {
-        let theme = indexjs.get(req);
-
-        if (!req.session.pterodactyl) return four0four(req, res, theme);
-        
-        let cacheaccount = await fetch(
-            settings.pterodactyl.domain + "/api/application/users/" + (await db.get("users-" + req.session.userinfo.id)) + "?include=servers",
-            {
-                method: "get",
-                headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
-            }
-        );
-        if (await cacheaccount.statusText == "Not Found") return four0four(req, res, theme);
-        let cacheaccountinfo = JSON.parse(await cacheaccount.text());
-
-        req.session.pterodactyl = cacheaccountinfo.attributes;
-        if (cacheaccountinfo.attributes.root_admin !== true) return four0four(req, res, theme);
-        
-        if (!req.query.id) return res.send({status: "missing id"});
-
-        if (!(await db.get("users-" + req.query.id))) return res.send({status: "invalid id"});
-    
-        let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
-    
-        if (newsettings.api.client.oauth2.link.slice(-1) == "/")
-          newsettings.api.client.oauth2.link = newsettings.api.client.oauth2.link.slice(0, -1);
-      
-        if (newsettings.api.client.oauth2.callbackpath.slice(0, 1) !== "/")
-          newsettings.api.client.oauth2.callbackpath = "/" + newsettings.api.client.oauth2.callbackpath;
-        
-        if (newsettings.pterodactyl.domain.slice(-1) == "/")
-          newsettings.pterodactyl.domain = newsettings.pterodactyl.domain.slice(0, -1);
-        
-        let packagename = await db.get("package-" + req.query.id);
-        let package = newsettings.api.client.packages.list[packagename ? packagename : newsettings.api.client.packages.default];
-        if (!package) package = {
-          ram: 0,
-          disk: 0,
-          cpu: 0,
-          servers: 0
+// Helper function for 404
+async function four0four(req, res, theme) {
+    ejs.renderFile(
+        `./themes/${theme.name}/${theme.settings.notfound}`, 
+        await eval(indexjs.renderdataeval),
+        null,
+    function (err, str) {
+        delete req.session.newaccount;
+        if (err) {
+            console.log(`[WEBSITE] An error has occured on path ${req._parsedUrl.pathname}:`);
+            console.log(err);
+            return res.send("An error has occured while attempting to load this page. Please contact an administrator to fix this.");
         };
-    
-        package["name"] = packagename;
-    
-        let pterodactylid = await db.get("users-" + req.query.id);
-        let userinforeq = await fetch(
-          newsettings.pterodactyl.domain + "/api/application/users/" + pterodactylid + "?include=servers",
-            {
-              method: "get",
-              headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${newsettings.pterodactyl.key}` }
-            }
-          );
-        if (await userinforeq.statusText == "Not Found") {
-            console.log("[WEBSITE] An error has occured while attempting to get a user's information");
-            console.log("- Discord ID: " + req.query.id);
-            console.log("- Pterodactyl Panel ID: " + pterodactylid);
-            return res.send({ status: "could not find user on panel" });
-        }
-        let userinfo = await userinforeq.json();
-    
-        res.send({
-          status: "success",
-          package: package,
-          extra: await db.get("extra-" + req.query.id) ? await db.get("extra-" + req.query.id) : {
-            ram: 0,
-            disk: 0,
-            cpu: 0,
-            servers: 0
-          },
-          userinfo: userinfo,
-          coins: newsettings.api.client.coins.enabled == true ? (await db.get("coins-" + req.query.id) ? await db.get("coins-" + req.query.id) : 0) : null
-        });
+        res.status(404);
+        res.send(str);
     });
+}
 
-    async function four0four(req, res, theme) {
-        ejs.renderFile(
-            `./themes/${theme.name}/${theme.settings.notfound}`, 
-            await eval(indexjs.renderdataeval),
-            null,
-        function (err, str) {
-            delete req.session.newaccount;
-            if (err) {
-                console.log(`[WEBSITE] An error has occured on path ${req._parsedUrl.pathname}:`);
-                console.log(err);
-                return res.send("An error has occured while attempting to load this page. Please contact an administrator to fix this.");
-            };
-            res.status(404);
-            res.send(str);
+function hexToDecimal(hex) {
+    return parseInt(hex.replace("#", ""), 16)
+}
+
+// Middleware to check if user is admin
+async function checkAdmin(req, res, next) {
+    try {
+        if (!req.session || !req.session.pterodactyl) {
+            console.log(chalk.yellow('[ADMIN] Unauthorized access attempt - No session'));
+            return res.redirect('/login');
+        }
+
+        // Check if user is admin in Pterodactyl
+        const response = await fetch(
+            `${settings.pterodactyl.domain}/api/application/users/${req.session.pterodactyl.id}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${settings.pterodactyl.key}`
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch user: ${response.status} ${response.statusText}`);
+        }
+
+        const userData = await response.json();
+        
+        if (!userData.attributes.root_admin) {
+            console.log(chalk.yellow(`[ADMIN] Unauthorized access attempt by user ${req.session.pterodactyl.id}`));
+            return res.status(403).render('404', { 
+                title: 'Access Denied',
+                error: 'You do not have permission to access this page.'
+            });
+        }
+
+        // Update session with latest user data
+        req.session.pterodactyl = userData.attributes;
+        req.session.isAdmin = true;
+        next();
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error checking admin status:'), error);
+        return res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while checking admin status.'
         });
     }
+}
 
-    module.exports.suspend = async function(discordid) {
+// Admin dashboard
+router.get('/', checkAdmin, async (req, res) => {
+    try {
+        console.log(chalk.blue('[ADMIN] Admin dashboard accessed'));
+        
+        // Fetch all users and servers
+        const [users, servers] = await Promise.all([
+            getUsers(),
+            getServers()
+        ]);
+
+        // Calculate statistics
+        const stats = {
+            totalUsers: users.length,
+            totalServers: servers.length,
+            activeServers: servers.filter(s => !s.suspended).length,
+            suspendedServers: servers.filter(s => s.suspended).length
+        };
+
+        res.render('admin/dashboard', {
+            title: 'Admin Dashboard',
+            users,
+            servers,
+            stats
+        });
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error loading admin dashboard:'), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while loading the admin dashboard.'
+        });
+    }
+});
+
+// Users management
+router.get('/users', checkAdmin, async (req, res) => {
+    try {
+        console.log(chalk.blue('[ADMIN] Users management page accessed'));
+        
+        const users = await getUsers();
+        
+        res.render('admin/users', {
+            title: 'User Management',
+            users
+        });
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error loading users management:'), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while loading the users management page.'
+        });
+    }
+});
+
+// Server management
+router.get('/servers', checkAdmin, async (req, res) => {
+    try {
+        console.log(chalk.blue('[ADMIN] Servers management page accessed'));
+        
+        const [servers, nodes] = await Promise.all([
+            getServers(),
+            getNodes()
+        ]);
+
+        // Get allocations for each node
+        const nodesWithAllocations = await Promise.all(
+            nodes.map(async node => {
+                const allocations = await getNodeAllocations(node.id);
+                return { ...node, allocations };
+            })
+        );
+        
+        res.render('admin/servers', {
+            title: 'Server Management',
+            servers,
+            nodes: nodesWithAllocations
+        });
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error loading servers management:'), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while loading the servers management page.'
+        });
+    }
+});
+
+// Update server details
+router.post('/servers/:id/details', checkAdmin, async (req, res) => {
+    try {
+        const serverId = req.params.id;
+        const serverData = req.body;
+
+        console.log(chalk.blue(`[ADMIN] Updating server ${serverId} details`));
+        
+        await updateServerDetails(serverId, serverData);
+        
+        // Send webhook if enabled
+        if (settings.webhook.enabled) {
+            const webhookData = {
+                content: `Server ${serverId} details updated by admin ${req.session.pterodactyl.username}`
+            };
+            
+            await fetch(settings.webhook.url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(webhookData)
+            });
+        }
+        
+        res.redirect('/admin/servers');
+    } catch (error) {
+        console.error(chalk.red(`[ADMIN] Error updating server ${req.params.id} details:`), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while updating server details.'
+        });
+    }
+});
+
+// Update server build
+router.post('/servers/:id/build', checkAdmin, async (req, res) => {
+    try {
+        const serverId = req.params.id;
+        const buildData = req.body;
+
+        console.log(chalk.blue(`[ADMIN] Updating server ${serverId} build`));
+        
+        await updateServerBuild(serverId, buildData);
+        
+        // Send webhook if enabled
+        if (settings.webhook.enabled) {
+            const webhookData = {
+                content: `Server ${serverId} build updated by admin ${req.session.pterodactyl.username}`
+            };
+            
+            await fetch(settings.webhook.url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(webhookData)
+            });
+        }
+        
+        res.redirect('/admin/servers');
+    } catch (error) {
+        console.error(chalk.red(`[ADMIN] Error updating server ${req.params.id} build:`), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while updating server build.'
+        });
+    }
+});
+
+// Suspend server
+router.post('/servers/:id/suspend', checkAdmin, async (req, res) => {
+    try {
+        const serverId = req.params.id;
+
+        console.log(chalk.blue(`[ADMIN] Suspending server ${serverId}`));
+        
+        await suspendServer(serverId);
+        
+        // Send webhook if enabled
+        if (settings.webhook.enabled) {
+            const webhookData = {
+                content: `Server ${serverId} suspended by admin ${req.session.pterodactyl.username}`
+            };
+            
+            await fetch(settings.webhook.url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(webhookData)
+            });
+        }
+        
+        res.redirect('/admin/servers');
+    } catch (error) {
+        console.error(chalk.red(`[ADMIN] Error suspending server ${req.params.id}:`), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while suspending the server.'
+        });
+    }
+});
+
+// Unsuspend server
+router.post('/servers/:id/unsuspend', checkAdmin, async (req, res) => {
+    try {
+        const serverId = req.params.id;
+
+        console.log(chalk.blue(`[ADMIN] Unsuspending server ${serverId}`));
+        
+        await unsuspendServer(serverId);
+        
+        // Send webhook if enabled
+        if (settings.webhook.enabled) {
+            const webhookData = {
+                content: `Server ${serverId} unsuspended by admin ${req.session.pterodactyl.username}`
+            };
+            
+            await fetch(settings.webhook.url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(webhookData)
+            });
+        }
+        
+        res.redirect('/admin/servers');
+    } catch (error) {
+        console.error(chalk.red(`[ADMIN] Error unsuspending server ${req.params.id}:`), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while unsuspending the server.'
+        });
+    }
+});
+
+// Delete server
+router.post('/servers/:id/delete', checkAdmin, async (req, res) => {
+    try {
+        const serverId = req.params.id;
+        const force = req.body.force === 'true';
+
+        console.log(chalk.blue(`[ADMIN] Deleting server ${serverId} (force: ${force})`));
+        
+        await deleteServer(serverId, force);
+        
+        // Send webhook if enabled
+        if (settings.webhook.enabled) {
+            const webhookData = {
+                content: `Server ${serverId} deleted by admin ${req.session.pterodactyl.username} (force: ${force})`
+            };
+            
+            await fetch(settings.webhook.url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(webhookData)
+            });
+        }
+        
+        res.redirect('/admin/servers');
+    } catch (error) {
+        console.error(chalk.red(`[ADMIN] Error deleting server ${req.params.id}:`), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while deleting the server.'
+        });
+    }
+});
+
+// Set user coins
+router.post('/users/:id/setcoins', checkAdmin, async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const coins = parseInt(req.body.coins);
+
+        if (isNaN(coins)) {
+            throw new Error('Invalid coins amount');
+        }
+
+        console.log(chalk.blue(`[ADMIN] Setting coins for user ${userId} to ${coins}`));
+        
+        // Get current user data
+        const user = await getUserById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        // Update user with new coins
+        await updateUser(userId, {
+            coins: coins
+        });
+        
+        // Send webhook if enabled
+        if (settings.webhook.enabled) {
+            const webhookData = {
+                content: `Coins set to ${coins} for user ${user.username} by admin ${req.session.pterodactyl.username}`
+            };
+            
+            await fetch(settings.webhook.url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(webhookData)
+            });
+        }
+        
+        res.redirect('/admin/users');
+    } catch (error) {
+        console.error(chalk.red(`[ADMIN] Error setting coins for user ${req.params.id}:`), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while setting user coins.'
+        });
+    }
+});
+
+// Admin settings route
+router.get("/admin/settings", checkAdmin, async (req, res) => {
+    console.log(`[ADMIN] Admin ${req.session.userinfo.id} accessed admin settings`);
+    let theme = indexjs.get(req);
+    
+    try {
+        // Load settings
+        let settingsData = JSON.parse(fs.readFileSync("./settings.json"));
+        
+        // Store in session for use in template
+        req.session.adminSettings = settingsData;
+        
+        // Get render data and render the settings template
+        ejs.renderFile(
+            `./themes/${theme.name}/admin.ejs`, 
+            await eval(indexjs.renderdataeval),
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[ADMIN] Error rendering admin settings:`));
+                    console.log(err);
+                    return res.send("An error has occurred while loading the admin settings. Please contact an administrator to fix this.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error('[ADMIN] Error preparing admin settings data:', error);
+        return res.status(500).send("An error occurred while preparing admin settings data. Please try again later.");
+    }
+});
+
+// Save admin settings route
+router.post("/admin/settings/save", checkAdmin, async (req, res) => {
+    console.log(`[ADMIN] Admin ${req.session.userinfo.id} saving admin settings`);
+    let theme = indexjs.get(req);
+    
+    try {
+        // Get current settings
+        let settingsData = JSON.parse(fs.readFileSync("./settings.json"));
+        
+        // Update settings based on form data
+        if (req.body.website_name) {
+            if (!settingsData.api) settingsData.api = {};
+            if (!settingsData.api.client) settingsData.api.client = {};
+            if (!settingsData.api.client.allow) settingsData.api.client.allow = {};
+            
+            // Update general settings
+            if (req.body.website_name) settingsData.website.name = req.body.website_name;
+            if (req.body.website_url) settingsData.website.url = req.body.website_url;
+            if (req.body.website_port) settingsData.website.port = parseInt(req.body.website_port);
+            
+            // Update server creation settings
+            if (req.body.server_create !== undefined) {
+                if (!settingsData.api.client.allow.server) settingsData.api.client.allow.server = {};
+                settingsData.api.client.allow.server.create = req.body.server_create === 'true';
+            }
+            
+            // Update panel URL and API key
+            if (req.body.pterodactyl_domain) settingsData.pterodactyl.domain = req.body.pterodactyl_domain;
+            if (req.body.pterodactyl_key) settingsData.pterodactyl.key = req.body.pterodactyl_key;
+            
+            // Save the updated settings
+            fs.writeFileSync("./settings.json", JSON.stringify(settingsData, null, 4));
+            
+            // Log the action
+            console.log(`[ADMIN] Settings updated by admin ${req.session.userinfo.id}`);
+            
+            // Send webhook notification if enabled
+            if(settingsData.api.client.webhook.auditlogs.enabled && !settingsData.api.client.webhook.auditlogs.disabled.includes("ADMIN")) {
+                let tag = `${req.session.pterodactyl.first_name}${req.session.pterodactyl.last_name}`;
+                let params = JSON.stringify({
+                    embeds: [
+                        {
+                            title: "Settings Updated",
+                            description: `**__Admin:__** ${tag} (<@${req.session.userinfo.id}>)\n\n**Settings:** Admin updated dashboard settings`,
+                            color: hexToDecimal("#ffff00")
+                        }
+                    ]
+                });
+                
+                fetch(`${settingsData.api.client.webhook.webhook_url}`, {
+                    method: "POST",
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    body: params
+                }).catch(e => console.warn(chalk.red("[WEBSITE] There was an error sending to the webhook: " + e)));
+            }
+            
+            return res.redirect("/admin/settings?success=true");
+        } else {
+            return res.redirect("/admin/settings?err=MISSINGVALUES");
+        }
+    } catch (error) {
+        console.error('[ADMIN] Error saving admin settings:', error);
+        return res.redirect("/admin/settings?err=SAVEFAILED");
+    }
+});
+
+// Eggs and Nests Management
+router.get('/nests', checkAdmin, async (req, res) => {
+    try {
+        console.log(chalk.blue('[ADMIN] Nests management page accessed'));
+        
+        const [nests, eggs] = await Promise.all([
+            getNests(true), // Force update to get fresh data
+            getEggs(true)  // Force update to get fresh data
+        ]);
+        
+        res.render('admin/nests', {
+            title: 'Nests & Eggs Management',
+            nests,
+            eggs
+        });
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error loading nests management:'), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while loading the nests management page.'
+        });
+    }
+});
+
+// Create new nest
+router.post('/nests', checkAdmin, async (req, res) => {
+    try {
+        const nestData = req.body;
+        console.log(chalk.blue('[ADMIN] Creating new nest'));
+        
+        await createNest(nestData);
+        
+        if (settings.webhook.enabled) {
+            const webhookData = {
+                content: `New nest created by admin ${req.session.pterodactyl.username}`
+            };
+            await fetch(settings.webhook.url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(webhookData)
+            });
+        }
+        
+        res.redirect('/admin/nests');
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error creating nest:'), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while creating the nest.'
+        });
+    }
+});
+
+// Update nest
+router.put('/nests/:id', checkAdmin, async (req, res) => {
+    try {
+        const nestId = req.params.id;
+        const nestData = req.body;
+        console.log(chalk.blue(`[ADMIN] Updating nest ${nestId}`));
+        
+        await updateNest(nestId, nestData);
+        
+        if (settings.webhook.enabled) {
+            const webhookData = {
+                content: `Nest ${nestId} updated by admin ${req.session.pterodactyl.username}`
+            };
+            await fetch(settings.webhook.url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(webhookData)
+            });
+        }
+        
+        res.redirect('/admin/nests');
+    } catch (error) {
+        console.error(chalk.red(`[ADMIN] Error updating nest ${req.params.id}:`), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while updating the nest.'
+        });
+    }
+});
+
+// Delete nest
+router.delete('/nests/:id', checkAdmin, async (req, res) => {
+    try {
+        const nestId = req.params.id;
+        console.log(chalk.blue(`[ADMIN] Deleting nest ${nestId}`));
+        
+        await deleteNest(nestId);
+        
+        if (settings.webhook.enabled) {
+            const webhookData = {
+                content: `Nest ${nestId} deleted by admin ${req.session.pterodactyl.username}`
+            };
+            await fetch(settings.webhook.url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(webhookData)
+            });
+        }
+        
+        res.redirect('/admin/nests');
+    } catch (error) {
+        console.error(chalk.red(`[ADMIN] Error deleting nest ${req.params.id}:`), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while deleting the nest.'
+        });
+    }
+});
+
+// Create new egg
+router.post('/nests/:nestId/eggs', checkAdmin, async (req, res) => {
+    try {
+        const nestId = req.params.nestId;
+        const eggData = req.body;
+        console.log(chalk.blue(`[ADMIN] Creating new egg in nest ${nestId}`));
+        
+        await createEgg(nestId, eggData);
+        
+        if (settings.webhook.enabled) {
+            const webhookData = {
+                content: `New egg created in nest ${nestId} by admin ${req.session.pterodactyl.username}`
+            };
+            await fetch(settings.webhook.url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(webhookData)
+            });
+        }
+        
+        res.redirect('/admin/nests');
+    } catch (error) {
+        console.error(chalk.red(`[ADMIN] Error creating egg in nest ${req.params.nestId}:`), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while creating the egg.'
+        });
+    }
+});
+
+// Update egg
+router.put('/nests/:nestId/eggs/:eggId', checkAdmin, async (req, res) => {
+    try {
+        const { nestId, eggId } = req.params;
+        const eggData = req.body;
+        console.log(chalk.blue(`[ADMIN] Updating egg ${eggId} in nest ${nestId}`));
+        
+        await updateEgg(nestId, eggId, eggData);
+        
+        if (settings.webhook.enabled) {
+            const webhookData = {
+                content: `Egg ${eggId} in nest ${nestId} updated by admin ${req.session.pterodactyl.username}`
+            };
+            await fetch(settings.webhook.url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(webhookData)
+            });
+        }
+        
+        res.redirect('/admin/nests');
+    } catch (error) {
+        console.error(chalk.red(`[ADMIN] Error updating egg ${req.params.eggId}:`), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while updating the egg.'
+        });
+    }
+});
+
+// Delete egg
+router.delete('/nests/:nestId/eggs/:eggId', checkAdmin, async (req, res) => {
+    try {
+        const { nestId, eggId } = req.params;
+        console.log(chalk.blue(`[ADMIN] Deleting egg ${eggId} from nest ${nestId}`));
+        
+        await deleteEgg(nestId, eggId);
+        
+        if (settings.webhook.enabled) {
+            const webhookData = {
+                content: `Egg ${eggId} in nest ${nestId} deleted by admin ${req.session.pterodactyl.username}`
+            };
+            await fetch(settings.webhook.url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(webhookData)
+            });
+        }
+        
+        res.redirect('/admin/nests');
+    } catch (error) {
+        console.error(chalk.red(`[ADMIN] Error deleting egg ${req.params.eggId}:`), error);
+        res.status(500).render('404', { 
+            title: 'Error',
+            error: 'An error occurred while deleting the egg.'
+        });
+    }
+});
+
+module.exports = {
+    router: router,
+    suspend: async function(discordid) {
         let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
         if (newsettings.api.client.allow.overresourcessuspend !== true) return;
 
@@ -774,9 +782,6 @@ module.exports.load = async function(app, db) {
                   );
             }
         };
-    }
+    },
+    checkAdmin: checkAdmin
 };
-
-function hexToDecimal(hex) {
-    return parseInt(hex.replace("#",""), 16)
-  }

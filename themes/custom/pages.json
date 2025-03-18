@@ -1,0 +1,32 @@
+{
+    "index": "index.ejs",
+    "notfound": "404.ejs",
+    "pages": {
+        "login": "login.ejs",
+        "register": "register.ejs",
+        "dashboard": "dashboard.ejs",
+        "admin": "admin.ejs",
+        "servers": "servers.ejs",
+        "store": "store.ejs",
+        "redeem": "redeem.ejs",
+        "servers/new": "create.ejs",
+        "servers/edit": "edit.ejs",
+        "arcio": "arcio.ejs"
+    },
+    "mustbeloggedin": [
+        "/dashboard",
+        "/servers",
+        "/create",
+        "/edit",
+        "/admin",
+        "/store",
+        "/redeem"
+    ],
+    "mustbeadmin": [
+        "/admin"
+    ],
+    "variables": {
+        "title": "Dashactyl",
+        "description": "A client panel for Pterodactyl"
+    }
+} 

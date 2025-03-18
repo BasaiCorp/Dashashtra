@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/themes/custom/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Login - <%= settings.website.name %></title>
+</head>
+<body>
+    <div class="main1">
+        <div class="circle-center"></div>
+        <div class="main2">
+            <h1 class="title">Flaxy Nodes</h1>
+            <div class="label-b">
+                <div class="labels" role="navigation">
+                    <p>Login</p><a href="/register" aria-label="Switch to Register">Register</a>
+                </div>
+            </div>
+            <div class="main">
+                <div class="fields">
+                    <input type="email" placeholder="Email" class="email box" id="email" required aria-label="Email">
+                    <input type="password" placeholder="Password" class="password box" id="password" required aria-label="Password">
+                </div>
+                <div class="second">
+                    <select name="remember" id="select" aria-label="Remember me">
+                        <option value="yes">Remember me</option>
+                        <option value="no">Don't remember</option>
+                    </select>
+                    <a href="/forgot-password" aria-label="Forgot Password">Forgot Password?</a>
+                </div>
+                <div class="tnc">
+                    <input type="checkbox" name="agree" id="checkbox" required>
+                    <p>I agree Terms & Conditions</p>
+                </div>
+                <div class="buttons">
+                    <button type="button" id="loginButton" aria-label="Login">Login</button>
+                </div>
+                <div class="buttons" style="margin-top: 10px;">
+                    <a href="/auth/discord" class="discord-button" style="text-decoration: none;">
+                        <button type="button" style="border-radius: 12px;">
+                            <i class="fab fa-discord"></i> Login with Discord
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <p id="toastMessage"></p>
+    </div>
+
+    <script>
+        document.getElementById('loginButton').addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('select').value;
+            const agreeCheck = document.getElementById('checkbox').checked;
+            
+            if (!agreeCheck) {
+                showToast('Please agree to Terms & Conditions');
+                return;
+            }
+
+            try {
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        email, 
+                        password,
+                        remember: remember === 'yes'
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    window.location.href = '/dashboard';
+                } else {
+                    showToast(data.error || 'Login failed');
+                }
+            } catch (error) {
+                showToast('An error occurred. Please try again.');
+            }
+        });
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html> 

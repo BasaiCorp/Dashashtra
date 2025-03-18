@@ -1,121 +1,108 @@
 const settings = require("../settings.json");
+const express = require('express');
+const router = express.Router();
+const indexjs = require("../index.js");
+const fetch = require('node-fetch');
+const fs = require('fs');
+const db = require("../db.js");
 
-module.exports.load = async function(app, db) {
-    if (settings.api.client.allow.renewsuspendsystem.enabled == true) {
+let renewalservers = {};
 
-        let renewalservers = {};
-        
-        const indexjs = require("../index.js");
-        const arciotext = (require("./arcio.js")).text;
-        const fetch = require('node-fetch');
-        const fs = require('fs');
+// Initialize renewal system if enabled
+if (settings.api.client.allow.renewsuspendsystem.enabled == true) {
+    // Renewal check interval
+    setInterval(async () => {
+        for (let [id, value] of Object.entries(renewalservers)) {
+            renewalservers[id]--;
+            if (renewalservers[id] < 1) {
+                let canpass = await indexjs.islimited();
+                if (canpass == false) {
+                    renewalservers[id] = 0;
+                    continue;
+                }
 
-        setInterval(async () => {
-            for (let [id, value] of Object.entries(renewalservers)) {
-                renewalservers[id]--;
-                if (renewalservers[id] < 1) {
-                    let canpass = await indexjs.islimited();
-                    if (canpass == false) {
-                        return renewalservers[id] = 0;
-                    };
-                    indexjs.ratelimits(1);
-                    await fetch(
-                        settings.pterodactyl.domain + "/api/application/servers/" + id + "/suspend",
-                        {
-                          method: "post",
-                          headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
-                        }
-                    );
+                let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
+                if (newsettings.api.client.allow.renewsuspendsystem.enabled !== true) return;
+
+                let userinfo = await db.get("user-" + id);
+                let serverInfo = await db.get("server-" + id);
+                
+                if (!userinfo || !serverInfo) {
                     delete renewalservers[id];
+                    return;
                 }
-            }
-        }, 1000);
 
-        app.get("/renew", async (req, res) => {
-            if (!req.session.pterodactyl) return res.redirect("/login");
-        
-            if (!req.query.id) return res.send("Missing id.");
-            if (!req.session.pterodactyl.relationships.servers.data.filter(server => server.attributes.id == req.query.id)) return res.send("Could not find server with that ID.");
-        
-            let theme = indexjs.get(req);
-
-
-            let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
-            if (newsettings.api.client.allow.overresourcessuspend == true) {
-                let userinfo = req.session.pterodactyl;
-                let discordid = req.session.userinfo.id;
-        
-                let packagename = await db.get("package-" + discordid);
-                let package = newsettings.api.client.packages.list[packagename || newsettings.api.client.packages.default];
-        
-                let extra = 
-                    await db.get("extra-" + discordid) ?
-                    await db.get("extra-" + discordid) :
+                let panel = await fetch(
+                    settings.pterodactyl.domain + "/api/application/servers/" + serverInfo.id + "/suspend",
                     {
-                        ram: 0,
-                        disk: 0,
-                        cpu: 0,
-                        servers: 0
-                    };
-        
-                let plan = {
-                    ram: package.ram + extra.ram,
-                    disk: package.disk + extra.disk,
-                    cpu: package.cpu + extra.cpu,
-                    servers: package.servers + extra.servers
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": `Bearer ${settings.pterodactyl.key}`
+                        }
+                    }
+                );
+
+                if (await panel.statusText !== "No Content") {
+                    console.log("[RENEWAL] Failed to suspend server.");
+                    return;
                 }
-        
-                let current = {
-                    ram: 0,
-                    disk: 0,
-                    cpu: 0,
-                    servers: userinfo.relationships.servers.data.length
-                }
-                for (let i = 0, len = userinfo.relationships.servers.data.length; i < len; i++) {
-                    current.ram = current.ram + userinfo.relationships.servers.data[i].attributes.limits.memory;
-                    current.disk = current.disk + userinfo.relationships.servers.data[i].attributes.limits.disk;
-                    current.cpu = current.cpu + userinfo.relationships.servers.data[i].attributes.limits.cpu;
-                };
 
-                if (current.ram > plan.ram || current.disk > plan.disk || current.cpu > plan.cpu || current.servers > plan.servers) {
-                    return res.send(theme.settings.redirect.failedrenewserver + "?err=EXCEEDSPLAN");
-                };
-            };
-
-            let cost = settings.api.client.allow.renewsuspendsystem.cost;
-
-            let usercoins = await db.get("coins-" + req.session.userinfo.id) || 0;
-
-            if (usercoins < cost) return res.redirect(theme.settings.redirect.failedrenewserver + "?err=CANNOTAFFORD");
-
-            let newusercoins = usercoins - cost;
-
-            if (newusercoins == 0) {
-                await db.delete("coins-" + req.session.userinfo.id);
-            } else {
-                await db.set("coins-" + req.session.userinfo.id, newusercoins);
+                await db.set("server-" + id + ".suspended", true);
+                delete renewalservers[id];
             }
+        }
+    }, 1000);
+}
 
-            
-            renewalservers[req.query.id] = settings.api.client.allow.renewsuspendsystem.time;
-            
-            await fetch(
-                settings.pterodactyl.domain + "/api/application/servers/" + req.query.id + "/unsuspend",
-                {
-                  method: "post",
-                  headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
+// Renewal routes
+router.get("/renew", async (req, res) => {
+    if (!req.session.pterodactyl) return res.redirect("/login");
+    
+    let theme = indexjs.get(req);
+
+    if (!req.query.id) return res.send("Missing server ID.");
+
+    let userinfo = req.session.pterodactyl;
+    let serverInfo = await db.get("server-" + req.query.id);
+    
+    if (!serverInfo) return res.send("Invalid server ID.");
+    if (serverInfo.owner !== userinfo.id) return res.send("Not server owner.");
+
+    let coins = await db.get("coins-" + userinfo.id) || 0;
+    let cost = settings.api.client.allow.renewsuspendsystem.cost;
+
+    if (cost > coins) return res.redirect(theme.settings.redirect.insufficientcoins + "?err=INSUFFICIENTCOINS");
+
+    coins = coins - cost;
+    await db.set("coins-" + userinfo.id, coins);
+
+    if (serverInfo.suspended == true) {
+        let panel = await fetch(
+            settings.pterodactyl.domain + "/api/application/servers/" + serverInfo.id + "/unsuspend",
+            {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${settings.pterodactyl.key}`
                 }
-            );
+            }
+        );
+
+        if (await panel.statusText !== "No Content") return res.send("Failed to unsuspend server.");
         
-            return res.redirect(theme.settings.redirect.renewserver || "/");
-        });
-
-        module.exports.set = async function(id) {
-            renewalservers[id] = settings.api.client.allow.renewsuspendsystem.time;
-        }
-
-        module.exports.delete = async function(id) {
-            delete renewalservers[id];
-        }
+        await db.set("server-" + req.query.id + ".suspended", false);
     }
+
+    renewalservers[req.query.id] = settings.api.client.allow.renewsuspendsystem.time;
+
+    res.redirect(theme.settings.redirect.renewserver || "/");
+});
+
+// Export the router
+module.exports = {
+    router: router
 };
+
+// Export renewalservers separately if needed
+module.exports.renewalservers = renewalservers;

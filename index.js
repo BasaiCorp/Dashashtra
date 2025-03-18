@@ -5,7 +5,7 @@
 const fs = require("fs");
 const fetch = require('node-fetch');
 const chalk = require("chalk");
-const arciotext = (require("./api/arcio.js")).text;
+const express = require("express");
 
 // Load settings.
 
@@ -25,36 +25,52 @@ module.exports.renderdataeval =
   `(async () => {
     let newsettings = JSON.parse(require("fs").readFileSync("./settings.json"));
 
-    const JavaScriptObfuscator = require('javascript-obfuscator');
-
+    // Standard data retrieval for all users
     let renderdata = {
       req: req,
       settings: newsettings,
       userinfo: req.session.userinfo,
-      packagename: req.session.userinfo ? await db.get("package-" + req.session.userinfo.id) ? await db.get("package-" + req.session.userinfo.id) : newsettings.api.client.packages.default : null,
-      extraresources: !req.session.userinfo ? null : (await db.get("extra-" + req.session.userinfo.id) ? await db.get("extra-" + req.session.userinfo.id) : {
-        ram: 0,
-        disk: 0,
-        cpu: 0,
-        servers: 0
-      }),
-      packages: req.session.userinfo ? newsettings.api.client.packages.list[await db.get("package-" + req.session.userinfo.id) ? await db.get("package-" + req.session.userinfo.id) : newsettings.api.client.packages.default] : null,
-      coins: newsettings.api.client.coins.enabled == true ? (req.session.userinfo ? (await db.get("coins-" + req.session.userinfo.id) ? await db.get("coins-" + req.session.userinfo.id) : 0) : null) : null,
-      pterodactyl: req.session.pterodactyl,
       theme: theme.name,
       extra: theme.settings.variables
     };
 
-    if (newsettings.api.arcio.enabled == true && req.session.arcsessiontoken) {
-      renderdata.arcioafktext = JavaScriptObfuscator.obfuscate(\`
-        let token = "\${req.session.arcsessiontoken}";
-        let everywhat = \${newsettings.api.arcio["afk page"].every};
-        let gaincoins = \${newsettings.api.arcio["afk page"].coins};
-        let arciopath = "\${newsettings.api.arcio["afk page"].path.replace(/\\\\/g, "\\\\\\\\").replace(/"/g, "\\\\\\"")}";
+    // Add additional data if user is logged in
+    if (req.session.userinfo) {
+      try {
+        // Get user's package information
+        const userPackage = await db.packages.getUserPackage(req.session.userinfo.id);
+        renderdata.packagename = userPackage ? userPackage.name : newsettings.api.client.packages.default;
+        renderdata.packages = newsettings.api.client.packages.list[renderdata.packagename];
 
-        \${arciotext}
-      \`);
-    };
+        // Get user's pterodactyl information
+        renderdata.pterodactyl = req.session.pterodactyl;
+
+        // Get extra resources (if enabled)
+        renderdata.extraresources = {
+          ram: 0,
+          disk: 0,
+          cpu: 0,
+          servers: 0
+        };
+
+        // Get coins if enabled
+        if (newsettings.api.client.coins.enabled) {
+          renderdata.coins = 0; // Initialize with default value
+        }
+
+      } catch (error) {
+        console.error('Error preparing render data:', error);
+        // Set default values if there's an error
+        renderdata.packagename = newsettings.api.client.packages.default;
+        renderdata.packages = newsettings.api.client.packages.list[newsettings.api.client.packages.default];
+        renderdata.extraresources = {
+          ram: 0,
+          disk: 0,
+          cpu: 0,
+          servers: 0
+        };
+      }
+    }
 
     return renderdata;
   })();`;
@@ -67,8 +83,22 @@ module.exports.db = db;
 
 // Load websites.
 
-const express = require("express");
 const app = express();
+
+// Debug middleware for static files
+app.use((req, res, next) => {
+  console.log('Request URL:', req.url);
+  next();
+});
+
+// Serve static files from themes directory
+app.use('/themes', express.static('themes'));
+
+// Specific route for auth.css
+app.get('/themes/custom/auth.css', (req, res) => {
+  res.setHeader('Content-Type', 'text/css');
+  res.sendFile(__dirname + '/themes/custom/auth.css');
+});
 
 // Load express addons.
 
@@ -77,29 +107,13 @@ const ejs = require("ejs");
 const session = require("express-session");
 const indexjs = require("./index.js");
 
-// Sets up saving session data.
+// Import API routes
+const adminRoutes = require('./api/admin.js');
 
-const sqlite = require("better-sqlite3");
-const SqliteStore = require("better-sqlite3-session-store")(session);
-const session_db = new sqlite("sessions.db");
+// Register API routes
+app.use('/admin', adminRoutes.router);
 
-// Load the website.
-
-module.exports.app = app;
-
-app.use(session({
-  secret: settings.website.secret,
-  resave: true,
-  saveUninitialized: true,
-  store: new SqliteStore({
-    client: session_db, 
-    expired: {
-      clear: true,
-      intervalMs: 900000
-    }
-  })
-}));
-
+// Add middleware for parsing request bodies
 app.use(express.json({
   inflate: true,
   limit: '500kb',
@@ -109,30 +123,88 @@ app.use(express.json({
   verify: undefined
 }));
 
+// Add middleware for parsing form data
+app.use(express.urlencoded({ 
+  extended: true,
+  limit: '500kb'
+}));
+
+// Sets up saving session data.
+let sessionStore;
+
+try {
+    const sqlite = require("better-sqlite3");
+    const SqliteStore = require("better-sqlite3-session-store")(session);
+    const session_db = new sqlite("sessions.db");
+    sessionStore = new SqliteStore({
+        client: session_db,
+        expired: {
+            clear: true,
+            intervalMs: 900000 // ms = 15min
+        }
+    });
+} catch (error) {
+    console.warn('SQLite session store initialization failed, using memory store:', error.message);
+    // Fallback to memory store
+    const MemoryStore = require('memorystore')(session);
+    sessionStore = new MemoryStore({
+        checkPeriod: 86400000 // Prune expired entries every 24h
+    });
+}
+
+// Configure session middleware
+app.use(session({
+    store: sessionStore,
+    secret: settings.website.secret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 86400000 // 24 hours
+    }
+}));
+
+// Load the website.
+
+module.exports.app = app;
+
 const listener = app.listen(settings.website.port, function() {
   console.log(chalk.green("[WEBSITE] The dashboard has successfully loaded on port " + listener.address().port + "."));
 });
 
 let ipratelimit = {};
+let cache = 0;
 
-var cache = 0;
+// More efficient cache reduction
+const CACHE_REDUCTION_INTERVAL = 100; // 100ms
+const CACHE_REDUCTION_AMOUNT = 0.1;
 
-setInterval(
-  async function() {
-    if (cache - .1 < 0) return cache = 0;
-    cache = cache - .1;
-  }, 100
-)
+setInterval(() => {
+  if (cache > 0) {
+    cache = Math.max(0, cache - CACHE_REDUCTION_AMOUNT);
+  }
+}, CACHE_REDUCTION_INTERVAL);
+
+// Clean up IP rate limits periodically
+setInterval(() => {
+  const now = Date.now();
+  for (const ip in ipratelimit) {
+    if (ipratelimit[ip].timestamp < now - (settings.api.client.ratelimits["per second"] * 1000)) {
+      delete ipratelimit[ip];
+    }
+  }
+}, 60000); // Clean up every minute
 
 app.use(async (req, res, next) => {
-  if (req.session.userinfo && req.session.userinfo.id && !(await db.get("users-" + req.session.userinfo.id))) {
-    let theme = indexjs.get(req);
-
-    req.session.destroy(() => {
-      return res.redirect(theme.settings.redirect.logout || "/");
-    });
-
-    return;
+  // Session check
+  if (req.session.userinfo && req.session.userinfo.id) {
+    const user = await db.users.getUserById(req.session.userinfo.id);
+    if (!user) {
+      let theme = indexjs.get(req);
+      req.session.destroy(() => {
+        return res.redirect(theme.settings.redirect.logout || "/");
+      });
+      return;
+    }
   }
 
   let manager = {
@@ -152,68 +224,404 @@ app.use(async (req, res, next) => {
     "/revoke_coupon": 1,
     "/getip": 1
   };
+
   if (manager[req._parsedUrl.pathname]) {
     if (cache > 0) {
-      setTimeout(async () => {
-        let allqueries = Object.entries(req.query);
-        let querystring = "";
-        for (let query of allqueries) {
-          querystring = querystring + "&" + query[0] + "=" + query[1];
-        }
-        querystring = "?" + querystring.slice(1);
-        if (querystring == "?") querystring = "";
+      setTimeout(() => {
+        let querystring = Object.entries(req.query)
+          .map(([key, value]) => `${key}=${value}`)
+          .join('&');
+        querystring = querystring ? `?${querystring}` : '';
         res.redirect((req._parsedUrl.pathname.slice(0, 1) == "/" ? req._parsedUrl.pathname : "/" + req._parsedUrl.pathname) + querystring);
       }, 1000);
       return;
     } else {
-      let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
+      let newsettings = JSON.parse(fs.readFileSync("./settings.json"));
 
-      if (newsettings.api.client.ratelimits.enabled == true) {
+      if (newsettings.api.client.ratelimits.enabled) {
+        let ip = (newsettings.api.client.ratelimits["trust x-forwarded-for"] ? 
+          (req.headers['x-forwarded-for'] || req.connection.remoteAddress) : 
+          req.connection.remoteAddress)
+          .replace(/::1/g, "::ffff:127.0.0.1")
+          .replace(/^.*:/, '');
 
-        let ip = (newsettings.api.client.ratelimits["trust x-forwarded-for"] == true ? (req.headers['x-forwarded-for'] || req.connection.remoteAddress) : req.connection.remoteAddress);
-        ip = (ip ? ip : "::1").replace(/::1/g, "::ffff:127.0.0.1").replace(/^.*:/, '');
-      
-        if (ipratelimit[ip] && ipratelimit[ip] >= newsettings.api.client.ratelimits.requests) {
-          // possibly add a custom theme for this in the future
-          res.send(`<html><head><title>You are being rate limited.</title></head><body>You have exceeded rate limits.</body></html>`);
+        if (!ipratelimit[ip]) {
+          ipratelimit[ip] = {
+            count: 0,
+            timestamp: Date.now()
+          };
+        }
+
+        if (ipratelimit[ip].count >= newsettings.api.client.ratelimits.requests) {
+          res.status(429).send(`<html><head><title>Rate Limited</title></head><body>You have exceeded rate limits. Please try again later.</body></html>`);
           return;
         }
-      
-        ipratelimit[ip] = (ipratelimit[ip] ? ipratelimit[ip] : 0) + 1;
-      
-        setTimeout(
-          async function() {
-            ipratelimit[ip] = ipratelimit[ip] - 1;
-            if (ipratelimit[ip] <= 0) ipratelimit[ip] = 0;
-          }, newsettings.api.client.ratelimits["per second"] * 1000
-        );
-  
-      };
 
-      cache = cache + manager[req._parsedUrl.pathname];
+        ipratelimit[ip].count++;
+        ipratelimit[ip].timestamp = Date.now();
+      }
+
+      cache += manager[req._parsedUrl.pathname];
     }
-  };
+  }
   next();
 });
 
-// Load the API files.
+// First load auth.js to ensure it's mounted before other routes
+const authModule = require('./api/auth.js');
+if (authModule.router) {
+  app.use('/auth', authModule.router);
+} else if (typeof authModule.load === 'function') {
+  authModule.load(app, db);
+}
 
-let apifiles = fs.readdirSync('./api').filter(file => file.endsWith('.js'));
-
-apifiles.forEach(file => {
-  let apifile = require(`./api/${file}`);
-	apifile.load(app, db);
+// Handle create route - MUST be defined before the catch-all route handler
+app.get('/create', async (req, res) => {
+    console.log('[CREATE] Processing request for create page');
+    
+    // Check if user is logged in
+    if (!req.session.userinfo || !req.session.pterodactyl) {
+        console.log('[CREATE] User not logged in, redirecting to login');
+        return res.redirect("/login");
+    }
+    
+    // Validate user session
+    try {
+        const user = await db.users.getUserById(req.session.userinfo.id);
+        if (!user || user.pterodactyl_id !== req.session.pterodactyl.id) {
+            console.log('[CREATE] Invalid user session, redirecting to login');
+            req.session.destroy();
+            return res.redirect("/login");
+        }
+        
+        // Check if server creation is enabled
+        const settings = JSON.parse(fs.readFileSync("./settings.json").toString());
+        if (settings.api.client.allow.server.create !== true) {
+            return res.send("Server creation is currently disabled.");
+        }
+        
+        // Get theme and render create page
+        let theme = indexjs.get(req);
+        
+        // Find the correct template for the create page
+        let createTemplate = theme.settings.pages.create || theme.settings.pages["servers/new"] || "create.ejs";
+        console.log(`[CREATE] Using template: ${createTemplate}`);
+        
+        // Get render data from indexjs
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        // Get eggs, nests, and locations from the fetcher module
+        try {
+            const eggFetcher = require('./api/fetch_eggs');
+            const [nests, eggs, locations] = await Promise.all([
+                eggFetcher.getNests(true),  // Force update to get fresh data
+                eggFetcher.getEggs(true),   // Force update to get fresh data
+                eggFetcher.getLocations(true) // Force update to get fresh data
+            ]);
+            
+            // Format the data for the template
+            renderData.nests = nests;
+            renderData.eggs = eggs;
+            renderData.locations = locations;
+            
+            // Format locations data for the template
+            renderData.formattedLocations = {};
+            locations.forEach(location => {
+                renderData.formattedLocations[location.id] = {
+                    name: location.long,
+                    short: location.short,
+                    description: location.description
+                };
+            });
+            
+            console.log('[CREATE] Added nests, eggs, and locations data');
+            console.log('[CREATE] Available locations:', renderData.formattedLocations);
+            
+        } catch (err) {
+            console.error('[CREATE] Error preparing data:', err);
+            // Provide fallback data
+            renderData.nests = [];
+            renderData.eggs = {};
+            renderData.locations = [];
+            renderData.formattedLocations = {};
+        }
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/${createTemplate}`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[CREATE] Error rendering create page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the create page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error('[CREATE] Error processing create page:', error);
+        return res.send("An error occurred while preparing data for the create page. Please try again.");
+    }
 });
 
-app.all("*", async (req, res) => {
-  if (req.session.pterodactyl) if (req.session.pterodactyl.id !== await db.get("users-" + req.session.userinfo.id)) return res.redirect("/login?prompt=none");
-  let theme = indexjs.get(req);
+// Then load other API files
+const apifiles = fs.readdirSync('./api').filter(file => file.endsWith('.js'));
+apifiles.forEach(file => {
+    if (file !== 'auth.js') { // Skip auth.js since we already loaded it
+        try {
+            let apiModule = require(`./api/${file}`);
+            if (apiModule && apiModule.router) {
+                app.use('/', apiModule.router);
+            } else if (typeof apiModule === 'function') {
+                apiModule(app, db);
+            } else if (apiModule && typeof apiModule.load === 'function') {
+                apiModule.load(app, db);
+            } else if (apiModule && typeof apiModule.getNests === 'function') {
+                // This is a data fetcher module (like fetch_eggs.js)
+                // We don't need to mount it as a router
+                console.log(`[API] Loaded data fetcher module: ${file}`);
+            } else {
+                console.warn(`Warning: API file ${file} doesn't export a router, load function, or initialization function`);
+            }
+        } catch (error) {
+            console.error(`Error loading API file ${file}:`, error);
+        }
+    }
+});
 
-  let newsettings = JSON.parse(require("fs").readFileSync("./settings.json"));
-  if (newsettings.api.arcio.enabled == true) if (theme.settings.generateafktoken.includes(req._parsedUrl.pathname)) req.session.arcsessiontoken = Math.random().toString(36).substring(2, 15);
+// Direct route handler for the root path - MUST be defined before API routes
+app.get('/', async (req, res) => {
+    console.log('[ROOT] Processing request for root path');
+    
+    // If user is logged in and has valid Pterodactyl session, redirect to dashboard
+    if (req.session.userinfo && req.session.pterodactyl) {
+        try {
+            const user = await db.users.getUserById(req.session.userinfo.id);
+            if (user && user.pterodactyl_id === req.session.pterodactyl.id) {
+                console.log('[ROOT] User is logged in with valid session, redirecting to dashboard');
+                return res.redirect("/dashboard");
+            } else {
+                // Invalid session, clear it
+                req.session.destroy();
+            }
+        } catch (error) {
+            console.error('[ROOT] Error validating user session:', error);
+            req.session.destroy();
+        }
+    }
+    
+    // For non-logged-in users or invalid sessions, show the onboarding page
+    let theme = indexjs.get(req);
+    console.log(`[ROOT] Selected theme: ${theme.name}`);
+    console.log(`[ROOT] Theme index page: ${theme.settings.index}`);
+    
+    try {
+        console.log('[ROOT] Evaluating render data');
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        console.log('[ROOT] Rendering index page');
+        ejs.renderFile(
+            `./themes/${theme.name}/${theme.settings.index}`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[WEBSITE] Error rendering index page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the homepage. Please contact an administrator.");
+                }
+                console.log('[ROOT] Successfully rendered, sending response');
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.log(chalk.red(`[WEBSITE] Error processing index page:`), error);
+        return res.send("An error occurred while preparing data for the homepage. Please try again.");
+    }
+});
+
+// Explicit route handlers for login and register pages
+app.get('/login', async (req, res) => {
+    console.log('[LOGIN] Processing request for login page');
+    
+    // If user is already logged in, redirect to dashboard
+    if (req.session.userinfo && req.session.pterodactyl) {
+        try {
+            const user = await db.users.getUserById(req.session.userinfo.id);
+            if (user && user.pterodactyl_id === req.session.pterodactyl.id) {
+                console.log('[LOGIN] User is already logged in, redirecting to dashboard');
+                return res.redirect("/dashboard");
+            }
+        } catch (error) {
+            console.error('[LOGIN] Error validating user session:', error);
+            req.session.destroy();
+        }
+    }
+    
+    // Show login page for non-logged-in users
+    // Ensure we're using the auth theme from settings for login/register
+    let settings = JSON.parse(fs.readFileSync("./settings.json"));
+    let auththeme = settings.auththeme;
+    console.log(`[LOGIN] Using auth theme: ${auththeme}`);
+    
+    let theme = {
+        name: auththeme,
+        settings: fs.existsSync(`./themes/${auththeme}/pages.json`) ?
+            JSON.parse(fs.readFileSync(`./themes/${auththeme}/pages.json`).toString()) :
+            defaultthemesettings
+    };
+    
+    try {
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        try {
+            // Get login page from theme
+            const loginPage = theme.settings.pages && theme.settings.pages.login ? 
+                theme.settings.pages.login : 'login.ejs';
+            
+            console.log(`[LOGIN] Rendering login page: ./themes/${theme.name}/${loginPage}`);
+            
+            ejs.renderFile(
+                `./themes/${theme.name}/${loginPage}`, 
+                renderData,
+                null,
+                function (err, str) {
+                    if (err) {
+                        console.log(chalk.red(`[LOGIN] Error rendering login page:`));
+                        console.log(err);
+                        return res.send("An error occurred while loading the login page. Please contact an administrator.");
+                    }
+                    res.send(str);
+                }
+            );
+        } catch (fileError) {
+            console.log(chalk.red(`[LOGIN] Error with login page:`));
+            console.log(fileError);
+            return res.send("An error occurred while loading the login page. Please contact an administrator.");
+        }
+    } catch (error) {
+        console.log(chalk.red(`[LOGIN] Error processing login page:`), error);
+        return res.send("An error occurred while preparing data for the login page. Please try again.");
+    }
+});
+
+app.get('/register', async (req, res) => {
+    console.log('[REGISTER] Processing request for register page');
+    
+    // If user is already logged in, redirect to dashboard
+    if (req.session.userinfo && req.session.pterodactyl) {
+        try {
+            const user = await db.users.getUserById(req.session.userinfo.id);
+            if (user && user.pterodactyl_id === req.session.pterodactyl.id) {
+                console.log('[REGISTER] User is already logged in, redirecting to dashboard');
+                return res.redirect("/dashboard");
+            }
+        } catch (error) {
+            console.error('[REGISTER] Error validating user session:', error);
+            req.session.destroy();
+        }
+    }
+    
+    // Show register page for non-logged-in users
+    // Ensure we're using the auth theme from settings for login/register
+    let settings = JSON.parse(fs.readFileSync("./settings.json"));
+    let auththeme = settings.auththeme;
+    console.log(`[REGISTER] Using auth theme: ${auththeme}`);
+    
+    let theme = {
+        name: auththeme,
+        settings: fs.existsSync(`./themes/${auththeme}/pages.json`) ?
+            JSON.parse(fs.readFileSync(`./themes/${auththeme}/pages.json`).toString()) :
+            defaultthemesettings
+    };
+    
+    try {
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        try {
+            // Get register page from theme
+            const registerPage = theme.settings.pages && theme.settings.pages.register ? 
+                theme.settings.pages.register : 'register.ejs';
+            
+            console.log(`[REGISTER] Rendering register page: ./themes/${theme.name}/${registerPage}`);
+            
+            ejs.renderFile(
+                `./themes/${theme.name}/${registerPage}`, 
+                renderData,
+                null,
+                function (err, str) {
+                    if (err) {
+                        console.log(chalk.red(`[REGISTER] Error rendering register page:`));
+                        console.log(err);
+                        return res.send("An error occurred while loading the register page. Please contact an administrator.");
+                    }
+                    res.send(str);
+                }
+            );
+        } catch (fileError) {
+            console.log(chalk.red(`[REGISTER] Error with register page:`));
+            console.log(fileError);
+            return res.send("An error occurred while loading the register page. Please contact an administrator.");
+        }
+    } catch (error) {
+        console.log(chalk.red(`[REGISTER] Error processing register page:`), error);
+        return res.send("An error occurred while preparing data for the register page. Please try again.");
+    }
+});
+
+app.all("*", async (req, res, next) => {
+  // Skip session validation for login and register pages
+  if (req._parsedUrl.pathname === '/login' || req._parsedUrl.pathname === '/register' || 
+      req._parsedUrl.pathname.startsWith('/auth/')) {
+    return next();
+  }
+
+  // Validate Pterodactyl session if it exists
+  if (req.session.pterodactyl) {
+    try {
+      const user = await db.users.getUserById(req.session.userinfo.id);
+      if (!user || user.pterodactyl_id !== req.session.pterodactyl.id) {
+        req.session.destroy();
+        return res.redirect("/login?prompt=none");
+      }
+    } catch (error) {
+      console.error("Error checking user session:", error);
+      req.session.destroy();
+      return res.redirect("/login?prompt=none");
+    }
+  }
   
-  if (theme.settings.mustbeloggedin.includes(req._parsedUrl.pathname)) if (!req.session.userinfo || !req.session.pterodactyl) return res.redirect("/login" + (req._parsedUrl.pathname.slice(0, 1) == "/" ? "?redirect=" + req._parsedUrl.pathname.slice(1) : ""));
-  if (theme.settings.mustbeadmin.includes(req._parsedUrl.pathname)) {
+  let theme = indexjs.get(req);
+  let newsettings = JSON.parse(require("fs").readFileSync("./settings.json"));
+  
+  // Add this to ensure root redirects to the onboarding page
+  if (req._parsedUrl.pathname === "/") {
+    if (req.session.userinfo && req.session.pterodactyl) {
+      return res.redirect("/dashboard");
+    }
+    // Default to showing the onboarding page (index.ejs) to non-logged-in users
+  }
+  
+  // Allow regular users to access pages that require login
+  if (theme.settings.mustbeloggedin.includes(req._parsedUrl.pathname)) {
+    if (!req.session.userinfo || !req.session.pterodactyl) {
+      return res.redirect("/login" + (req._parsedUrl.pathname.slice(0, 1) == "/" ? "?redirect=" + req._parsedUrl.pathname.slice(1) : ""));
+    }
+  }
+  
+  // Check for admin routes
+  if (req._parsedUrl.pathname.startsWith('/admin') || theme.settings.mustbeadmin.includes(req._parsedUrl.pathname)) {
+    // Admin routes are handled by the admin.js module, so pass through to it
+    if (req._parsedUrl.pathname.startsWith('/admin')) {
+      return next();
+    }
+    
+    // For other routes that require admin access
+    if (!req.session.userinfo || !req.session.pterodactyl) {
+      return res.redirect("/login");
+    }
+    
     ejs.renderFile(
       `./themes/${theme.name}/${theme.settings.notfound}`, 
       await eval(indexjs.renderdataeval),
@@ -221,61 +629,71 @@ app.all("*", async (req, res) => {
     async function (err, str) {
       delete req.session.newaccount;
       delete req.session.password;
-      if (!req.session.userinfo || !req.session.pterodactyl) {
-        if (err) {
-          console.log(chalk.red(`[WEBSITE] An error has occured on path ${req._parsedUrl.pathname}:`));
-          console.log(err);
-          return res.send("An error has occured while attempting to load this page. Please contact an administrator to fix this.");
-        };
-        res.status(404);
-        return res.send(str);
-      };
-
-      let cacheaccount = await fetch(
-        settings.pterodactyl.domain + "/api/application/users/" + (await db.get("users-" + req.session.userinfo.id)) + "?include=servers",
-        {
-          method: "get",
-          headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
+      
+      try {
+        let cacheaccount = await fetch(
+          settings.pterodactyl.domain + "/api/application/users/" + req.session.pterodactyl.id + "?include=servers",
+          {
+            method: "get",
+            headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
+          }
+        );
+        
+        if (cacheaccount.status === 404) {
+          if (err) {
+            console.log(chalk.red(`[WEBSITE] An error has occured on path ${req._parsedUrl.pathname}:`));
+            console.log(err);
+            return res.send("An error has occured while attempting to load this page. Please contact an administrator to fix this.");
+          };
+          return res.send(str);
         }
-      );
-      if (await cacheaccount.statusText == "Not Found") {
-        if (err) {
-          console.log(chalk.red(`[WEBSITE] An error has occured on path ${req._parsedUrl.pathname}:`));
-          console.log(err);
-          return res.send("An error has occured while attempting to load this page. Please contact an administrator to fix this.");
-        };
-        return res.send(str);
-      };
-      let cacheaccountinfo = JSON.parse(await cacheaccount.text());
-    
-      req.session.pterodactyl = cacheaccountinfo.attributes;
-      if (cacheaccountinfo.attributes.root_admin !== true) {
-        if (err) {
-          console.log(chalk.red(`[WEBSITE] An error has occured on path ${req._parsedUrl.pathname}:`));
-          console.log(err);
-          return res.send("An error has occured while attempting to load this page. Please contact an administrator to fix this.");
-        };
-        return res.send(str);
-      };
+        
+        let cacheaccountinfo = await cacheaccount.json();
+        req.session.pterodactyl = cacheaccountinfo.attributes;
+        
+        // Check if user is admin
+        if (cacheaccountinfo.attributes.root_admin !== true) {
+          console.log(`[ADMIN] User ${req.session.userinfo.id} tried to access admin page but is not an admin`);
+          if (err) {
+            console.log(chalk.red(`[WEBSITE] An error has occured on path ${req._parsedUrl.pathname}:`));
+            console.log(err);
+            return res.send("An error has occured while attempting to load this page. Please contact an administrator to fix this.");
+          };
+          return res.send(str);
+        }
+        
+        // Set admin status in session
+        req.session.isAdmin = true;
 
-      ejs.renderFile(
-        `./themes/${theme.name}/${theme.settings.pages[req._parsedUrl.pathname.slice(1)] ? theme.settings.pages[req._parsedUrl.pathname.slice(1)] : theme.settings.notfound}`, 
-        await eval(indexjs.renderdataeval),
-        null,
-      function (err, str) {
-        delete req.session.newaccount;
-        delete req.session.password;
-        if (err) {
-          console.log(`[WEBSITE] An error has occured on path ${req._parsedUrl.pathname}:`);
-          console.log(err);
-          return res.send("An error has occured while attempting to load this page. Please contact an administrator to fix this.");
-        };
-        res.status(404);
-        res.send(str);
-      });
+        // Continue to next handler or render the page
+        if (theme.settings.pages[req._parsedUrl.pathname.slice(1)]) {
+          ejs.renderFile(
+            `./themes/${theme.name}/${theme.settings.pages[req._parsedUrl.pathname.slice(1)]}`, 
+            await eval(indexjs.renderdataeval),
+            null,
+            function (err, str) {
+              delete req.session.newaccount;
+              delete req.session.password;
+              if (err) {
+                console.log(chalk.red(`[WEBSITE] An error has occured on path ${req._parsedUrl.pathname}:`));
+                console.log(err);
+                return res.send("An error has occured while attempting to load this page. Please contact an administrator to fix this.");
+              };
+              res.send(str);
+            }
+          );
+        } else {
+          return res.status(404).send(str);
+        }
+      } catch (error) {
+        console.error("Error checking admin status:", error);
+        return res.send("An error occurred while checking admin status. Please try again later.");
+      }
     });
     return;
   };
+  
+  // Render the requested page
   ejs.renderFile(
     `./themes/${theme.name}/${theme.settings.pages[req._parsedUrl.pathname.slice(1)] ? theme.settings.pages[req._parsedUrl.pathname.slice(1)] : theme.settings.notfound}`, 
     await eval(indexjs.renderdataeval),
@@ -288,13 +706,33 @@ app.all("*", async (req, res) => {
       console.log(err);
       return res.send("An error has occured while attempting to load this page. Please contact an administrator to fix this.");
     };
-    res.status(404);
+    
+    // Only set 404 status if the page isn't found
+    if (!theme.settings.pages[req._parsedUrl.pathname.slice(1)]) {
+      res.status(404);
+    }
+    
     res.send(str);
   });
 });
 
 module.exports.get = function(req) {
-  let defaulttheme = JSON.parse(fs.readFileSync("./settings.json")).defaulttheme;
+  let settings = JSON.parse(fs.readFileSync("./settings.json"));
+  let defaulttheme = settings.defaulttheme;
+  let auththeme = settings.auththeme;
+  
+  // Use auth theme for login and register pages
+  if (req._parsedUrl.pathname === '/login' || req._parsedUrl.pathname === '/register') {
+    return {
+      settings: (
+        fs.existsSync(`./themes/${auththeme}/pages.json`) ?
+          JSON.parse(fs.readFileSync(`./themes/${auththeme}/pages.json`).toString())
+        : defaultthemesettings
+      ),
+      name: auththeme
+    };
+  }
+
   let tname = encodeURIComponent(getCookie(req, "theme"));
   let name = (
     tname ?
