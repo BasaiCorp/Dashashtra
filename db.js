@@ -151,9 +151,20 @@ const userMethods = {
         return stmt.get(id);
     },
 
+    async getUserByDiscordId(discordId) {
+        const stmt = authDb.prepare('SELECT * FROM users WHERE discord_id = ?');
+        return stmt.get(discordId);
+    },
+
     async getUserByPterodactylId(pterodactylId) {
         const stmt = authDb.prepare('SELECT * FROM users WHERE pterodactyl_id = ?');
         return stmt.get(pterodactylId);
+    },
+
+    async getUserCount() {
+        const stmt = authDb.prepare('SELECT COUNT(*) as count FROM users');
+        const result = stmt.get();
+        return result ? result.count : 0;
     },
 
     async updateUser(userId, updateData) {
@@ -164,6 +175,7 @@ const userMethods = {
                 username = COALESCE(?, username),
                 first_name = COALESCE(?, first_name),
                 last_name = COALESCE(?, last_name),
+                discord_id = COALESCE(?, discord_id),
                 pterodactyl_id = COALESCE(?, pterodactyl_id),
                 pterodactyl_username = COALESCE(?, pterodactyl_username),
                 pterodactyl_email = COALESCE(?, pterodactyl_email),
@@ -185,6 +197,7 @@ const userMethods = {
             updateData.username,
             updateData.first_name,
             updateData.last_name,
+            updateData.discord_id,
             updateData.pterodactyl_id,
             updateData.pterodactyl_username,
             updateData.pterodactyl_email,

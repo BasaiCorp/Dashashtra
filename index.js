@@ -93,6 +93,33 @@ const db = require("./db.js");
 
 module.exports.db = db;
 
+// Initialize Discord bot if enabled
+if (settings.api && settings.api.client && settings.api.client.bot && settings.api.client.bot.enabled) {
+  console.log(chalk.blue("[BOT] Initializing Discord bot..."));
+  try {
+    // First deploy the commands
+    console.log(chalk.blue("[BOT] Deploying slash commands..."));
+    const deployCommands = require('./bot/deploy-commands.js');
+    
+    // Deploy commands then initialize the bot
+    deployCommands()
+      .then(() => {
+        const bot = require('./bot/index.js');
+        module.exports.bot = bot;
+        console.log(chalk.green("[BOT] Discord bot initialized successfully!"));
+      })
+      .catch(error => {
+        console.error(chalk.red("[BOT] Failed to deploy commands:"), error);
+        // Continue with bot initialization even if command deployment fails
+        const bot = require('./bot/index.js');
+        module.exports.bot = bot;
+        console.log(chalk.yellow("[BOT] Discord bot initialized without commands. You may need to run 'npm run deploy-commands' manually."));
+      });
+  } catch (error) {
+    console.error(chalk.red("[BOT] Failed to initialize Discord bot:"), error);
+  }
+}
+
 // Load websites.
 
 const app = express();

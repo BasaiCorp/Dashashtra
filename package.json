@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "deploy-commands": "node bot/deploy-commands.js"
   },
   "author": "PrathmeshPro",
   "license": "MIT",
@@ -48,6 +49,7 @@
     "inherits": "^2.0.4",
     "ipaddr.js": "^2.1.0",
     "media-typer": "^0.3.0",
+    "memorystore": "^1.6.7",
     "merge-descriptors": "^1.0.1",
     "methods": "^1.1.2",
     "negotiator": "^0.6.3",
