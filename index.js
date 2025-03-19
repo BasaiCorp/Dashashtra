@@ -130,6 +130,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// Serve static files from assets directory
+app.use('/assets', express.static('assets'));
+
 // Serve static files from themes directory
 app.use('/themes', express.static('themes'));
 

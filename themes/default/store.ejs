@@ -53,37 +53,32 @@
 			<!-- End Logo Header -->
 
 			<!-- Navbar Header -->
-			<nav class="navbar navbar-header navbar-expand-lg" data-background-color="dark">
-				
-				<div class="container-fluid">
-					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-						<li class="nav-item dropdown hidden-caret">
-							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
-								<div class="avatar-sm">
-									<img src="https://cdn.discordapp.com/avatars/<%= req.session.userinfo.id%>/<%= req.session.userinfo.avatar%>.jpg?size=1024" alt="..." class="avatar-img rounded-circle">
-								</div>
-							</a>
-							<ul class="dropdown-menu dropdown-user animated fadeIn">
-								<div class="dropdown-user-scroll scrollbar-outer">
-									<li>
-										<div class="user-box">
-											<div class="avatar-lg"><img src="https://cdn.discordapp.com/avatars/<%= req.session.userinfo.id%>/<%= req.session.userinfo.avatar%>.jpg?size=1024" alt="image profile" class="avatar-img rounded"></div>
-											<div class="u-text">
-												<h4><%= req.session.userinfo.username%>#<%= req.session.userinfo.discriminator %></h4>
-												<p class="text-muted"><%= req.session.userinfo.email%></p>
-											</div>
-										</div>
-									</li>
-									<li>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="/regen">Reset Password</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="/logout">Logout</a>
-									</li>
-								</div>
-							</ul>
-						</li>
-					</ul>
+			<nav class="navbar fixed w-full h-16 z-10 px-4 py-2.5 flex items-center justify-between">
+				<div class="flex items-center">
+					<a href="/" class="flex items-center">
+						<img src="/assets/img/FlaxyNodes_logo.gif" class="h-8 w-8 mr-3 rounded-full" alt="Flaxy Nodes Logo">
+						<div class="flex flex-col">
+							<span class="self-center text-xl font-bold text-white">Flaxy Nodes</span>
+							<span class="text-xs text-gray-400">Premium Game Hosting</span>
+						</div>
+					</a>
+				</div>
+				<div class="flex items-center space-x-4">
+					<div class="bg-primary-500/10 px-4 py-2 rounded-lg">
+						<span class="text-sm text-gray-400">Balance</span>
+						<div class="flex items-center">
+							<i class="fas fa-coins text-yellow-400 mr-2"></i>
+							<% if (typeof coins !== 'undefined') { %>
+								<span class="text-lg font-semibold text-white"><%= coins %></span>
+							<% } else { %>
+								<span class="text-lg font-semibold text-white">0</span>
+							<% } %>
+						</div>
+					</div>
+					<a href="/earn" class="btn btn-primary">
+						<i class="fas fa-plus mr-2"></i>
+						Earn Coins
+					</a>
 				</div>
 			</nav>
 			<!-- End Navbar -->
