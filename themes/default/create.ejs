@@ -368,6 +368,8 @@
 									<p class="text-gray-300">You need at least 1GB (1024MB) of disk space to create a server.</p>
 								<% } else if (req.query.err == "NOTENOUGHCPU") { %>
 									<p class="text-gray-300">You need at least 10% CPU to create a server.</p>
+								<% } else if (req.query.err == "ENVVARIABLEERROR") { %>
+									<p class="text-gray-300">There was a problem with the server's environment variables. Please contact an administrator for assistance.</p>
 								<% } else if (req.query.err == "CREATEFAILED") { %>
 									<p class="text-gray-300">Failed to create server. Please try again later or contact support.</p>
 								<% } else { %>
@@ -596,7 +598,7 @@
 		const diskInput = document.getElementById('disk');
 		const cpuInput = document.getElementById('cpu');
 		const nameInput = document.getElementById('name');
-		const typeInput = document.getElementById('type');
+		const eggInput = document.getElementById('egg');
 		const locationInput = document.getElementById('location');
 		
 		form.addEventListener('submit', (e) => {
@@ -613,13 +615,12 @@
 			}
 			
 			// Validate Server Type (Egg)
-			const eggSelect = document.getElementById('egg');
-			if (!eggSelect.value) {
-				eggSelect.classList.add('border-red-500');
+			if (!eggInput.value) {
+				eggInput.classList.add('border-red-500');
 				isValid = false;
 				errorMessage = 'Please select a server type.';
 			} else {
-				eggSelect.classList.remove('border-red-500');
+				eggInput.classList.remove('border-red-500');
 			}
 			
 			// Validate Location

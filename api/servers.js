@@ -66,16 +66,20 @@ router.post('/servers/create', async (req, res) => {
         // Get theme
         const theme = indexjs.get(req);
 
-        // Get form data
+        // Get form data - use egg instead of type
         const name = req.body.name;
         const ram = parseInt(req.body.ram);
         const disk = parseInt(req.body.disk);
         const cpu = parseInt(req.body.cpu);
         const location = req.body.location;
-        const type = req.body.type;
+        const egg = req.body.egg; // Changed from type to egg to match the form
+
+        // Log received data for debugging
+        console.log(`[SERVER CREATE] Received data: name=${name}, ram=${ram}, disk=${disk}, cpu=${cpu}, location=${location}, egg=${egg}`);
 
         // Validate input
-        if (!name || isNaN(ram) || isNaN(disk) || isNaN(cpu) || !location || !type) {
+        if (!name || isNaN(ram) || isNaN(disk) || isNaN(cpu) || !location || !egg) {
+            console.log('[SERVER CREATE] Missing variable:', { name, ram, disk, cpu, location, egg });
             return res.redirect('/create?err=MISSINGVARIABLE');
         }
 
@@ -125,71 +129,42 @@ router.post('/servers/create', async (req, res) => {
             return res.redirect('/create?err=NOTENOUGHCPU');
         }
 
-        // Get egg info from type
-        // Format: <nest_id>-<egg_id> OR a simple egg ID from settings
-        let nest_id, egg_id;
-        
-        if (type.includes('-')) {
-            // New format from egg fetcher: <nest_id>-<egg_id>
-            [nest_id, egg_id] = type.split('-');
-        } else {
-            // Legacy format from settings.json
-            // Get egg info from settings
-            const egg = settings.api.client.eggs[type];
-            if (!egg) {
-                return res.redirect('/create?err=INVALIDTYPE');
-            }
-            
-            egg_id = egg.info.egg;
-            // For the nest_id, we need to look up the egg in the cache
-            try {
-                const eggCache = JSON.parse(fs.readFileSync(path.join(__dirname, '../cache/eggs.json')));
-                // Find the egg in the cache
-                const eggData = Object.values(eggCache).find(e => e.id == egg_id);
-                if (eggData) {
-                    nest_id = eggData.nestId;
-                } else {
-                    // Fallback to a default nest ID or estimate
-                    nest_id = 1; // This is a guess - most systems use 1 for the first nest
-                }
-            } catch (error) {
-                console.error('Error finding nest ID:', error);
-                nest_id = 1; // Fallback to nest ID 1
-            }
-        }
+        // Get egg info
+        let nest_id;
+        let egg_id = egg; // Use the egg ID directly from the form
 
-        // Create server on Pterodactyl
-        console.log(`[SERVER] Creating server with name: ${name}, ram: ${ram}, disk: ${disk}, cpu: ${cpu}, location: ${location}, nest: ${nest_id}, egg: ${egg_id}`);
-        
-        // Get egg info to use for creating the server
+        // Get egg info from cache
         let eggInfo = {};
         try {
             // Try to get egg info from cache
             const eggCache = JSON.parse(fs.readFileSync(path.join(__dirname, '../cache/eggs.json')));
             if (eggCache[egg_id]) {
-                console.log('[SERVER] Using egg info from cache');
+                console.log(`[SERVER CREATE] Using egg info from cache for egg ID ${egg_id}`);
+                
+                // Get the nest ID from the egg cache
+                nest_id = eggCache[egg_id].nestId || 1;
+                
                 eggInfo = {
                     docker_image: eggCache[egg_id].docker_image,
                     startup: eggCache[egg_id].startup,
                     environment: {}
                 };
                 
-                // Add environment variables
+                // Add environment variables with default values
                 eggCache[egg_id].variables.forEach(variable => {
                     eggInfo.environment[variable.env_variable] = variable.default_value;
                 });
-            } else if (settings.api.client.eggs[type] && settings.api.client.eggs[type].info) {
-                // Fallback to settings.json
-                console.log('[SERVER] Using egg info from settings.json');
-                eggInfo = {
-                    docker_image: settings.api.client.eggs[type].info.docker_image,
-                    startup: settings.api.client.eggs[type].info.startup,
-                    environment: settings.api.client.eggs[type].info.environment,
-                    feature_limits: settings.api.client.eggs[type].info.feature_limits
+
+                // Set feature limits
+                eggInfo.feature_limits = {
+                    databases: 1,
+                    backups: 1,
+                    allocations: 1
                 };
             } else {
-                // Use a default configuration
-                console.log('[SERVER] Using default egg info');
+                // Fallback to a default configuration
+                console.log('[SERVER CREATE] Egg not found in cache, using default configuration');
+                nest_id = 1;
                 eggInfo = {
                     docker_image: "quay.io/pterodactyl/core:java",
                     startup: "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
@@ -198,13 +173,15 @@ router.post('/servers/create', async (req, res) => {
                     },
                     feature_limits: {
                         databases: 1,
-                        backups: 1
+                        backups: 1,
+                        allocations: 1
                     }
                 };
             }
         } catch (error) {
             console.error('Error getting egg info:', error);
             // Use a default configuration
+            nest_id = 1;
             eggInfo = {
                 docker_image: "quay.io/pterodactyl/core:java",
                 startup: "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
@@ -213,13 +190,45 @@ router.post('/servers/create', async (req, res) => {
                 },
                 feature_limits: {
                     databases: 1,
-                    backups: 1
+                    backups: 1,
+                    allocations: 1
                 }
             };
         }
 
         // Create server on Pterodactyl
+        console.log(`[SERVER CREATE] Creating server with name: ${name}, ram: ${ram}, disk: ${disk}, cpu: ${cpu}, location: ${location}, nest: ${nest_id}, egg: ${egg_id}`);
+        
         try {
+            const serverData = {
+                name: name,
+                user: req.session.pterodactyl.id, // Automatically set the user ID
+                egg: egg_id,
+                docker_image: eggInfo.docker_image,
+                startup: eggInfo.startup,
+                environment: eggInfo.environment,
+                limits: {
+                    memory: ram,
+                    swap: 0,
+                    disk: disk,
+                    io: 500,
+                    cpu: cpu
+                },
+                feature_limits: eggInfo.feature_limits,
+                allocation: {
+                    default: 0
+                },
+                deploy: {
+                    locations: [parseInt(location)],
+                    dedicated_ip: false,
+                    port_range: []
+                },
+                start_on_completion: true,
+                nest: nest_id
+            };
+
+            console.log(`[SERVER CREATE] Sending request to Pterodactyl API with data:`, JSON.stringify(serverData, null, 2));
+
             const response = await fetch(`${settings.pterodactyl.domain}/api/application/servers`, {
                 method: "POST",
                 headers: {
@@ -227,52 +236,37 @@ router.post('/servers/create', async (req, res) => {
                     "Authorization": `Bearer ${settings.pterodactyl.key}`,
                     "Accept": "application/json"
                 },
-                body: JSON.stringify({
-                    name: name,
-                    user: req.session.pterodactyl.id,
-                    egg: egg_id,
-                    docker_image: eggInfo.docker_image,
-                    startup: eggInfo.startup,
-                    environment: eggInfo.environment,
-                    limits: {
-                        memory: ram,
-                        swap: 0,
-                        disk: disk,
-                        io: 500,
-                        cpu: cpu
-                    },
-                    feature_limits: eggInfo.feature_limits || {
-                        databases: 1,
-                        backups: 1
-                    },
-                    allocation: {
-                        default: 0
-                    },
-                    deploy: {
-                        locations: [parseInt(location)],
-                        dedicated_ip: false,
-                        port_range: []
-                    },
-                    start_on_completion: true,
-                    nest: nest_id
-                })
+                body: JSON.stringify(serverData)
             });
 
             if (!response.ok) {
                 const error = await response.json();
-                console.error('Error creating server:', error);
+                console.error('[SERVER CREATE] Error response from Pterodactyl API:', error);
+                
+                // Check for specific error messages
+                if (error.errors && error.errors.length > 0) {
+                    const errorDetail = error.errors[0].detail;
+                    if (errorDetail.includes("environment")) {
+                        console.error('[SERVER CREATE] Environment variable error:', errorDetail);
+                        return res.redirect('/create?err=ENVVARIABLEERROR');
+                    }
+                }
+                
                 return res.redirect('/create?err=CREATEFAILED');
             }
+
+            const serverResponse = await response.json();
+            console.log(`[SERVER CREATE] Server created successfully. Server ID: ${serverResponse.attributes.id}`);
 
             // Server created successfully, redirect to server list
             let redirectPath = theme.settings.redirect.createserver || "/servers";
             return res.redirect(redirectPath);
         } catch (error) {
-            console.error('Error creating server:', error);
+            console.error('[SERVER CREATE] Error creating server:', error);
             return res.redirect('/create?err=CREATEFAILED');
         }
     } catch (error) {
-        console.error('Error handling server creation:', error);
+        console.error('[SERVER CREATE] Error handling server creation:', error);
         return res.redirect('/create?err=CREATEFAILED');
     }
 });
