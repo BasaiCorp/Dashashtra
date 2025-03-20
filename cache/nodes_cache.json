@@ -3,28 +3,28 @@
     "object": "node",
     "attributes": {
       "id": 1,
-      "uuid": "1d9ed967-6da0-46ed-836f-728059a5b07e",
+      "uuid": "b16ecfc4-a9ef-4d42-b2ec-e9c4187cd2ba",
       "public": true,
-      "name": "india",
+      "name": "Germany",
       "description": null,
       "location_id": 1,
-      "fqdn": "in-1.flaxynodes.fun",
+      "fqdn": "fn-1.flaxynodes.fun",
       "scheme": "https",
       "behind_proxy": false,
       "maintenance_mode": false,
-      "memory": 4294967295,
-      "memory_overallocate": 0,
-      "disk": 4294967295,
-      "disk_overallocate": 0,
+      "memory": 46080,
+      "memory_overallocate": -1,
+      "disk": 179200,
+      "disk_overallocate": 500,
       "upload_size": 1024,
       "daemon_listen": 8080,
       "daemon_sftp": 2022,
       "daemon_base": "/var/lib/pterodactyl/volumes",
-      "created_at": "2025-03-17T07:37:33+00:00",
-      "updated_at": "2025-03-17T08:27:38+00:00",
+      "created_at": "2025-03-20T07:56:56+00:00",
+      "updated_at": "2025-03-20T10:57:00+00:00",
       "allocated_resources": {
-        "memory": 62080,
-        "disk": 152000
+        "memory": 6000,
+        "disk": 40000
       },
       "relationships": {
         "allocations": {
@@ -34,19 +34,8 @@
               "object": "allocation",
               "attributes": {
                 "id": 1,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
-                "port": 25565,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 2,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25566,
                 "notes": null,
                 "assigned": true
@@ -55,9 +44,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 3,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 2,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25567,
                 "notes": null,
                 "assigned": true
@@ -66,9 +55,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 4,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 3,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25568,
                 "notes": null,
                 "assigned": true
@@ -77,53 +66,53 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 5,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 4,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25569,
                 "notes": null,
-                "assigned": true
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 5,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
+                "port": 25570,
+                "notes": null,
+                "assigned": false
               }
             },
             {
               "object": "allocation",
               "attributes": {
                 "id": 6,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
-                "port": 25570,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
+                "port": 25571,
                 "notes": null,
-                "assigned": true
+                "assigned": false
               }
             },
             {
               "object": "allocation",
               "attributes": {
                 "id": 7,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
-                "port": 25571,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
+                "port": 25572,
                 "notes": null,
-                "assigned": true
+                "assigned": false
               }
             },
             {
               "object": "allocation",
               "attributes": {
                 "id": 8,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
-                "port": 25572,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 9,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25573,
                 "notes": null,
                 "assigned": false
@@ -132,20 +121,20 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 10,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 9,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25574,
                 "notes": null,
-                "assigned": true
+                "assigned": false
               }
             },
             {
               "object": "allocation",
               "attributes": {
-                "id": 11,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 10,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25575,
                 "notes": null,
                 "assigned": false
@@ -154,20 +143,20 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 12,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 11,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25576,
                 "notes": null,
-                "assigned": true
+                "assigned": false
               }
             },
             {
               "object": "allocation",
               "attributes": {
-                "id": 13,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 12,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25577,
                 "notes": null,
                 "assigned": false
@@ -176,9 +165,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 14,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 13,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25578,
                 "notes": null,
                 "assigned": false
@@ -187,9 +176,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 15,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 14,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25579,
                 "notes": null,
                 "assigned": false
@@ -198,9 +187,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 16,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 15,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25580,
                 "notes": null,
                 "assigned": false
@@ -209,9 +198,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 17,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 16,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25581,
                 "notes": null,
                 "assigned": false
@@ -220,9 +209,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 18,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 17,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25582,
                 "notes": null,
                 "assigned": false
@@ -231,9 +220,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 19,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 18,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25583,
                 "notes": null,
                 "assigned": false
@@ -242,9 +231,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 20,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 19,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25584,
                 "notes": null,
                 "assigned": false
@@ -253,9 +242,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 21,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 20,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25585,
                 "notes": null,
                 "assigned": false
@@ -264,9 +253,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 22,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 21,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25586,
                 "notes": null,
                 "assigned": false
@@ -275,9 +264,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 23,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 22,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25587,
                 "notes": null,
                 "assigned": false
@@ -286,9 +275,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 24,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 23,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25588,
                 "notes": null,
                 "assigned": false
@@ -297,9 +286,9 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 25,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 24,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25589,
                 "notes": null,
                 "assigned": false
@@ -308,65 +297,10 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 26,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
+                "id": 25,
+                "ip": "5.231.230.39",
+                "alias": "fn-1.flaxynodes.fun",
                 "port": 25590,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 27,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
-                "port": 25591,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 28,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
-                "port": 25592,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 29,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
-                "port": 25593,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 30,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
-                "port": 25594,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 31,
-                "ip": "130.250.191.111",
-                "alias": "in-1.flaxynodes.fun",
-                "port": 25595,
                 "notes": null,
                 "assigned": false
               }
@@ -379,105 +313,11 @@
             {
               "object": "server",
               "attributes": {
-                "id": 35,
+                "id": 1,
                 "external_id": null,
-                "uuid": "d3cabd93-e0ce-445b-91b2-d76a99fb9118",
-                "identifier": "d3cabd93",
-                "name": "arley permanent",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 10240,
-                  "swap": 0,
-                  "disk": 41000,
-                  "io": 500,
-                  "cpu": 225,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 36,
-                "node": 1,
-                "allocation": 3,
-                "nest": 1,
-                "egg": 1,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "BUNGEE_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN",
-                    "P_SERVER_UUID": "d3cabd93-e0ce-445b-91b2-d76a99fb9118",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-17T17:00:39+00:00",
-                "created_at": "2025-03-17T14:27:30+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 40,
-                "external_id": null,
-                "uuid": "d0ec7891-6a20-45e8-a9ad-aac430607b76",
-                "identifier": "d0ec7891",
-                "name": "Umbraix Blue [DOn't delete founders server]",
-                "description": "own bot",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 10,
-                  "allocations": 10,
-                  "backups": 10
-                },
-                "user": 37,
-                "node": 1,
-                "allocation": 4,
-                "nest": 5,
-                "egg": 15,
-                "container": {
-                  "startup_command": "/start.sh",
-                  "image": "quay.io/yajtpg/pterodactyl-images:python-3.11",
-                  "installed": 1,
-                  "environment": {
-                    "STARTUP_CMD": "pip install -r requirements.txt",
-                    "SECOND_CMD": "python3 bot.py",
-                    "STARTUP": "/start.sh",
-                    "P_SERVER_LOCATION": "IN",
-                    "P_SERVER_UUID": "d0ec7891-6a20-45e8-a9ad-aac430607b76",
-                    "P_SERVER_ALLOCATION_LIMIT": 10
-                  }
-                },
-                "updated_at": "2025-03-18T05:27:47+00:00",
-                "created_at": "2025-03-18T05:24:24+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 50,
-                "external_id": null,
-                "uuid": "b0d3e065-df77-45a0-9f3f-d3dafe4c089d",
-                "identifier": "b0d3e065",
-                "name": "Rudra's server (don't delete)",
+                "uuid": "32275875-4f65-420d-9ee6-467edbdae694",
+                "identifier": "32275875",
+                "name": "qweq",
                 "description": "",
                 "status": null,
                 "suspended": false,
@@ -497,104 +337,6 @@
                 },
                 "user": 2,
                 "node": 1,
-                "allocation": 10,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN",
-                    "P_SERVER_UUID": "b0d3e065-df77-45a0-9f3f-d3dafe4c089d",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-18T12:53:06+00:00",
-                "created_at": "2025-03-18T12:52:31+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 55,
-                "external_id": null,
-                "uuid": "2a284772-1988-46ce-b12e-8703ebf6052a",
-                "identifier": "2a284772",
-                "name": "THUNDER'S SERVER",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 10000,
-                  "allocations": 10000,
-                  "backups": 10000
-                },
-                "user": 32,
-                "node": 1,
-                "allocation": 12,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.21.1",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN",
-                    "P_SERVER_UUID": "2a284772-1988-46ce-b12e-8703ebf6052a",
-                    "P_SERVER_ALLOCATION_LIMIT": 10000
-                  }
-                },
-                "updated_at": "2025-03-19T08:06:53+00:00",
-                "created_at": "2025-03-19T04:48:30+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 57,
-                "external_id": null,
-                "uuid": "3fddaa47-79ce-4d86-8b4d-e11226725cd4",
-                "identifier": "3fddaa47",
-                "name": "FLAXYNODES DEV TEAM SERVER FOR SETUPS",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 16840,
-                  "swap": 0,
-                  "disk": 80000,
-                  "io": 500,
-                  "cpu": 400,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 52,
-                "node": 1,
                 "allocation": 1,
                 "nest": 1,
                 "egg": 2,
@@ -608,41 +350,41 @@
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN",
-                    "P_SERVER_UUID": "3fddaa47-79ce-4d86-8b4d-e11226725cd4",
+                    "P_SERVER_LOCATION": "Germany",
+                    "P_SERVER_UUID": "32275875-4f65-420d-9ee6-467edbdae694",
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-19T14:22:03+00:00",
-                "created_at": "2025-03-19T14:08:09+00:00"
+                "updated_at": "2025-03-20T10:09:35+00:00",
+                "created_at": "2025-03-20T08:02:39+00:00"
               }
             },
             {
               "object": "server",
               "attributes": {
-                "id": 58,
+                "id": 12,
                 "external_id": null,
-                "uuid": "ffa71463-7bca-42c0-8c38-b6d26899f9a5",
-                "identifier": "ffa71463",
-                "name": "FLAXYNODES DEV TEAM SERVER FOR SETUPS 2",
-                "description": "",
+                "uuid": "4fabf166-8cca-423b-b064-4e84ff6c482d",
+                "identifier": "4fabf166",
+                "name": "LittlePlayz Infinite specs server [EXPIRE ON 20 APRIL]",
+                "description": "[EXPIRE ON 20 APRIL]",
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 8000,
+                  "memory": 0,
                   "swap": 0,
                   "disk": 0,
                   "io": 500,
-                  "cpu": 350,
+                  "cpu": 0,
                   "threads": null,
                   "oom_disabled": true
                 },
                 "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
                 },
-                "user": 52,
+                "user": 13,
                 "node": 1,
                 "allocation": 2,
                 "nest": 1,
@@ -652,1559 +394,18 @@
                   "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "MINECRAFT_VERSION": "latest",
+                    "MINECRAFT_VERSION": "1.21",
                     "SERVER_JARFILE": "server.jar",
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN",
-                    "P_SERVER_UUID": "ffa71463-7bca-42c0-8c38-b6d26899f9a5",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-19T14:11:55+00:00",
-                "created_at": "2025-03-19T14:11:34+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 59,
-                "external_id": null,
-                "uuid": "7d230b6d-e44d-4bfa-ba28-3f206453ec9b",
-                "identifier": "7d230b6d",
-                "name": "REXY PROXY(10 JULY)",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 1000,
-                  "swap": 0,
-                  "disk": 1000,
-                  "io": 500,
-                  "cpu": 75,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 33,
-                "node": 1,
-                "allocation": 5,
-                "nest": 1,
-                "egg": 1,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "BUNGEE_VERSION": "latest",
-                    "SERVER_JARFILE": "serer.jar",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN",
-                    "P_SERVER_UUID": "7d230b6d-e44d-4bfa-ba28-3f206453ec9b",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-20T01:49:58+00:00",
-                "created_at": "2025-03-19T15:10:40+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 60,
-                "external_id": null,
-                "uuid": "38086a75-8198-4cc1-a216-f5bf680927c7",
-                "identifier": "38086a75",
-                "name": "REXY LOBBY(10 JULY)",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 10000,
-                  "swap": 0,
-                  "disk": 10000,
-                  "io": 500,
-                  "cpu": 300,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 33,
-                "node": 1,
-                "allocation": 6,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.20.1",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN",
-                    "P_SERVER_UUID": "38086a75-8198-4cc1-a216-f5bf680927c7",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-20T05:09:56+00:00",
-                "created_at": "2025-03-19T15:12:31+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 61,
-                "external_id": null,
-                "uuid": "41f90902-a207-4dea-99cc-6c9f6ba32d62",
-                "identifier": "41f90902",
-                "name": "REXY LS(10 JULY)",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 16000,
-                  "swap": 0,
-                  "disk": 20000,
-                  "io": 500,
-                  "cpu": 400,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 33,
-                "node": 1,
-                "allocation": 7,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.20.1",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN",
-                    "P_SERVER_UUID": "41f90902-a207-4dea-99cc-6c9f6ba32d62",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-20T01:50:37+00:00",
-                "created_at": "2025-03-19T15:13:51+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 62,
-                "external_id": null,
-                "uuid": "8d7884c3-349e-4cfe-9789-2efdbdc6eab4",
-                "identifier": "8d7884c3",
-                "name": "(Don't Delete)",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 500,
-                  "threads": "1",
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 40,
-                "node": 1,
-                "allocation": 8,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN",
-                    "P_SERVER_UUID": "8d7884c3-349e-4cfe-9789-2efdbdc6eab4",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-19T15:30:38+00:00",
-                "created_at": "2025-03-19T15:30:04+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "node",
-    "attributes": {
-      "id": 2,
-      "uuid": "3139bb23-b15d-46c4-989a-37a3174f546f",
-      "public": true,
-      "name": "India 2",
-      "description": null,
-      "location_id": 2,
-      "fqdn": "in2.flaxynodes.fun",
-      "scheme": "https",
-      "behind_proxy": false,
-      "maintenance_mode": false,
-      "memory": 4294967295,
-      "memory_overallocate": 0,
-      "disk": 4294967295,
-      "disk_overallocate": 0,
-      "upload_size": 1024,
-      "daemon_listen": 8080,
-      "daemon_sftp": 2022,
-      "daemon_base": "/var/lib/pterodactyl/volumes",
-      "created_at": "2025-03-17T08:25:48+00:00",
-      "updated_at": "2025-03-17T08:27:56+00:00",
-      "allocated_resources": {
-        "memory": 180492,
-        "disk": 760000
-      },
-      "relationships": {
-        "allocations": {
-          "object": "list",
-          "data": [
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 32,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3000,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 33,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3001,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 34,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3002,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 35,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3003,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 36,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3004,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 37,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3005,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 38,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3006,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 39,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3007,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 40,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3008,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 41,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3009,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 42,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3010,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 43,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3011,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 44,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3012,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 45,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3013,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 46,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3014,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 47,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3015,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 48,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3016,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 49,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3017,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 50,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3018,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 51,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3019,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 52,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3020,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 53,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3021,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 54,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3022,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 55,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3023,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 56,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3024,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 57,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3025,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 58,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3026,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 59,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3027,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 60,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3028,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 61,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3029,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 62,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3030,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 63,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3031,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 64,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3032,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 65,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3033,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 66,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3034,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 67,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3035,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 68,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3036,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 69,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3037,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 70,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3038,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 71,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3039,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 72,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3040,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 73,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3041,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 74,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3042,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 75,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3043,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 76,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3044,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 77,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3045,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 78,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3046,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 79,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3047,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 80,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3048,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 81,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3049,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 82,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3050,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 83,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3051,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 84,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3052,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 85,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3053,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 86,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3054,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 87,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3055,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 88,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3056,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 89,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3057,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 90,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3058,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 91,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3059,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 92,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3060,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 93,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3061,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 94,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3062,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 95,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3063,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 96,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3064,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 97,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3065,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 98,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3066,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 99,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3067,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 100,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3068,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 101,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3069,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 102,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3070,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 103,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3071,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 104,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3072,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 105,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3073,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 106,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3074,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 107,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3075,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 108,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3076,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 109,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3077,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 110,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3078,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 111,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3079,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 112,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3080,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 113,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3081,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 114,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3082,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 115,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3083,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 116,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3084,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 117,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3085,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 118,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3086,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 119,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3087,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 120,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3088,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 121,
-                "ip": "5.254.5.13",
-                "alias": "in2.flaxynodes.fun",
-                "port": 3089,
-                "notes": null,
-                "assigned": false
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 122,
-                "ip": "5.254.5.13",
-                "alias": "alphamc.flaxynodes.fun",
-                "port": 2025,
-                "notes": null,
-                "assigned": true
-              }
-            },
-            {
-              "object": "allocation",
-              "attributes": {
-                "id": 123,
-                "ip": "5.254.5.13",
-                "alias": "thunder_mc.flaxynodes.fim",
-                "port": 18826,
-                "notes": null,
-                "assigned": true
-              }
-            }
-          ]
-        },
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 3,
-                "external_id": null,
-                "uuid": "cb6d1672-72f4-481a-be4f-b122aaf76618",
-                "identifier": "cb6d1672",
-                "name": "Bzrk's Server [EXPIRE ON 17 APRIL]",
-                "description": "[EXPIRE ON 20 APRIL]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 14000,
-                  "swap": 0,
-                  "disk": 80000,
-                  "io": 500,
-                  "cpu": 350,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 6,
-                "node": 2,
-                "allocation": 33,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "cb6d1672-72f4-481a-be4f-b122aaf76618",
+                    "P_SERVER_LOCATION": "Germany",
+                    "P_SERVER_UUID": "4fabf166-8cca-423b-b064-4e84ff6c482d",
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-17T08:33:50+00:00",
-                "created_at": "2025-03-17T08:33:40+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 4,
-                "external_id": null,
-                "uuid": "ed8c6736-0b8e-4716-aa4b-c5b8db81d91f",
-                "identifier": "ed8c6736",
-                "name": "Thunder_God10 [16 may]",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 7,
-                "node": 2,
-                "allocation": 123,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_17",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "ed8c6736-0b8e-4716-aa4b-c5b8db81d91f",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-17T15:14:32+00:00",
-                "created_at": "2025-03-17T08:35:39+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 5,
-                "external_id": null,
-                "uuid": "3bfac354-d8cc-490c-9b08-c1f9fad8f370",
-                "identifier": "3bfac354",
-                "name": "RORMAFIA's Server [PERMANENT SERVER]",
-                "description": "[PERMANENT SERVER]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 8,
-                "node": 2,
-                "allocation": 35,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "3bfac354-d8cc-490c-9b08-c1f9fad8f370",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
-                  }
-                },
-                "updated_at": "2025-03-17T08:36:43+00:00",
-                "created_at": "2025-03-17T08:36:32+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 7,
-                "external_id": null,
-                "uuid": "f41c9d35-a655-4b32-865d-818c25ed404f",
-                "identifier": "f41c9d35",
-                "name": "ITZ_FROSTU'S Infinite Specs Server [EXPIRE ON 17 APRIL]",
-                "description": "[EXPIRE ON 17 APRIL]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 12,
-                "node": 2,
-                "allocation": 37,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.21.4",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "f41c9d35-a655-4b32-865d-818c25ed404f",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
-                  }
-                },
-                "updated_at": "2025-03-17T16:11:32+00:00",
-                "created_at": "2025-03-17T08:52:04+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 8,
-                "external_id": null,
-                "uuid": "156ef288-328f-49a3-9be7-11de01e5883d",
-                "identifier": "156ef288",
-                "name": "Hyper mc",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 16420,
-                  "swap": 0,
-                  "disk": 80000,
-                  "io": 500,
-                  "cpu": 300,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 13,
-                "node": 2,
-                "allocation": 38,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "156ef288-328f-49a3-9be7-11de01e5883d",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-18T12:30:17+00:00",
-                "created_at": "2025-03-17T08:53:43+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 9,
-                "external_id": null,
-                "uuid": "479d4000-a939-48d3-a831-6ec7bd1fb237",
-                "identifier": "479d4000",
-                "name": "ansul ( exp - 17arpil )",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 32000,
-                  "swap": 0,
-                  "disk": 50000,
-                  "io": 500,
-                  "cpu": 300,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 1
-                },
-                "user": 15,
-                "node": 2,
-                "allocation": 39,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "479d4000-a939-48d3-a831-6ec7bd1fb237",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-17T09:07:49+00:00",
-                "created_at": "2025-03-17T09:07:39+00:00"
+                "updated_at": "2025-03-20T11:04:51+00:00",
+                "created_at": "2025-03-20T09:49:25+00:00"
               }
             },
             {
@@ -2212,157 +413,10 @@
               "attributes": {
                 "id": 13,
                 "external_id": null,
-                "uuid": "51edfaad-5c59-40a6-8f72-5008497ad21e",
-                "identifier": "51edfaad",
-                "name": "naan (exp - 14may)",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 12000,
-                  "swap": 0,
-                  "disk": 50000,
-                  "io": 500,
-                  "cpu": 250,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 1
-                },
-                "user": 17,
-                "node": 2,
-                "allocation": 40,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "51edfaad-5c59-40a6-8f72-5008497ad21e",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-17T09:23:03+00:00",
-                "created_at": "2025-03-17T09:22:51+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 16,
-                "external_id": null,
-                "uuid": "1746e262-10ca-468f-8ecb-a385e54da529",
-                "identifier": "1746e262",
-                "name": "SKY MC",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 16000,
-                  "swap": 0,
-                  "disk": 20000,
-                  "io": 500,
-                  "cpu": 200,
-                  "threads": "0",
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 19,
-                "node": 2,
-                "allocation": 42,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.20.6",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "1746e262-10ca-468f-8ecb-a385e54da529",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-17T11:04:35+00:00",
-                "created_at": "2025-03-17T09:36:57+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 18,
-                "external_id": null,
-                "uuid": "2ebe0d03-0870-4815-895b-87cb80ced349",
-                "identifier": "2ebe0d03",
-                "name": "DropiBoi's Iron Server [EXPIRE ON 17 APRIL]",
-                "description": "[EXPIRE ON 17 APRIL]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 10000,
-                  "swap": 0,
-                  "disk": 50000,
-                  "io": 500,
-                  "cpu": 225,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 21,
-                "node": 2,
-                "allocation": 41,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.20.4",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "499",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "2ebe0d03-0870-4815-895b-87cb80ced349",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
-                  }
-                },
-                "updated_at": "2025-03-17T11:24:52+00:00",
-                "created_at": "2025-03-17T10:00:54+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 19,
-                "external_id": null,
-                "uuid": "a17ec778-1070-44a2-8138-5a21d3860022",
-                "identifier": "a17ec778",
-                "name": "PvP boy's EXPIRE ON 17 APRIL]",
-                "description": "",
+                "uuid": "b70e3bff-48ac-49ed-98a6-86869ca49989",
+                "identifier": "b70e3bff",
+                "name": "Krish's server [EXPIRE ON 20 APRIL]",
+                "description": "[EXPIRE ON 20 APRIL]",
                 "status": null,
                 "suspended": false,
                 "limits": {
@@ -2380,8 +434,8 @@
                   "backups": 5
                 },
                 "user": 14,
-                "node": 2,
-                "allocation": 43,
+                "node": 1,
+                "allocation": 3,
                 "nest": 1,
                 "egg": 2,
                 "container": {
@@ -2389,77 +443,1026 @@
                   "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "MINECRAFT_VERSION": "1.21.1",
+                    "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "a17ec778-1070-44a2-8138-5a21d3860022",
+                    "P_SERVER_LOCATION": "Germany",
+                    "P_SERVER_UUID": "b70e3bff-48ac-49ed-98a6-86869ca49989",
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-18T11:36:20+00:00",
-                "created_at": "2025-03-17T10:03:24+00:00"
+                "updated_at": "2025-03-20T09:53:03+00:00",
+                "created_at": "2025-03-20T09:52:58+00:00"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "object": "node",
+    "attributes": {
+      "id": 2,
+      "uuid": "70321fdd-856d-4ada-bcd6-a498b19188ff",
+      "public": true,
+      "name": "India",
+      "description": null,
+      "location_id": 2,
+      "fqdn": "in.flaxynodes.fun",
+      "scheme": "https",
+      "behind_proxy": false,
+      "maintenance_mode": false,
+      "memory": 4294967295,
+      "memory_overallocate": 0,
+      "disk": 4294967295,
+      "disk_overallocate": 0,
+      "upload_size": 1024,
+      "daemon_listen": 8080,
+      "daemon_sftp": 2022,
+      "daemon_base": "/var/lib/pterodactyl/volumes",
+      "created_at": "2025-03-20T08:52:06+00:00",
+      "updated_at": "2025-03-20T10:01:58+00:00",
+      "allocated_resources": {
+        "memory": 75548,
+        "disk": 165258
+      },
+      "relationships": {
+        "allocations": {
+          "object": "list",
+          "data": [
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 26,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3000,
+                "notes": null,
+                "assigned": true
               }
             },
             {
-              "object": "server",
+              "object": "allocation",
               "attributes": {
-                "id": 20,
-                "external_id": null,
-                "uuid": "56bc50df-3479-4956-afca-bd8663875d83",
-                "identifier": "56bc50df",
-                "name": "yash (exp - 17may)",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 4000,
-                  "swap": 0,
-                  "disk": 10000,
-                  "io": 500,
-                  "cpu": 200,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 22,
-                "node": 2,
-                "allocation": 44,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "56bc50df-3479-4956-afca-bd8663875d83",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-17T13:18:28+00:00",
-                "created_at": "2025-03-17T10:05:25+00:00"
+                "id": 27,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3001,
+                "notes": null,
+                "assigned": true
               }
             },
             {
+              "object": "allocation",
+              "attributes": {
+                "id": 28,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3002,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 29,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3003,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 30,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3004,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 31,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3005,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 32,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3006,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 33,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3007,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 34,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3008,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 35,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3009,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 36,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3010,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 37,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3011,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 38,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3012,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 39,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3013,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 40,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3014,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 41,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3015,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 42,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3016,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 43,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3017,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 44,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3018,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 45,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3019,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 46,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3020,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 47,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3021,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 48,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3022,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 49,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3023,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 50,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3024,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 51,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3025,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 52,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3026,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 53,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3027,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 54,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3028,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 55,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3029,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 56,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3030,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 57,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3031,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 58,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3032,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 59,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3033,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 60,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3034,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 61,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3035,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 62,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3036,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 63,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3037,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 64,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3038,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 65,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3039,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 66,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3040,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 67,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3041,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 68,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3042,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 69,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3043,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 70,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3044,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 71,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3045,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 72,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3046,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 73,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3047,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 74,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3048,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 75,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3049,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 76,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3050,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 77,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3051,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 78,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3052,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 79,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3053,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 80,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3054,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 81,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3055,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 82,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3056,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 83,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3057,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 84,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3058,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 85,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3059,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 86,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3060,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 87,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3061,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 88,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3062,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 89,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3063,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 90,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3064,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 91,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3065,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 92,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3066,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 93,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3067,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 94,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3068,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 95,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3069,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 96,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3070,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 97,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3071,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 98,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3072,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 99,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3073,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 100,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3074,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 101,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3075,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 102,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3076,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 103,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3077,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 104,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3078,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 105,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3079,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 106,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3080,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 107,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3081,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 108,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3082,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 109,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3083,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 110,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3084,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 111,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3085,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 112,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3086,
+                "notes": null,
+                "assigned": false
+              }
+            }
+          ]
+        },
+        "servers": {
+          "object": "list",
+          "data": [
+            {
               "object": "server",
               "attributes": {
-                "id": 22,
+                "id": 3,
                 "external_id": null,
-                "uuid": "f76b23b5-3c37-46e4-a606-92cdf2608bf2",
-                "identifier": "f76b23b5",
-                "name": "DARK_FLEX [16-04-2025]",
+                "uuid": "112841d0-4864-49cb-b2bd-fc06b0be3205",
+                "identifier": "112841d0",
+                "name": "Mafia Paid [15 July]",
                 "description": "",
                 "status": null,
                 "suspended": false,
@@ -2477,156 +1480,9 @@
                   "allocations": 0,
                   "backups": 0
                 },
-                "user": 24,
+                "user": 9,
                 "node": 2,
-                "allocation": 46,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.21.1",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "f76b23b5-3c37-46e4-a606-92cdf2608bf2",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-18T08:50:41+00:00",
-                "created_at": "2025-03-17T10:11:00+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 23,
-                "external_id": null,
-                "uuid": "95ac3df5-a707-45de-ad63-4793195c3bd1",
-                "identifier": "95ac3df5",
-                "name": "Darsh's Stone Plan Server [EXPIRE ON 17 APRIL]",
-                "description": "[EXPIRE ON 17 APRIL]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 6000,
-                  "swap": 0,
-                  "disk": 40000,
-                  "io": 500,
-                  "cpu": 150,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 23,
-                "node": 2,
-                "allocation": 47,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "95ac3df5-a707-45de-ad63-4793195c3bd1",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
-                  }
-                },
-                "updated_at": "2025-03-17T10:11:50+00:00",
-                "created_at": "2025-03-17T10:11:36+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 24,
-                "external_id": null,
-                "uuid": "0e6988c5-aaa7-4fc3-8adc-53cb8c2728e6",
-                "identifier": "0e6988c5",
-                "name": "ThunderGod's EVENT Iron Specs Server [EXPIRE ON 17 APRIL]",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 6000,
-                  "swap": 0,
-                  "disk": 45000,
-                  "io": 500,
-                  "cpu": 150,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 7,
-                "node": 2,
-                "allocation": 48,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "0e6988c5-aaa7-4fc3-8adc-53cb8c2728e6",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
-                  }
-                },
-                "updated_at": "2025-03-17T10:17:12+00:00",
-                "created_at": "2025-03-17T10:16:58+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 26,
-                "external_id": null,
-                "uuid": "cc02a513-c895-4015-9e38-11cade1cd206",
-                "identifier": "cc02a513",
-                "name": "Tishan Sarkar's Server [EXPIRE ON 17 APRIL]",
-                "description": "[EXPIRE ON 17 APRIL]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 10000,
-                  "swap": 0,
-                  "disk": 50000,
-                  "io": 500,
-                  "cpu": 250,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 26,
-                "node": 2,
-                "allocation": 50,
+                "allocation": 26,
                 "nest": 1,
                 "egg": 2,
                 "container": {
@@ -2639,79 +1495,30 @@
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "cc02a513-c895-4015-9e38-11cade1cd206",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "112841d0-4864-49cb-b2bd-fc06b0be3205",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-17T11:08:27+00:00",
-                "created_at": "2025-03-17T10:29:58+00:00"
+                "updated_at": "2025-03-20T10:15:08+00:00",
+                "created_at": "2025-03-20T09:25:53+00:00"
               }
             },
             {
               "object": "server",
               "attributes": {
-                "id": 27,
+                "id": 5,
                 "external_id": null,
-                "uuid": "f2202b61-0639-43d3-b44e-a664f2c1b531",
-                "identifier": "f2202b61",
-                "name": "Lenxs Infinite Specs Server [EXPIRE ON 25 APRIL]",
-                "description": "[EXPIRE ON 25 APRIL]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 27,
-                "node": 2,
-                "allocation": 51,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "f2202b61-0639-43d3-b44e-a664f2c1b531",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
-                  }
-                },
-                "updated_at": "2025-03-17T10:36:15+00:00",
-                "created_at": "2025-03-17T10:36:02+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 28,
-                "external_id": null,
-                "uuid": "77e286a5-b83e-43b0-be7d-20b26c417634",
-                "identifier": "77e286a5",
-                "name": "Krish paid ( 8 april )",
+                "uuid": "755fe963-140b-43c2-9483-5aa05dad34e6",
+                "identifier": "755fe963",
+                "name": "Mafia Paid [15 July] Proxy",
                 "description": "",
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 6048,
+                  "memory": 4026,
                   "swap": 0,
-                  "disk": 40000,
+                  "disk": 10000,
                   "io": 500,
                   "cpu": 150,
                   "threads": null,
@@ -2722,145 +1529,47 @@
                   "allocations": 0,
                   "backups": 0
                 },
-                "user": 16,
+                "user": 9,
                 "node": 2,
-                "allocation": 52,
+                "allocation": 27,
                 "nest": 1,
-                "egg": 2,
+                "egg": 15,
                 "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "startup_command": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar {{SERVER_JARFILE}}",
                   "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
+                    "VELOCITY_VERSION": "latest",
+                    "SERVER_JARFILE": "velocity.jar",
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "77e286a5-b83e-43b0-be7d-20b26c417634",
+                    "STARTUP": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "755fe963-140b-43c2-9483-5aa05dad34e6",
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-17T10:43:36+00:00",
-                "created_at": "2025-03-17T10:43:25+00:00"
+                "updated_at": "2025-03-20T09:29:21+00:00",
+                "created_at": "2025-03-20T09:28:49+00:00"
               }
             },
             {
               "object": "server",
               "attributes": {
-                "id": 29,
+                "id": 6,
                 "external_id": null,
-                "uuid": "361c0bb6-e62c-4251-9f23-2eafd3640db2",
-                "identifier": "361c0bb6",
-                "name": "Dinax's Coal Server [EXPIRE ON 7 APRIL]",
-                "description": "[EXPIRE ON 7 APRIL]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 8000,
-                  "swap": 0,
-                  "disk": 45000,
-                  "io": 500,
-                  "cpu": 200,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 28,
-                "node": 2,
-                "allocation": 53,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "361c0bb6-e62c-4251-9f23-2eafd3640db2",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
-                  }
-                },
-                "updated_at": "2025-03-17T10:44:02+00:00",
-                "created_at": "2025-03-17T10:43:51+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 31,
-                "external_id": null,
-                "uuid": "be59931b-0670-4558-bdc5-af05f60683c8",
-                "identifier": "be59931b",
-                "name": "FNREXY's Server [EXPIRE ON 1JULY]",
-                "description": "[EXPIRE ON 1JULY]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 33,
-                "node": 2,
-                "allocation": 54,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "be59931b-0670-4558-bdc5-af05f60683c8",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
-                  }
-                },
-                "updated_at": "2025-03-17T12:10:49+00:00",
-                "created_at": "2025-03-17T12:10:38+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 32,
-                "external_id": null,
-                "uuid": "75b50b74-7d94-49fd-af14-cd7edfd52cd7",
-                "identifier": "75b50b74",
-                "name": "Shaurya [17 April]",
+                "uuid": "1ee32f2b-8783-411c-a1f6-977115941e85",
+                "identifier": "1ee32f2b",
+                "name": "Mafia Paid [15 July] Lifesteal",
                 "description": "",
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 0,
+                  "memory": 16000,
                   "swap": 0,
-                  "disk": 0,
+                  "disk": 25000,
                   "io": 500,
-                  "cpu": 0,
+                  "cpu": 400,
                   "threads": null,
                   "oom_disabled": true
                 },
@@ -2869,9 +1578,9 @@
                   "allocations": 0,
                   "backups": 0
                 },
-                "user": 5,
+                "user": 9,
                 "node": 2,
-                "allocation": 122,
+                "allocation": 28,
                 "nest": 1,
                 "egg": 2,
                 "container": {
@@ -2879,29 +1588,225 @@
                   "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "MINECRAFT_VERSION": "1.20.4",
+                    "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
                     "DL_PATH": "",
-                    "BUILD_NUMBER": "499",
+                    "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "75b50b74-7d94-49fd-af14-cd7edfd52cd7",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "1ee32f2b-8783-411c-a1f6-977115941e85",
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-20T03:19:06+00:00",
-                "created_at": "2025-03-17T12:26:34+00:00"
+                "updated_at": "2025-03-20T09:32:03+00:00",
+                "created_at": "2025-03-20T09:30:00+00:00"
               }
             },
             {
               "object": "server",
               "attributes": {
-                "id": 33,
+                "id": 8,
                 "external_id": null,
-                "uuid": "ba3f810a-1012-46a8-86c8-c3b6c9ac91f9",
-                "identifier": "ba3f810a",
-                "name": "The Imortal SMP",
-                "description": "By Flaxy Nodes ( The Best Hosting)",
+                "uuid": "c5626092-7624-421c-bd06-918128c856ec",
+                "identifier": "c5626092",
+                "name": "Mafia Paid [15 July] Pvp",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 16000,
+                  "swap": 0,
+                  "disk": 30000,
+                  "io": 500,
+                  "cpu": 400,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 0
+                },
+                "user": 9,
+                "node": 2,
+                "allocation": 29,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "c5626092-7624-421c-bd06-918128c856ec",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-20T09:31:58+00:00",
+                "created_at": "2025-03-20T09:31:30+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 9,
+                "external_id": null,
+                "uuid": "a4aaa712-e67a-4abf-acf4-52be68de8d4b",
+                "identifier": "a4aaa712",
+                "name": "Mafia Paid [15 July] Lobby",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 8024,
+                  "swap": 0,
+                  "disk": 15000,
+                  "io": 500,
+                  "cpu": 300,
+                  "threads": "0",
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 0
+                },
+                "user": 9,
+                "node": 2,
+                "allocation": 30,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "a4aaa712-e67a-4abf-acf4-52be68de8d4b",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-20T09:33:14+00:00",
+                "created_at": "2025-03-20T09:32:43+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 15,
+                "external_id": null,
+                "uuid": "38669160-978b-441c-b151-c1a414c7876b",
+                "identifier": "38669160",
+                "name": "arley permanent",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 10240,
+                  "swap": 0,
+                  "disk": 50000,
+                  "io": 500,
+                  "cpu": 150,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 0
+                },
+                "user": 18,
+                "node": 2,
+                "allocation": 31,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "38669160-978b-441c-b151-c1a414c7876b",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-20T10:34:33+00:00",
+                "created_at": "2025-03-20T10:33:56+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 18,
+                "external_id": null,
+                "uuid": "796cfbd1-c89e-467a-a7e3-3bf56400b973",
+                "identifier": "796cfbd1",
+                "name": "Setup server(developers)",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 15258,
+                  "swap": 0,
+                  "disk": 15258,
+                  "io": 500,
+                  "cpu": 400,
+                  "threads": "4",
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 0
+                },
+                "user": 20,
+                "node": 2,
+                "allocation": 32,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "796cfbd1-c89e-467a-a7e3-3bf56400b973",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-20T11:09:52+00:00",
+                "created_at": "2025-03-20T11:09:16+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 21,
+                "external_id": null,
+                "uuid": "523ab426-b25d-4c50-86a7-152e60d3d175",
+                "identifier": "523ab426",
+                "name": "Tony's Server [MAKE ATLEAST 1 VIDEO PER WEEK]",
+                "description": "[MAKE ATLEAST 1 VIDEO PER WEEK]",
                 "status": null,
                 "suspended": false,
                 "limits": {
@@ -2918,9 +1823,9 @@
                   "allocations": 5,
                   "backups": 5
                 },
-                "user": 34,
+                "user": 23,
                 "node": 2,
-                "allocation": 32,
+                "allocation": 33,
                 "nest": 1,
                 "egg": 2,
                 "container": {
@@ -2933,43 +1838,810 @@
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "ba3f810a-1012-46a8-86c8-c3b6c9ac91f9",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "523ab426-b25d-4c50-86a7-152e60d3d175",
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-17T12:37:50+00:00",
-                "created_at": "2025-03-17T12:31:14+00:00"
+                "updated_at": "2025-03-20T11:25:39+00:00",
+                "created_at": "2025-03-20T11:25:04+00:00"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "object": "node",
+    "attributes": {
+      "id": 3,
+      "uuid": "db9ffac3-0ccb-4837-b261-7b2be0608f55",
+      "public": true,
+      "name": "India 2",
+      "description": null,
+      "location_id": 3,
+      "fqdn": "in-2.flaxynodes.fun",
+      "scheme": "https",
+      "behind_proxy": false,
+      "maintenance_mode": false,
+      "memory": 4294967295,
+      "memory_overallocate": 0,
+      "disk": 4294967295,
+      "disk_overallocate": 0,
+      "upload_size": 1024,
+      "daemon_listen": 8080,
+      "daemon_sftp": 2022,
+      "daemon_base": "/var/lib/pterodactyl/volumes",
+      "created_at": "2025-03-20T09:07:19+00:00",
+      "updated_at": "2025-03-20T10:04:17+00:00",
+      "allocated_resources": {
+        "memory": 86024,
+        "disk": 414000
+      },
+      "relationships": {
+        "allocations": {
+          "object": "list",
+          "data": [
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 113,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2025,
+                "notes": null,
+                "assigned": true
               }
             },
             {
+              "object": "allocation",
+              "attributes": {
+                "id": 114,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2026,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 115,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2027,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 116,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2028,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 117,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2029,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 118,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2030,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 119,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2031,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 120,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2032,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 121,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2033,
+                "notes": null,
+                "assigned": true
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 122,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2034,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 123,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2035,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 124,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2036,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 125,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2037,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 126,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2038,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 127,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2039,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 128,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2040,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 129,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2041,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 130,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2042,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 131,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2043,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 132,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2044,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 133,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2045,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 134,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2046,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 135,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2047,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 136,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2048,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 137,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2049,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 138,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2050,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 139,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2051,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 140,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2052,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 141,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2053,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 142,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2054,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 143,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2055,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 144,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2056,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 145,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2057,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 146,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2058,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 147,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2059,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 148,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2060,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 149,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2061,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 150,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2062,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 151,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2063,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 152,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2064,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 153,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2065,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 154,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2066,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 155,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2067,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 156,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2068,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 157,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2069,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 158,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2070,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 159,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2071,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 160,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2072,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 161,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2073,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 162,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2074,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 163,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2075,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 164,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2076,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 165,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2077,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 166,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2078,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 167,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2079,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 168,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2080,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 169,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2081,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 170,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2082,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 171,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2083,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 172,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2084,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 173,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2085,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 174,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2086,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 175,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2087,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 176,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2088,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 177,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2089,
+                "notes": null,
+                "assigned": false
+              }
+            },
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 178,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 2090,
+                "notes": null,
+                "assigned": false
+              }
+            }
+          ]
+        },
+        "servers": {
+          "object": "list",
+          "data": [
+            {
               "object": "server",
               "attributes": {
-                "id": 41,
+                "id": 2,
                 "external_id": null,
-                "uuid": "45c60812-038d-4cc6-8f1b-7c376d432cbb",
-                "identifier": "45c60812",
-                "name": "Camper ( exp - 18may )",
+                "uuid": "3afaa9c3-7fb0-49ac-b6a4-d9cf9a95efdf",
+                "identifier": "3afaa9c3",
+                "name": "Tonight Gamerz' Server [EXPIRE ON 20 APRIL]",
                 "description": "",
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 4000,
+                  "memory": 8000,
                   "swap": 0,
-                  "disk": 10000,
+                  "disk": 45000,
                   "io": 500,
-                  "cpu": 140,
+                  "cpu": 200,
                   "threads": null,
                   "oom_disabled": true
                 },
                 "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
+                  "databases": 3,
+                  "allocations": 3,
+                  "backups": 3
                 },
-                "user": 38,
-                "node": 2,
-                "allocation": 34,
+                "user": 7,
+                "node": 3,
+                "allocation": 113,
                 "nest": 1,
                 "egg": 2,
                 "container": {
@@ -2977,48 +2649,48 @@
                   "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "MINECRAFT_VERSION": "1.21",
+                    "MINECRAFT_VERSION": "1.20.1",
                     "SERVER_JARFILE": "server.jar",
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "45c60812-038d-4cc6-8f1b-7c376d432cbb",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
+                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_UUID": "3afaa9c3-7fb0-49ac-b6a4-d9cf9a95efdf",
+                    "P_SERVER_ALLOCATION_LIMIT": 3
                   }
                 },
-                "updated_at": "2025-03-18T07:34:20+00:00",
-                "created_at": "2025-03-18T06:44:36+00:00"
+                "updated_at": "2025-03-20T10:05:12+00:00",
+                "created_at": "2025-03-20T09:22:20+00:00"
               }
             },
             {
               "object": "server",
               "attributes": {
-                "id": 45,
+                "id": 4,
                 "external_id": null,
-                "uuid": "adfb68e2-8275-4dcf-986b-bf16a035e2be",
-                "identifier": "adfb68e2",
-                "name": "MrHostBoy [Don't Delete]",
-                "description": "",
+                "uuid": "5084620a-d8b7-429f-9208-8b7ca172548f",
+                "identifier": "5084620a",
+                "name": "Syprim's Server [EXPIRE ON 20 APRIL 2026]",
+                "description": "[EXPIRE ON 20 APRIL 2029]",
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 0,
+                  "memory": 16000,
                   "swap": 0,
-                  "disk": 0,
+                  "disk": 97000,
                   "io": 500,
                   "cpu": 0,
                   "threads": null,
                   "oom_disabled": true
                 },
                 "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
+                  "databases": 4,
+                  "allocations": 4,
+                  "backups": 4
                 },
-                "user": 10,
-                "node": 2,
-                "allocation": 45,
+                "user": 8,
+                "node": 3,
+                "allocation": 114,
                 "nest": 1,
                 "egg": 2,
                 "container": {
@@ -3031,73 +2703,24 @@
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "adfb68e2-8275-4dcf-986b-bf16a035e2be",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
+                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_UUID": "5084620a-d8b7-429f-9208-8b7ca172548f",
+                    "P_SERVER_ALLOCATION_LIMIT": 4
                   }
                 },
-                "updated_at": "2025-03-18T10:31:06+00:00",
-                "created_at": "2025-03-18T10:30:54+00:00"
+                "updated_at": "2025-03-20T09:35:20+00:00",
+                "created_at": "2025-03-20T09:26:12+00:00"
               }
             },
             {
               "object": "server",
               "attributes": {
-                "id": 46,
+                "id": 7,
                 "external_id": null,
-                "uuid": "24a10b9e-9064-464e-a178-d66f09fb1305",
-                "identifier": "24a10b9e",
-                "name": "WoNox SMP",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 8024,
-                  "swap": 0,
-                  "disk": 30000,
-                  "io": 500,
-                  "cpu": 250,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 42,
-                "node": 2,
-                "allocation": 36,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "24a10b9e-9064-464e-a178-d66f09fb1305",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-18T11:09:54+00:00",
-                "created_at": "2025-03-18T11:07:02+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 53,
-                "external_id": null,
-                "uuid": "d5771ef4-c9d4-491e-a7b3-745f8352ce34",
-                "identifier": "d5771ef4",
-                "name": "KingMc",
-                "description": "",
+                "uuid": "9a9be40e-8e70-4a6a-960f-486caeeb5ee7",
+                "identifier": "9a9be40e",
+                "name": "Shehe_Playz's Server [EXPIRE ON 17 APRIL]",
+                "description": "[EXPIRE ON 17 APRIL]",
                 "status": null,
                 "suspended": false,
                 "limits": {
@@ -3110,62 +2733,13 @@
                   "oom_disabled": true
                 },
                 "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
                 },
-                "user": 39,
-                "node": 2,
-                "allocation": 49,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_17",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "d5771ef4-c9d4-491e-a7b3-745f8352ce34",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-20T05:24:04+00:00",
-                "created_at": "2025-03-18T14:59:52+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 54,
-                "external_id": null,
-                "uuid": "1776880a-655d-4ff2-b776-bcf26cd57afb",
-                "identifier": "1776880a",
-                "name": "Rg Mera Jaaaaan",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 49,
-                "node": 2,
-                "allocation": 56,
+                "user": 10,
+                "node": 3,
+                "allocation": 115,
                 "nest": 1,
                 "egg": 2,
                 "container": {
@@ -3178,24 +2752,24 @@
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "1776880a-655d-4ff2-b776-bcf26cd57afb",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
+                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_UUID": "9a9be40e-8e70-4a6a-960f-486caeeb5ee7",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-18T17:45:41+00:00",
-                "created_at": "2025-03-18T17:45:28+00:00"
+                "updated_at": "2025-03-20T09:30:43+00:00",
+                "created_at": "2025-03-20T09:30:33+00:00"
               }
             },
             {
               "object": "server",
               "attributes": {
-                "id": 63,
+                "id": 10,
                 "external_id": null,
-                "uuid": "7a64b721-e67c-43c8-8f01-7b25ed602986",
-                "identifier": "7a64b721",
-                "name": "Survival server modded [ Itzrajrupyt ]",
-                "description": "",
+                "uuid": "4c5725dd-07b9-4906-86ef-052d065816a7",
+                "identifier": "4c5725dd",
+                "name": "Advit's server [EXPIRE ON 10 AUGUST]",
+                "description": "[EXPIRE ON 10 AUGUST]",
                 "status": null,
                 "suspended": false,
                 "limits": {
@@ -3208,13 +2782,13 @@
                   "oom_disabled": true
                 },
                 "feature_limits": {
-                  "databases": 10000,
-                  "allocations": 10000,
-                  "backups": 10000
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
                 },
-                "user": 29,
-                "node": 2,
-                "allocation": 55,
+                "user": 11,
+                "node": 3,
+                "allocation": 116,
                 "nest": 1,
                 "egg": 2,
                 "container": {
@@ -3227,13 +2801,258 @@
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN 2",
-                    "P_SERVER_UUID": "7a64b721-e67c-43c8-8f01-7b25ed602986",
-                    "P_SERVER_ALLOCATION_LIMIT": 10000
+                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_UUID": "4c5725dd-07b9-4906-86ef-052d065816a7",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-19T15:59:45+00:00",
-                "created_at": "2025-03-19T15:59:28+00:00"
+                "updated_at": "2025-03-20T09:32:56+00:00",
+                "created_at": "2025-03-20T09:32:47+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 11,
+                "external_id": null,
+                "uuid": "27242656-e294-40a2-bc74-967d61ff9f4c",
+                "identifier": "27242656",
+                "name": "Ghost's Server [EXPIRE ON 20 APRIL]",
+                "description": "[EXPIRE ON 20 APRIL]",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 0,
+                  "swap": 0,
+                  "disk": 0,
+                  "io": 500,
+                  "cpu": 0,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
+                },
+                "user": 12,
+                "node": 3,
+                "allocation": 117,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_UUID": "27242656-e294-40a2-bc74-967d61ff9f4c",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
+                  }
+                },
+                "updated_at": "2025-03-20T09:38:06+00:00",
+                "created_at": "2025-03-20T09:37:54+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 14,
+                "external_id": null,
+                "uuid": "1170f441-ec9f-4acb-9c66-28b445469194",
+                "identifier": "1170f441",
+                "name": "Maxie's YT Server [MAKE 1 VIDEO ON OUR HOST PER WEEK]",
+                "description": "[MAKE 1 VIDEO ON OUR HOST PER WEEK]",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 12000,
+                  "swap": 0,
+                  "disk": 30000,
+                  "io": 500,
+                  "cpu": 300,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
+                },
+                "user": 15,
+                "node": 3,
+                "allocation": 118,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_UUID": "1170f441-ec9f-4acb-9c66-28b445469194",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
+                  }
+                },
+                "updated_at": "2025-03-20T09:55:51+00:00",
+                "created_at": "2025-03-20T09:55:41+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 17,
+                "external_id": null,
+                "uuid": "edc8f5e1-60b0-4ce9-9f4a-b9218835b35d",
+                "identifier": "edc8f5e1",
+                "name": "Dev srvr 2",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 8024,
+                  "swap": 0,
+                  "disk": 12000,
+                  "io": 500,
+                  "cpu": 400,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 0
+                },
+                "user": 20,
+                "node": 3,
+                "allocation": 120,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_UUID": "edc8f5e1-60b0-4ce9-9f4a-b9218835b35d",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-20T11:16:06+00:00",
+                "created_at": "2025-03-20T10:57:18+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 19,
+                "external_id": null,
+                "uuid": "431629b0-4f78-495c-a789-7b0363ee2827",
+                "identifier": "431629b0",
+                "name": "Bzrk's Server [EXPIRE ON 17 APRIL]",
+                "description": "[EXPIRE ON 17 APRIL]",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 16000,
+                  "swap": 0,
+                  "disk": 80000,
+                  "io": 500,
+                  "cpu": 400,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
+                },
+                "user": 21,
+                "node": 3,
+                "allocation": 119,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_UUID": "431629b0-4f78-495c-a789-7b0363ee2827",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
+                  }
+                },
+                "updated_at": "2025-03-20T11:12:52+00:00",
+                "created_at": "2025-03-20T11:12:42+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 20,
+                "external_id": null,
+                "uuid": "8a8ab1bf-a6d5-4be1-a737-04a8a3d88961",
+                "identifier": "8a8ab1bf",
+                "name": "Tishan Sarkar [EXPIRE ON 20 APRIL]",
+                "description": "[EXPIRE ON 20 APRIL]",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 10000,
+                  "swap": 0,
+                  "disk": 50000,
+                  "io": 500,
+                  "cpu": 300,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
+                },
+                "user": 22,
+                "node": 3,
+                "allocation": 121,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_UUID": "8a8ab1bf-a6d5-4be1-a737-04a8a3d88961",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
+                  }
+                },
+                "updated_at": "2025-03-20T11:17:43+00:00",
+                "created_at": "2025-03-20T11:17:33+00:00"
               }
             }
           ]

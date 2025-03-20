@@ -1,0 +1,17 @@
+{
+  "watch": ["*.js", "*.json"],
+  "ignore": [
+    "node_modules/",
+    "sessions.db",
+    "*.db",
+    "*.db-journal",
+    "themes/",
+    ".git/",
+    "cache/",
+    "logs/"
+  ],
+  "delay": 1000,
+  "env": {
+    "NODE_ENV": "development"
+  }
+}

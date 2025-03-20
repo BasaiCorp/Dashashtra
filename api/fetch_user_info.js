@@ -1,8 +1,7 @@
 const axios = require('axios');
-const { PrismaClient } = require('@prisma/client');
 const fs = require('fs');
 const path = require('path');
-const prisma = new PrismaClient();
+const { userMethods } = require('../db');
 
 // Load settings from settings.json
 function getSettings() {
@@ -81,36 +80,19 @@ class PterodactylAPI {
     }
 }
 
-// Database operations
+// Database operations using db.js methods
 async function updateLocalUser(userId, data) {
     try {
-        // Parse notification preferences if it's an object
-        if (typeof data.notificationPreferences === 'object') {
-            data.notificationPreferences = JSON.stringify(data.notificationPreferences);
-        }
+        const updateData = {
+            email: data.email,
+            username: data.username,
+            pterodactyl_email: data.email,
+            pterodactyl_username: data.username,
+            pterodactyl_updated_at: new Date().toISOString()
+        };
 
-        const updatedUser = await prisma.user.update({
-            where: { id: userId },
-            data: {
-                username: data.username,
-                email: data.email,
-                panelApiKey: data.panelApiKey,
-                discordId: data.discordId,
-                discordUsername: data.discordUsername,
-                discordAvatar: data.discordAvatar,
-                discordDiscriminator: data.discordDiscriminator,
-                notificationPreferences: data.notificationPreferences,
-                twoFactorEnabled: data.twoFactorEnabled,
-                lastUpdated: new Date()
-            }
-        });
-
-        // Parse notification preferences back to object
-        if (updatedUser.notificationPreferences) {
-            updatedUser.notificationPreferences = JSON.parse(updatedUser.notificationPreferences);
-        }
-
-        return updatedUser;
+        await userMethods.updateUser(userId, updateData);
+        return await userMethods.getUserById(userId);
     } catch (error) {
         console.error('Error updating local user:', error);
         throw error;
@@ -119,16 +101,7 @@ async function updateLocalUser(userId, data) {
 
 async function getLocalUser(userId) {
     try {
-        const user = await prisma.user.findUnique({
-            where: { id: userId }
-        });
-
-        // Parse notification preferences if it exists
-        if (user?.notificationPreferences) {
-            user.notificationPreferences = JSON.parse(user.notificationPreferences);
-        }
-
-        return user;
+        return await userMethods.getUserById(userId);
     } catch (error) {
         console.error('Error fetching local user:', error);
         throw error;
@@ -152,11 +125,11 @@ async function fetchAndSyncUserInfo(userId, panelApiKey) {
 
         // Merge and update local data
         const updatedData = {
-            ...localUser,
             username: panelUser.username,
             email: panelUser.email,
-            panelApiKey: panelApiKey,
-            lastPanelSync: new Date()
+            pterodactyl_username: panelUser.username,
+            pterodactyl_email: panelUser.email,
+            pterodactyl_updated_at: new Date().toISOString()
         };
 
         // Update local database
@@ -184,8 +157,8 @@ async function updateUserSettings(userId, settings) {
         }
 
         // If panel API key exists, update Pterodactyl
-        if (localUser.panelApiKey) {
-            const pterodactyl = new PterodactylAPI(localUser.panelApiKey);
+        if (localUser.pterodactyl_id) {
+            const pterodactyl = new PterodactylAPI(settings.panelApiKey || localUser.pterodactyl_api_key);
             
             // Update email if changed
             if (settings.email && settings.email !== localUser.email) {
@@ -202,7 +175,7 @@ async function updateUserSettings(userId, settings) {
         const updatedUser = await updateLocalUser(userId, {
             ...localUser,
             ...settings,
-            lastUpdated: new Date()
+            pterodactyl_updated_at: new Date().toISOString()
         });
 
         return {
@@ -221,5 +194,12 @@ async function updateUserSettings(userId, settings) {
 module.exports = {
     fetchAndSyncUserInfo,
     updateUserSettings,
-    PterodactylAPI
+    PterodactylAPI,
+    // Add empty router and load function to prevent warnings
+    router: null,
+    load: function() {
+        // This is just a utility module, no routes to load
+        console.log('[USER_INFO] Utility module loaded');
+        return null;
+    }
 }; 

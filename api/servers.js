@@ -53,9 +53,17 @@ router.post('/servers/create', async (req, res) => {
     const db = require('../index.js').db;
     try {
         const user = await db.users.getUserById(req.session.userinfo.id);
-        if (!user || user.pterodactyl_id !== req.session.pterodactyl.id) {
-            req.session.destroy();
-            return res.redirect('/login');
+        
+        // Convert both IDs to strings for consistent comparison
+        const userPteroId = String(user.pterodactyl_id);
+        const sessionPteroId = String(req.session.pterodactyl.id);
+        
+        if (!user || userPteroId !== sessionPteroId) {
+            req.session.destroy((err) => {
+                if (err) console.error("Error destroying session:", err);
+                return res.redirect("/login");
+            });
+            return;
         }
 
         // Check if server creation is enabled

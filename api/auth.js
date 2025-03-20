@@ -79,7 +79,7 @@ router.post('/register', async (req, res) => {
                 username: username,
                 first_name: firstName,
                 last_name: lastName,
-                pterodactyl_id: pterodactylId,
+                pterodactyl_id: String(pterodactylId),
                 pterodactyl_username: pterodactylData.attributes.username,
                 pterodactyl_email: pterodactylData.attributes.email,
                 pterodactyl_first_name: pterodactylData.attributes.first_name,
@@ -167,7 +167,7 @@ router.post('/login', async (req, res) => {
                     username: pterodactylUser.username,
                     first_name: pterodactylUser.first_name,
                     last_name: pterodactylUser.last_name,
-                    pterodactyl_id: pterodactylUser.id,
+                    pterodactyl_id: String(pterodactylUser.id),
                     pterodactyl_username: pterodactylUser.username,
                     pterodactyl_email: pterodactylUser.email,
                     pterodactyl_first_name: pterodactylUser.first_name,
@@ -212,7 +212,7 @@ router.post('/login', async (req, res) => {
 
             const pterodactylDetailData = await pterodactylDetailResponse.json();
 
-            // Create new session
+            // Store user data in session
             req.session.userinfo = {
                 id: user.id,
                 email: user.email,
@@ -221,6 +221,12 @@ router.post('/login', async (req, res) => {
                 last_name: user.last_name,
                 type: 'email'
             };
+
+            // IMPORTANT: Store pterodactyl ID as string to ensure consistent comparison
+            if (pterodactylDetailData.attributes && pterodactylDetailData.attributes.id) {
+                // Store ptero ID as string - this fixes comparison issues in session validation
+                pterodactylDetailData.attributes.id = String(pterodactylDetailData.attributes.id);
+            }
             req.session.pterodactyl = pterodactylDetailData.attributes;
 
             // Get user's package
@@ -230,11 +236,20 @@ router.post('/login', async (req, res) => {
             // Set admin status in session
             req.session.isAdmin = pterodactylDetailData.attributes.root_admin === true;
 
-            console.log(`[LOGIN] Successfully completed login for user: ${email} (Admin: ${req.session.isAdmin})`);
-            res.json({ 
-                success: true, 
-                redirect: '/dashboard',
-                isAdmin: req.session.isAdmin
+            console.log(`[LOGIN] Successfully completed login for user: ${email} (Admin: ${req.session.isAdmin}, Ptero ID: ${pterodactylDetailData.attributes.id})`);
+
+            // Save session before redirecting
+            req.session.save(err => {
+                if (err) {
+                    console.error('[LOGIN] Error saving session:', err);
+                    return res.status(500).json({ success: false, error: 'Failed to save session' });
+                }
+                
+                res.json({ 
+                    success: true, 
+                    redirect: '/dashboard',
+                    isAdmin: req.session.isAdmin
+                });
             });
 
         } catch (error) {
@@ -351,7 +366,7 @@ router.get('/discord/callback', async (req, res) => {
                     first_name: userData.username,
                     last_name: '#' + userData.discriminator,
                     discord_id: userData.id,
-                    pterodactyl_id: pterodactylData.attributes.id,
+                    pterodactyl_id: String(pterodactylData.attributes.id),
                     pterodactyl_username: pterodactylData.attributes.username,
                     pterodactyl_email: pterodactylData.attributes.email,
                     pterodactyl_first_name: pterodactylData.attributes.first_name,
@@ -406,6 +421,12 @@ router.get('/discord/callback', async (req, res) => {
                 guilds: guildsData,
                 type: 'discord'
             };
+
+            // IMPORTANT: Store pterodactyl ID as string to ensure consistent comparison
+            if (pterodactylUserData.attributes && pterodactylUserData.attributes.id) {
+                // Store ptero ID as string - this fixes comparison issues in session validation
+                pterodactylUserData.attributes.id = String(pterodactylUserData.attributes.id);
+            }
             req.session.pterodactyl = pterodactylUserData.attributes;
 
             // Set new account flag if this is a new account
@@ -420,8 +441,18 @@ router.get('/discord/callback', async (req, res) => {
             // Set admin status in session
             req.session.isAdmin = pterodactylUserData.attributes.root_admin === true;
 
-            // Redirect to the dashboard
-            return res.redirect('/dashboard');
+            console.log(`[DISCORD AUTH] Successfully completed login for user: ${user.email} (Admin: ${req.session.isAdmin}, Ptero ID: ${pterodactylUserData.attributes.id})`);
+
+            // Save session before redirecting
+            req.session.save(err => {
+                if (err) {
+                    console.error('[LOGIN] Error saving session:', err);
+                    return res.redirect('/login?error=session_save_failed');
+                }
+                
+                // Redirect to the dashboard
+                return res.redirect('/dashboard');
+            });
         } catch (error) {
             console.error('Error fetching Pterodactyl user data:', error);
             return res.redirect('/login?error=pterodactyl_data_fetch_failed');

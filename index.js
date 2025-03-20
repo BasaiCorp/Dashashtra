@@ -200,11 +200,19 @@ app.get('/', async (req, res) => {
                 return res.redirect("/dashboard");
             } else {
                 // Invalid session, clear it
-                req.session.destroy();
+                req.session.destroy((err) => {
+                    if (err) console.error("Error destroying session:", err);
+                    return res.redirect("/");
+                });
+                return;
             }
         } catch (error) {
             console.error('[ROOT] Error validating user session:', error);
-            req.session.destroy();
+            req.session.destroy((err) => {
+                if (err) console.error("Error destroying session:", err);
+                return res.redirect("/");
+            });
+            return;
         }
     }
     
@@ -251,9 +259,17 @@ app.get('/servers', async (req, res) => {
     // Validate user session
     try {
         const user = await db.users.getUserById(req.session.userinfo.id);
-        if (!user || user.pterodactyl_id !== req.session.pterodactyl.id) {
+        
+        // Convert both IDs to strings for consistent comparison
+        const userPteroId = String(user.pterodactyl_id);
+        const sessionPteroId = String(req.session.pterodactyl.id);
+        
+        if (!user || userPteroId !== sessionPteroId) {
             console.log('[SERVERS] Invalid user session, redirecting to login');
-            req.session.destroy();
+            req.session.destroy((err) => {
+                if (err) console.error("Error destroying session:", err);
+                return res.redirect("/login");
+            });
             return res.redirect("/login");
         }
         
@@ -283,6 +299,136 @@ app.get('/servers', async (req, res) => {
     } catch (error) {
         console.error('[SERVERS] Error processing servers page:', error);
         return res.send("An error occurred while preparing data for the servers page. Please try again.");
+    }
+});
+
+// Handle create route - MUST be defined before the catch-all route handler
+app.get('/create', async (req, res) => {
+    console.log('[CREATE] Processing request for create page');
+    
+    // Check if user is logged in
+    if (!req.session.userinfo || !req.session.pterodactyl) {
+        console.log('[CREATE] User not logged in, redirecting to login');
+        return res.redirect("/login");
+    }
+    
+    // Validate user session
+    try {
+        const user = await db.users.getUserById(req.session.userinfo.id);
+        
+        // Convert both IDs to strings for consistent comparison
+        const userPteroId = String(user.pterodactyl_id);
+        const sessionPteroId = String(req.session.pterodactyl.id);
+        
+        if (!user || userPteroId !== sessionPteroId) {
+            console.log('[CREATE] Invalid user session, redirecting to login');
+            req.session.destroy((err) => {
+                if (err) console.error("Error destroying session:", err);
+                return res.redirect("/login");
+            });
+            return res.redirect("/login");
+        }
+        
+        // Check if server creation is enabled
+        const settings = JSON.parse(fs.readFileSync("./settings.json").toString());
+        if (settings.api.client.allow.server.create !== true) {
+            return res.send("Server creation is currently disabled.");
+        }
+        
+        // Get theme and render create page
+        let theme = indexjs.get(req);
+        
+        // Find the correct template for the create page
+        let createTemplate = theme.settings.pages.create || theme.settings.pages["servers/new"] || "create.ejs";
+        console.log(`[CREATE] Using template: ${createTemplate}`);
+        
+        // Get render data from indexjs
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        // Get nests, eggs, and locations from cache
+        const nests = JSON.parse(fs.readFileSync("./cache/nests_cache.json", "utf8"));
+        const eggs = JSON.parse(fs.readFileSync("./cache/eggs_cache.json", "utf8"));
+        const locations = JSON.parse(fs.readFileSync("./cache/locations_cache.json", "utf8"));
+        
+        // Add nests, eggs, and locations to render data
+        renderData.nests = nests;
+        renderData.eggs = eggs;
+        renderData.locations = locations;
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/${createTemplate}`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[CREATE] Error rendering create page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the create page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error('[CREATE] Error processing create page:', error);
+        return res.send("An error occurred while preparing data for the create page. Please try again.");
+    }
+});
+
+// Handle dashboard route explicitly - MUST be defined before the catch-all route handler
+app.get('/dashboard', async (req, res) => {
+    console.log('[DASHBOARD] Processing request for dashboard page');
+    
+    // Check if user is logged in
+    if (!req.session.userinfo || !req.session.pterodactyl) {
+        console.log('[DASHBOARD] User not logged in, redirecting to login');
+        return res.redirect("/login");
+    }
+    
+    // Validate user session
+    try {
+        const user = await db.users.getUserById(req.session.userinfo.id);
+        
+        // Convert both IDs to strings for consistent comparison
+        const userPteroId = String(user.pterodactyl_id);
+        const sessionPteroId = String(req.session.pterodactyl.id);
+        
+        console.log(`[DASHBOARD] Validating session: User DB ID ${userPteroId} vs Session ID ${sessionPteroId}`);
+        
+        if (!user || userPteroId !== sessionPteroId) {
+            console.log('[DASHBOARD] Invalid user session, redirecting to login');
+            req.session.destroy((err) => {
+                if (err) console.error("Error destroying session:", err);
+                return res.redirect("/login?reason=invalid_session");
+            });
+            return;
+        }
+        
+        // Get theme and render dashboard page
+        let theme = indexjs.get(req);
+        
+        // Find the correct template for the dashboard page
+        let dashboardTemplate = theme.settings.pages.dashboard || "dashboard.ejs";
+        console.log(`[DASHBOARD] Using template: ${dashboardTemplate}`);
+        
+        // Get render data from indexjs
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/${dashboardTemplate}`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[DASHBOARD] Error rendering dashboard page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the dashboard page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error('[DASHBOARD] Error processing dashboard page:', error);
+        return res.send("An error occurred while preparing data for the dashboard page. Please try again.");
     }
 });
 
@@ -347,7 +493,8 @@ app.use(async (req, res, next) => {
     const user = await db.users.getUserById(req.session.userinfo.id);
     if (!user) {
       let theme = indexjs.get(req);
-      req.session.destroy(() => {
+      req.session.destroy((err) => {
+        if (err) console.error("Error destroying session:", err);
         return res.redirect(theme.settings.redirect.logout || "/");
       });
       return;
@@ -422,70 +569,6 @@ if (authModule.router) {
   authModule.load(app, db);
 }
 
-// Handle create route - MUST be defined before the catch-all route handler
-app.get('/create', async (req, res) => {
-    console.log('[CREATE] Processing request for create page');
-    
-    // Check if user is logged in
-    if (!req.session.userinfo || !req.session.pterodactyl) {
-        console.log('[CREATE] User not logged in, redirecting to login');
-        return res.redirect("/login");
-    }
-    
-    // Validate user session
-    try {
-        const user = await db.users.getUserById(req.session.userinfo.id);
-        if (!user || user.pterodactyl_id !== req.session.pterodactyl.id) {
-            console.log('[CREATE] Invalid user session, redirecting to login');
-            req.session.destroy();
-            return res.redirect("/login");
-        }
-        
-        // Check if server creation is enabled
-        const settings = JSON.parse(fs.readFileSync("./settings.json").toString());
-        if (settings.api.client.allow.server.create !== true) {
-            return res.send("Server creation is currently disabled.");
-        }
-        
-        // Get theme and render create page
-        let theme = indexjs.get(req);
-        
-        // Find the correct template for the create page
-        let createTemplate = theme.settings.pages.create || theme.settings.pages["servers/new"] || "create.ejs";
-        console.log(`[CREATE] Using template: ${createTemplate}`);
-        
-        // Get render data from indexjs
-        const renderData = await eval(indexjs.renderdataeval);
-        
-        // Get nests, eggs, and locations from cache
-        const nests = JSON.parse(fs.readFileSync("./cache/nests_cache.json", "utf8"));
-        const eggs = JSON.parse(fs.readFileSync("./cache/eggs_cache.json", "utf8"));
-        const locations = JSON.parse(fs.readFileSync("./cache/locations_cache.json", "utf8"));
-        
-        // Add nests, eggs, and locations to render data
-        renderData.nests = nests;
-        renderData.eggs = eggs;
-        renderData.locations = locations;
-        
-        ejs.renderFile(
-            `./themes/${theme.name}/${createTemplate}`, 
-            renderData,
-            null,
-            function (err, str) {
-                if (err) {
-                    console.log(chalk.red(`[CREATE] Error rendering create page:`));
-                    console.log(err);
-                    return res.send("An error occurred while loading the create page. Please contact an administrator.");
-                }
-                res.send(str);
-            }
-        );
-    } catch (error) {
-        console.error('[CREATE] Error processing create page:', error);
-        return res.send("An error occurred while preparing data for the create page. Please try again.");
-    }
-});
-
 // Then load other API files
 const apifiles = fs.readdirSync('./api').filter(file => file.endsWith('.js'));
 apifiles.forEach(file => {
@@ -516,36 +599,50 @@ app.use('/admin', adminRoutes.router);
 
 // Explicit route handlers for login and register pages
 app.get('/login', async (req, res) => {
-    console.log('[LOGIN] Processing request for login page');
-    
-    // If user is already logged in, redirect to dashboard
-    if (req.session.userinfo && req.session.pterodactyl) {
-        try {
-            const user = await db.users.getUserById(req.session.userinfo.id);
-            if (user && user.pterodactyl_id === req.session.pterodactyl.id) {
-                console.log('[LOGIN] User is already logged in, redirecting to dashboard');
-                return res.redirect("/dashboard");
-            }
-        } catch (error) {
-            console.error('[LOGIN] Error validating user session:', error);
-            req.session.destroy();
-        }
-    }
-    
-    // Show login page for non-logged-in users
-    // Ensure we're using the auth theme from settings for login/register
-    let settings = JSON.parse(fs.readFileSync("./settings.json"));
-    let auththeme = settings.auththeme;
-    console.log(`[LOGIN] Using auth theme: ${auththeme}`);
-    
-    let theme = {
-        name: auththeme,
-        settings: fs.existsSync(`./themes/${auththeme}/pages.json`) ?
-            JSON.parse(fs.readFileSync(`./themes/${auththeme}/pages.json`).toString()) :
-            defaultthemesettings
-    };
-    
     try {
+        // Prevent redirect loops - if coming from login page with prompt=none, show error
+        if (req.query.prompt === 'none') {
+            console.log('[LOGIN] Detected potential redirect loop with prompt=none');
+            // Clear the problematic session
+            if (req.session) {
+                req.session.destroy((err) => {
+                    if (err) console.error("Error destroying session:", err);
+                    // Continue with login page rendering
+                });
+            }
+        }
+        
+        // If user is already logged in, redirect to dashboard
+        if (req.session.userinfo && req.session.pterodactyl) {
+            try {
+                const user = await db.users.getUserById(req.session.userinfo.id);
+                if (user && user.pterodactyl_id === req.session.pterodactyl.id) {
+                    console.log('[LOGIN] User is already logged in, redirecting to dashboard');
+                    return res.redirect("/dashboard");
+                }
+            } catch (error) {
+                console.error('[LOGIN] Error validating user session:', error);
+                req.session.destroy((err) => {
+                    if (err) console.error("Error destroying session:", err);
+                    return res.redirect("/");
+                });
+                return;
+            }
+        }
+        
+        // Show login page for non-logged-in users
+        // Ensure we're using the auth theme from settings for login/register
+        let settings = JSON.parse(fs.readFileSync("./settings.json"));
+        let auththeme = settings.auththeme;
+        console.log(`[LOGIN] Using auth theme: ${auththeme}`);
+        
+        let theme = {
+            name: auththeme,
+            settings: fs.existsSync(`./themes/${auththeme}/pages.json`) ?
+                JSON.parse(fs.readFileSync(`./themes/${auththeme}/pages.json`).toString()) :
+                defaultthemesettings
+        };
+        
         const renderData = await eval(indexjs.renderdataeval);
         
         try {
@@ -592,7 +689,11 @@ app.get('/register', async (req, res) => {
             }
         } catch (error) {
             console.error('[REGISTER] Error validating user session:', error);
-            req.session.destroy();
+            req.session.destroy((err) => {
+                if (err) console.error("Error destroying session:", err);
+                return res.redirect("/");
+            });
+            return;
         }
     }
     
@@ -646,22 +747,53 @@ app.get('/register', async (req, res) => {
 app.all("*", async (req, res, next) => {
   // Skip session validation for login and register pages
   if (req._parsedUrl.pathname === '/login' || req._parsedUrl.pathname === '/register' || 
-      req._parsedUrl.pathname.startsWith('/auth/')) {
+      req._parsedUrl.pathname.startsWith('/auth/') || 
+      req._parsedUrl.pathname.startsWith('/themes/')) {
     return next();
   }
+
+  // Add debugging
+  console.log(`[DEBUG] Session check for ${req._parsedUrl.pathname}:`, {
+    hasSession: !!req.session,
+    hasPterodactyl: !!(req.session && req.session.pterodactyl),
+    hasUserinfo: !!(req.session && req.session.userinfo),
+    userID: req.session && req.session.userinfo ? req.session.userinfo.id : null,
+    pteroID: req.session && req.session.pterodactyl ? req.session.pterodactyl.id : null
+  });
 
   // Validate Pterodactyl session if it exists
   if (req.session && req.session.pterodactyl && req.session.userinfo) {
     try {
       const user = await db.users.getUserById(req.session.userinfo.id);
-      if (!user || user.pterodactyl_id !== req.session.pterodactyl.id) {
-        req.session.destroy();
-        return res.redirect("/login?prompt=none");
+      
+      // Also debug the user from database
+      console.log(`[DEBUG] User from DB:`, {
+        found: !!user,
+        pteroID: user ? user.pterodactyl_id : null,
+        sessionPteroID: req.session.pterodactyl.id
+      });
+      
+      // Convert both to strings for comparison to avoid type mismatch issues
+      const userPteroId = user ? String(user.pterodactyl_id) : null;
+      const sessionPteroId = req.session.pterodactyl.id ? String(req.session.pterodactyl.id) : null;
+      
+      if (!user || userPteroId !== sessionPteroId) {
+        console.log(`[DEBUG] Session validation failed - destroying session (${userPteroId} !== ${sessionPteroId})`);
+        req.session.destroy((err) => {
+          if (err) console.error("Error destroying session:", err);
+          return res.redirect("/login?prompt=none&reason=invalid_id");
+        });
+        return;
       }
+      
+      console.log(`[DEBUG] Session validation successful for user ${req.session.userinfo.id}`);
     } catch (error) {
       console.error("Error checking user session:", error);
-      req.session.destroy();
-      return res.redirect("/login?prompt=none");
+      req.session.destroy((err) => {
+        if (err) console.error("Error destroying session:", err);
+        return res.redirect("/login?prompt=none&reason=error");
+      });
+      return;
     }
   }
   
@@ -799,53 +931,21 @@ module.exports.get = function(req) {
     return {
       settings: (
         fs.existsSync(`./themes/${auththeme}/pages.json`) ?
-          JSON.parse(fs.readFileSync(`./themes/${auththeme}/pages.json`).toString())
-        : defaultthemesettings
+          JSON.parse(fs.readFileSync(`./themes/${auththeme}/pages.json`).toString()) :
+          defaultthemesettings
       ),
       name: auththeme
     };
   }
-
-  let tname = encodeURIComponent(getCookie(req, "theme"));
-  let name = (
-    tname ?
-      fs.existsSync(`./themes/${tname}`) ?
-        tname
-      : defaulttheme
-    : defaulttheme
-  )
+  
   return {
     settings: (
-      fs.existsSync(`./themes/${name}/pages.json`) ?
-        JSON.parse(fs.readFileSync(`./themes/${name}/pages.json`).toString())
-      : defaultthemesettings
+      fs.existsSync(`./themes/${defaulttheme}/pages.json`) ?
+        JSON.parse(fs.readFileSync(`./themes/${defaulttheme}/pages.json`).toString()) :
+        defaultthemesettings
     ),
-    name: name
+    name: defaulttheme
   };
 };
 
-module.exports.islimited = async function() {
-  return cache <= 0 ? true : false;
-}
-
-module.exports.ratelimits = async function(length) {
-  cache = cache + length
-}
-
-// Get a cookie.
-function getCookie(req, cname) {
-  let cookies = req.headers.cookie;
-  if (!cookies) return null;
-  let name = cname + "=";
-  let ca = cookies.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return decodeURIComponent(c.substring(name.length, c.length));
-    }
-  }
-  return "";
-}
+module.exports.defaultthemesettings = defaultthemesettings;
