@@ -549,7 +549,7 @@
 
 				<!-- Create Server Form -->
 				<div class="glass-card rounded-xl border border-gray-700 p-6 mb-8">
-					<form action="/create" method="POST" class="space-y-6">
+					<form action="/api/servers/create" method="POST" class="space-y-6">
 						<!-- Server Name -->
 						<div>
 							<label class="form-label">Server Name</label>
@@ -567,7 +567,7 @@
 						<!-- Server Type -->
 						<div>
 							<label class="form-label">Server Type</label>
-							<select name="type" class="form-input w-full" required>
+							<select name="egg" class="form-input w-full" required>
 								<option value="">Select server type</option>
 								<% if (typeof nests !== 'undefined' && nests.length > 0) { %>
 									<% nests.forEach(nest => { %>
