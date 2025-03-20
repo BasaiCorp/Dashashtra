@@ -3,11 +3,20 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Redeem Coupon - Redeem your coupon codes for server resources">
+	<meta name="theme-color" content="#0f0f12">
+	
+	<!-- Security Headers -->
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data:; font-src 'self' https: data:;">
+	<meta http-equiv="X-Content-Type-Options" content="nosniff">
+	<meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+	<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+	
 	<title><%= extra.redeem.title %></title>
 	<link rel="icon" type="image/png" href="<%= extra.faviconlink %>"/>
 	
 	<!-- Fonts and Icons -->
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	
 	<!-- Tailwind CSS -->
@@ -18,38 +27,47 @@
 			theme: {
 				extend: {
 					fontFamily: {
-						sans: ['Inter', 'sans-serif'],
+						sans: ['Poppins', 'sans-serif'],
 					},
 					colors: {
 						primary: {
-							50: '#f0f9ff',
-							100: '#e0f2fe',
-							200: '#bae6fd',
-							300: '#7dd3fc',
-							400: '#38bdf8',
-							500: '#0ea5e9',
-							600: '#0284c7',
-							700: '#0369a1',
-							800: '#075985',
-							900: '#0c4a6e',
-							950: '#082f49',
+							50: '#eef2ff',
+							100: '#e0e7ff',
+							200: '#c7d2fe',
+							300: '#a5b4fc',
+							400: '#818cf8',
+							500: '#6366f1',
+							600: '#4f46e5',
+							700: '#4338ca',
+							800: '#3730a3',
+							900: '#312e81',
+							950: '#1e1b4b',
 						},
 						dark: {
-							base: '#111827',
-							light: '#1F2937',
-							lighter: '#374151',
-							card: '#1E293B'
+							base: '#0f0f12',
+							light: '#1a1a21',
+							lighter: '#24242e',
+							card: '#1a1a21'
 						}
 					},
 					animation: {
 						'fade-in': 'fadeIn 0.5s ease-in-out',
 						'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+						'float': 'float 3s ease-in-out infinite',
 					},
 					keyframes: {
 						fadeIn: {
 							'0%': { opacity: '0' },
 							'100%': { opacity: '1' },
+						},
+						float: {
+							'0%, 100%': { transform: 'translateY(0)' },
+							'50%': { transform: 'translateY(-10px)' },
 						}
+					},
+					boxShadow: {
+						'glow': '0 0 15px rgba(99, 102, 241, 0.5)',
+						'card': '0 8px 24px rgba(0, 0, 0, 0.12)',
 					}
 				}
 			}
@@ -58,72 +76,112 @@
 	
 	<style>
 		body {
-			background-color: #0f172a;
-			color: #f1f5f9;
-			font-family: 'Inter', sans-serif;
-		}
-		.navbar {
-			background-color: rgba(15, 23, 42, 0.7);
-			backdrop-filter: blur(10px);
-			border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-		}
-		.sidebar {
-			background-color: #1e293b;
-			border-right: 1px solid rgba(148, 163, 184, 0.1);
-			transition: all 0.3s ease;
-		}
-		.card {
-			background-color: #1e293b;
-			border: 1px solid rgba(148, 163, 184, 0.1);
-			transition: all 0.3s ease;
-		}
-		.card:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-		}
-		.gradient-border {
-			position: relative;
-			border-radius: 0.5rem;
-			z-index: 0;
-			overflow: hidden;
-			padding: 1px;
-		}
-		.gradient-border::before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			border-radius: 0.5rem;
-			padding: 2px;
-			background: linear-gradient(45deg, #0ea5e9, #8b5cf6, #ec4899);
-			-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-			-webkit-mask-composite: xor;
-			mask-composite: exclude;
-			z-index: -1;
-		}
-		.main-content {
-			animation: fadeIn 0.5s ease-in-out;
-		}
-		@keyframes fadeIn {
-			0% { opacity: 0; }
-			100% { opacity: 1; }
+			background-color: #0f0f12;
+			color: #f5f5f7;
+			font-family: 'Poppins', sans-serif;
 		}
 		
-		/* Custom Scrollbar */
+		/* Custom scrollbar */
 		::-webkit-scrollbar {
 			width: 8px;
+			height: 8px;
 		}
+		
 		::-webkit-scrollbar-track {
-			background: #1e293b;
+			background: #1e1e24;
 		}
+		
 		::-webkit-scrollbar-thumb {
-			background: #475569;
+			background: #3a3a43;
 			border-radius: 4px;
 		}
+		
 		::-webkit-scrollbar-thumb:hover {
-			background: #64748b;
+			background: #4a4a55;
+		}
+		
+		/* Custom styles */
+		.sidebar {
+			background-color: #161618;
+			border-right: 1px solid #2d2d35;
+		}
+		
+		.main-content {
+			background-color: #0f0f12;
+		}
+		
+		.bg-dark-card {
+			background-color: #1a1a1f;
+		}
+		
+		.bg-dark-lighter {
+			background-color: #202026;
+		}
+		
+		.menu-item.active {
+			background-color: rgba(99, 102, 241, 0.1);
+			color: #fff;
+		}
+		
+		.menu-item.active i {
+			color: #6366f1;
+		}
+		
+		.glass-card {
+			background: rgba(26, 26, 31, 0.7);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+		}
+		
+		.btn-primary {
+			background-color: #6366f1;
+			border-radius: 0.5rem;
+			padding: 0.5rem 1rem;
+			transition: all 0.3s ease;
+		}
+		
+		.btn-primary:hover {
+			background-color: #4f46e5;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+		}
+		
+		.gradient-border {
+			position: relative;
+			border-radius: 0.75rem;
+			overflow: hidden;
+		}
+		
+		.gradient-border::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			border-radius: 0.75rem;
+			padding: 1px;
+			background: linear-gradient(to right, #6366f1, #8b5cf6);
+			-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+			mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+			-webkit-mask-composite: xor;
+			mask-composite: exclude;
+			pointer-events: none;
+		}
+		
+		.animate-fade-in {
+			animation: fadeIn 0.6s ease-out;
+		}
+		
+		.animate-slide-up {
+			animation: slideUp 0.5s ease-out;
+		}
+		
+		@keyframes fadeIn {
+			from { opacity: 0; }
+			to { opacity: 1; }
+		}
+		
+		@keyframes slideUp {
+			from { transform: translateY(20px); opacity: 0; }
+			to { transform: translateY(0); opacity: 1; }
 		}
 	</style>
 </head>
@@ -138,215 +196,318 @@
 	%>
 
 	<!-- Navbar -->
-	<nav class="navbar fixed w-full h-16 z-10 px-4 py-2.5 flex items-center justify-between">
+	<nav class="navbar fixed w-full h-16 z-50 px-4 py-2.5 flex items-center justify-between bg-dark-base/80 backdrop-blur-lg border-b border-gray-800">
+		<!-- Left side - Logo and Brand -->
 		<div class="flex items-center">
-			<a href="/" class="flex items-center">
-				<img src="/assets/img/FlaxyNodes_logo.gif" class="h-8 w-8 mr-3 rounded-full" alt="Flaxy Nodes Logo">
+			<a href="/" class="flex items-center group">
+				<div class="h-10 w-10 mr-3 rounded-full overflow-hidden transition-all duration-300 group-hover:shadow-glow">
+					<img src="/assets/img/FlaxyNodes_logo.gif" class="h-full w-full object-cover" alt="Flaxy Nodes Logo">
+				</div>
 				<div class="flex flex-col">
 					<span class="self-center text-xl font-bold text-white">Flaxy Nodes</span>
-					<span class="text-xs text-gray-400">Premium Game Hosting</span>
+					<span class="text-xs text-indigo-300">Premium Game Hosting</span>
 				</div>
 			</a>
 		</div>
-		
+
+		<!-- Center - Search Bar -->
+		<div class="hidden md:flex items-center flex-1 max-w-xl mx-8">
+			<div class="relative w-full">
+				<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
+				<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+					<i class="fas fa-search"></i>
+				</button>
+			</div>
+		</div>
+
+		<!-- Right side - User Menu and Notifications -->
 		<div class="flex items-center gap-4">
+			<!-- Notifications -->
+			<div class="relative">
+				<button class="p-2 text-gray-400 hover:text-white transition-colors duration-200">
+					<i class="fas fa-bell"></i>
+					<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+				</button>
+			</div>
+
+			<!-- User Profile Dropdown -->
 			<div class="relative inline-block">
-				<button id="dropdownBtn" class="flex items-center px-3 py-2 text-sm font-medium text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none">
+				<button id="dropdownBtn" class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-dark-lighter hover:bg-primary-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50">
+					<div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center mr-2">
+						<i class="fas fa-user text-primary-400"></i>
+					</div>
 					<span class="mr-2"><%= userData.username %></span>
 					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
 					</svg>
 				</button>
-				<div id="dropdownMenu" class="hidden absolute right-0 mt-2 bg-gray-800 rounded-lg shadow-lg overflow-hidden z-20" style="min-width: 10rem;">
+				<div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-64 bg-dark-lighter rounded-lg shadow-lg overflow-hidden z-50 border border-gray-700">
+					<div class="p-4 border-b border-gray-700">
+						<div class="flex items-center">
+							<div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center mr-3">
+								<i class="fas fa-user text-primary-400"></i>
+							</div>
+							<div>
+								<p class="text-sm font-medium text-white"><%= userData.username %></p>
+								<p class="text-xs text-gray-400"><%= userData.email %></p>
+							</div>
+						</div>
+					</div>
 					<ul class="py-1 text-sm text-gray-200">
 						<li>
-							<a href="/settings" class="block px-4 py-2 hover:bg-gray-700">Settings</a>
+							<a href="/settings" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
+								<i class="fas fa-cog mr-2"></i> Settings
+							</a>
+						</li>
+						<li>
+							<a href="/profile" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
+								<i class="fas fa-user-circle mr-2"></i> Profile
+							</a>
 						</li>
 						<% if (userData.isAdmin) { %>
 						<li>
-							<a href="/admin" class="block px-4 py-2 hover:bg-gray-700">Admin Panel</a>
+							<a href="/admin" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
+								<i class="fas fa-shield-alt mr-2"></i> Admin Panel
+							</a>
 						</li>
 						<% } %>
-						<li>
-							<a href="/auth/logout" class="block px-4 py-2 hover:bg-gray-700 text-red-400">Logout</a>
+						<li class="border-t border-gray-700 mt-1">
+							<a href="/auth/logout" class="flex items-center px-4 py-2 hover:bg-dark-base text-red-400 hover:text-red-300 transition-colors duration-200">
+								<i class="fas fa-sign-out-alt mr-2"></i> Logout
+							</a>
 						</li>
 					</ul>
 				</div>
 			</div>
+
+			<!-- Mobile Menu Button -->
+			<button id="mobileMenuBtn" class="md:hidden p-2 text-gray-400 hover:text-white transition-colors duration-200">
+				<i class="fas fa-bars"></i>
+			</button>
 		</div>
 	</nav>
-	
-	<!-- Sidebar and Main Content -->
+
+	<!-- Mobile Search Bar -->
+	<div id="mobileSearch" class="md:hidden fixed top-16 left-0 right-0 p-4 bg-dark-base border-b border-gray-800 z-40 hidden">
+		<div class="relative">
+			<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
+			<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+				<i class="fas fa-search"></i>
+			</button>
+		</div>
+	</div>
+
 	<div class="flex h-screen pt-16">
 		<!-- Sidebar -->
 		<aside id="sidebar" class="fixed left-0 top-16 h-full z-10 w-64 transition-transform -translate-x-full sm:translate-x-0">
 			<div class="h-full px-3 pb-4 overflow-y-auto sidebar">
-				<ul class="space-y-2 pt-4 font-medium">
+				<ul class="space-y-1 pt-4 font-medium">
 					<li>
-						<a href="/dashboard" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-gauge-high w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">Dashboard</span>
+						<a href="/dashboard" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-tachometer-alt w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Dashboard</span>
 						</a>
 					</li>
 					<li>
-						<a href="/servers" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-server w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">My Servers</span>
+						<a href="/servers" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-server w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Servers</span>
 						</a>
 					</li>
 					<li>
-						<a href="/create" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-plus w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">Create Server</span>
+						<a href="/store" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-shopping-cart w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Store</span>
 						</a>
 					</li>
 					<li>
-						<a href="/store" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-shopping-cart w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">Resource Store</span>
+						<a href="/afk" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-coins w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">AFK Page</span>
 						</a>
 					</li>
 					<li>
-						<a href="/redeem" class="flex items-center p-3 text-white rounded-lg bg-primary-600 group">
-							<i class="fas fa-gift w-5 h-5 text-white transition duration-75"></i>
-							<span class="ms-3">Redeem Coupon</span>
+						<a href="/redeem" class="menu-item flex items-center p-3 text-white rounded-lg active">
+							<i class="fas fa-gift w-5 h-5 text-primary-400 transition duration-75"></i>
+							<span class="ml-3">Redeem</span>
 						</a>
 					</li>
+					<li>
+						<a href="/earn" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-gem w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Earn</span>
+						</a>
+					</li>
+					<li>
+						<a href="/leaderboard" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-trophy w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Leaderboard</span>
+						</a>
+					</li>
+					<li>
+						<a href="/settings" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-cog w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Settings</span>
+						</a>
+					</li>
+					<li>
+						<a href="<%= settings.pterodactyl.domain %>" target="_blank" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-external-link-alt w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Panel</span>
+						</a>
+					</li>
+					<% if (userData.isAdmin) { %>
+					<li class="mt-6 pt-6 border-t border-gray-700">
+						<a href="/admin" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-shield-alt w-5 h-5 text-red-400 transition duration-75 group-hover:text-red-300"></i>
+							<span class="ml-3">Admin Panel</span>
+						</a>
+					</li>
+					<% } %>
 				</ul>
 			</div>
 		</aside>
 		
+		<!-- Mobile menu button -->
+		<button id="toggleSidebar" type="button" class="fixed bottom-4 right-4 z-20 sm:hidden inline-flex items-center p-3 text-sm font-medium text-white bg-primary-600 rounded-full hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
+			<i id="sidebarIcon" class="fas fa-bars"></i>
+		</button>
+
 		<!-- Main Content -->
 		<div class="p-4 sm:ml-64 pt-5 w-full main-content">
-			<div class="p-4">
-				<!-- Page Header -->
-				<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+			<div class="container mx-auto px-4 py-8">
+				<!-- Header -->
+				<div class="flex items-center justify-between mb-8">
 					<div>
-						<h1 class="text-3xl font-bold mb-2">Redeem Coupon</h1>
-						<p class="text-gray-400">Enter your coupon code to redeem resources.</p>
+						<h1 class="text-3xl font-bold text-white">Redeem Coupon</h1>
+						<p class="text-gray-400 mt-2">Enter your coupon code to redeem rewards</p>
 					</div>
-					<div class="mt-4 md:mt-0 flex items-center gap-4">
-						<div class="bg-gray-800 px-4 py-2 rounded-lg">
-							<span class="text-sm text-gray-400">Current Balance</span>
+					<div class="flex items-center space-x-4">
+						<div class="bg-dark-light px-4 py-2 rounded-lg">
+							<span class="text-sm text-gray-400">Balance</span>
 							<div class="flex items-center">
 								<i class="fas fa-coins text-yellow-400 mr-2"></i>
-								<span class="text-lg font-semibold text-white"><%= typeof coins !== 'undefined' ? coins : 0 %></span>
+								<% if (typeof coins !== 'undefined') { %>
+									<span class="text-lg font-semibold text-white"><%= coins %></span>
+								<% } else { %>
+									<span class="text-lg font-semibold text-white">0</span>
+								<% } %>
 							</div>
 						</div>
+						<a href="/earn" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
+							<i class="fas fa-plus mr-2"></i> Earn Coins
+						</a>
 					</div>
 				</div>
-				
-				<!-- Main Content -->
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-					<!-- Redeem Form Card -->
-					<div class="card p-6">
-						<div class="flex items-center space-x-3 mb-6">
+
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+					<!-- Redeem Form -->
+					<div class="bg-dark-light rounded-lg p-6">
+						<div class="flex items-center mb-6">
 							<div class="p-3 rounded-lg bg-primary-500/10">
 								<i class="fas fa-gift text-2xl text-primary-400"></i>
 							</div>
-							<div>
-								<h2 class="text-xl font-semibold text-white">Redeem Your Code</h2>
-								<p class="text-gray-400">Enter your coupon code below to receive resources.</p>
+							<div class="ml-4">
+								<h2 class="text-xl font-semibold text-white">Redeem Your Coupon</h2>
+								<p class="text-gray-400">Enter your coupon code below to claim your rewards</p>
 							</div>
 						</div>
-						
-						<form action="/redeem" method="POST" class="space-y-6">
+
+						<form action="/redeem" method="POST" class="space-y-4">
 							<div>
-								<label for="code" class="block text-sm font-medium text-gray-300 mb-2">Coupon Code</label>
-								<div class="relative">
-									<input type="text" id="code" name="code" required
-										class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary-500"
-										placeholder="Enter your coupon code">
-									<div class="absolute inset-y-0 right-0 flex items-center pr-4">
-										<i class="fas fa-ticket-alt text-gray-400"></i>
-									</div>
+								<label for="coupon" class="block text-sm font-medium text-gray-300 mb-2">Coupon Code</label>
+								<input type="text" id="coupon" name="coupon" required
+									class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+									placeholder="Enter your coupon code">
+							</div>
+
+							<% if (typeof error !== 'undefined' && error) { %>
+							<div class="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+								<div class="flex items-center">
+									<i class="fas fa-exclamation-circle text-red-400 mr-2"></i>
+									<p class="text-sm text-red-400"><%= error %></p>
 								</div>
 							</div>
-							
-							<button type="submit" class="w-full inline-flex items-center justify-center px-5 py-2.5 bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-800 font-medium rounded-lg text-sm">
-								<i class="fas fa-gift mr-2"></i>
-								Redeem Code
+							<% } %>
+
+							<% if (typeof success !== 'undefined' && success) { %>
+							<div class="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
+								<div class="flex items-center">
+									<i class="fas fa-check-circle text-green-400 mr-2"></i>
+									<p class="text-sm text-green-400"><%= success %></p>
+								</div>
+							</div>
+							<% } %>
+
+							<button type="submit"
+								class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+								<i class="fas fa-gift mr-2"></i> Redeem Coupon
 							</button>
 						</form>
-						
-						<!-- Error Messages -->
-						<% if (req.query.err) { %>
-							<div class="mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-								<div class="flex items-center">
-									<i class="fas fa-exclamation-circle text-red-400 mr-3"></i>
-									<div>
-										<h3 class="text-sm font-medium text-red-400">Error</h3>
-										<p class="text-sm text-red-300 mt-1">
-											<% if (req.query.err === "MISSINGCOUPONCODE") { %>
-												You have not provided the coupon code.
-											<% } else if (req.query.err === "INVALIDCOUPONCODE") { %>
-												Could not find coupon with the provided code.
-											<% } else if (req.query.err === "SUCCESSCOUPONCODE") { %>
-												You have successfully applied a coupon code.
-											<% } else { %>
-												An error occurred while redeeming your code.
-											<% } %>
-										</p>
-									</div>
-								</div>
-							</div>
-						<% } %>
 					</div>
-					
+
 					<!-- Information Card -->
-					<div class="card p-6">
-						<div class="flex items-center space-x-3 mb-6">
+					<div class="bg-dark-light rounded-lg p-6">
+						<div class="flex items-center mb-6">
 							<div class="p-3 rounded-lg bg-blue-500/10">
 								<i class="fas fa-info-circle text-2xl text-blue-400"></i>
 							</div>
-							<div>
+							<div class="ml-4">
 								<h2 class="text-xl font-semibold text-white">About Coupons</h2>
-								<p class="text-gray-400">Learn how coupons work and where to get them.</p>
+								<p class="text-gray-400">Learn how to get and use coupon codes</p>
 							</div>
 						</div>
-						
+
 						<div class="space-y-6">
 							<div>
-								<h3 class="text-sm font-semibold text-white mb-2">How It Works</h3>
-								<p class="text-sm text-gray-400">
-									Coupons are a great way to get free resources for your servers. Simply enter your code in the form on the left, and the resources will be instantly added to your account.
-								</p>
-							</div>
-							
-							<div>
-								<h3 class="text-sm font-semibold text-white mb-2">Where to Get Coupons</h3>
-								<p class="text-sm text-gray-400">
-									Coupons can be purchased from our official store or received as rewards for participating in community events.
-								</p>
-							</div>
-							
-							<div>
-								<h3 class="text-sm font-semibold text-white mb-2">Important Notes</h3>
-								<ul class="space-y-2 text-sm text-gray-400">
-									<li class="flex items-center">
-										<i class="fas fa-check text-green-400 mr-2"></i>
-										Codes can only be used once
+								<h3 class="text-lg font-medium text-white mb-2">How to Get Coupons</h3>
+								<ul class="space-y-2 text-gray-400">
+									<li class="flex items-start">
+										<i class="fas fa-check text-green-400 mt-1 mr-2"></i>
+										<span>Participate in community events and giveaways</span>
 									</li>
-									<li class="flex items-center">
-										<i class="fas fa-check text-green-400 mr-2"></i>
-										Codes expire after 30 days
+									<li class="flex items-start">
+										<i class="fas fa-check text-green-400 mt-1 mr-2"></i>
+										<span>Follow our social media for exclusive codes</span>
 									</li>
-									<li class="flex items-center">
-										<i class="fas fa-check text-green-400 mr-2"></i>
-										Resources are added instantly
+									<li class="flex items-start">
+										<i class="fas fa-check text-green-400 mt-1 mr-2"></i>
+										<span>Refer friends to earn bonus rewards</span>
 									</li>
 								</ul>
 							</div>
-							
-							<div class="pt-6 border-t border-gray-700">
-								<h3 class="text-sm font-semibold text-white mb-2">Need Help?</h3>
-								<p class="text-sm text-gray-400 mb-4">
-									If you're having trouble redeeming your coupon, please contact our support team.
-								</p>
-								<a href="/support" class="inline-flex items-center justify-center px-5 py-2.5 bg-gray-700 hover:bg-gray-600 focus:ring-4 focus:ring-gray-800 font-medium rounded-lg text-sm">
-									<i class="fas fa-headset mr-2"></i>
-									Contact Support
-								</a>
+
+							<div>
+								<h3 class="text-lg font-medium text-white mb-2">Important Notes</h3>
+								<ul class="space-y-2 text-gray-400">
+									<li class="flex items-start">
+										<i class="fas fa-exclamation-circle text-yellow-400 mt-1 mr-2"></i>
+										<span>Each coupon can only be used once per account</span>
+									</li>
+									<li class="flex items-start">
+										<i class="fas fa-exclamation-circle text-yellow-400 mt-1 mr-2"></i>
+										<span>Coupons may expire after a certain period</span>
+									</li>
+									<li class="flex items-start">
+										<i class="fas fa-exclamation-circle text-yellow-400 mt-1 mr-2"></i>
+										<span>Rewards are added instantly after successful redemption</span>
+									</li>
+								</ul>
+							</div>
+
+							<div>
+								<h3 class="text-lg font-medium text-white mb-2">Need Help?</h3>
+								<p class="text-gray-400 mb-4">If you're having trouble redeeming your coupon, please contact our support team.</p>
+								<div class="flex space-x-4">
+									<a href="/discord" target="_blank"
+										class="flex items-center px-4 py-2 bg-[#5865F2] hover:bg-[#4752C4] text-white rounded-lg transition-colors duration-200">
+										<i class="fab fa-discord mr-2"></i> Join Discord
+									</a>
+									<a href="/support" target="_blank"
+										class="flex items-center px-4 py-2 bg-dark-lighter hover:bg-dark-base text-white rounded-lg transition-colors duration-200">
+										<i class="fas fa-ticket-alt mr-2"></i> Support Ticket
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -354,7 +515,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<script>
 		// Dropdown menu toggle
 		const dropdownBtn = document.getElementById('dropdownBtn');
@@ -372,28 +533,27 @@
 		});
 		
 		// Mobile sidebar toggle
-		const sidebarBtn = document.getElementById('sidebarBtn');
+		const sidebarBtn = document.getElementById('toggleSidebar');
 		const sidebar = document.getElementById('sidebar');
+		const sidebarIcon = document.getElementById('sidebarIcon');
 		
 		if (sidebarBtn) {
 			sidebarBtn.addEventListener('click', () => {
 				sidebar.classList.toggle('-translate-x-full');
+				sidebarIcon.classList.toggle('fa-bars');
+				sidebarIcon.classList.toggle('fa-times');
 			});
 		}
 		
-		// Form validation
-		const form = document.querySelector('form');
-		const codeInput = document.getElementById('code');
+		// Mobile search toggle
+		const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+		const mobileSearch = document.getElementById('mobileSearch');
 		
-		form.addEventListener('submit', (e) => {
-			if (!codeInput.value.trim()) {
-				e.preventDefault();
-				codeInput.classList.add('border-red-500');
-				alert('Please enter a coupon code.');
-			} else {
-				codeInput.classList.remove('border-red-500');
-			}
-		});
+		if (mobileMenuBtn) {
+			mobileMenuBtn.addEventListener('click', () => {
+				mobileSearch.classList.toggle('hidden');
+			});
+		}
 	</script>
 </body>
 </html>

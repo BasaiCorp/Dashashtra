@@ -3,11 +3,11 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><%= extra.admin.title.default %></title>
-	<link rel="icon" type="image/gif" href="/assets/img/Flaxy Nodes v2.2.gif"/> 
+	<title><%= extra.admin.title %></title>
+	<link rel="icon" type="image/png" href="<%= extra.faviconlink %>"/>
 	
 	<!-- Fonts and Icons -->
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	
 	<!-- Tailwind CSS -->
@@ -18,38 +18,47 @@
 			theme: {
 				extend: {
 					fontFamily: {
-						sans: ['Inter', 'sans-serif'],
+						sans: ['Poppins', 'sans-serif'],
 					},
 					colors: {
 						primary: {
-							50: '#f0f9ff',
-							100: '#e0f2fe',
-							200: '#bae6fd',
-							300: '#7dd3fc',
-							400: '#38bdf8',
-							500: '#0ea5e9',
-							600: '#0284c7',
-							700: '#0369a1',
-							800: '#075985',
-							900: '#0c4a6e',
-							950: '#082f49',
+							50: '#eef2ff',
+							100: '#e0e7ff',
+							200: '#c7d2fe',
+							300: '#a5b4fc',
+							400: '#818cf8',
+							500: '#6366f1',
+							600: '#4f46e5',
+							700: '#4338ca',
+							800: '#3730a3',
+							900: '#312e81',
+							950: '#1e1b4b',
 						},
 						dark: {
-							base: '#111827',
-							light: '#1F2937',
-							lighter: '#374151',
-							card: '#1E293B'
+							base: '#0f0f12',
+							light: '#1a1a21',
+							lighter: '#24242e',
+							card: '#1a1a21'
 						}
 					},
 					animation: {
 						'fade-in': 'fadeIn 0.5s ease-in-out',
 						'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+						'float': 'float 3s ease-in-out infinite',
 					},
 					keyframes: {
 						fadeIn: {
 							'0%': { opacity: '0' },
 							'100%': { opacity: '1' },
+						},
+						float: {
+							'0%, 100%': { transform: 'translateY(0)' },
+							'50%': { transform: 'translateY(-10px)' },
 						}
+					},
+					boxShadow: {
+						'glow': '0 0 15px rgba(99, 102, 241, 0.5)',
+						'card': '0 8px 24px rgba(0, 0, 0, 0.12)',
 					}
 				}
 			}
@@ -58,80 +67,208 @@
 	
 	<style>
 		body {
-			background-color: #0f172a;
-			color: #f1f5f9;
-			font-family: 'Inter', sans-serif;
-		}
-		.navbar {
-			background-color: rgba(15, 23, 42, 0.7);
-			backdrop-filter: blur(10px);
-			border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-		}
-		.sidebar {
-			background-color: #1e293b;
-			border-right: 1px solid rgba(148, 163, 184, 0.1);
-			transition: all 0.3s ease;
-		}
-		.card {
-			background-color: #1e293b;
-			border: 1px solid rgba(148, 163, 184, 0.1);
-			transition: all 0.3s ease;
-		}
-		.card:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-		}
-		.stat-card {
-			border: 1px solid rgba(148, 163, 184, 0.1);
-		}
-		.gradient-border {
-			position: relative;
-			border-radius: 0.5rem;
-			z-index: 0;
-			overflow: hidden;
-			padding: 1px;
-		}
-		.gradient-border::before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			border-radius: 0.5rem;
-			padding: 2px;
-			background: linear-gradient(45deg, #0ea5e9, #8b5cf6, #ec4899);
-			-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-			-webkit-mask-composite: xor;
-			mask-composite: exclude;
-			z-index: -1;
-		}
-		.main-content {
-			animation: fadeIn 0.5s ease-in-out;
-		}
-		@keyframes fadeIn {
-			0% { opacity: 0; }
-			100% { opacity: 1; }
+			background-color: #0f0f12;
+			color: #f5f5f7;
+			font-family: 'Poppins', sans-serif;
 		}
 		
-		/* Custom Scrollbar */
+		/* Custom scrollbar */
 		::-webkit-scrollbar {
 			width: 8px;
-		}
-		::-webkit-scrollbar-track {
-			background: #1e293b;
-		}
-		::-webkit-scrollbar-thumb {
-			background: #475569;
-			border-radius: 4px;
-		}
-		::-webkit-scrollbar-thumb:hover {
-			background: #64748b;
+			height: 8px;
 		}
 		
-		.active-nav {
-			background-color: #0284c7;
-			color: white;
+		::-webkit-scrollbar-track {
+			background: #1e1e24;
+		}
+		
+		::-webkit-scrollbar-thumb {
+			background: #3a3a43;
+			border-radius: 4px;
+		}
+		
+		::-webkit-scrollbar-thumb:hover {
+			background: #4a4a55;
+		}
+		
+		/* Custom styles */
+		.sidebar {
+			background-color: #161618;
+			border-right: 1px solid #2d2d35;
+		}
+		
+		.main-content {
+			background-color: #0f0f12;
+		}
+		
+		.bg-dark-card {
+			background-color: #1a1a1f;
+		}
+		
+		.bg-dark-lighter {
+			background-color: #202026;
+		}
+		
+		.menu-item.active {
+			background-color: rgba(99, 102, 241, 0.1);
+			color: #fff;
+		}
+		
+		.menu-item.active i {
+			color: #6366f1;
+		}
+		
+		.glass-card {
+			background: rgba(26, 26, 31, 0.7);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+		}
+		
+		.btn-primary {
+			background-color: #6366f1;
+			border-radius: 0.5rem;
+			padding: 0.5rem 1rem;
+			transition: all 0.3s ease;
+		}
+		
+		.btn-primary:hover {
+			background-color: #4f46e5;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+		}
+		
+		.gradient-border {
+			position: relative;
+			border-radius: 0.75rem;
+			overflow: hidden;
+		}
+		
+		.gradient-border::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			border-radius: 0.75rem;
+			padding: 1px;
+			background: linear-gradient(to right, #6366f1, #8b5cf6);
+			-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+			mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+			-webkit-mask-composite: xor;
+			mask-composite: exclude;
+			pointer-events: none;
+		}
+		
+		.progress-bar-fill {
+			height: 100%;
+			border-radius: 4px;
+			transition: width 0.5s ease;
+		}
+		
+		.progress-bar-fill.ram {
+			background: linear-gradient(to right, #6366f1, #8b5cf6);
+		}
+		
+		.progress-bar-fill.disk {
+			background: linear-gradient(to right, #10b981, #34d399);
+		}
+		
+		.progress-bar-fill.cpu {
+			background: linear-gradient(to right, #f59e0b, #fbbf24);
+		}
+		
+		.progress-bar-fill.servers {
+			background: linear-gradient(to right, #ec4899, #f43f5e);
+		}
+		
+		.animate-fade-in {
+			animation: fadeIn 0.6s ease-out;
+		}
+		
+		.animate-slide-up {
+			animation: slideUp 0.5s ease-out;
+		}
+		
+		@keyframes fadeIn {
+			from { opacity: 0; }
+			to { opacity: 1; }
+		}
+		
+		@keyframes slideUp {
+			from { transform: translateY(20px); opacity: 0; }
+			to { transform: translateY(0); opacity: 1; }
+		}
+		
+		/* Resource progress bars */
+		.progress-bar {
+			height: 8px;
+			border-radius: 4px;
+			background-color: #2d2d35;
+			overflow: hidden;
+		}
+		
+		/* Mobile responsiveness */
+		@media (max-width: 640px) {
+			.stat-card {
+				padding: 1rem;
+			}
+		}
+		
+		/* Admin specific styles */
+		.admin-card {
+			background-color: #1a1a1f;
+			border: 1px solid #2d2d35;
+			border-radius: 0.75rem;
+			transition: all 0.3s ease;
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+		}
+		
+		.admin-card:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+		}
+		
+		.admin-table th {
+			background-color: #1a1a1f;
+			color: #e2e8f0;
+			font-weight: 500;
+			padding: 0.75rem 1rem;
+			text-align: left;
+			border-bottom: 1px solid #2d2d35;
+		}
+		
+		.admin-table td {
+			padding: 0.75rem 1rem;
+			border-bottom: 1px solid #2d2d35;
+		}
+		
+		.admin-table tr:hover {
+			background-color: rgba(99, 102, 241, 0.05);
+		}
+		
+		/* Navbar styles */
+		.navbar {
+			background-color: rgba(15, 15, 18, 0.8);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			border-bottom: 1px solid #2d2d35;
+		}
+		
+		/* Sidebar styles */
+		.sidebar {
+			background-color: #161618;
+			border-right: 1px solid #2d2d35;
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+		}
+		
+		/* Card hover effects */
+		.card-hover {
+			transition: all 0.3s ease;
+		}
+		
+		.card-hover:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 		}
 	</style>
 </head>
@@ -155,532 +292,365 @@
 	%>
 
 	<!-- Navbar -->
-	<nav class="navbar fixed w-full h-16 z-10 px-4 py-2.5 flex items-center justify-between">
+	<nav class="navbar fixed w-full h-16 z-50 px-4 py-2.5 flex items-center justify-between bg-dark-base/80 backdrop-blur-lg border-b border-gray-800">
+		<!-- Left side - Logo and Brand -->
 		<div class="flex items-center">
-			<a href="/" class="flex items-center">
-				<img src="/assets/img/FlaxyNodes_logo.gif" class="h-8 w-8 mr-3 rounded-full" alt="Flaxy Nodes Logo">
+			<a href="/" class="flex items-center group">
+				<div class="h-10 w-10 mr-3 rounded-full overflow-hidden transition-all duration-300 group-hover:shadow-glow">
+					<img src="/assets/img/FlaxyNodes_logo.gif" class="h-full w-full object-cover" alt="Flaxy Nodes Logo">
+				</div>
 				<div class="flex flex-col">
 					<span class="self-center text-xl font-bold text-white">Flaxy Nodes</span>
-					<span class="text-xs text-gray-400">Premium Game Hosting</span>
+					<span class="text-xs text-indigo-300">Admin Panel</span>
 				</div>
 			</a>
 		</div>
-		
+
+		<!-- Center - Search Bar -->
+		<div class="hidden md:flex items-center flex-1 max-w-xl mx-8">
+			<div class="relative w-full">
+				<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
+				<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+					<i class="fas fa-search"></i>
+				</button>
+			</div>
+		</div>
+
+		<!-- Right side - User Menu and Notifications -->
 		<div class="flex items-center gap-4">
+			<!-- Notifications -->
+			<div class="relative">
+				<button class="p-2 text-gray-400 hover:text-white transition-colors duration-200">
+					<i class="fas fa-bell"></i>
+					<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+				</button>
+			</div>
+
+			<!-- User Profile Dropdown -->
 			<div class="relative inline-block">
-				<button id="dropdownBtn" class="flex items-center px-3 py-2 text-sm font-medium text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none">
-					<img src="https://cdn.discordapp.com/avatars/<%= userData.id %>/<%= userData.avatar %>.jpg?size=128" class="w-6 h-6 mr-2 rounded-full">
+				<button id="dropdownBtn" class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-dark-lighter hover:bg-primary-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50">
+					<div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center mr-2">
+						<i class="fas fa-user text-primary-400"></i>
+					</div>
 					<span class="mr-2"><%= userData.username %></span>
 					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
 					</svg>
 				</button>
-				<div id="dropdownMenu" class="hidden absolute right-0 mt-2 bg-gray-800 rounded-lg shadow-lg overflow-hidden z-20" style="min-width: 10rem;">
+				<div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-64 bg-dark-lighter rounded-lg shadow-lg overflow-hidden z-50 border border-gray-700">
+					<div class="p-4 border-b border-gray-700">
+						<div class="flex items-center">
+							<div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center mr-3">
+								<i class="fas fa-user text-primary-400"></i>
+							</div>
+							<div>
+								<p class="text-sm font-medium text-white"><%= userData.username %></p>
+								<p class="text-xs text-gray-400"><%= userData.email %></p>
+							</div>
+						</div>
+					</div>
 					<ul class="py-1 text-sm text-gray-200">
 						<li>
-							<a href="/dashboard" class="block px-4 py-2 hover:bg-gray-700">Dashboard</a>
+							<a href="/dashboard" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
+								<i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+							</a>
 						</li>
 						<li>
-							<a href="/settings" class="block px-4 py-2 hover:bg-gray-700">Settings</a>
+							<a href="/settings" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
+								<i class="fas fa-cog mr-2"></i> Settings
+							</a>
 						</li>
 						<li>
-							<a href="/auth/logout" class="block px-4 py-2 hover:bg-gray-700 text-red-400">Logout</a>
+							<a href="/profile" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
+								<i class="fas fa-user-circle mr-2"></i> Profile
+							</a>
+						</li>
+						<li class="border-t border-gray-700 mt-1">
+							<a href="/auth/logout" class="flex items-center px-4 py-2 hover:bg-dark-base text-red-400 hover:text-red-300 transition-colors duration-200">
+								<i class="fas fa-sign-out-alt mr-2"></i> Logout
+							</a>
 						</li>
 					</ul>
 				</div>
 			</div>
+
+			<!-- Mobile Menu Button -->
+			<button id="mobileMenuBtn" class="md:hidden p-2 text-gray-400 hover:text-white transition-colors duration-200">
+				<i class="fas fa-bars"></i>
+			</button>
 		</div>
 	</nav>
-	
-	<!-- Sidebar and Main Content -->
+
+	<!-- Mobile Search Bar -->
+	<div id="mobileSearch" class="md:hidden fixed top-16 left-0 right-0 p-4 bg-dark-base border-b border-gray-800 z-40 hidden">
+		<div class="relative">
+			<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
+			<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+				<i class="fas fa-search"></i>
+			</button>
+		</div>
+	</div>
+
 	<div class="flex h-screen pt-16">
 		<!-- Sidebar -->
 		<aside id="sidebar" class="fixed left-0 top-16 h-full z-10 w-64 transition-transform -translate-x-full sm:translate-x-0">
 			<div class="h-full px-3 pb-4 overflow-y-auto sidebar">
-				<ul class="space-y-2 pt-4 font-medium">
+				<ul class="space-y-1 pt-4 font-medium">
 					<li>
-						<a href="/dashboard" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-gauge-high w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">Dashboard</span>
+						<a href="/admin" class="menu-item flex items-center p-3 text-white rounded-lg active">
+							<i class="fas fa-tachometer-alt w-5 h-5 text-primary-400 transition duration-75"></i>
+							<span class="ml-3">Overview</span>
 						</a>
 					</li>
 					<li>
-						<a href="/admin" class="flex items-center p-3 text-white rounded-lg bg-primary-600 group">
-							<i class="fas fa-shield-alt w-5 h-5 text-white transition duration-75"></i>
-							<span class="ms-3">Admin Panel</span>
+						<a href="/admin/users" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-users w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Users</span>
 						</a>
 					</li>
 					<li>
-						<a href="/admin/users" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-users w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">Users</span>
+						<a href="/admin/servers" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-server w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Servers</span>
 						</a>
 					</li>
 					<li>
-						<a href="/admin/servers" class="flex items-center p-3 text-white rounded-lg bg-primary-600 group">
-							<i class="fas fa-server w-5 h-5 text-white transition duration-75"></i>
-							<span class="ms-3">Servers</span>
+						<a href="/admin/nests" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-egg w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Nests</span>
 						</a>
 					</li>
 					<li>
-						<a href="/admin/coupons" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-gift w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">Coupons</span>
+						<a href="/admin/nodes" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-microchip w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Nodes</span>
 						</a>
 					</li>
 					<li>
-						<a href="/admin/packages" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-box w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">Packages</span>
+						<a href="/admin/mounts" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-hdd w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Mounts</span>
 						</a>
 					</li>
 					<li>
-						<a href="/admin/settings" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-cog w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">Settings</span>
+						<a href="/admin/locations" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-map-marker-alt w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Locations</span>
 						</a>
 					</li>
 					<li>
-						<a href="/admin/logs" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-list w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">Logs</span>
+						<a href="/admin/allocations" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-network-wired w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Allocations</span>
+						</a>
+					</li>
+					<li>
+						<a href="/admin/databases" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-database w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Databases</span>
+						</a>
+					</li>
+					<li>
+						<a href="/admin/settings" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-cog w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Settings</span>
 						</a>
 					</li>
 				</ul>
-				
-				<div class="pt-4 mt-4 border-t border-gray-700">
-					<div class="px-3 py-4 rounded-lg bg-gray-800">
-						<h3 class="text-sm font-medium text-gray-400 mb-2">System Status</h3>
-						<div class="space-y-3">
-							<div class="flex items-center gap-2 text-sm">
-								<div class="w-3 h-3 bg-green-500 rounded-full"></div>
-								<span>API: Online</span>
-							</div>
-							<div class="flex items-center gap-2 text-sm">
-								<div class="w-3 h-3 bg-green-500 rounded-full"></div>
-								<span>Panel: Online</span>
-							</div>
-							<div class="flex items-center gap-2 text-sm">
-								<div class="w-3 h-3 bg-green-500 rounded-full"></div>
-								<span>Database: Online</span>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 		</aside>
 		
+		<!-- Mobile menu button -->
+		<button id="toggleSidebar" type="button" class="fixed bottom-4 right-4 z-20 sm:hidden inline-flex items-center p-3 text-sm font-medium text-white bg-primary-600 rounded-full hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
+			<i id="sidebarIcon" class="fas fa-bars"></i>
+		</button>
+
 		<!-- Main Content -->
-		<div class="p-4 sm:ml-64 pt-5 w-full main-content">
-			<div class="p-4">
-				<!-- Welcome Message -->
-				<div class="mb-6">
-					<h1 class="text-3xl font-bold mb-2">Server Management</h1>
-					<p class="text-gray-400">Manage your servers and platform settings.</p>
-				</div>
-				
-				<!-- Stats Cards -->
+		<main class="p-4 sm:ml-64 pt-5 w-full main-content">
+			<div class="container mx-auto px-4 py-8">
+				<!-- Stats Grid -->
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 					<!-- Total Users Card -->
-					<div class="gradient-border">
-						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
-							<div class="flex items-center justify-between mb-4">
-								<div class="flex items-center space-x-3">
-									<div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center">
-										<i class="fas fa-users text-xl text-blue-400"></i>
-									</div>
-									<div>
-										<h3 class="text-sm font-medium text-gray-400">Total Users</h3>
-										<p class="text-2xl font-semibold"><%= totalUsers %></p>
-									</div>
-								</div>
-								<div class="text-right">
-									<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900 text-blue-200">
-										+3% <i class="fas fa-arrow-up ml-1"></i>
-									</span>
-								</div>
+					<div class="admin-card p-6 animate-fade-in card-hover">
+						<div class="flex items-center justify-between mb-4">
+							<div>
+								<h3 class="text-sm font-medium text-gray-400">Total Users</h3>
+								<p class="text-2xl font-semibold text-white"><%= totalUsers %></p>
 							</div>
-							<p class="mt-2 text-xs text-gray-400">Total registered users on the platform</p>
+							<div class="w-12 h-12 rounded-full bg-primary-500/10 flex items-center justify-center">
+								<i class="fas fa-users text-primary-500 text-xl"></i>
+							</div>
 						</div>
-					</div>
-
-					<!-- Active Users Card -->
-					<div class="gradient-border">
-						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
-							<div class="flex items-center justify-between mb-4">
-								<div class="flex items-center space-x-3">
-									<div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center">
-										<i class="fas fa-user-check text-xl text-green-400"></i>
-									</div>
-									<div>
-										<h3 class="text-sm font-medium text-gray-400">Active Users</h3>
-										<p class="text-2xl font-semibold"><%= activeUsers %></p>
-									</div>
+						<div class="relative pt-1">
+							<div class="flex mb-2 items-center justify-between">
+								<div>
+									<span class="text-xs font-semibold inline-block text-primary-500">
+										Active Users
+									</span>
 								</div>
 								<div class="text-right">
-									<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-900 text-green-200">
-										+5% <i class="fas fa-arrow-up ml-1"></i>
+									<span class="text-xs font-semibold inline-block text-primary-500">
+										<%= activeUsers %>
 									</span>
 								</div>
 							</div>
-							<p class="mt-2 text-xs text-gray-400">Users active in the past 30 days</p>
+							<div class="progress-bar">
+								<div class="progress-bar-fill servers" style="width: <%= (activeUsers / totalUsers) * 100 %>%"></div>
+							</div>
 						</div>
 					</div>
 
 					<!-- Total Servers Card -->
-					<div class="gradient-border">
-						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
-							<div class="flex items-center justify-between mb-4">
-								<div class="flex items-center space-x-3">
-									<div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center">
-										<i class="fas fa-server text-xl text-purple-400"></i>
-									</div>
-									<div>
-										<h3 class="text-sm font-medium text-gray-400">Total Servers</h3>
-										<p class="text-2xl font-semibold"><%= totalServers %></p>
-									</div>
+					<div class="admin-card p-6 animate-fade-in card-hover">
+						<div class="flex items-center justify-between mb-4">
+							<div>
+								<h3 class="text-sm font-medium text-gray-400">Total Servers</h3>
+								<p class="text-2xl font-semibold text-white"><%= totalServers %></p>
+							</div>
+							<div class="w-12 h-12 rounded-full bg-primary-500/10 flex items-center justify-center">
+								<i class="fas fa-server text-primary-500 text-xl"></i>
+							</div>
+						</div>
+						<div class="relative pt-1">
+							<div class="flex mb-2 items-center justify-between">
+								<div>
+									<span class="text-xs font-semibold inline-block text-primary-500">
+										Active Servers
+									</span>
 								</div>
 								<div class="text-right">
-									<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-900 text-purple-200">
-										+7% <i class="fas fa-arrow-up ml-1"></i>
+									<span class="text-xs font-semibold inline-block text-primary-500">
+										<%= totalServers %>
 									</span>
 								</div>
 							</div>
-							<p class="mt-2 text-xs text-gray-400">Total servers deployed on the platform</p>
+							<div class="progress-bar">
+								<div class="progress-bar-fill servers" style="width: 100%"></div>
+							</div>
 						</div>
 					</div>
 
 					<!-- Revenue Card -->
-					<div class="gradient-border">
-						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
-							<div class="flex items-center justify-between mb-4">
-								<div class="flex items-center space-x-3">
-									<div class="w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center">
-										<i class="fas fa-dollar-sign text-xl text-amber-400"></i>
-									</div>
-									<div>
-										<h3 class="text-sm font-medium text-gray-400">Monthly Revenue</h3>
-										<p class="text-2xl font-semibold">$<%= revenue %></p>
-									</div>
+					<div class="admin-card p-6 animate-fade-in card-hover">
+						<div class="flex items-center justify-between mb-4">
+							<div>
+								<h3 class="text-sm font-medium text-gray-400">Revenue</h3>
+								<p class="text-2xl font-semibold text-white">$<%= revenue %></p>
+							</div>
+							<div class="w-12 h-12 rounded-full bg-primary-500/10 flex items-center justify-center">
+								<i class="fas fa-dollar-sign text-primary-500 text-xl"></i>
+							</div>
+						</div>
+						<div class="relative pt-1">
+							<div class="flex mb-2 items-center justify-between">
+								<div>
+									<span class="text-xs font-semibold inline-block text-primary-500">
+										Monthly
+									</span>
 								</div>
 								<div class="text-right">
-									<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-900 text-amber-200">
-										+12% <i class="fas fa-arrow-up ml-1"></i>
+									<span class="text-xs font-semibold inline-block text-primary-500">
+										$<%= revenue %>
 									</span>
 								</div>
 							</div>
-							<p class="mt-2 text-xs text-gray-400">Revenue generated this month</p>
+							<div class="progress-bar">
+								<div class="progress-bar-fill servers" style="width: 100%"></div>
+							</div>
+						</div>
+					</div>
+
+					<!-- System Status Card -->
+					<div class="admin-card p-6 animate-fade-in card-hover">
+						<div class="flex items-center justify-between mb-4">
+							<div>
+								<h3 class="text-sm font-medium text-gray-400">System Status</h3>
+								<p class="text-2xl font-semibold text-white">Online</p>
+							</div>
+							<div class="w-12 h-12 rounded-full bg-primary-500/10 flex items-center justify-center">
+								<i class="fas fa-check-circle text-primary-500 text-xl"></i>
+							</div>
+						</div>
+						<div class="relative pt-1">
+							<div class="flex mb-2 items-center justify-between">
+								<div>
+									<span class="text-xs font-semibold inline-block text-primary-500">
+										Uptime
+									</span>
+								</div>
+								<div class="text-right">
+									<span class="text-xs font-semibold inline-block text-primary-500">
+										100%
+									</span>
+								</div>
+							</div>
+							<div class="progress-bar">
+								<div class="progress-bar-fill servers" style="width: 100%"></div>
+							</div>
 						</div>
 					</div>
 				</div>
-				
+
+				<!-- Recent Activity -->
+				<div class="admin-card p-6 mb-8 animate-fade-in card-hover">
+					<h2 class="text-lg font-semibold text-white mb-4">Recent Activity</h2>
+					<div class="overflow-x-auto">
+						<table class="admin-table w-full">
+							<thead>
+								<tr>
+									<th>User</th>
+									<th>Action</th>
+									<th>Time</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="flex items-center">
+										<img src="https://cdn.discordapp.com/avatars/<%= userData.id %>/<%= userData.avatar %>.jpg?size=128" class="w-6 h-6 rounded-full mr-2">
+										<span class="text-sm text-gray-300"><%= userData.username %></span>
+									</td>
+									<td>
+										<span class="text-sm text-gray-300">Logged in</span>
+									</td>
+									<td>
+										<span class="text-sm text-gray-300">Just now</span>
+									</td>
+									<td>
+										<span class="px-2 py-1 text-xs font-medium text-green-500 bg-green-500/10 rounded-full">Success</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
 				<!-- Quick Actions -->
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-					<div class="card rounded-lg p-6 bg-dark-card border border-gray-700">
-						<div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center mb-4">
-							<i class="fas fa-user-plus text-blue-400"></i>
-						</div>
-						<h3 class="text-lg font-semibold mb-2">Add User</h3>
-						<p class="text-gray-400 mb-4">Create a new user account with custom resources.</p>
-						<a href="/admin/users/add" class="inline-flex items-center text-sm font-medium text-blue-400 hover:text-blue-300">
-							Add user
-							<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-							</svg>
-						</a>
-					</div>
-					
-					<div class="card rounded-lg p-6 bg-dark-card border border-gray-700">
-						<div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mb-4">
-							<i class="fas fa-gift text-green-400"></i>
-						</div>
-						<h3 class="text-lg font-semibold mb-2">Create Coupon</h3>
-						<p class="text-gray-400 mb-4">Generate new coupon codes for your users.</p>
-						<a href="/admin/coupons/add" class="inline-flex items-center text-sm font-medium text-green-400 hover:text-green-300">
-							Create coupon
-							<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-							</svg>
-						</a>
-					</div>
-					
-					<div class="card rounded-lg p-6 bg-dark-card border border-gray-700">
-						<div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mb-4">
-							<i class="fas fa-box text-purple-400"></i>
-						</div>
-						<h3 class="text-lg font-semibold mb-2">Create Package</h3>
-						<p class="text-gray-400 mb-4">Define new resource packages for the store.</p>
-						<a href="/admin/packages/add" class="inline-flex items-center text-sm font-medium text-purple-400 hover:text-purple-300">
-							Create package
-							<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-							</svg>
-						</a>
-					</div>
-				</div>
-				
-				<!-- Server List -->
-				<div class="bg-dark-card rounded-lg border border-gray-700 p-6 mb-8">
-					<div class="flex items-center justify-between mb-6">
-						<h2 class="text-xl font-semibold">Server List</h2>
-						<a href="/admin/servers" class="text-sm text-blue-400 hover:text-blue-300">View all</a>
-					</div>
-					
-					<% if (typeof req.session.allServers !== 'undefined' && req.session.allServers.length > 0) { %>
-						<div class="overflow-x-auto">
-							<table class="w-full text-sm text-left text-gray-300">
-								<thead class="text-xs uppercase bg-gray-700 text-gray-300">
-									<tr>
-										<th scope="col" class="px-6 py-3 rounded-l-lg">ID</th>
-										<th scope="col" class="px-6 py-3">Name</th>
-										<th scope="col" class="px-6 py-3">User</th>
-										<th scope="col" class="px-6 py-3">Node</th>
-										<th scope="col" class="px-6 py-3">Status</th>
-										<th scope="col" class="px-6 py-3">Resources</th>
-										<th scope="col" class="px-6 py-3">Actions</th>
-									</tr>
-								</thead>
-								<tbody>
-									<% req.session.allServers.forEach(server => { %>
-										<tr class="border-b border-gray-700">
-											<td class="px-6 py-4 font-medium whitespace-nowrap text-white">
-												<%= server.id %>
-											</td>
-											<td class="px-6 py-4">
-												<%= server.name || 'Unnamed Server' %>
-											</td>
-											<td class="px-6 py-4">
-												<%= server.user || 'Unknown User' %>
-											</td>
-											<td class="px-6 py-4">
-												<%= server.node || 'Unknown Node' %>
-											</td>
-											<td class="px-6 py-4">
-												<% if (server.suspended) { %>
-													<span class="badge bg-danger">Suspended</span>
-												<% } else { %>
-													<span class="badge bg-success">Active</span>
-												<% } %>
-											</td>
-											<td class="px-6 py-4">
-												<small>
-													RAM: <%= server.limits?.memory || 0 %>MB<br>
-													CPU: <%= server.limits?.cpu || 0 %>%<br>
-													Disk: <%= server.limits?.disk || 0 %>MB
-												</small>
-											</td>
-											<td class="px-6 py-4 flex gap-2">
-												<div class="btn-group">
-													<button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editServerModal<%= server.id %>">
-														<i class="fas fa-edit"></i>
-													</button>
-													<% if (server.suspended) { %>
-														<form action="/admin/servers/<%= server.id %>/unsuspend" method="POST" class="d-inline">
-															<button type="submit" class="btn btn-sm btn-success">
-																<i class="fas fa-play"></i>
-															</button>
-														</form>
-													<% } else { %>
-														<form action="/admin/servers/<%= server.id %>/suspend" method="POST" class="d-inline">
-															<button type="submit" class="btn btn-sm btn-warning">
-																<i class="fas fa-pause"></i>
-															</button>
-														</form>
-													<% } %>
-													<form action="/admin/servers/<%= server.id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this server?');">
-														<button type="submit" class="btn btn-sm btn-danger">
-															<i class="fas fa-trash"></i>
-														</button>
-													</form>
-												</div>
-											</td>
-										</tr>
-
-										<!-- Edit Server Modal -->
-										<div class="modal fade" id="editServerModal<%= server.id %>" tabindex="-1">
-											<div class="modal-dialog">
-												<div class="modal-content">
-													<div class="modal-header">
-														<h5 class="modal-title">Edit Server: <%= server.name %></h5>
-														<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-													</div>
-													<div class="modal-body">
-														<form action="/admin/servers/<%= server.id %>/details" method="POST">
-															<div class="mb-3">
-																<label class="form-label">Name</label>
-																<input type="text" class="form-control" name="name" value="<%= server.name %>" required>
-															</div>
-															<div class="mb-3">
-																<label class="form-label">Description</label>
-																<textarea class="form-control" name="description" rows="3"><%= server.description %></textarea>
-															</div>
-															<div class="mb-3">
-																<label class="form-label">External ID</label>
-																<input type="text" class="form-control" name="external_id" value="<%= server.external_id %>">
-															</div>
-															<button type="submit" class="btn btn-primary">Save Changes</button>
-														</form>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<!-- Edit Build Modal -->
-										<div class="modal fade" id="editBuildModal<%= server.id %>" tabindex="-1">
-											<div class="modal-dialog">
-												<div class="modal-content">
-													<div class="modal-header">
-														<h5 class="modal-title">Edit Server Build: <%= server.name %></h5>
-														<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-													</div>
-													<div class="modal-body">
-														<form action="/admin/servers/<%= server.id %>/build" method="POST">
-															<div class="mb-3">
-																<label class="form-label">Memory Limit (MB)</label>
-																<input type="number" class="form-control" name="memory" value="<%= server.limits?.memory || 0 %>" required>
-															</div>
-															<div class="mb-3">
-																<label class="form-label">CPU Limit (%)</label>
-																<input type="number" class="form-control" name="cpu" value="<%= server.limits?.cpu || 0 %>" required>
-															</div>
-															<div class="mb-3">
-																<label class="form-label">Disk Space (MB)</label>
-																<input type="number" class="form-control" name="disk" value="<%= server.limits?.disk || 0 %>" required>
-															</div>
-															<div class="mb-3">
-																<label class="form-label">Swap Space (MB)</label>
-																<input type="number" class="form-control" name="swap" value="<%= server.limits?.swap || 0 %>" required>
-															</div>
-															<div class="mb-3">
-																<label class="form-label">IO Priority</label>
-																<input type="number" class="form-control" name="io" value="<%= server.limits?.io || 0 %>" required>
-															</div>
-															<button type="submit" class="btn btn-primary">Save Changes</button>
-														</form>
-													</div>
-												</div>
-											</div>
-										</div>
-									<% }); %>
-								</tbody>
-							</table>
-						</div>
-					<% } else { %>
-						<div class="text-center py-10">
-							<div class="w-16 h-16 bg-gray-700 rounded-full mx-auto mb-4 flex items-center justify-center">
-								<i class="fas fa-server text-2xl text-gray-400"></i>
-							</div>
-							<h3 class="text-lg font-medium mb-2">No Servers Found</h3>
-							<p class="text-gray-400 mb-4 max-w-md mx-auto">There are no servers registered on the platform yet.</p>
-						</div>
-					<% } %>
-				</div>
-				
-				<!-- Recent Activity & System Logs -->
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-					<!-- Recent Activity -->
-					<div class="bg-dark-card rounded-lg border border-gray-700 p-6">
-						<h2 class="text-xl font-semibold mb-6">Recent Activity</h2>
-						<div class="text-gray-400 space-y-4">
-							<div class="flex items-start gap-4">
-								<div class="w-10 h-10 flex-shrink-0 bg-blue-900 rounded-full flex items-center justify-center">
-									<i class="fas fa-user-plus text-blue-400"></i>
-								</div>
-								<div>
-									<p class="text-white font-medium">New user registered</p>
-									<p class="text-sm">User123 joined the platform</p>
-									<p class="text-xs text-gray-500 mt-1">Just now</p>
-								</div>
-							</div>
-							
-							<div class="flex items-start gap-4">
-								<div class="w-10 h-10 flex-shrink-0 bg-green-900 rounded-full flex items-center justify-center">
-									<i class="fas fa-server text-green-400"></i>
-								</div>
-								<div>
-									<p class="text-white font-medium">New server created</p>
-									<p class="text-sm">User456 created a new Minecraft server</p>
-									<p class="text-xs text-gray-500 mt-1">2 hours ago</p>
-								</div>
-							</div>
-							
-							<div class="flex items-start gap-4">
-								<div class="w-10 h-10 flex-shrink-0 bg-purple-900 rounded-full flex items-center justify-center">
-									<i class="fas fa-shopping-cart text-purple-400"></i>
-								</div>
-								<div>
-									<p class="text-white font-medium">Package purchased</p>
-									<p class="text-sm">User789 purchased the Premium package</p>
-									<p class="text-xs text-gray-500 mt-1">5 hours ago</p>
-								</div>
-							</div>
-							
-							<div class="flex items-start gap-4">
-								<div class="w-10 h-10 flex-shrink-0 bg-red-900 rounded-full flex items-center justify-center">
-									<i class="fas fa-exclamation-circle text-red-400"></i>
-								</div>
-								<div>
-									<p class="text-white font-medium">Server error detected</p>
-									<p class="text-sm">High CPU usage detected on Node #3</p>
-									<p class="text-xs text-gray-500 mt-1">1 day ago</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<!-- System Logs -->
-					<div class="bg-dark-card rounded-lg border border-gray-700 p-6">
-						<h2 class="text-xl font-semibold mb-6">System Logs</h2>
-						<div class="space-y-3 text-sm">
-							<div class="p-3 rounded-lg bg-gray-800">
-								<div class="flex items-center justify-between mb-1">
-									<span class="text-gray-400 font-medium">System</span>
-									<span class="text-xs text-gray-500">Today, 10:45 AM</span>
-								</div>
-								<p class="text-gray-300">Database backup completed successfully</p>
-							</div>
-							
-							<div class="p-3 rounded-lg bg-gray-800">
-								<div class="flex items-center justify-between mb-1">
-									<span class="text-green-400 font-medium">Success</span>
-									<span class="text-xs text-gray-500">Today, 09:30 AM</span>
-								</div>
-								<p class="text-gray-300">API rate limit increased to 100 req/min</p>
-							</div>
-							
-							<div class="p-3 rounded-lg bg-gray-800">
-								<div class="flex items-center justify-between mb-1">
-									<span class="text-yellow-400 font-medium">Warning</span>
-									<span class="text-xs text-gray-500">Yesterday, 11:20 PM</span>
-								</div>
-								<p class="text-gray-300">High memory usage detected (85%)</p>
-							</div>
-							
-							<div class="p-3 rounded-lg bg-gray-800">
-								<div class="flex items-center justify-between mb-1">
-									<span class="text-red-400 font-medium">Error</span>
-									<span class="text-xs text-gray-500">Yesterday, 08:15 PM</span>
-								</div>
-								<p class="text-gray-300">Failed login attempt from suspicious IP</p>
-							</div>
-						</div>
-						
-						<div class="mt-4 flex justify-end">
-							<a href="/admin/logs" class="text-sm text-blue-400 hover:text-blue-300 inline-flex items-center">
-								View all logs
-								<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-								</svg>
-							</a>
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					<div class="admin-card p-6 animate-fade-in card-hover">
+						<h3 class="text-lg font-semibold text-white mb-4">Quick Actions</h3>
+						<div class="space-y-3">
+							<button class="w-full btn-primary text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center">
+								<i class="fas fa-plus mr-2"></i>
+								Add New Server
+							</button>
+							<button class="w-full btn-primary text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center">
+								<i class="fas fa-user-plus mr-2"></i>
+								Add New User
+							</button>
+							<button class="w-full btn-primary text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center">
+								<i class="fas fa-cog mr-2"></i>
+								System Settings
+							</button>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</main>
 	</div>
-	
+
 	<script>
-		// Dropdown menu toggle
+		// Dropdown menu functionality
 		const dropdownBtn = document.getElementById('dropdownBtn');
 		const dropdownMenu = document.getElementById('dropdownMenu');
 		
@@ -689,39 +659,21 @@
 		});
 		
 		// Close dropdown when clicking outside
-		document.addEventListener('click', (event) => {
-			if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+		document.addEventListener('click', (e) => {
+			if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
 				dropdownMenu.classList.add('hidden');
 			}
 		});
 		
-		// Mobile sidebar toggle
-		const sidebarBtn = document.getElementById('sidebarBtn');
-		const sidebar = document.getElementById('sidebar');
+		// Set active menu item
+		const currentPath = window.location.pathname;
+		const menuItems = document.querySelectorAll('.menu-item');
 		
-		if (sidebarBtn) {
-			sidebarBtn.addEventListener('click', () => {
-				sidebar.classList.toggle('-translate-x-full');
-			});
-		}
-		
-		// Card hover effects
-		document.querySelectorAll('.card').forEach(card => {
-			card.addEventListener('mouseenter', function() {
-				this.classList.add('transform', '-translate-y-1');
-			});
-			
-			card.addEventListener('mouseleave', function() {
-				this.classList.remove('transform', '-translate-y-1');
-			});
-		});
-		
-		// Confirm user deletion
-		function confirmDeleteUser(userId) {
-			if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-				window.location.href = `/admin/users/delete/${userId}`;
+		menuItems.forEach(item => {
+			if (item.getAttribute('href') === currentPath) {
+				item.classList.add('active');
 			}
-		}
+		});
 	</script>
 </body>
 </html>

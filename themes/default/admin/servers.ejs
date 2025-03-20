@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Admin Server Management">
+	<meta name="theme-color" content="#0f0f12">
+	
+	<!-- Security Headers -->
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data:; font-src 'self' https: data:;">
+	<meta http-equiv="X-Content-Type-Options" content="nosniff">
+	<meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+	<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+	
+	<title>Server Management | Flaxy Nodes</title>
+	<link rel="icon" type="image/png" href="<%= extra.faviconlink %>"/>
+	
+	<!-- Fonts and Icons -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	
+	<!-- Tailwind CSS -->
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script>
+		tailwind.config = {
+			darkMode: 'class',
+			theme: {
+				extend: {
+					fontFamily: {
+						sans: ['Poppins', 'sans-serif'],
+					},
+					colors: {
+						primary: {
+							50: '#eef2ff',
+							100: '#e0e7ff',
+							200: '#c7d2fe',
+							300: '#a5b4fc',
+							400: '#818cf8',
+							500: '#6366f1',
+							600: '#4f46e5',
+							700: '#4338ca',
+							800: '#3730a3',
+							900: '#312e81',
+							950: '#1e1b4b',
+						},
+						dark: {
+							base: '#0f0f12',
+							light: '#1a1a21',
+							lighter: '#24242e',
+							card: '#1a1a21'
+						}
+					},
+					animation: {
+						'fade-in': 'fadeIn 0.5s ease-in-out',
+						'float': 'float 3s ease-in-out infinite',
+					},
+					keyframes: {
+						fadeIn: {
+							'0%': { opacity: '0' },
+							'100%': { opacity: '1' },
+						},
+						float: {
+							'0%, 100%': { transform: 'translateY(0)' },
+							'50%': { transform: 'translateY(-10px)' },
+						}
+					}
+				}
+			}
+		}
+	</script>
+	
+	<style>
+		body {
+			background-color: #0f0f12;
+			color: #f5f5f7;
+			font-family: 'Poppins', sans-serif;
+		}
+		
+		.glass-card {
+			background: rgba(26, 26, 31, 0.7);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+		}
+		
+		.btn-primary {
+			background-color: #6366f1;
+			border-radius: 0.5rem;
+			padding: 0.5rem 1rem;
+			transition: all 0.3s ease;
+		}
+		
+		.btn-primary:hover {
+			background-color: #4f46e5;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+		}
+		
+		/* Custom scrollbar */
+		::-webkit-scrollbar {
+			width: 8px;
+			height: 8px;
+		}
+		
+		::-webkit-scrollbar-track {
+			background: #1e1e24;
+		}
+		
+		::-webkit-scrollbar-thumb {
+			background: #3a3a43;
+			border-radius: 4px;
+		}
+		
+		::-webkit-scrollbar-thumb:hover {
+			background: #4a4a55;
+		}
+	</style>
+</head>
+<body class="min-h-screen">
+	<div class="container mx-auto px-4 py-8">
+		<div class="flex items-center justify-between mb-8">
+			<h1 class="text-3xl font-bold">Server Management</h1>
+			<a href="/admin/servers/new" class="btn-primary text-white font-medium">
+				<i class="fas fa-plus mr-2"></i> Create Server
+			</a>
+		</div>
+		
+		<div class="glass-card rounded-2xl p-6 mb-8 animate-fade-in">
+			<div class="flex items-center justify-between mb-6">
+				<h2 class="text-xl font-semibold">All Servers</h2>
+			</div>
+			
+			<div class="overflow-x-auto">
+				<table class="w-full">
+					<thead>
+						<tr class="text-left text-gray-400 text-sm border-b border-gray-700">
+							<th class="pb-3 font-medium">ID</th>
+							<th class="pb-3 font-medium">Name</th>
+							<th class="pb-3 font-medium">Owner</th>
+							<th class="pb-3 font-medium">Node</th>
+							<th class="pb-3 font-medium">RAM</th>
+							<th class="pb-3 font-medium">Disk</th>
+							<th class="pb-3 font-medium">CPU</th>
+							<th class="pb-3 font-medium">Status</th>
+							<th class="pb-3 font-medium">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% if (servers && servers.length > 0) { %>
+							<% servers.forEach(server => { %>
+								<tr class="border-b border-gray-700/50 hover:bg-dark-lighter/30 transition-colors duration-150">
+									<td class="py-4"><%= server.id %></td>
+									<td class="py-4"><%= server.name %></td>
+									<td class="py-4"><%= server.user ? server.user : 'Unknown' %></td>
+									<td class="py-4"><%= server.node ? server.node : 'Unknown' %></td>
+									<td class="py-4"><%= server.limits?.memory || '0' %> MB</td>
+									<td class="py-4"><%= server.limits?.disk || '0' %> MB</td>
+									<td class="py-4"><%= server.limits?.cpu || '0' %>%</td>
+									<td class="py-4">
+										<% if (server.suspended) { %>
+											<span class="px-2 py-1 rounded-full text-xs font-medium bg-red-900/30 text-red-400">
+												Suspended
+											</span>
+										<% } else { %>
+											<span class="px-2 py-1 rounded-full text-xs font-medium bg-emerald-900/30 text-emerald-400">
+												Active
+											</span>
+										<% } %>
+									</td>
+									<td class="py-4">
+										<div class="flex space-x-2">
+											<a href="/admin/servers/<%= server.id %>/edit" class="p-2 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors duration-200" title="Edit Server">
+												<i class="fas fa-edit"></i>
+											</a>
+											<% if (server.suspended) { %>
+												<a href="/admin/servers/<%= server.id %>/unsuspend" class="p-2 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500/20 transition-colors duration-200" title="Unsuspend Server">
+													<i class="fas fa-play"></i>
+												</a>
+											<% } else { %>
+												<a href="/admin/servers/<%= server.id %>/suspend" class="p-2 rounded-lg bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20 transition-colors duration-200" title="Suspend Server">
+													<i class="fas fa-pause"></i>
+												</a>
+											<% } %>
+											<a href="/admin/servers/<%= server.id %>/delete" class="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors duration-200" title="Delete Server">
+												<i class="fas fa-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+							<% }); %>
+						<% } else { %>
+							<tr>
+								<td colspan="9" class="py-4 text-center text-gray-400">No servers found</td>
+							</tr>
+						<% } %>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html> 

@@ -3,11 +3,20 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="<%= extra.servers.title.list %> - Your Game Servers">
+	<meta name="theme-color" content="#0f0f12">
+	
+	<!-- Security Headers -->
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data:; font-src 'self' https: data:;">
+	<meta http-equiv="X-Content-Type-Options" content="nosniff">
+	<meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+	<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+	
 	<title><%= extra.servers.title.list %></title>
-	<link rel="icon" type="image/png" href="/assets/img/Flaxy Nodes v2.2.gif"/>
+	<link rel="icon" type="image/png" href="<%= extra.faviconlink %>"/>
 	
 	<!-- Fonts and Icons -->
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	
 	<!-- Tailwind CSS -->
@@ -18,38 +27,47 @@
 			theme: {
 				extend: {
 					fontFamily: {
-						sans: ['Inter', 'sans-serif'],
+						sans: ['Poppins', 'sans-serif'],
 					},
 					colors: {
 						primary: {
-							50: '#f0f9ff',
-							100: '#e0f2fe',
-							200: '#bae6fd',
-							300: '#7dd3fc',
-							400: '#38bdf8',
-							500: '#0ea5e9',
-							600: '#0284c7',
-							700: '#0369a1',
-							800: '#075985',
-							900: '#0c4a6e',
-							950: '#082f49',
+							50: '#eef2ff',
+							100: '#e0e7ff',
+							200: '#c7d2fe',
+							300: '#a5b4fc',
+							400: '#818cf8',
+							500: '#6366f1',
+							600: '#4f46e5',
+							700: '#4338ca',
+							800: '#3730a3',
+							900: '#312e81',
+							950: '#1e1b4b',
 						},
 						dark: {
-							base: '#111827',
-							light: '#1F2937',
-							lighter: '#374151',
-							card: '#1E293B'
+							base: '#0f0f12',
+							light: '#1a1a21',
+							lighter: '#24242e',
+							card: '#1a1a21'
 						}
 					},
 					animation: {
 						'fade-in': 'fadeIn 0.5s ease-in-out',
 						'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+						'float': 'float 3s ease-in-out infinite',
 					},
 					keyframes: {
 						fadeIn: {
 							'0%': { opacity: '0' },
 							'100%': { opacity: '1' },
+						},
+						float: {
+							'0%, 100%': { transform: 'translateY(0)' },
+							'50%': { transform: 'translateY(-10px)' },
 						}
+					},
+					boxShadow: {
+						'glow': '0 0 15px rgba(99, 102, 241, 0.5)',
+						'card': '0 8px 24px rgba(0, 0, 0, 0.12)',
 					}
 				}
 			}
@@ -58,102 +76,166 @@
 	
 	<style>
 		body {
-			background-color: #0f172a;
-			color: #f1f5f9;
-			font-family: 'Inter', sans-serif;
-		}
-		.navbar {
-			background-color: rgba(15, 23, 42, 0.7);
-			backdrop-filter: blur(10px);
-			border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-		}
-		.sidebar {
-			background-color: #1e293b;
-			border-right: 1px solid rgba(148, 163, 184, 0.1);
-			transition: all 0.3s ease;
-		}
-		.card {
-			background-color: #1e293b;
-			border: 1px solid rgba(148, 163, 184, 0.1);
-			transition: all 0.3s ease;
-		}
-		.card:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-		}
-		.stat-card {
-			border: 1px solid rgba(148, 163, 184, 0.1);
-		}
-		.gradient-border {
-			position: relative;
-			border-radius: 0.5rem;
-			z-index: 0;
-			overflow: hidden;
-			padding: 1px;
-		}
-		.gradient-border::before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			border-radius: 0.5rem;
-			padding: 2px;
-			background: linear-gradient(45deg, #0ea5e9, #8b5cf6, #ec4899);
-			-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-			-webkit-mask-composite: xor;
-			mask-composite: exclude;
-			z-index: -1;
-		}
-		.main-content {
-			animation: fadeIn 0.5s ease-in-out;
-		}
-		@keyframes fadeIn {
-			0% { opacity: 0; }
-			100% { opacity: 1; }
+			background-color: #0f0f12;
+			color: #f5f5f7;
+			font-family: 'Poppins', sans-serif;
 		}
 		
-		/* Custom Scrollbar */
+		/* Custom scrollbar */
 		::-webkit-scrollbar {
 			width: 8px;
+			height: 8px;
 		}
+		
 		::-webkit-scrollbar-track {
-			background: #1e293b;
+			background: #1e1e24;
 		}
+		
 		::-webkit-scrollbar-thumb {
-			background: #475569;
+			background: #3a3a43;
 			border-radius: 4px;
 		}
+		
 		::-webkit-scrollbar-thumb:hover {
-			background: #64748b;
+			background: #4a4a55;
 		}
 		
-		.server-card {
+		/* Custom styles */
+		.sidebar {
+			background-color: #161618;
+			border-right: 1px solid #2d2d35;
+		}
+		
+		.main-content {
+			background-color: #0f0f12;
+		}
+		
+		.bg-dark-card {
+			background-color: #1a1a1f;
+		}
+		
+		.bg-dark-lighter {
+			background-color: #202026;
+		}
+		
+		.menu-item.active {
+			background-color: rgba(99, 102, 241, 0.1);
+			color: #fff;
+		}
+		
+		.menu-item.active i {
+			color: #6366f1;
+		}
+		
+		.glass-card {
+			background: rgba(26, 26, 31, 0.7);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+		}
+		
+		.btn-primary {
+			background-color: #6366f1;
+			border-radius: 0.5rem;
+			padding: 0.5rem 1rem;
 			transition: all 0.3s ease;
 		}
-		.server-card:hover {
+		
+		.btn-primary:hover {
+			background-color: #4f46e5;
 			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 		}
 		
-		.status-dot {
-			width: 8px;
+		.gradient-border {
+			position: relative;
+			border-radius: 0.75rem;
+			overflow: hidden;
+		}
+		
+		.gradient-border::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			border-radius: 0.75rem;
+			padding: 1px;
+			background: linear-gradient(to right, #6366f1, #8b5cf6);
+			-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+			mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+			-webkit-mask-composite: xor;
+			mask-composite: exclude;
+			pointer-events: none;
+		}
+		
+		/* Form Styling */
+		.form-input {
+			background-color: #1a1a21;
+			border: 1px solid #2d2d35;
+			color: #f5f5f7;
+			transition: all 0.3s ease;
+			border-radius: 0.5rem;
+			padding: 0.75rem 1rem;
+		}
+		
+		.form-input:focus {
+			border-color: #6366f1;
+			box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+			outline: none;
+		}
+		
+		.form-label {
+			color: #a1a1aa;
+			font-weight: 500;
+			margin-bottom: 0.5rem;
+			display: block;
+		}
+		
+		.form-helper {
+			color: #71717a;
+			font-size: 0.875rem;
+			margin-top: 0.25rem;
+		}
+		
+		.form-error {
+			color: #ef4444;
+			font-size: 0.875rem;
+			margin-top: 0.25rem;
+		}
+		
+		/* Resource progress bars */
+		.progress-bar {
 			height: 8px;
-			border-radius: 50%;
-			display: inline-block;
-			margin-right: 6px;
+			border-radius: 4px;
+			background-color: #2d2d35;
+			overflow: hidden;
 		}
-		.status-running {
-			background-color: #10b981;
+		
+		.progress-bar-fill {
+			height: 100%;
+			border-radius: 4px;
+			transition: width 0.5s ease;
 		}
-		.status-starting {
-			background-color: #f59e0b;
+		
+		.progress-bar-fill.ram {
+			background: linear-gradient(to right, #6366f1, #8b5cf6);
 		}
-		.status-stopping {
-			background-color: #f59e0b;
+		
+		.progress-bar-fill.disk {
+			background: linear-gradient(to right, #10b981, #34d399);
 		}
-		.status-offline {
-			background-color: #6b7280;
+		
+		.progress-bar-fill.cpu {
+			background: linear-gradient(to right, #f59e0b, #fbbf24);
+		}
+		
+		.progress-bar-fill.servers {
+			background: linear-gradient(to right, #ec4899, #f43f5e);
+		}
+		
+		/* Mobile responsiveness */
+		@media (max-width: 640px) {
+			.stat-card {
+				padding: 1rem;
+			}
 		}
 	</style>
 </head>
@@ -188,349 +270,490 @@
 			cpu: 0,
 			servers: 0
 		};
+		
+		// Available resources
+		const availableRam = (packageData.ram || 0) - ram;
+		const availableDisk = (packageData.disk || 0) - disk;
+		const availableCpu = (packageData.cpu || 0) - cpu;
+		const availableServers = (packageData.servers || 0) - servers;
 	%>
 
 	<!-- Navbar -->
-	<nav class="navbar fixed w-full h-16 z-10 px-4 py-2.5 flex items-center justify-between">
+	<nav class="navbar fixed w-full h-16 z-50 px-4 py-2.5 flex items-center justify-between bg-dark-base/80 backdrop-blur-lg border-b border-gray-800">
+		<!-- Left side - Logo and Brand -->
 		<div class="flex items-center">
-			<a href="/" class="flex items-center">
-				<img src="/assets/img/FlaxyNodes_logo.gif" class="h-8 w-8 mr-3 rounded-full" alt="Flaxy Nodes Logo">
+			<a href="/" class="flex items-center group">
+				<div class="h-10 w-10 mr-3 rounded-full overflow-hidden transition-all duration-300 group-hover:shadow-glow">
+					<img src="/assets/img/FlaxyNodes_logo.gif" class="h-full w-full object-cover" alt="Flaxy Nodes Logo">
+				</div>
 				<div class="flex flex-col">
 					<span class="self-center text-xl font-bold text-white">Flaxy Nodes</span>
-					<span class="text-xs text-gray-400">Premium Game Hosting</span>
+					<span class="text-xs text-indigo-300">Premium Game Hosting</span>
 				</div>
 			</a>
 		</div>
-		
+
+		<!-- Center - Search Bar -->
+		<div class="hidden md:flex items-center flex-1 max-w-xl mx-8">
+			<div class="relative w-full">
+				<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
+				<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+					<i class="fas fa-search"></i>
+				</button>
+			</div>
+		</div>
+
+		<!-- Right side - User Menu and Notifications -->
 		<div class="flex items-center gap-4">
+			<!-- Notifications -->
+			<div class="relative">
+				<button class="p-2 text-gray-400 hover:text-white transition-colors duration-200">
+					<i class="fas fa-bell"></i>
+					<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+				</button>
+			</div>
+
+			<!-- User Profile Dropdown -->
 			<div class="relative inline-block">
-				<button id="dropdownBtn" class="flex items-center px-3 py-2 text-sm font-medium text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white focus:outline-none">
+				<button id="dropdownBtn" class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-dark-lighter hover:bg-primary-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50">
+					<div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center mr-2">
+						<i class="fas fa-user text-primary-400"></i>
+					</div>
 					<span class="mr-2"><%= userData.username %></span>
 					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
 					</svg>
 				</button>
-				<div id="dropdownMenu" class="hidden absolute right-0 mt-2 bg-gray-800 rounded-lg shadow-lg overflow-hidden z-20" style="min-width: 10rem;">
+				<div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-64 bg-dark-lighter rounded-lg shadow-lg overflow-hidden z-50 border border-gray-700">
+					<div class="p-4 border-b border-gray-700">
+						<div class="flex items-center">
+							<div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center mr-3">
+								<i class="fas fa-user text-primary-400"></i>
+							</div>
+							<div>
+								<p class="text-sm font-medium text-white"><%= userData.username %></p>
+								<p class="text-xs text-gray-400"><%= userData.email %></p>
+							</div>
+						</div>
+					</div>
 					<ul class="py-1 text-sm text-gray-200">
 						<li>
-							<a href="/settings" class="block px-4 py-2 hover:bg-gray-700">Settings</a>
+							<a href="/settings" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
+								<i class="fas fa-cog mr-2"></i> Settings
+							</a>
+						</li>
+						<li>
+							<a href="/profile" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
+								<i class="fas fa-user-circle mr-2"></i> Profile
+							</a>
 						</li>
 						<% if (userData.isAdmin) { %>
 						<li>
-							<a href="/admin" class="block px-4 py-2 hover:bg-gray-700">Admin Panel</a>
+							<a href="/admin" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
+								<i class="fas fa-shield-alt mr-2"></i> Admin Panel
+							</a>
 						</li>
 						<% } %>
-						<li>
-							<a href="/auth/logout" class="block px-4 py-2 hover:bg-gray-700 text-red-400">Logout</a>
+						<li class="border-t border-gray-700 mt-1">
+							<a href="/auth/logout" class="flex items-center px-4 py-2 hover:bg-dark-base text-red-400 hover:text-red-300 transition-colors duration-200">
+								<i class="fas fa-sign-out-alt mr-2"></i> Logout
+							</a>
 						</li>
 					</ul>
 				</div>
 			</div>
+
+			<!-- Mobile Menu Button -->
+			<button id="mobileMenuBtn" class="md:hidden p-2 text-gray-400 hover:text-white transition-colors duration-200">
+				<i class="fas fa-bars"></i>
+			</button>
 		</div>
 	</nav>
-	
-	<!-- Sidebar and Main Content -->
+
+	<!-- Mobile Search Bar -->
+	<div id="mobileSearch" class="md:hidden fixed top-16 left-0 right-0 p-4 bg-dark-base border-b border-gray-800 z-40 hidden">
+		<div class="relative">
+			<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
+			<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+				<i class="fas fa-search"></i>
+			</button>
+		</div>
+	</div>
+
 	<div class="flex h-screen pt-16">
 		<!-- Sidebar -->
 		<aside id="sidebar" class="fixed left-0 top-16 h-full z-10 w-64 transition-transform -translate-x-full sm:translate-x-0">
 			<div class="h-full px-3 pb-4 overflow-y-auto sidebar">
-				<ul class="space-y-2 pt-4 font-medium">
+				<ul class="space-y-1 pt-4 font-medium">
 					<li>
-						<a href="/dashboard" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-gauge-high w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">Dashboard</span>
+						<a href="/dashboard" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-tachometer-alt w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Dashboard</span>
 						</a>
 					</li>
 					<li>
-						<a href="/servers" class="flex items-center p-3 text-white rounded-lg bg-primary-600 group">
+						<a href="/servers" class="menu-item flex items-center p-3 text-white rounded-lg bg-primary-600">
 							<i class="fas fa-server w-5 h-5 text-white transition duration-75"></i>
-							<span class="ms-3">My Servers</span>
+							<span class="ml-3">Servers</span>
 						</a>
 					</li>
 					<li>
-						<a href="/create" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-plus w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">Create Server</span>
+						<a href="/store" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-shopping-cart w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Store</span>
 						</a>
 					</li>
 					<li>
-						<a href="/store" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-shopping-cart w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">Resource Store</span>
+						<a href="/afk" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-coins w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">AFK Page</span>
 						</a>
 					</li>
 					<li>
-						<a href="/redeem" class="flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700 group">
-							<i class="fas fa-gift w-5 h-5 text-gray-400 group-hover:text-white transition duration-75"></i>
-							<span class="ms-3">Redeem Coupon</span>
+						<a href="/redeem" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-gift w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Redeem</span>
 						</a>
 					</li>
+					<li>
+						<a href="/earn" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-gem w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Earn</span>
+						</a>
+					</li>
+					<li>
+						<a href="/leaderboard" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-trophy w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Leaderboard</span>
+						</a>
+					</li>
+					<li>
+						<a href="/settings" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-cog w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Settings</span>
+						</a>
+					</li>
+					<li>
+						<a href="<%= settings.pterodactyl.domain %>" target="_blank" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-external-link-alt w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Panel</span>
+						</a>
+					</li>
+					<% if (userData.isAdmin) { %>
+					<li class="mt-6 pt-6 border-t border-gray-700">
+						<a href="/admin" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-shield-alt w-5 h-5 text-red-400 transition duration-75 group-hover:text-red-300"></i>
+							<span class="ml-3">Admin Panel</span>
+						</a>
+					</li>
+					<% } %>
 				</ul>
-				
-				<div class="pt-4 mt-4 border-t border-gray-700">
-					<div class="px-3 py-4 rounded-lg bg-gray-800">
-						<h3 class="text-sm font-medium text-gray-400 mb-2">Resource Limits</h3>
-						<div class="space-y-3">
-							<!-- RAM Usage -->
-							<div>
-								<div class="flex justify-between text-xs mb-1">
-									<span>RAM: <%= ram %>MB</span>
-									<span><%= packageData.ram %>MB</span>
-								</div>
-								<div class="w-full bg-gray-700 rounded-full h-1.5">
-									<div class="bg-blue-500 h-1.5 rounded-full" style="width: <%= Math.min(100, (ram / (packageData.ram || 1)) * 100) %>%"></div>
-								</div>
-							</div>
-							
-							<!-- Disk Usage -->
-							<div>
-								<div class="flex justify-between text-xs mb-1">
-									<span>Disk: <%= disk %>MB</span>
-									<span><%= packageData.disk %>MB</span>
-								</div>
-								<div class="w-full bg-gray-700 rounded-full h-1.5">
-									<div class="bg-green-500 h-1.5 rounded-full" style="width: <%= Math.min(100, (disk / (packageData.disk || 1)) * 100) %>%"></div>
-								</div>
-							</div>
-							
-							<!-- CPU Usage -->
-							<div>
-								<div class="flex justify-between text-xs mb-1">
-									<span>CPU: <%= cpu %>%</span>
-									<span><%= packageData.cpu %>%</span>
-								</div>
-								<div class="w-full bg-gray-700 rounded-full h-1.5">
-									<div class="bg-purple-500 h-1.5 rounded-full" style="width: <%= Math.min(100, (cpu / (packageData.cpu || 1)) * 100) %>%"></div>
-								</div>
-							</div>
-							
-							<!-- Server Count -->
-							<div>
-								<div class="flex justify-between text-xs mb-1">
-									<span>Servers: <%= servers %></span>
-									<span><%= packageData.servers %></span>
-								</div>
-								<div class="w-full bg-gray-700 rounded-full h-1.5">
-									<div class="bg-amber-500 h-1.5 rounded-full" style="width: <%= Math.min(100, (servers / (packageData.servers || 1)) * 100) %>%"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 		</aside>
-		
+
 		<!-- Main Content -->
 		<div class="p-4 sm:ml-64 pt-5 w-full main-content">
 			<div class="p-4">
-				<!-- Page Header -->
-				<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-					<div>
-						<h1 class="text-3xl font-bold mb-2">My Servers</h1>
-						<p class="text-gray-400">Manage your game servers and applications.</p>
-					</div>
-					<a href="/create" class="mt-4 md:mt-0 inline-flex items-center justify-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-800 font-medium rounded-lg text-sm">
-						<i class="fas fa-plus mr-2"></i>
-						Create Server
-					</a>
+				<!-- Welcome Message -->
+				<div class="mb-8 glass-card p-6 rounded-xl animate-fade-in">
+					<h1 class="text-3xl font-bold mb-2">Your Servers</h1>
+					<p class="text-gray-400">Manage and monitor all your game servers in one place.</p>
 				</div>
-				
-				<!-- Server List -->
-				<% if (pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data && pterodactyl.relationships.servers.data.length > 0) { %>
-					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-						<% pterodactyl.relationships.servers.data.forEach(server => { %>
-							<div class="server-card bg-dark-card rounded-lg border border-gray-700 overflow-hidden">
-								<div class="p-5">
-									<div class="flex justify-between items-start mb-4">
-										<h2 class="text-xl font-semibold text-white"><%= server.attributes.name %></h2>
-										<div class="flex items-center text-xs font-medium text-gray-400">
-											<span class="status-dot status-<%= server.attributes.status || 'offline' %>"></span>
-											<span class="capitalize"><%= server.attributes.status || 'offline' %></span>
-										</div>
+
+				<!-- Resource Stats -->
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-slide-up" style="animation-delay: 0.1s;">
+					<!-- RAM Card -->
+					<div class="gradient-border">
+						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center">
+									<div class="w-12 h-12 rounded-lg bg-indigo-500/20 flex items-center justify-center mr-3">
+										<i class="fas fa-memory text-indigo-400 text-xl"></i>
 									</div>
-									
-									<div class="space-y-3 mb-4">
-										<div>
-											<h3 class="text-xs font-medium text-gray-400 mb-1">Resources</h3>
-											<div class="grid grid-cols-3 gap-3">
-												<div class="text-center p-2 bg-gray-800 rounded-lg">
-													<div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mb-1.5 mx-auto">
-														<i class="fas fa-memory text-blue-400"></i>
-													</div>
-													<p class="text-sm font-medium text-white"><%= server.attributes.limits.memory %>MB</p>
-													<p class="text-xs text-gray-400">RAM</p>
-												</div>
-												
-												<div class="text-center p-2 bg-gray-800 rounded-lg">
-													<div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center mb-1.5 mx-auto">
-														<i class="fas fa-hdd text-green-400"></i>
-													</div>
-													<p class="text-sm font-medium text-white"><%= server.attributes.limits.disk %>MB</p>
-													<p class="text-xs text-gray-400">Disk</p>
-												</div>
-												
-												<div class="text-center p-2 bg-gray-800 rounded-lg">
-													<div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mb-1.5 mx-auto">
-														<i class="fas fa-microchip text-purple-400"></i>
-													</div>
-													<p class="text-sm font-medium text-white"><%= server.attributes.limits.cpu %>%</p>
-													<p class="text-xs text-gray-400">CPU</p>
-												</div>
-											</div>
-										</div>
-										
-										<div>
-											<div class="flex items-center justify-between text-xs mb-1">
-												<span class="font-medium text-gray-400">Server ID</span>
-												<span class="text-gray-300"><%= server.attributes.identifier.substring(0, 8) %>...</span>
-											</div>
-										</div>
-									</div>
-									
-									<div class="flex gap-2">
-										<a href="<%= settings.pterodactyl.domain %>/server/<%= server.attributes.identifier %>" target="_blank" 
-											class="flex-1 inline-flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 text-white font-medium rounded-lg text-sm">
-											<i class="fas fa-terminal mr-2"></i>
-											Console
-										</a>
-										<a href="/servers/edit/<%= server.attributes.id %>" 
-											class="inline-flex items-center justify-center px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg text-sm">
-											<i class="fas fa-edit"></i>
-										</a>
+									<div class="ml-4">
+										<h3 class="text-lg font-semibold text-white">Available RAM</h3>
+										<p class="text-gray-400 text-sm">Memory Resources</p>
 									</div>
 								</div>
+								<span class="text-xl font-bold text-white"><%= availableRam %> <span class="text-gray-400 text-sm">/ <%= packageData.ram %> MB</span></span>
 							</div>
-						<% }); %>
-					</div>
-				<% } else { %>
-					<div class="bg-dark-card border border-gray-700 rounded-lg p-10 text-center">
-						<div class="w-20 h-20 rounded-full mx-auto mb-6 bg-gray-800 flex items-center justify-center">
-							<i class="fas fa-server text-3xl text-gray-400"></i>
+							<div class="progress-bar">
+								<div class="progress-bar-fill ram" style="width: <%= ((ram / packageData.ram) * 100).toFixed(2) + '%' %>"></div>
+							</div>
 						</div>
-						<h2 class="text-xl font-semibold mb-3">No Servers Found</h2>
-						<p class="text-gray-400 mb-6 max-w-md mx-auto">You haven't created any servers yet. Get started by creating your first game server.</p>
-						<a href="/create" class="inline-flex items-center justify-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-800 font-medium rounded-lg text-sm">
+					</div>
+					
+					<!-- Disk Card -->
+					<div class="gradient-border">
+						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center">
+									<div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mr-3">
+										<i class="fas fa-hdd text-green-400 text-xl"></i>
+									</div>
+									<div class="ml-4">
+										<h3 class="text-lg font-semibold text-white">Available Disk</h3>
+										<p class="text-gray-400 text-sm">Storage Resources</p>
+									</div>
+								</div>
+								<span class="text-xl font-bold text-white"><%= availableDisk %> <span class="text-gray-400 text-sm">/ <%= packageData.disk %> MB</span></span>
+							</div>
+							<div class="progress-bar">
+								<div class="progress-bar-fill disk" style="width: <%= ((disk / packageData.disk) * 100).toFixed(2) + '%' %>"></div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- CPU Card -->
+					<div class="gradient-border">
+						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center">
+									<div class="w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center mr-3">
+										<i class="fas fa-microchip text-amber-400 text-xl"></i>
+									</div>
+									<div class="ml-4">
+										<h3 class="text-lg font-semibold text-white">Available CPU</h3>
+										<p class="text-gray-400 text-sm">Processor Resources</p>
+									</div>
+								</div>
+								<span class="text-xl font-bold text-white"><%= availableCpu %> <span class="text-gray-400 text-sm">/ <%= packageData.cpu %>%</span></span>
+							</div>
+							<div class="progress-bar">
+								<div class="progress-bar-fill cpu" style="width: <%= ((cpu / packageData.cpu) * 100).toFixed(2) + '%' %>"></div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Servers Card -->
+					<div class="gradient-border">
+						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center">
+									<div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3">
+										<i class="fas fa-server text-purple-400 text-xl"></i>
+									</div>
+									<div class="ml-4">
+										<h3 class="text-lg font-semibold text-white">Available Servers</h3>
+										<p class="text-gray-400 text-sm">Server Slots</p>
+									</div>
+								</div>
+								<span class="text-xl font-bold text-white"><%= availableServers %> <span class="text-gray-400 text-sm">/ <%= packageData.servers %></span></span>
+							</div>
+							<div class="progress-bar">
+								<div class="progress-bar-fill servers" style="width: <%= ((servers / packageData.servers) * 100).toFixed(2) + '%' %>"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Server List -->
+				<div class="glass-card rounded-xl border border-gray-700 p-6 mb-8">
+					<div class="flex items-center justify-between mb-6">
+						<h2 class="text-xl font-semibold flex items-center">
+							<i class="fas fa-server text-primary-400 mr-3"></i>
+							Your Game Servers
+						</h2>
+						<a href="/create" class="btn-primary inline-flex items-center">
 							<i class="fas fa-plus mr-2"></i>
-							Create First Server
+							Create Server
 						</a>
 					</div>
-				<% } %>
-				
-				<!-- Resources Section -->
-				<div class="mt-8">
-					<h2 class="text-xl font-semibold mb-6">Resource Management</h2>
-					
-					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<!-- Resource Stats -->
-						<div class="bg-dark-card rounded-lg border border-gray-700 p-6">
-							<h3 class="text-lg font-medium mb-4">Your Resources</h3>
-							
-							<div class="space-y-5">
-								<!-- RAM Usage -->
-								<div>
-									<div class="flex justify-between mb-2">
-										<span class="text-gray-400">RAM</span>
-										<span class="text-gray-300"><%= ram %>MB / <%= packageData.ram %>MB</span>
-									</div>
-									<div class="w-full bg-gray-700 rounded-full h-2.5">
-										<div class="bg-blue-500 h-2.5 rounded-full" style="width: <%= Math.min(100, (ram / (packageData.ram || 1)) * 100) %>%"></div>
+
+					<% if (pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data && pterodactyl.relationships.servers.data.length > 0) { %>
+						<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+							<% pterodactyl.relationships.servers.data.forEach(server => { %>
+								<div class="gradient-border">
+									<div class="bg-dark-card rounded-lg p-6 h-full">
+										<div class="flex items-center justify-between mb-4">
+											<div class="flex items-center">
+												<div class="w-10 h-10 rounded-lg bg-primary-500/20 flex items-center justify-center mr-3">
+													<i class="fas fa-server text-primary-400"></i>
+												</div>
+												<div>
+													<h3 class="text-lg font-semibold text-white"><%= server.attributes.name %></h3>
+													<p class="text-sm text-gray-400"><%= server.attributes.description || 'No description' %></p>
+												</div>
+											</div>
+											<div class="flex items-center space-x-2">
+												<a href="<%= settings.pterodactyl.domain %>/server/<%= server.attributes.identifier %>" target="_blank" class="p-2 text-gray-400 hover:text-white transition-colors">
+													<i class="fas fa-external-link-alt"></i>
+												</a>
+												<a href="/servers/edit/<%= server.attributes.identifier %>" class="p-2 text-gray-400 hover:text-white transition-colors">
+													<i class="fas fa-edit"></i>
+												</a>
+												<button onclick="deleteServer('<%= server.attributes.identifier %>')" class="p-2 text-gray-400 hover:text-red-400 transition-colors">
+													<i class="fas fa-trash"></i>
+												</button>
+											</div>
+										</div>
+
+										<div class="space-y-3">
+											<div>
+												<div class="flex justify-between mb-1">
+													<span class="text-sm text-gray-400">RAM</span>
+													<span class="text-sm text-gray-300"><%= server.attributes.limits.memory %> MB</span>
+												</div>
+												<div class="w-full bg-gray-700 rounded-full h-2">
+													<div class="bg-indigo-500 h-2 rounded-full" style="width: <%= (server.attributes.limits.memory / packageData.ram) * 100 %>%"></div>
+												</div>
+											</div>
+
+											<div>
+												<div class="flex justify-between mb-1">
+													<span class="text-sm text-gray-400">CPU</span>
+													<span class="text-sm text-gray-300"><%= server.attributes.limits.cpu %>%</span>
+												</div>
+												<div class="w-full bg-gray-700 rounded-full h-2">
+													<div class="bg-amber-500 h-2 rounded-full" style="width: <%= (server.attributes.limits.cpu / packageData.cpu) * 100 %>%"></div>
+												</div>
+											</div>
+
+											<div>
+												<div class="flex justify-between mb-1">
+													<span class="text-sm text-gray-400">Disk</span>
+													<span class="text-sm text-gray-300"><%= server.attributes.limits.disk %> MB</span>
+												</div>
+												<div class="w-full bg-gray-700 rounded-full h-2">
+													<div class="bg-green-500 h-2 rounded-full" style="width: <%= (server.attributes.limits.disk / packageData.disk) * 100 %>%"></div>
+												</div>
+											</div>
+										</div>
+
+										<div class="mt-4 pt-4 border-t border-gray-700">
+											<div class="flex items-center justify-between">
+												<span class="text-sm text-gray-400">Status</span>
+												<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= server.attributes.suspended ? 'bg-red-900 text-red-200' : 'bg-green-900 text-green-200' %>">
+													<%= server.attributes.suspended ? 'Suspended' : 'Active' %>
+												</span>
+											</div>
+										</div>
 									</div>
 								</div>
-								
-								<!-- Disk Usage -->
-								<div>
-									<div class="flex justify-between mb-2">
-										<span class="text-gray-400">Disk</span>
-										<span class="text-gray-300"><%= disk %>MB / <%= packageData.disk %>MB</span>
-									</div>
-									<div class="w-full bg-gray-700 rounded-full h-2.5">
-										<div class="bg-green-500 h-2.5 rounded-full" style="width: <%= Math.min(100, (disk / (packageData.disk || 1)) * 100) %>%"></div>
-									</div>
-								</div>
-								
-								<!-- CPU Usage -->
-								<div>
-									<div class="flex justify-between mb-2">
-										<span class="text-gray-400">CPU</span>
-										<span class="text-gray-300"><%= cpu %>% / <%= packageData.cpu %>%</span>
-									</div>
-									<div class="w-full bg-gray-700 rounded-full h-2.5">
-										<div class="bg-purple-500 h-2.5 rounded-full" style="width: <%= Math.min(100, (cpu / (packageData.cpu || 1)) * 100) %>%"></div>
-									</div>
-								</div>
-								
-								<!-- Server Count -->
-								<div>
-									<div class="flex justify-between mb-2">
-										<span class="text-gray-400">Servers</span>
-										<span class="text-gray-300"><%= servers %> / <%= packageData.servers %></span>
-									</div>
-									<div class="w-full bg-gray-700 rounded-full h-2.5">
-										<div class="bg-amber-500 h-2.5 rounded-full" style="width: <%= Math.min(100, (servers / (packageData.servers || 1)) * 100) %>%"></div>
-									</div>
-								</div>
-							</div>
+							<% }); %>
 						</div>
-						
-						<!-- Quick Actions -->
-						<div class="bg-dark-card rounded-lg border border-gray-700 p-6">
-							<h3 class="text-lg font-medium mb-4">Need More Resources?</h3>
-							<p class="text-gray-400 mb-6">Upgrade your plan or purchase additional resources from our store.</p>
-							
-							<div class="space-y-4">
-								<a href="/store" class="flex items-center p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
-									<div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center mr-4">
-										<i class="fas fa-shopping-cart text-green-400"></i>
-									</div>
-									<div>
-										<h4 class="text-white font-medium">Visit Resource Store</h4>
-										<p class="text-sm text-gray-400">Purchase additional RAM, Disk, and CPU</p>
-									</div>
-									<i class="fas fa-chevron-right ml-auto text-gray-400"></i>
-								</a>
-								
-								<a href="/redeem" class="flex items-center p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
-									<div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center mr-4">
-										<i class="fas fa-gift text-purple-400"></i>
-									</div>
-									<div>
-										<h4 class="text-white font-medium">Redeem Coupon</h4>
-										<p class="text-sm text-gray-400">Use a coupon code to get free resources</p>
-									</div>
-									<i class="fas fa-chevron-right ml-auto text-gray-400"></i>
-								</a>
+					<% } else { %>
+						<div class="text-center py-12">
+							<div class="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-500/20 flex items-center justify-center">
+								<i class="fas fa-server text-2xl text-primary-400"></i>
 							</div>
+							<h3 class="text-xl font-semibold text-white mb-2">No Servers Found</h3>
+							<p class="text-gray-400 mb-6">You haven't created any servers yet. Get started by creating your first server!</p>
+							<a href="/create" class="btn-primary inline-flex items-center">
+								<i class="fas fa-plus mr-2"></i>
+								Create Your First Server
+							</a>
 						</div>
-					</div>
+					<% } %>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
+	<!-- Footer -->
+	<footer class="mt-auto py-6 border-t border-gray-800">
+		<div class="container mx-auto px-4">
+			<div class="flex flex-col md:flex-row justify-between items-center">
+				<div class="mb-4 md:mb-0">
+					<div class="flex items-center">
+						<img src="<%= settings.logo %>" alt="Logo" class="h-8 mr-3">
+						<span class="text-lg font-semibold text-white"><%= settings.name %></span>
+					</div>
+					<p class="text-gray-400 text-sm mt-2">© 2024 <%= settings.name %>. All rights reserved.</p>
+				</div>
+				
+				<div class="flex space-x-6">
+					<a href="/terms" class="text-gray-400 hover:text-white transition-colors duration-200">Terms</a>
+					<a href="/privacy" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy</a>
+					<a href="/contact" class="text-gray-400 hover:text-white transition-colors duration-200">Contact</a>
+					<a href="https://discord.gg/<%= settings.discord.id %>" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
+						<i class="fab fa-discord mr-1"></i> Discord
+					</a>
+				</div>
+			</div>
+		</div>
+	</footer>
+
 	<script>
-		// Dropdown menu toggle
-		const dropdownBtn = document.getElementById('dropdownBtn');
-		const dropdownMenu = document.getElementById('dropdownMenu');
+		// Mobile menu toggle
+		const toggleSidebar = document.getElementById('toggleSidebar');
+		const sidebar = document.getElementById('sidebar');
+		const sidebarIcon = document.getElementById('sidebarIcon');
 		
-		dropdownBtn.addEventListener('click', () => {
-			dropdownMenu.classList.toggle('hidden');
-		});
-		
-		// Close dropdown when clicking outside
-		document.addEventListener('click', (event) => {
-			if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
-				dropdownMenu.classList.add('hidden');
+		toggleSidebar.addEventListener('click', () => {
+			sidebar.classList.toggle('-translate-x-full');
+			
+			// Toggle icon between bars and times
+			if (sidebar.classList.contains('-translate-x-full')) {
+				sidebarIcon.classList.remove('fa-times');
+				sidebarIcon.classList.add('fa-bars');
+			} else {
+				sidebarIcon.classList.remove('fa-bars');
+				sidebarIcon.classList.add('fa-times');
 			}
 		});
 		
-		// Mobile sidebar toggle
-		const sidebarBtn = document.getElementById('sidebarBtn');
-		const sidebar = document.getElementById('sidebar');
+		// Close sidebar when clicking outside on mobile
+		document.addEventListener('click', (e) => {
+			const isClickInsideSidebar = sidebar.contains(e.target);
+			const isClickOnToggleButton = toggleSidebar.contains(e.target);
+			
+			if (!isClickInsideSidebar && !isClickOnToggleButton && window.innerWidth < 640 && !sidebar.classList.contains('-translate-x-full')) {
+				sidebar.classList.add('-translate-x-full');
+				sidebarIcon.classList.remove('fa-times');
+				sidebarIcon.classList.add('fa-bars');
+			}
+		});
 		
-		if (sidebarBtn) {
-			sidebarBtn.addEventListener('click', () => {
-				sidebar.classList.toggle('-translate-x-full');
+		// Highlight active menu item
+		document.addEventListener('DOMContentLoaded', () => {
+			const currentPath = window.location.pathname;
+			const menuItems = document.querySelectorAll('.menu-item');
+			
+			menuItems.forEach(item => {
+				const href = item.getAttribute('href');
+				if (href === currentPath) {
+					item.classList.add('active');
+				}
 			});
+		});
+
+		// Dropdown menu functionality
+		const dropdownBtn = document.getElementById('dropdownBtn');
+		const dropdownMenu = document.getElementById('dropdownMenu');
+		const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+		const mobileSearch = document.getElementById('mobileSearch');
+
+		// Toggle dropdown menu
+		dropdownBtn.addEventListener('click', (e) => {
+			e.stopPropagation();
+			dropdownMenu.classList.toggle('hidden');
+		});
+
+		// Close dropdown when clicking outside
+		document.addEventListener('click', (e) => {
+			if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+				dropdownMenu.classList.add('hidden');
+			}
+		});
+
+		// Toggle mobile search
+		mobileMenuBtn.addEventListener('click', () => {
+			mobileSearch.classList.toggle('hidden');
+		});
+
+		// Close mobile search when clicking outside
+		document.addEventListener('click', (e) => {
+			if (!mobileMenuBtn.contains(e.target) && !mobileSearch.contains(e.target)) {
+				mobileSearch.classList.add('hidden');
+			}
+		});
+
+		// Server deletion function
+		function deleteServer(identifier) {
+			if (confirm('Are you sure you want to delete this server? This action cannot be undone.')) {
+				window.location.href = `/servers/delete/${identifier}`;
+			}
 		}
 	</script>
 </body>

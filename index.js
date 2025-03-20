@@ -124,6 +124,10 @@ if (settings.api && settings.api.client && settings.api.client.bot && settings.a
 
 const app = express();
 
+// Set up view engine
+app.set('view engine', 'ejs');
+app.set('views', './themes');
+
 // Debug middleware for static files
 app.use((req, res, next) => {
   console.log('Request URL:', req.url);
@@ -148,10 +152,6 @@ const expressWs = require('express-ws')(app);
 const ejs = require("ejs");
 const session = require("express-session");
 const indexjs = require("./index.js");
-
-// Set up view engine
-app.set('view engine', 'ejs');
-app.set('views', './themes');
 
 // Sets up saving session data.
 let sessionStore;
@@ -238,13 +238,62 @@ app.get('/', async (req, res) => {
     }
 });
 
+// Handle servers route - MUST be defined before the catch-all route handler
+app.get('/servers', async (req, res) => {
+    console.log('[SERVERS] Processing request for servers page');
+    
+    // Check if user is logged in
+    if (!req.session.userinfo || !req.session.pterodactyl) {
+        console.log('[SERVERS] User not logged in, redirecting to login');
+        return res.redirect("/login");
+    }
+    
+    // Validate user session
+    try {
+        const user = await db.users.getUserById(req.session.userinfo.id);
+        if (!user || user.pterodactyl_id !== req.session.pterodactyl.id) {
+            console.log('[SERVERS] Invalid user session, redirecting to login');
+            req.session.destroy();
+            return res.redirect("/login");
+        }
+        
+        // Get theme and render servers page
+        let theme = indexjs.get(req);
+        
+        // Find the correct template for the servers page
+        let serversTemplate = theme.settings.pages.servers || "servers.ejs";
+        console.log(`[SERVERS] Using template: ${serversTemplate}`);
+        
+        // Get render data from indexjs
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/${serversTemplate}`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[SERVERS] Error rendering servers page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the servers page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error('[SERVERS] Error processing servers page:', error);
+        return res.send("An error occurred while preparing data for the servers page. Please try again.");
+    }
+});
+
 // Import API routes
 const adminRoutes = require('./api/admin.js');
 const serverRoutes = require('./api/servers.js');
+const { router: earnRouter } = require('./api/earn.js');
 
-// Register API routes
-app.use('/admin', adminRoutes.router);
+// Register API routes - moved after main routes
 app.use('/api/servers', serverRoutes.router);
+app.use('/api', earnRouter);
 
 // Add middleware for parsing request bodies
 app.use(express.json({
@@ -263,7 +312,6 @@ app.use(express.urlencoded({
 }));
 
 // Load the website.
-
 module.exports.app = app;
 
 const listener = app.listen(settings.website.port, function() {
@@ -409,41 +457,15 @@ app.get('/create', async (req, res) => {
         // Get render data from indexjs
         const renderData = await eval(indexjs.renderdataeval);
         
-        // Get eggs, nests, and locations from the fetcher module
-        try {
-            const eggFetcher = require('./api/fetch_eggs');
-            const [nests, eggs, locations] = await Promise.all([
-                eggFetcher.getNests(true),  // Force update to get fresh data
-                eggFetcher.getEggs(true),   // Force update to get fresh data
-                eggFetcher.getLocations(true) // Force update to get fresh data
-            ]);
-            
-            // Format the data for the template
-            renderData.nests = nests;
-            renderData.eggs = eggs;
-            renderData.locations = locations;
-            
-            // Format locations data for the template
-            renderData.formattedLocations = {};
-            locations.forEach(location => {
-                renderData.formattedLocations[location.id] = {
-                    name: location.long,
-                    short: location.short,
-                    description: location.description
-                };
-            });
-            
-            console.log('[CREATE] Added nests, eggs, and locations data');
-            console.log('[CREATE] Available locations:', renderData.formattedLocations);
-            
-        } catch (err) {
-            console.error('[CREATE] Error preparing data:', err);
-            // Provide fallback data
-            renderData.nests = [];
-            renderData.eggs = {};
-            renderData.locations = [];
-            renderData.formattedLocations = {};
-        }
+        // Get nests, eggs, and locations from cache
+        const nests = JSON.parse(fs.readFileSync("./cache/nests_cache.json", "utf8"));
+        const eggs = JSON.parse(fs.readFileSync("./cache/eggs_cache.json", "utf8"));
+        const locations = JSON.parse(fs.readFileSync("./cache/locations_cache.json", "utf8"));
+        
+        // Add nests, eggs, and locations to render data
+        renderData.nests = nests;
+        renderData.eggs = eggs;
+        renderData.locations = locations;
         
         ejs.renderFile(
             `./themes/${theme.name}/${createTemplate}`, 
@@ -467,7 +489,7 @@ app.get('/create', async (req, res) => {
 // Then load other API files
 const apifiles = fs.readdirSync('./api').filter(file => file.endsWith('.js'));
 apifiles.forEach(file => {
-    if (file !== 'auth.js') { // Skip auth.js since we already loaded it
+    if (file !== 'auth.js' && file !== 'admin.js') { // Skip auth.js and admin.js since we already loaded them
         try {
             let apiModule = require(`./api/${file}`);
             if (apiModule && apiModule.router) {
@@ -488,6 +510,9 @@ apifiles.forEach(file => {
         }
     }
 });
+
+// Register admin routes last to ensure proper route handling
+app.use('/admin', adminRoutes.router);
 
 // Explicit route handlers for login and register pages
 app.get('/login', async (req, res) => {

@@ -176,30 +176,44 @@ router.get('/servers', checkAdmin, async (req, res) => {
     try {
         console.log(chalk.blue('[ADMIN] Servers management page accessed'));
         
-        const [servers, nodes] = await Promise.all([
-            getServers(),
-            getNodes()
-        ]);
-
-        // Get allocations for each node
-        const nodesWithAllocations = await Promise.all(
-            nodes.map(async node => {
-                const allocations = await getNodeAllocations(node.id);
-                return { ...node, allocations };
-            })
-        );
+        // Get cached server and node data
+        console.log(chalk.blue('[SERVERS] Using cached server data'));
+        const serversPath = './cache/servers_cache.json';
+        const servers = fs.existsSync(serversPath) 
+            ? JSON.parse(fs.readFileSync(serversPath, 'utf8')) 
+            : await getServers();
         
-        res.render('admin/servers', {
-            title: 'Server Management',
-            servers,
-            nodes: nodesWithAllocations
-        });
+        console.log(chalk.blue('[NODES] Using cached node data'));
+        const nodesPath = './cache/nodes_cache.json';
+        const nodes = fs.existsSync(nodesPath) 
+            ? JSON.parse(fs.readFileSync(nodesPath, 'utf8')) 
+            : await getNodes();
+
+        // Get theme and render properly
+        let theme = indexjs.get(req);
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        // Add servers and nodes to render data
+        renderData.servers = servers;
+        renderData.nodes = nodes;
+        renderData.title = 'Server Management';
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/${theme.settings.pages.adminservers || 'admin/servers.ejs'}`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[ADMIN] Error rendering admin servers page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the admin servers page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
     } catch (error) {
         console.error(chalk.red('[ADMIN] Error loading servers management:'), error);
-        res.status(500).render('404', { 
-            title: 'Error',
-            error: 'An error occurred while loading the servers management page.'
-        });
+        res.status(500).send('An error occurred while loading the servers management page.');
     }
 });
 
@@ -534,7 +548,7 @@ router.get('/nests', checkAdmin, async (req, res) => {
             getEggs(true)  // Force update to get fresh data
         ]);
         
-        res.render('admin/nests', {
+        res.render('themes/default/admin/nests', {
             title: 'Nests & Eggs Management',
             nests,
             eggs

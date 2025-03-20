@@ -3,404 +3,579 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Resource Store - Purchase additional resources for your servers">
+	<meta name="theme-color" content="#0f0f12">
+	
+	<!-- Security Headers -->
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data:; font-src 'self' https: data:;">
+	<meta http-equiv="X-Content-Type-Options" content="nosniff">
+	<meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+	<meta http-equiv="X-XSS-Protection" content="1; mode=block">
+	
 	<title><%= extra.store.title %></title>
 	<link rel="icon" type="image/png" href="<%= extra.faviconlink %>"/>
-    <% if (settings.api.arcio.enabled == true) { %>
-        <script async src="https://arc.io/widget.min.js#<%= settings.api.arcio.widgetid %>"></script>
-    <% } %>	
-	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-
-	<!-- Fonts and icons -->
-	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
+	
+	<!-- Fonts and Icons -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	
+	<!-- Tailwind CSS -->
+	<script src="https://cdn.tailwindcss.com"></script>
 	<script>
-		WebFont.load({
-			google: {"families":["Lato:300,400,700,900"]},
-			custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['/assets/css/fonts.min.css']},
-			active: function() {
-				sessionStorage.fonts = true;
+		tailwind.config = {
+			darkMode: 'class',
+			theme: {
+				extend: {
+					fontFamily: {
+						sans: ['Poppins', 'sans-serif'],
+					},
+					colors: {
+						primary: {
+							50: '#eef2ff',
+							100: '#e0e7ff',
+							200: '#c7d2fe',
+							300: '#a5b4fc',
+							400: '#818cf8',
+							500: '#6366f1',
+							600: '#4f46e5',
+							700: '#4338ca',
+							800: '#3730a3',
+							900: '#312e81',
+							950: '#1e1b4b',
+						},
+						dark: {
+							base: '#0f0f12',
+							light: '#1a1a21',
+							lighter: '#24242e',
+							card: '#1a1a21'
+						}
+					},
+					animation: {
+						'fade-in': 'fadeIn 0.5s ease-in-out',
+						'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+						'float': 'float 3s ease-in-out infinite',
+					},
+					keyframes: {
+						fadeIn: {
+							'0%': { opacity: '0' },
+							'100%': { opacity: '1' },
+						},
+						float: {
+							'0%, 100%': { transform: 'translateY(0)' },
+							'50%': { transform: 'translateY(-10px)' },
+						}
+					},
+					boxShadow: {
+						'glow': '0 0 15px rgba(99, 102, 241, 0.5)',
+						'card': '0 8px 24px rgba(0, 0, 0, 0.12)',
+					}
+				}
 			}
-		});
+		}
 	</script>
-
-	<!-- CSS Files -->
-	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/assets/css/atlantis.min.css">
-
-	<!-- CSS Just for demo purpose, don't include it in your project -->
-	<link rel="stylesheet" href="/assets/css/demo.css">
+	
+	<style>
+		body {
+			background-color: #0f0f12;
+			color: #f5f5f7;
+			font-family: 'Poppins', sans-serif;
+		}
+		
+		/* Custom scrollbar */
+		::-webkit-scrollbar {
+			width: 8px;
+			height: 8px;
+		}
+		
+		::-webkit-scrollbar-track {
+			background: #1e1e24;
+		}
+		
+		::-webkit-scrollbar-thumb {
+			background: #3a3a43;
+			border-radius: 4px;
+		}
+		
+		::-webkit-scrollbar-thumb:hover {
+			background: #4a4a55;
+		}
+		
+		/* Custom styles */
+		.sidebar {
+			background-color: #161618;
+			border-right: 1px solid #2d2d35;
+		}
+		
+		.main-content {
+			background-color: #0f0f12;
+		}
+		
+		.bg-dark-card {
+			background-color: #1a1a1f;
+		}
+		
+		.bg-dark-lighter {
+			background-color: #202026;
+		}
+		
+		.menu-item.active {
+			background-color: rgba(99, 102, 241, 0.1);
+			color: #fff;
+		}
+		
+		.menu-item.active i {
+			color: #6366f1;
+		}
+		
+		.glass-card {
+			background: rgba(26, 26, 31, 0.7);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+		}
+		
+		.btn-primary {
+			background-color: #6366f1;
+			border-radius: 0.5rem;
+			padding: 0.5rem 1rem;
+			transition: all 0.3s ease;
+		}
+		
+		.btn-primary:hover {
+			background-color: #4f46e5;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+		}
+		
+		.gradient-border {
+			position: relative;
+			border-radius: 0.75rem;
+			overflow: hidden;
+		}
+		
+		.gradient-border::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			border-radius: 0.75rem;
+			padding: 1px;
+			background: linear-gradient(to right, #6366f1, #8b5cf6);
+			-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+			mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+			-webkit-mask-composite: xor;
+			mask-composite: exclude;
+			pointer-events: none;
+		}
+		
+		.animate-fade-in {
+			animation: fadeIn 0.6s ease-out;
+		}
+		
+		.animate-slide-up {
+			animation: slideUp 0.5s ease-out;
+		}
+		
+		@keyframes fadeIn {
+			from { opacity: 0; }
+			to { opacity: 1; }
+		}
+		
+		@keyframes slideUp {
+			from { transform: translateY(20px); opacity: 0; }
+			to { transform: translateY(0); opacity: 1; }
+		}
+	</style>
 </head>
-<body data-background-color="dark">
-	<div class="wrapper">
-		<div class="main-header">
-			<!-- Logo Header -->
-			<div class="logo-header" data-background-color="dark2">
-				
-				<a href="/dashboard" class="logo">
-					<p style="color:white;" class="navbar-brand"><%= extra.home.name %></p>
-				</a>
-				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon">
-						<i class="icon-menu"></i>
-					</span>
-				</button>
-				<button class="topbar-toggler more"><i class="icon-options-vertical"></i></button>
-				<div class="nav-toggle">
-					<button class="btn btn-toggle toggle-sidebar">
-						<i class="icon-menu"></i>
-					</button>
-				</div>
-			</div>
-			<!-- End Logo Header -->
+<body class="min-h-screen">
+	<%
+		const userData = {
+			id: userinfo.id,
+			username: userinfo.username || userinfo.email.split('@')[0],
+			email: userinfo.email,
+			isAdmin: typeof req.session !== 'undefined' ? req.session.isAdmin : false
+		};
+	%>
 
-			<!-- Navbar Header -->
-			<nav class="navbar fixed w-full h-16 z-10 px-4 py-2.5 flex items-center justify-between">
-				<div class="flex items-center">
-					<a href="/" class="flex items-center">
-						<img src="/assets/img/FlaxyNodes_logo.gif" class="h-8 w-8 mr-3 rounded-full" alt="Flaxy Nodes Logo">
-						<div class="flex flex-col">
-							<span class="self-center text-xl font-bold text-white">Flaxy Nodes</span>
-							<span class="text-xs text-gray-400">Premium Game Hosting</span>
-						</div>
-					</a>
+	<!-- Navbar -->
+	<nav class="navbar fixed w-full h-16 z-50 px-4 py-2.5 flex items-center justify-between bg-dark-base/80 backdrop-blur-lg border-b border-gray-800">
+		<!-- Left side - Logo and Brand -->
+		<div class="flex items-center">
+			<a href="/" class="flex items-center group">
+				<div class="h-10 w-10 mr-3 rounded-full overflow-hidden transition-all duration-300 group-hover:shadow-glow">
+					<img src="/assets/img/FlaxyNodes_logo.gif" class="h-full w-full object-cover" alt="Flaxy Nodes Logo">
 				</div>
-				<div class="flex items-center space-x-4">
-					<div class="bg-primary-500/10 px-4 py-2 rounded-lg">
-						<span class="text-sm text-gray-400">Balance</span>
-						<div class="flex items-center">
-							<i class="fas fa-coins text-yellow-400 mr-2"></i>
-							<% if (typeof coins !== 'undefined') { %>
-								<span class="text-lg font-semibold text-white"><%= coins %></span>
-							<% } else { %>
-								<span class="text-lg font-semibold text-white">0</span>
-							<% } %>
-						</div>
-					</div>
-					<a href="/earn" class="btn btn-primary">
-						<i class="fas fa-plus mr-2"></i>
-						Earn Coins
-					</a>
+				<div class="flex flex-col">
+					<span class="self-center text-xl font-bold text-white">Flaxy Nodes</span>
+					<span class="text-xs text-indigo-300">Premium Game Hosting</span>
 				</div>
-			</nav>
-			<!-- End Navbar -->
+			</a>
 		</div>
 
-		<!-- Sidebar -->
-		<div class="sidebar sidebar-style-2" data-background-color="dark2">
-			<div class="sidebar-wrapper scrollbar scrollbar-inner">
-				<div class="sidebar-content">
-					<div class="user">
-						<div class="avatar-sm float-left mr-2">
-							<img src="https://cdn.discordapp.com/avatars/<%= req.session.userinfo.id%>/<%= req.session.userinfo.avatar%>.jpg?size=1024" alt="..." class="avatar-img rounded-circle">
-						</div>
-						<div class="info">
-							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
-								<span>
-									<%= req.session.userinfo.username%>#<%= req.session.userinfo.discriminator %>
+		<!-- Center - Search Bar -->
+		<div class="hidden md:flex items-center flex-1 max-w-xl mx-8">
+			<div class="relative w-full">
+				<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
+				<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+					<i class="fas fa-search"></i>
+				</button>
+			</div>
+		</div>
 
-									<% if (typeof coins !== 'undefined') { %>
-										<span class="user-level"><%= coins %> coin<%= coins == 1 ? "" : "s" %></span>
-									<% } %>
+		<!-- Right side - User Menu and Notifications -->
+		<div class="flex items-center gap-4">
+			<!-- Notifications -->
+			<div class="relative">
+				<button class="p-2 text-gray-400 hover:text-white transition-colors duration-200">
+					<i class="fas fa-bell"></i>
+					<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+				</button>
+			</div>
 
-								</span>
-							</a>
+			<!-- User Profile Dropdown -->
+			<div class="relative inline-block">
+				<button id="dropdownBtn" class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-dark-lighter hover:bg-primary-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50">
+					<div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center mr-2">
+						<i class="fas fa-user text-primary-400"></i>
+					</div>
+					<span class="mr-2"><%= userData.username %></span>
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+					</svg>
+				</button>
+				<div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-64 bg-dark-lighter rounded-lg shadow-lg overflow-hidden z-50 border border-gray-700">
+					<div class="p-4 border-b border-gray-700">
+						<div class="flex items-center">
+							<div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center mr-3">
+								<i class="fas fa-user text-primary-400"></i>
+							</div>
+							<div>
+								<p class="text-sm font-medium text-white"><%= userData.username %></p>
+								<p class="text-xs text-gray-400"><%= userData.email %></p>
+							</div>
 						</div>
 					</div>
-					<ul class="nav nav-primary">
-						<li class="nav-item">
-							<a href="/dashboard" class="collapsed">
-								<i class="fas fa-home"></i>
-								<p>Dashboard</p>
+					<ul class="py-1 text-sm text-gray-200">
+						<li>
+							<a href="/settings" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
+								<i class="fas fa-cog mr-2"></i> Settings
 							</a>
 						</li>
-						<li class="nav-item">
-							<a href="/create" class="collapsed">
-								<i class="fas fa-plus-square"></i>
-								<p>New Server</p>
+						<li>
+							<a href="/profile" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
+								<i class="fas fa-user-circle mr-2"></i> Profile
 							</a>
 						</li>
-						<li class="nav-item">
-							<a href="/servers" class="collapsed">
-								<i class="fas fa-server"></i>
-								<p>View Servers</p>
+						<% if (userData.isAdmin) { %>
+						<li>
+							<a href="/admin" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
+								<i class="fas fa-shield-alt mr-2"></i> Admin Panel
 							</a>
 						</li>
-						<li class="nav-item active">
-							<a href="javascript:void(0)" class="collapsed">
-								<i class="fas fa-shopping-bag"></i>
-								<p>Shop</p>
+						<% } %>
+						<li class="border-t border-gray-700 mt-1">
+							<a href="/auth/logout" class="flex items-center px-4 py-2 hover:bg-dark-base text-red-400 hover:text-red-300 transition-colors duration-200">
+								<i class="fas fa-sign-out-alt mr-2"></i> Logout
 							</a>
 						</li>
-                    <% if (settings.api.arcio["afk page"].enabled == true) { %>
-						<li class="nav-item">
-							<a href="/afk" class="collapsed">
-								<i class="fas fa-coins"></i>
-								<p>AFK Page</p>
-							</a>
-						</li>                    
-                    <% } %>
-						<li class="nav-item">
-							<a href="/redeem" class="collapsed">
-								<i class="fas fa-qrcode"></i>
-								<p>Redeem Coupon Code</p>
-							</a>
-						</li>     
-						<li class="nav-item">
-							<a href="/regen" class="collapsed">
-                                <i class="fas fa-redo-alt"></i>
-								<p>Regenerate Password</p>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a href="<%= settings.pterodactyl.domain %>" class="collapsed">
-                                <i class="fas fa-external-link-square-alt"></i>
-								<p>Pterodactyl Panel</p>
-							</a>
-						</li>
-                    <% if (pterodactyl.root_admin == true) { %>
-						<li class="nav-item">
-							<a href="/admin" class="collapsed">
-                                <i class="fas fa-user-cog"></i>
-								<p>Admin</p>
-							</a>
-						</li>
-                    <% } %>
 					</ul>
 				</div>
 			</div>
+
+			<!-- Mobile Menu Button -->
+			<button id="mobileMenuBtn" class="md:hidden p-2 text-gray-400 hover:text-white transition-colors duration-200">
+				<i class="fas fa-bars"></i>
+			</button>
 		</div>
-		<!-- End Sidebar -->
-        <%
-            let ram = 0;
-            let disk = 0;
-            let cpu = 0;
-            let servers = pterodactyl.relationships.servers.data.length;
-            for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
-                ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
-                disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
-                cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
-            }
-        %>
-		<div class="main-panel">
-			<div class="content">
-				<div class="page-inner">
-					<div class="animate-fade">
-						<!-- Header -->
-						<div class="mb-8">
-							<div class="flex items-center justify-between">
+	</nav>
+
+	<!-- Mobile Search Bar -->
+	<div id="mobileSearch" class="md:hidden fixed top-16 left-0 right-0 p-4 bg-dark-base border-b border-gray-800 z-40 hidden">
+		<div class="relative">
+			<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
+			<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+				<i class="fas fa-search"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="flex h-screen pt-16">
+		<!-- Sidebar -->
+		<aside id="sidebar" class="fixed left-0 top-16 h-full z-10 w-64 transition-transform -translate-x-full sm:translate-x-0">
+			<div class="h-full px-3 pb-4 overflow-y-auto sidebar">
+				<ul class="space-y-1 pt-4 font-medium">
+					<li>
+						<a href="/dashboard" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-tachometer-alt w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Dashboard</span>
+						</a>
+					</li>
+					<li>
+						<a href="/servers" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-server w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Servers</span>
+						</a>
+					</li>
+					<li>
+						<a href="/store" class="menu-item flex items-center p-3 text-white rounded-lg active">
+							<i class="fas fa-shopping-cart w-5 h-5 text-primary-400 transition duration-75"></i>
+							<span class="ml-3">Store</span>
+						</a>
+					</li>
+					<li>
+						<a href="/afk" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-coins w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">AFK Page</span>
+						</a>
+					</li>
+					<li>
+						<a href="/redeem" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-gift w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Redeem</span>
+						</a>
+					</li>
+					<li>
+						<a href="/earn" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-gem w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Earn</span>
+						</a>
+					</li>
+					<li>
+						<a href="/leaderboard" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-trophy w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Leaderboard</span>
+						</a>
+					</li>
+					<li>
+						<a href="/settings" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-cog w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Settings</span>
+						</a>
+					</li>
+					<li>
+						<a href="<%= settings.pterodactyl.domain %>" target="_blank" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-external-link-alt w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Panel</span>
+						</a>
+					</li>
+					<% if (userData.isAdmin) { %>
+					<li class="mt-6 pt-6 border-t border-gray-700">
+						<a href="/admin" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-shield-alt w-5 h-5 text-red-400 transition duration-75 group-hover:text-red-300"></i>
+							<span class="ml-3">Admin Panel</span>
+						</a>
+					</li>
+					<% } %>
+				</ul>
+			</div>
+		</aside>
+		
+		<!-- Mobile menu button -->
+		<button id="toggleSidebar" type="button" class="fixed bottom-4 right-4 z-20 sm:hidden inline-flex items-center p-3 text-sm font-medium text-white bg-primary-600 rounded-full hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
+			<i id="sidebarIcon" class="fas fa-bars"></i>
+		</button>
+
+		<!-- Main Content -->
+		<div class="p-4 sm:ml-64 pt-5 w-full main-content">
+			<div class="container mx-auto px-4 py-8">
+				<!-- Header -->
+				<div class="flex items-center justify-between mb-8">
+					<div>
+						<h1 class="text-3xl font-bold text-white">Resource Store</h1>
+						<p class="text-gray-400 mt-2">Purchase additional resources for your servers</p>
+					</div>
+					<div class="flex items-center space-x-4">
+						<div class="bg-dark-light px-4 py-2 rounded-lg">
+							<span class="text-sm text-gray-400">Balance</span>
+							<div class="flex items-center">
+								<i class="fas fa-coins text-yellow-400 mr-2"></i>
+								<% if (typeof coins !== 'undefined') { %>
+									<span class="text-lg font-semibold text-white"><%= coins %></span>
+								<% } else { %>
+									<span class="text-lg font-semibold text-white">0</span>
+								<% } %>
+							</div>
+						</div>
+						<a href="/earn" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
+							<i class="fas fa-plus mr-2"></i> Earn Coins
+						</a>
+					</div>
+				</div>
+
+				<!-- Resource Packages Grid -->
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+					<!-- RAM Package -->
+					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200">
+						<div class="flex items-center justify-between mb-4">
+							<div class="p-3 rounded-lg bg-blue-500/10">
+								<i class="fas fa-memory text-2xl text-blue-400"></i>
+							</div>
+							<span class="px-2 py-1 text-xs font-semibold text-blue-400 bg-blue-500/10 rounded-full">Most Popular</span>
+						</div>
+						<h3 class="text-xl font-semibold text-white mb-2">RAM Package</h3>
+						<p class="text-gray-400 text-sm mb-4">Increase your server's memory capacity for better performance.</p>
+						<div class="space-y-2 mb-6">
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-green-400 mr-2"></i>
+								<span class="text-gray-300">1024 MB RAM</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-green-400 mr-2"></i>
+								<span class="text-gray-300">Instant Activation</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-green-400 mr-2"></i>
+								<span class="text-gray-300">Permanent Upgrade</span>
+							</div>
+						</div>
+						<div class="flex items-center justify-between">
+							<div>
+								<span class="text-sm text-gray-400">Price</span>
+								<div class="flex items-center">
+									<i class="fas fa-coins text-yellow-400 mr-1"></i>
+									<span class="text-xl font-semibold text-white">100</span>
+								</div>
+							</div>
+							<button onclick="purchase('ram')" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
+								Purchase
+							</button>
+						</div>
+					</div>
+
+					<!-- Disk Package -->
+					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200">
+						<div class="flex items-center justify-between mb-4">
+							<div class="p-3 rounded-lg bg-green-500/10">
+								<i class="fas fa-hdd text-2xl text-green-400"></i>
+							</div>
+							<span class="px-2 py-1 text-xs font-semibold text-green-400 bg-green-500/10 rounded-full">Best Value</span>
+						</div>
+						<h3 class="text-xl font-semibold text-white mb-2">Disk Package</h3>
+						<p class="text-gray-400 text-sm mb-4">Expand your server's storage capacity for more files and data.</p>
+						<div class="space-y-2 mb-6">
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-green-400 mr-2"></i>
+								<span class="text-gray-300">2048 MB Storage</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-green-400 mr-2"></i>
+								<span class="text-gray-300">Instant Activation</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-green-400 mr-2"></i>
+								<span class="text-gray-300">Permanent Upgrade</span>
+							</div>
+						</div>
+						<div class="flex items-center justify-between">
+							<div>
+								<span class="text-sm text-gray-400">Price</span>
+								<div class="flex items-center">
+									<i class="fas fa-coins text-yellow-400 mr-1"></i>
+									<span class="text-xl font-semibold text-white">75</span>
+								</div>
+							</div>
+							<button onclick="purchase('disk')" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
+								Purchase
+							</button>
+						</div>
+					</div>
+
+					<!-- CPU Package -->
+					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200">
+						<div class="flex items-center justify-between mb-4">
+							<div class="p-3 rounded-lg bg-purple-500/10">
+								<i class="fas fa-microchip text-2xl text-purple-400"></i>
+							</div>
+							<span class="px-2 py-1 text-xs font-semibold text-purple-400 bg-purple-500/10 rounded-full">High Performance</span>
+						</div>
+						<h3 class="text-xl font-semibold text-white mb-2">CPU Package</h3>
+						<p class="text-gray-400 text-sm mb-4">Boost your server's processing power for better performance.</p>
+						<div class="space-y-2 mb-6">
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-green-400 mr-2"></i>
+								<span class="text-gray-300">100% CPU Power</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-green-400 mr-2"></i>
+								<span class="text-gray-300">Instant Activation</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-green-400 mr-2"></i>
+								<span class="text-gray-300">Permanent Upgrade</span>
+							</div>
+						</div>
+						<div class="flex items-center justify-between">
+							<div>
+								<span class="text-sm text-gray-400">Price</span>
+								<div class="flex items-center">
+									<i class="fas fa-coins text-yellow-400 mr-1"></i>
+									<span class="text-xl font-semibold text-white">150</span>
+								</div>
+							</div>
+							<button onclick="purchase('cpu')" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
+								Purchase
+							</button>
+						</div>
+					</div>
+
+					<!-- Server Slot Package -->
+					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200">
+						<div class="flex items-center justify-between mb-4">
+							<div class="p-3 rounded-lg bg-yellow-500/10">
+								<i class="fas fa-server text-2xl text-yellow-400"></i>
+							</div>
+							<span class="px-2 py-1 text-xs font-semibold text-yellow-400 bg-yellow-500/10 rounded-full">Expansion</span>
+						</div>
+						<h3 class="text-xl font-semibold text-white mb-2">Server Slot Package</h3>
+						<p class="text-gray-400 text-sm mb-4">Create an additional server to host more applications.</p>
+						<div class="space-y-2 mb-6">
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-green-400 mr-2"></i>
+								<span class="text-gray-300">1 Additional Server</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-green-400 mr-2"></i>
+								<span class="text-gray-300">Instant Activation</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-green-400 mr-2"></i>
+								<span class="text-gray-300">Permanent Upgrade</span>
+							</div>
+						</div>
+						<div class="flex items-center justify-between">
+							<div>
+								<span class="text-sm text-gray-400">Price</span>
+								<div class="flex items-center">
+									<i class="fas fa-coins text-yellow-400 mr-1"></i>
+									<span class="text-xl font-semibold text-white">200</span>
+								</div>
+							</div>
+							<button onclick="purchase('slot')" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
+								Purchase
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Help Section -->
+				<div class="bg-dark-light rounded-lg p-6">
+					<div class="flex items-start space-x-4">
+						<div class="p-3 rounded-lg bg-primary-500/10">
+							<i class="fas fa-question-circle text-2xl text-primary-400"></i>
+						</div>
+						<div>
+							<h3 class="text-lg font-semibold text-white mb-2">Need Help?</h3>
+							<p class="text-gray-400 mb-4">Here are some common questions about our resource packages:</p>
+							<div class="space-y-4">
 								<div>
-									<h1 class="text-2xl font-bold text-white">Resource Store</h1>
-									<p class="text-gray-400 mt-2">Purchase additional resources for your servers.</p>
+									<h4 class="text-sm font-semibold text-white mb-1">How do I purchase resources?</h4>
+									<p class="text-sm text-gray-400">Simply click the "Purchase" button on any package. The resources will be instantly added to your account.</p>
 								</div>
-								<div class="flex items-center space-x-4">
-									<div class="bg-primary-500/10 px-4 py-2 rounded-lg">
-										<span class="text-sm text-gray-400">Balance</span>
-										<div class="flex items-center">
-											<i class="fas fa-coins text-yellow-400 mr-2"></i>
-											<% if (typeof coins !== 'undefined') { %>
-												<span class="text-lg font-semibold text-white"><%= coins %></span>
-											<% } else { %>
-												<span class="text-lg font-semibold text-white">0</span>
-											<% } %>
-										</div>
-									</div>
-									<a href="/earn" class="btn btn-primary">
-										<i class="fas fa-plus mr-2"></i>
-										Earn Coins
-									</a>
+								<div>
+									<h4 class="text-sm font-semibold text-white mb-1">Are the upgrades permanent?</h4>
+									<p class="text-sm text-gray-400">Yes, all resource upgrades are permanent and will remain on your account indefinitely.</p>
 								</div>
-							</div>
-						</div>
-
-						<!-- Product Grid -->
-						<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-							<!-- RAM Package -->
-							<div class="card hover:border-primary-500/50 transition-all duration-200">
-								<div class="p-6">
-									<div class="flex items-center justify-between mb-4">
-										<div class="p-3 rounded-lg bg-blue-500/10">
-											<i class="fas fa-memory text-2xl text-blue-400"></i>
-										</div>
-										<span class="px-2 py-1 text-xs font-semibold text-blue-400 bg-blue-500/10 rounded-full">Most Popular</span>
-									</div>
-									<h3 class="text-xl font-semibold text-white mb-2">RAM Package</h3>
-									<p class="text-gray-400 text-sm mb-4">Increase your server's memory capacity for better performance.</p>
-									<div class="space-y-2 mb-6">
-										<div class="flex items-center text-sm">
-											<i class="fas fa-check text-green-400 mr-2"></i>
-											<span class="text-gray-300">1024 MB RAM</span>
-										</div>
-										<div class="flex items-center text-sm">
-											<i class="fas fa-check text-green-400 mr-2"></i>
-											<span class="text-gray-300">Instant Activation</span>
-										</div>
-										<div class="flex items-center text-sm">
-											<i class="fas fa-check text-green-400 mr-2"></i>
-											<span class="text-gray-300">Permanent Upgrade</span>
-										</div>
-									</div>
-									<div class="flex items-center justify-between">
-										<div>
-											<span class="text-sm text-gray-400">Price</span>
-											<div class="flex items-center">
-												<i class="fas fa-coins text-yellow-400 mr-1"></i>
-												<span class="text-xl font-semibold text-white">100</span>
-											</div>
-										</div>
-										<button onclick="purchase('ram')" class="btn btn-primary">
-											Purchase
-										</button>
-									</div>
-								</div>
-							</div>
-
-							<!-- Disk Package -->
-							<div class="card hover:border-primary-500/50 transition-all duration-200">
-								<div class="p-6">
-									<div class="flex items-center justify-between mb-4">
-										<div class="p-3 rounded-lg bg-green-500/10">
-											<i class="fas fa-hdd text-2xl text-green-400"></i>
-										</div>
-										<span class="px-2 py-1 text-xs font-semibold text-green-400 bg-green-500/10 rounded-full">Best Value</span>
-									</div>
-									<h3 class="text-xl font-semibold text-white mb-2">Disk Package</h3>
-									<p class="text-gray-400 text-sm mb-4">Expand your server's storage capacity for more files and data.</p>
-									<div class="space-y-2 mb-6">
-										<div class="flex items-center text-sm">
-											<i class="fas fa-check text-green-400 mr-2"></i>
-											<span class="text-gray-300">2048 MB Storage</span>
-										</div>
-										<div class="flex items-center text-sm">
-											<i class="fas fa-check text-green-400 mr-2"></i>
-											<span class="text-gray-300">Instant Activation</span>
-										</div>
-										<div class="flex items-center text-sm">
-											<i class="fas fa-check text-green-400 mr-2"></i>
-											<span class="text-gray-300">Permanent Upgrade</span>
-										</div>
-									</div>
-									<div class="flex items-center justify-between">
-										<div>
-											<span class="text-sm text-gray-400">Price</span>
-											<div class="flex items-center">
-												<i class="fas fa-coins text-yellow-400 mr-1"></i>
-												<span class="text-xl font-semibold text-white">75</span>
-											</div>
-										</div>
-										<button onclick="purchase('disk')" class="btn btn-primary">
-											Purchase
-										</button>
-									</div>
-								</div>
-							</div>
-
-							<!-- CPU Package -->
-							<div class="card hover:border-primary-500/50 transition-all duration-200">
-								<div class="p-6">
-									<div class="flex items-center justify-between mb-4">
-										<div class="p-3 rounded-lg bg-purple-500/10">
-											<i class="fas fa-microchip text-2xl text-purple-400"></i>
-										</div>
-										<span class="px-2 py-1 text-xs font-semibold text-purple-400 bg-purple-500/10 rounded-full">High Performance</span>
-									</div>
-									<h3 class="text-xl font-semibold text-white mb-2">CPU Package</h3>
-									<p class="text-gray-400 text-sm mb-4">Boost your server's processing power for better performance.</p>
-									<div class="space-y-2 mb-6">
-										<div class="flex items-center text-sm">
-											<i class="fas fa-check text-green-400 mr-2"></i>
-											<span class="text-gray-300">100% CPU Power</span>
-										</div>
-										<div class="flex items-center text-sm">
-											<i class="fas fa-check text-green-400 mr-2"></i>
-											<span class="text-gray-300">Instant Activation</span>
-										</div>
-										<div class="flex items-center text-sm">
-											<i class="fas fa-check text-green-400 mr-2"></i>
-											<span class="text-gray-300">Permanent Upgrade</span>
-										</div>
-									</div>
-									<div class="flex items-center justify-between">
-										<div>
-											<span class="text-sm text-gray-400">Price</span>
-											<div class="flex items-center">
-												<i class="fas fa-coins text-yellow-400 mr-1"></i>
-												<span class="text-xl font-semibold text-white">150</span>
-											</div>
-										</div>
-										<button onclick="purchase('cpu')" class="btn btn-primary">
-											Purchase
-										</button>
-									</div>
-								</div>
-							</div>
-
-							<!-- Server Slot Package -->
-							<div class="card hover:border-primary-500/50 transition-all duration-200">
-								<div class="p-6">
-									<div class="flex items-center justify-between mb-4">
-										<div class="p-3 rounded-lg bg-yellow-500/10">
-											<i class="fas fa-server text-2xl text-yellow-400"></i>
-										</div>
-										<span class="px-2 py-1 text-xs font-semibold text-yellow-400 bg-yellow-500/10 rounded-full">Expansion</span>
-									</div>
-									<h3 class="text-xl font-semibold text-white mb-2">Server Slot Package</h3>
-									<p class="text-gray-400 text-sm mb-4">Create an additional server to host more applications.</p>
-									<div class="space-y-2 mb-6">
-										<div class="flex items-center text-sm">
-											<i class="fas fa-check text-green-400 mr-2"></i>
-											<span class="text-gray-300">1 Additional Server</span>
-										</div>
-										<div class="flex items-center text-sm">
-											<i class="fas fa-check text-green-400 mr-2"></i>
-											<span class="text-gray-300">Instant Activation</span>
-										</div>
-										<div class="flex items-center text-sm">
-											<i class="fas fa-check text-green-400 mr-2"></i>
-											<span class="text-gray-300">Permanent Upgrade</span>
-										</div>
-									</div>
-									<div class="flex items-center justify-between">
-										<div>
-											<span class="text-sm text-gray-400">Price</span>
-											<div class="flex items-center">
-												<i class="fas fa-coins text-yellow-400 mr-1"></i>
-												<span class="text-xl font-semibold text-white">200</span>
-											</div>
-										</div>
-										<button onclick="purchase('slot')" class="btn btn-primary">
-											Purchase
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Help Section -->
-						<div class="mt-12">
-							<div class="card">
-								<div class="p-6">
-									<div class="flex items-start space-x-4">
-										<div class="p-3 rounded-lg bg-primary-500/10">
-											<i class="fas fa-question-circle text-2xl text-primary-400"></i>
-										</div>
-										<div>
-											<h3 class="text-lg font-semibold text-white mb-2">Need Help?</h3>
-											<p class="text-gray-400 mb-4">Here are some common questions about our resource packages:</p>
-											<div class="space-y-4">
-												<div>
-													<h4 class="text-sm font-semibold text-white mb-1">How do I purchase resources?</h4>
-													<p class="text-sm text-gray-400">Simply click the "Purchase" button on any package. The resources will be instantly added to your account.</p>
-												</div>
-												<div>
-													<h4 class="text-sm font-semibold text-white mb-1">Are the upgrades permanent?</h4>
-													<p class="text-sm text-gray-400">Yes, all resource upgrades are permanent and will remain on your account indefinitely.</p>
-												</div>
-												<div>
-													<h4 class="text-sm font-semibold text-white mb-1">How do I earn coins?</h4>
-													<p class="text-sm text-gray-400">Click the "Earn Coins" button to learn about various ways to earn coins on our platform.</p>
-												</div>
-											</div>
-										</div>
-									</div>
+								<div>
+									<h4 class="text-sm font-semibold text-white mb-1">How do I earn coins?</h4>
+									<p class="text-sm text-gray-400">Click the "Earn Coins" button to learn about various ways to earn coins on our platform.</p>
 								</div>
 							</div>
 						</div>
@@ -409,59 +584,50 @@
 			</div>
 		</div>
 	</div>
-	<!--   Core JS Files   -->
-	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>
-	<script src="/assets/js/core/popper.min.js"></script>
-	<script src="/assets/js/core/bootstrap.min.js"></script>
-
-	<!-- jQuery UI -->
-	<script src="/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
-	<script src="/assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
-
-	<!-- jQuery Scrollbar -->
-	<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
-	<!-- Chart JS -->
-	<script src="/assets/js/plugin/chart.js/chart.min.js"></script>
-
-	<!-- jQuery Sparkline -->
-	<script src="/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-
-	<!-- Chart Circle -->
-	<script src="/assets/js/plugin/chart-circle/circles.min.js"></script>
-
-	<!-- Datatables -->
-	<script src="/assets/js/plugin/datatables/datatables.min.js"></script>
-
-	<!-- Bootstrap Notify -->
-	<script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-
-	<!-- jQuery Vector Maps -->
-	<script src="/assets/js/plugin/jqvmap/jquery.vmap.min.js"></script>
-	<script src="/assets/js/plugin/jqvmap/maps/jquery.vmap.world.js"></script>
-
-	<!-- Sweet Alert -->
-	<script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
-
-	<!-- Atlantis JS -->
-	<script src="/assets/js/atlantis.min.js"></script>
 
 	<script>
+		// Dropdown menu toggle
+		const dropdownBtn = document.getElementById('dropdownBtn');
+		const dropdownMenu = document.getElementById('dropdownMenu');
+		
+		dropdownBtn.addEventListener('click', () => {
+			dropdownMenu.classList.toggle('hidden');
+		});
+		
+		// Close dropdown when clicking outside
+		document.addEventListener('click', (event) => {
+			if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+				dropdownMenu.classList.add('hidden');
+			}
+		});
+		
+		// Mobile sidebar toggle
+		const sidebarBtn = document.getElementById('toggleSidebar');
+		const sidebar = document.getElementById('sidebar');
+		const sidebarIcon = document.getElementById('sidebarIcon');
+		
+		if (sidebarBtn) {
+			sidebarBtn.addEventListener('click', () => {
+				sidebar.classList.toggle('-translate-x-full');
+				sidebarIcon.classList.toggle('fa-bars');
+				sidebarIcon.classList.toggle('fa-times');
+			});
+		}
+		
+		// Mobile search toggle
+		const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+		const mobileSearch = document.getElementById('mobileSearch');
+		
+		if (mobileMenuBtn) {
+			mobileMenuBtn.addEventListener('click', () => {
+				mobileSearch.classList.toggle('hidden');
+			});
+		}
+		
 		// Purchase function
 		function purchase(type) {
 			window.location.href = `/store/purchase?type=${type}`;
 		}
-
-		// Add animations for hover effects
-		document.querySelectorAll('.card').forEach(card => {
-			card.addEventListener('mouseenter', function() {
-				this.classList.add('transform', '-translate-y-1');
-			});
-			
-			card.addEventListener('mouseleave', function() {
-				this.classList.remove('transform', '-translate-y-1');
-			});
-		});
 	</script>
 </body>
 </html>

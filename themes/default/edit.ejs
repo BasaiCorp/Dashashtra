@@ -7,7 +7,7 @@
 	<link rel="icon" type="image/png" href="<%= extra.faviconlink %>"/>
 	
 	<!-- Fonts and Icons -->
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	
 	<!-- Tailwind CSS -->
@@ -18,7 +18,7 @@
 			theme: {
 				extend: {
 					fontFamily: {
-						sans: ['Inter', 'sans-serif'],
+						sans: ['Poppins', 'sans-serif'],
 					},
 					colors: {
 						primary: {
@@ -43,12 +43,17 @@
 					},
 					animation: {
 						'fade-in': 'fadeIn 0.5s ease-in-out',
+						'slide-up': 'slideUp 0.5s ease-out',
 						'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
 					},
 					keyframes: {
 						fadeIn: {
 							'0%': { opacity: '0' },
 							'100%': { opacity: '1' },
+						},
+						slideUp: {
+							'0%': { transform: 'translateY(20px)', opacity: '0' },
+							'100%': { transform: 'translateY(0)', opacity: '1' },
 						}
 					}
 				}
@@ -60,58 +65,115 @@
 		body {
 			background-color: #0f172a;
 			color: #f1f5f9;
-			font-family: 'Inter', sans-serif;
+			font-family: 'Poppins', sans-serif;
 		}
+		
 		.navbar {
-			background-color: rgba(15, 23, 42, 0.7);
+			background-color: rgba(17, 24, 39, 0.8);
 			backdrop-filter: blur(10px);
-			border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+			border-bottom: 1px solid rgba(75, 85, 99, 0.2);
 		}
+		
 		.sidebar {
-			background-color: #1e293b;
-			border-right: 1px solid rgba(148, 163, 184, 0.1);
-			transition: all 0.3s ease;
+			background-color: #111827;
+			border-right: 1px solid rgba(75, 85, 99, 0.2);
 		}
+		
+		.main-content {
+			background-color: #0f172a;
+		}
+		
 		.card {
-			background-color: #1e293b;
-			border: 1px solid rgba(148, 163, 184, 0.1);
 			transition: all 0.3s ease;
 		}
+		
 		.card:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+			transform: translateY(-5px);
+			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 		}
-		.stat-card {
-			border: 1px solid rgba(148, 163, 184, 0.1);
-		}
+		
 		.gradient-border {
 			position: relative;
-			border-radius: 0.5rem;
-			z-index: 0;
+			border-radius: 0.75rem;
 			overflow: hidden;
-			padding: 1px;
 		}
+		
 		.gradient-border::before {
-			content: '';
+			content: "";
 			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			border-radius: 0.5rem;
-			padding: 2px;
-			background: linear-gradient(45deg, #0ea5e9, #8b5cf6, #ec4899);
+			inset: 0;
+			border-radius: 0.75rem;
+			padding: 1px;
+			background: linear-gradient(to right, #6366f1, #8b5cf6);
 			-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+			mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
 			-webkit-mask-composite: xor;
 			mask-composite: exclude;
-			z-index: -1;
+			pointer-events: none;
 		}
-		.main-content {
-			animation: fadeIn 0.5s ease-in-out;
+		
+		.progress-bar-fill {
+			height: 100%;
+			border-radius: 4px;
+			transition: width 0.5s ease;
 		}
-		@keyframes fadeIn {
-			0% { opacity: 0; }
-			100% { opacity: 1; }
+		
+		.progress-bar-fill.ram {
+			background: linear-gradient(to right, #6366f1, #8b5cf6);
+		}
+		
+		.progress-bar-fill.disk {
+			background: linear-gradient(to right, #10b981, #34d399);
+		}
+		
+		.progress-bar-fill.cpu {
+			background: linear-gradient(to right, #f59e0b, #fbbf24);
+		}
+		
+		.animate-fade-in {
+			animation: fadeIn 0.6s ease-out;
+		}
+		
+		.animate-slide-up {
+			animation: slideUp 0.6s ease-out;
+		}
+		
+		/* Custom scrollbar */
+		::-webkit-scrollbar {
+			width: 8px;
+			height: 8px;
+		}
+		
+		::-webkit-scrollbar-track {
+			background: #1e293b;
+		}
+		
+		::-webkit-scrollbar-thumb {
+			background: #3b82f6;
+			border-radius: 4px;
+		}
+		
+		::-webkit-scrollbar-thumb:hover {
+			background: #2563eb;
+		}
+		
+		.btn-primary {
+			background: linear-gradient(to right, #3b82f6, #2563eb);
+			border: none;
+			transition: all 0.3s ease;
+		}
+		
+		.btn-primary:hover {
+			background: linear-gradient(to right, #2563eb, #1d4ed8);
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+		}
+		
+		/* Mobile responsiveness */
+		@media (max-width: 640px) {
+			.stat-card {
+				padding: 1rem;
+			}
 		}
 		
 		/* Custom Scrollbar */

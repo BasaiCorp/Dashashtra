@@ -1,562 +1,280 @@
-
-
-
 <!DOCTYPE html>
-<html lang="en" >
-
+<html lang="en">
 <head>
-
-  <meta charset="UTF-8">
-  
-
-
-
-
-  <link rel="icon" type="image/png" href="<%= extra.faviconlink %>"/>
-  <title><%= extra.error.title %></title>
-  <% if (settings.api.arcio.enabled == true) { %>
-      <script async src="https://arc.io/widget.min.js#<%= settings.api.arcio.widgetid %>"></script>
-  <% } %>
-  
-  <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
-  
-  
-  
-<style>
-html,
-body {
-  height: 100%;
-  width: 100%;
-  margin: 0px;
-  background: linear-gradient(90deg, #2f3640 23%, #181b20 100%);
-}
-
-.moon {
-  background: linear-gradient(90deg, #d0d0d0 48%, #919191 100%);
-  position: absolute;
-  top: -100px;
-  left: -300px;
-  width: 900px;
-  height: 900px;
-  content: "";
-  border-radius: 100%;
-  box-shadow: 0px 0px 30px -4px rgba(0, 0, 0, 0.5);
-}
-
-.moon__crater {
-  position: absolute;
-  content: "";
-  border-radius: 100%;
-  background: linear-gradient(90deg, #7a7a7a 38%, #c3c3c3 100%);
-  opacity: 0.6;
-}
-
-.moon__crater1 {
-  top: 250px;
-  left: 500px;
-  width: 60px;
-  height: 180px;
-}
-
-.moon__crater2 {
-  top: 650px;
-  left: 340px;
-  width: 40px;
-  height: 80px;
-  transform: rotate(55deg);
-}
-
-.moon__crater3 {
-  top: -20px;
-  left: 40px;
-  width: 65px;
-  height: 120px;
-  transform: rotate(250deg);
-}
-
-.star {
-  background: grey;
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  content: "";
-  border-radius: 100%;
-  transform: rotate(250deg);
-  opacity: 0.4;
-  animation-name: shimmer;
-  animation-duration: 1.5s;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-}
-
-@keyframes shimmer {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 0.7;
-  }
-}
-.star1 {
-  top: 40%;
-  left: 50%;
-  animation-delay: 1s;
-}
-
-.star2 {
-  top: 60%;
-  left: 90%;
-  animation-delay: 3s;
-}
-
-.star3 {
-  top: 10%;
-  left: 70%;
-  animation-delay: 2s;
-}
-
-.star4 {
-  top: 90%;
-  left: 40%;
-}
-
-.star5 {
-  top: 20%;
-  left: 30%;
-  animation-delay: 0.5s;
-}
-
-.error {
-  position: absolute;
-  left: 100px;
-  top: 400px;
-  transform: translateY(-60%);
-  font-family: "Righteous", cursive;
-  color: #363e49;
-}
-
-.error__title {
-  font-size: 10em;
-}
-
-.error__subtitle {
-  font-size: 2em;
-}
-
-.error__description {
-  opacity: 0.5;
-}
-
-.error__button {
-  min-width: 7em;
-  margin-top: 3em;
-  margin-right: 0.5em;
-  padding: 0.5em 2em;
-  outline: none;
-  border: 2px solid #2f3640;
-  background-color: transparent;
-  border-radius: 8em;
-  color: #576375;
-  cursor: pointer;
-  transition-duration: 0.2s;
-  font-size: 0.75em;
-  font-family: "Righteous", cursive;
-}
-
-.error__button:hover {
-  color: #21252c;
-}
-
-.error__button--active {
-  background-color: #e67e22;
-  border: 2px solid #e67e22;
-  color: white;
-}
-
-.error__button--active:hover {
-  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.5);
-  color: white;
-}
-
-.astronaut {
-  position: absolute;
-  width: 185px;
-  height: 300px;
-  left: 70%;
-  top: 50%;
-  transform: translate(-50%, -50%) rotate(20deg) scale(1.2);
-}
-
-.astronaut__head {
-  background-color: white;
-  position: absolute;
-  top: 60px;
-  left: 60px;
-  width: 60px;
-  height: 60px;
-  content: "";
-  border-radius: 2em;
-}
-
-.astronaut__head-visor-flare1 {
-  background-color: #7f8fa6;
-  position: absolute;
-  top: 28px;
-  left: 40px;
-  width: 10px;
-  height: 10px;
-  content: "";
-  border-radius: 2em;
-  opacity: 0.5;
-}
-
-.astronaut__head-visor-flare2 {
-  background-color: #718093;
-  position: absolute;
-  top: 40px;
-  left: 38px;
-  width: 5px;
-  height: 5px;
-  content: "";
-  border-radius: 2em;
-  opacity: 0.3;
-}
-
-.astronaut__backpack {
-  background-color: #bfbfbf;
-  position: absolute;
-  top: 90px;
-  left: 47px;
-  width: 86px;
-  height: 90px;
-  content: "";
-  border-radius: 8px;
-}
-
-.astronaut__body {
-  background-color: #e6e6e6;
-  position: absolute;
-  top: 115px;
-  left: 55px;
-  width: 70px;
-  height: 80px;
-  content: "";
-  border-radius: 8px;
-}
-
-.astronaut__body__chest {
-  background-color: #d9d9d9;
-  position: absolute;
-  top: 140px;
-  left: 68px;
-  width: 45px;
-  height: 25px;
-  content: "";
-  border-radius: 6px;
-}
-
-.astronaut__arm-left1 {
-  background-color: #e6e6e6;
-  position: absolute;
-  top: 127px;
-  left: 9px;
-  width: 65px;
-  height: 20px;
-  content: "";
-  border-radius: 8px;
-  transform: rotate(-30deg);
-}
-
-.astronaut__arm-left2 {
-  background-color: #e6e6e6;
-  position: absolute;
-  top: 102px;
-  left: 7px;
-  width: 20px;
-  height: 45px;
-  content: "";
-  border-radius: 8px;
-  transform: rotate(-12deg);
-  border-top-left-radius: 8em;
-  border-top-right-radius: 8em;
-}
-
-.astronaut__arm-right1 {
-  background-color: #e6e6e6;
-  position: absolute;
-  top: 113px;
-  left: 100px;
-  width: 65px;
-  height: 20px;
-  content: "";
-  border-radius: 8px;
-  transform: rotate(-10deg);
-}
-
-.astronaut__arm-right2 {
-  background-color: #e6e6e6;
-  position: absolute;
-  top: 78px;
-  left: 141px;
-  width: 20px;
-  height: 45px;
-  content: "";
-  border-radius: 8px;
-  transform: rotate(-10deg);
-  border-top-left-radius: 8em;
-  border-top-right-radius: 8em;
-}
-
-.astronaut__arm-thumb-left {
-  background-color: #e6e6e6;
-  position: absolute;
-  top: 110px;
-  left: 21px;
-  width: 10px;
-  height: 6px;
-  content: "";
-  border-radius: 8em;
-  transform: rotate(-35deg);
-}
-
-.astronaut__arm-thumb-right {
-  background-color: #e6e6e6;
-  position: absolute;
-  top: 90px;
-  left: 133px;
-  width: 10px;
-  height: 6px;
-  content: "";
-  border-radius: 8em;
-  transform: rotate(20deg);
-}
-
-.astronaut__wrist-left {
-  background-color: #e67e22;
-  position: absolute;
-  top: 122px;
-  left: 6.5px;
-  width: 21px;
-  height: 4px;
-  content: "";
-  border-radius: 8em;
-  transform: rotate(-15deg);
-}
-
-.astronaut__wrist-right {
-  background-color: #e67e22;
-  position: absolute;
-  top: 98px;
-  left: 141px;
-  width: 21px;
-  height: 4px;
-  content: "";
-  border-radius: 8em;
-  transform: rotate(-10deg);
-}
-
-.astronaut__leg-left {
-  background-color: #e6e6e6;
-  position: absolute;
-  top: 188px;
-  left: 50px;
-  width: 23px;
-  height: 75px;
-  content: "";
-  transform: rotate(10deg);
-}
-
-.astronaut__leg-right {
-  background-color: #e6e6e6;
-  position: absolute;
-  top: 188px;
-  left: 108px;
-  width: 23px;
-  height: 75px;
-  content: "";
-  transform: rotate(-10deg);
-}
-
-.astronaut__foot-left {
-  background-color: white;
-  position: absolute;
-  top: 240px;
-  left: 43px;
-  width: 28px;
-  height: 20px;
-  content: "";
-  transform: rotate(10deg);
-  border-radius: 3px;
-  border-top-left-radius: 8em;
-  border-top-right-radius: 8em;
-  border-bottom: 4px solid #e67e22;
-}
-
-.astronaut__foot-right {
-  background-color: white;
-  position: absolute;
-  top: 240px;
-  left: 111px;
-  width: 28px;
-  height: 20px;
-  content: "";
-  transform: rotate(-10deg);
-  border-radius: 3px;
-  border-top-left-radius: 8em;
-  border-top-right-radius: 8em;
-  border-bottom: 4px solid #e67e22;
-}
-</style>
-
-  <script>
-  window.console = window.console || function(t) {};
-</script>
-
-  
-  
-  <script>
-  if (document.location.search.match(/type=embed/gi)) {
-    window.parent.postMessage("resize", "*");
-  }
-</script>
-
-
-</head>
-
-<body translate="no" >
-  <div class="moon"></div>
-<div class="moon__crater moon__crater1"></div>
-<div class="moon__crater moon__crater2"></div>
-<div class="moon__crater moon__crater3"></div>
-
-<div class="star star1"></div>
-<div class="star star2"></div>
-<div class="star star3"></div>
-<div class="star star4"></div>
-<div class="star star5"></div>
-
-<div class="error">
-  <div class="error__title">404</div>
-  <div class="error__subtitle">Hmmm...</div>
-  <div class="error__description">We've got lost. Shall we go back home now?</div>
-  <button class="error__button error__button--active" onclick="location.href='/dashboard';">Go Home</button>
-</div>
-
-<div class="astronaut">
-  <div class="astronaut__backpack"></div>
-  <div class="astronaut__body"></div>
-  <div class="astronaut__body__chest"></div>
-  <div class="astronaut__arm-left1"></div>
-  <div class="astronaut__arm-left2"></div>
-  <div class="astronaut__arm-right1"></div>
-  <div class="astronaut__arm-right2"></div>
-  <div class="astronaut__arm-thumb-left"></div>
-  <div class="astronaut__arm-thumb-right"></div>
-  <div class="astronaut__leg-left"></div>
-  <div class="astronaut__leg-right"></div>
-  <div class="astronaut__foot-left"></div>
-  <div class="astronaut__foot-right"></div>
-  <div class="astronaut__wrist-left"></div>
-  <div class="astronaut__wrist-right"></div>
-  
-  <div class="astronaut__cord">
-    <canvas id="cord" height="500px" width="500px"></canvas>
-  </div>
-  
-  <div class="astronaut__head">
-    <canvas id="visor" width="60px" height="60px"></canvas>
-    <div class="astronaut__head-visor-flare1"></div>
-    <div class="astronaut__head-visor-flare2"></div>
-  </div>
-</div>
-    <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-157cd5b220a5c80d4ff8e0e70ac069bffd87a61252088146915e8726e5d9f147.js"></script>
-
-  
-      <script id="rendered-js" >
-function drawVisor() {
-  const canvas = document.getElementById('visor');
-  const ctx = canvas.getContext('2d');
-
-  ctx.beginPath();
-  ctx.moveTo(5, 45);
-  ctx.bezierCurveTo(15, 64, 45, 64, 55, 45);
-
-  ctx.lineTo(55, 20);
-  ctx.bezierCurveTo(55, 15, 50, 10, 45, 10);
-
-  ctx.lineTo(15, 10);
-
-  ctx.bezierCurveTo(15, 10, 5, 10, 5, 20);
-  ctx.lineTo(5, 45);
-
-  ctx.fillStyle = '#2f3640';
-  ctx.strokeStyle = '#f5f6fa';
-  ctx.fill();
-  ctx.stroke();
-}
-
-const cordCanvas = document.getElementById('cord');
-const ctx = cordCanvas.getContext('2d');
-
-let y1 = 160;
-let y2 = 100;
-let y3 = 100;
-
-let y1Forward = true;
-let y2Forward = false;
-let y3Forward = true;
-
-function animate() {
-  requestAnimationFrame(animate);
-  ctx.clearRect(0, 0, innerWidth, innerHeight);
-
-  ctx.beginPath();
-  ctx.moveTo(130, 170);
-  ctx.bezierCurveTo(250, y1, 345, y2, 400, y3);
-
-  ctx.strokeStyle = 'white';
-  ctx.lineWidth = 8;
-  ctx.stroke();
-
-
-  if (y1 === 100) {
-    y1Forward = true;
-  }
-
-  if (y1 === 300) {
-    y1Forward = false;
-  }
-
-  if (y2 === 100) {
-    y2Forward = true;
-  }
-
-  if (y2 === 310) {
-    y2Forward = false;
-  }
-
-  if (y3 === 100) {
-    y3Forward = true;
-  }
-
-  if (y3 === 317) {
-    y3Forward = false;
-  }
-
-  y1Forward ? y1 += 1 : y1 -= 1;
-  y2Forward ? y2 += 1 : y2 -= 1;
-  y3Forward ? y3 += 1 : y3 -= 1;
-}
-
-drawVisor();
-animate();
-//# sourceURL=pen.js
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | Flaxy Nodes</title>
+    <link rel="icon" type="image/png" href="<%= extra.faviconlink %>"/>
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                            950: '#1e1b4b',
+                        },
+                        dark: {
+                            base: '#0f0f12',
+                            light: '#1a1a21',
+                            lighter: '#24242e',
+                            card: '#1a1a21'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slow': 'bounce 3s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulse: {
+                            '0%, 100%': { opacity: 1 },
+                            '50%': { opacity: .5 },
+                        },
+                        bounce: {
+                            '0%, 100%': { transform: 'translateY(-25%)', animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)' },
+                            '50%': { transform: 'translateY(0)', animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)' },
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 15px rgba(99, 102, 241, 0.5)',
+                        'card': '0 8px 24px rgba(0, 0, 0, 0.12)',
+                    }
+                }
+            }
+        }
     </script>
+    
+    <style>
+        body {
+            background-color: #0f0f12;
+            color: #f5f5f7;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .glass-card {
+            background: rgba(26, 26, 31, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: #6366f1;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            background-color: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+        
+        .gradient-border {
+            position: relative;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+        
+        .gradient-border::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 0.75rem;
+            padding: 1px;
+            background: linear-gradient(to right, #6366f1, #8b5cf6);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
 
-  
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 4s ease-in-out infinite;
+        }
 
+        @keyframes particle-float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-20px) translateX(10px); }
+        }
+
+        .logo-container {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 10;
+        }
+
+        .logo-container img {
+            height: 2.5rem;
+            width: auto;
+            filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.3));
+        }
+
+        .logo-container span {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(to right, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+    <!-- Logo -->
+    <div class="logo-container">
+        <img src="/assets/img/FlaxyNodes_logo.gif" alt="Flaxy Nodes Logo" class="animate-float">
+        <span>Flaxy Nodes</span>
+    </div>
+
+    <!-- Background Particles -->
+    <div id="particles"></div>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="glass-card rounded-2xl p-8 max-w-2xl mx-auto text-center animate-fade-in relative overflow-hidden">
+            <!-- Decorative Elements -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-purple-500"></div>
+            <div class="absolute top-0 right-0 w-32 h-32 bg-primary-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl"></div>
+
+            <div class="mb-8 relative">
+                <div class="w-32 h-32 mx-auto mb-6 rounded-full bg-primary-500/10 flex items-center justify-center animate-float relative">
+                    <div class="absolute inset-0 rounded-full bg-primary-500/20 animate-pulse-slow"></div>
+                    <i class="fas fa-exclamation-triangle text-primary-500 text-5xl animate-bounce-slow"></i>
+                </div>
+                <h1 class="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-purple-500 mb-4">404</h1>
+                <h2 class="text-2xl font-semibold text-gray-300 mb-4">Oops! Page Not Found</h2>
+                <p class="text-gray-400 mb-8 max-w-md mx-auto">The page you're looking for seems to have vanished into thin air. Let's get you back on track!</p>
+            </div>
+            
+            <div class="space-y-4">
+                <a href="/" class="btn-primary text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center w-full group">
+                    <i class="fas fa-home mr-2 group-hover:scale-110 transition-transform"></i>
+                    Return to Home
+                </a>
+                <a href="/dashboard" class="btn-primary text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center w-full group">
+                    <i class="fas fa-tachometer-alt mr-2 group-hover:scale-110 transition-transform"></i>
+                    Go to Dashboard
+                </a>
+            </div>
+            
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <p class="text-sm text-gray-500">
+                    Need help? <a href="/support" class="text-primary-400 hover:text-primary-300 transition-colors">Contact Support</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Initialize particles
+        createParticles();
+
+        // Add mouse move effect
+        document.addEventListener('mousemove', (e) => {
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach(particle => {
+                const speed = 0.5;
+                const x = (window.innerWidth - e.pageX * speed) / 100;
+                const y = (window.innerHeight - e.pageY * speed) / 100;
+                particle.style.transform = `translateX(${x}px) translateY(${y}px)`;
+            });
+        });
+    </script>
 </body>
-
 </html>
  
 
