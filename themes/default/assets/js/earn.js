@@ -12,14 +12,278 @@ let timeRemaining = 300; // 5 minutes in seconds
 let totalCredits = 0;
 let sessionActive = true;
 let userBalance = 0;
+let totalAfkTime = 0; // Track total AFK time in seconds
+let lastTimerUpdate = Date.now();
+let reconnectAttempts = 0;
+let statsUpdateInterval = null;
 
-// Initialize the AFK timer
+// Global variables for AFK timer
+let timerInterval = null;
+let isTimerRunning = false;
+
+/**
+ * Initialize the AFK timer with the progress ring
+ */
 function initAFKTimer() {
-    // Get initial balance
-    fetchUserBalance();
+    console.log('Initializing AFK timer');
     
-    updateTimer();
-    afkTimer = setInterval(updateTimer, 1000);
+    // Make sure we have the timer element
+    const timerElement = document.getElementById('timer');
+    if (!timerElement) {
+        console.error('Timer element not found!');
+        return;
+    }
+    
+    // Reset timer state
+    timeRemaining = 300; // 5 minutes in seconds
+    updateTimerDisplay(timeRemaining);
+    
+    // Make sure progress ring is found
+    const progressRing = document.getElementById('progress-ring-circle');
+    if (!progressRing) {
+        console.error('Progress ring element not found!');
+    } else {
+        // Initialize progress ring to full circle (no progress)
+        progressRing.style.strokeDashoffset = '0';
+    }
+    
+    // Start the timer if not already running
+    if (!isTimerRunning) {
+        startAFKTimer();
+    }
+}
+
+/**
+ * Start the AFK timer countdown
+ */
+function startAFKTimer() {
+    console.log('Starting AFK timer');
+    
+    // Clear any existing interval
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+    
+    isTimerRunning = true;
+    
+    // Update timer every second
+    timerInterval = setInterval(() => {
+        // Decrement time remaining
+        timeRemaining--;
+        
+        // Update the display
+        updateTimerDisplay(timeRemaining);
+        
+        // Check if timer has reached zero
+        if (timeRemaining <= 0) {
+            console.log('Timer completed!');
+            claimAFKReward();
+            timeRemaining = 300; // Reset to 5 minutes
+        }
+    }, 1000);
+}
+
+/**
+ * Update the timer display and progress ring
+ * @param {number} seconds - Seconds remaining
+ */
+function updateTimerDisplay(seconds) {
+    // Get timer element
+    const timerElement = document.getElementById('timer');
+    if (!timerElement) {
+        console.error('Timer element not found when updating!');
+        return;
+    }
+    
+    // Calculate minutes and seconds
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    
+    // Format as MM:SS
+    timerElement.textContent = `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    
+    // Update progress ring if it exists
+    const progressRing = document.getElementById('progress-ring-circle');
+    if (progressRing) {
+        // Calculate progress percentage (inverted: 0% = full circle, 100% = empty)
+        const progress = 1 - (seconds / 300);
+        
+        // Convert to stroke-dashoffset (251.2 is the circumference of the circle)
+        // 0 = full circle, 251.2 = empty circle
+        const offset = progress * 251.2;
+        progressRing.style.strokeDashoffset = offset;
+    }
+}
+
+/**
+ * Claim AFK reward when timer completes
+ */
+async function claimAFKReward() {
+    try {
+        console.log('Claiming AFK reward');
+        
+        // Show loading state
+        const timerElement = document.getElementById('timer');
+        if (timerElement) {
+            timerElement.textContent = 'Claiming...';
+        }
+        
+        // Send request to claim reward
+        const response = await fetch('/api/earn/afk', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const data = await response.json();
+        console.log('Claim response:', data);
+        
+        if (data.success) {
+            // Update balance display
+            const balanceElement = document.getElementById('afk-balance');
+            if (balanceElement && data.balance !== undefined) {
+                balanceElement.textContent = data.balance;
+            }
+            
+            // Show success notification
+            showNotification('success', `You earned ${data.credits} credits!`);
+            
+            // Reset and restart timer
+            timeRemaining = 300;
+            updateTimerDisplay(timeRemaining);
+            
+            // Update AFK stats
+            fetchAfkStats();
+        } else {
+            // Show error notification
+            let errorMessage = data.error || 'Failed to claim reward';
+            showNotification('error', errorMessage);
+            
+            // If there's a specific time remaining, update the timer
+            if (data.timeRemaining) {
+                const secondsRemaining = Math.ceil(data.timeRemaining / 1000);
+                timeRemaining = secondsRemaining;
+                updateTimerDisplay(timeRemaining);
+            }
+        }
+    } catch (error) {
+        console.error('Error claiming AFK reward:', error);
+        showNotification('error', 'Error claiming reward. Please try again.');
+        
+        // Reset timer
+        timeRemaining = 300;
+        updateTimerDisplay(timeRemaining);
+    }
+}
+
+// Handle tab visibility changes
+function handleVisibilityChange() {
+    if (document.hidden) {
+        sessionActive = false;
+        // Use the local notification function if it exists
+        if (typeof showLocalNotification === 'function') {
+            showLocalNotification('AFK earnings paused - tab not active', 'warning');
+        } else if (typeof showNotification === 'function') {
+            showNotification('warning', 'AFK earnings paused - tab not active');
+        }
+    } else {
+        sessionActive = true;
+        lastTimerUpdate = Date.now(); // Reset timer reference point
+        if (typeof showLocalNotification === 'function') {
+            showLocalNotification('AFK earnings resumed', 'info');
+        } else if (typeof showNotification === 'function') {
+            showNotification('info', 'AFK earnings resumed');
+        }
+    }
+}
+
+// Attempt to reconnect websocket if connection fails
+function setupWebSocketReconnect() {
+    // If the server implements a websocket connection, this will help reconnect
+    window.addEventListener('online', () => {
+        if (reconnectAttempts < 5) {
+            reconnectAttempts++;
+            showNotification('Info', 'Network connection restored, reconnecting...');
+            fetchUserBalance();
+            updateAfkStats();
+        }
+    });
+}
+
+// Update AFK statistics display
+function updateAfkStats() {
+    const totalTimeElement = document.getElementById('total-afk-time');
+    if (totalTimeElement) {
+        totalTimeElement.textContent = formatTime(totalAfkTime);
+    }
+    
+    const sessionsElement = document.getElementById('total-sessions');
+    if (sessionsElement) {
+        // Get session count from localStorage or default to 1
+        const sessionCount = parseInt(localStorage.getItem('afkSessionCount') || '1');
+        sessionsElement.textContent = sessionCount;
+    }
+    
+    const creditsEarnedElement = document.getElementById('total-credits');
+    if (creditsEarnedElement) {
+        creditsEarnedElement.textContent = totalCredits;
+    }
+    
+    // Save AFK session data to localStorage for persistence
+    saveAfkSessionData();
+}
+
+// Save AFK session data to localStorage
+function saveAfkSessionData() {
+    try {
+        localStorage.setItem('afkTotalTime', totalAfkTime.toString());
+        localStorage.setItem('afkTotalCredits', totalCredits.toString());
+        
+        // Increment session count if not already counted
+        if (!localStorage.getItem('afkSessionToday')) {
+            const today = new Date().toDateString();
+            localStorage.setItem('afkSessionToday', today);
+            
+            const sessionCount = parseInt(localStorage.getItem('afkSessionCount') || '0') + 1;
+            localStorage.setItem('afkSessionCount', sessionCount.toString());
+        }
+    } catch (error) {
+        console.error('Error saving AFK session data:', error);
+    }
+}
+
+// Load AFK session data from localStorage
+function loadAfkSessionData() {
+    try {
+        const savedTotalTime = localStorage.getItem('afkTotalTime');
+        if (savedTotalTime) {
+            totalAfkTime = parseInt(savedTotalTime);
+        }
+        
+        const savedTotalCredits = localStorage.getItem('afkTotalCredits');
+        if (savedTotalCredits) {
+            totalCredits = parseInt(savedTotalCredits);
+        }
+        
+        // Check if session is from a different day
+        const today = new Date().toDateString();
+        const savedDate = localStorage.getItem('afkSessionToday');
+        if (savedDate !== today) {
+            localStorage.setItem('afkSessionToday', today);
+        }
+        
+        updateAfkStats();
+    } catch (error) {
+        console.error('Error loading AFK session data:', error);
+    }
+}
+
+// Format time in HH:MM:SS
+function formatTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
 // Fetch user's current balance
@@ -80,7 +344,6 @@ function updateBalanceDisplay() {
     const balanceElements = document.querySelectorAll('.user-balance');
     balanceElements.forEach(element => {
         element.textContent = userBalance;
-        console.log('Updated element:', element);
     });
     
     // Also update any balance display in the navbar if it exists
@@ -99,220 +362,75 @@ function updateBalanceDisplay() {
     const headerBalance = document.querySelector('.glass-card .text-primary-400');
     if (headerBalance) {
         headerBalance.textContent = userBalance;
-        console.log('Updated header balance element');
     }
     
-    // Log balance update to console for debugging
-    console.log(`Updated balance display: ${userBalance} credits`);
+    // Update the AFK page balance display if present
+    const afkBalanceElement = document.getElementById('afk-balance');
+    if (afkBalanceElement) {
+        afkBalanceElement.textContent = userBalance;
+    }
 }
 
-// Update the timer display
-function updateTimer() {
-    if (!sessionActive) return;
+/**
+ * Show notification to the user
+ * @param {string} type - Type of notification (success, error, warning, info)
+ * @param {string} message - Message to display
+ */
+function showNotification(type, message) {
+    console.log(`Showing ${type} notification:`, message);
     
-    if (timeRemaining > 0) {
-        timeRemaining--;
-        const minutes = Math.floor(timeRemaining / 60);
-        const seconds = timeRemaining % 60;
-        document.getElementById('timer').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        
-        // Update progress ring
-        const progress = ((300 - timeRemaining) / 300) * 100;
-        const progressRing = document.getElementById('progress-ring-circle');
-        if (progressRing) {
-            progressRing.style.strokeDashoffset = (251.2 * (100 - progress)) / 100;
-        }
-    } else {
-        claimAFKReward();
+    // If the AFK page's showLocalNotification function exists, use that instead
+    if (typeof showLocalNotification === 'function') {
+        showLocalNotification(message, type);
+        return;
     }
-}
-
-// Claim AFK reward
-async function claimAFKReward() {
-    try {
-        const response = await fetch('/api/earn/afk', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            totalCredits += data.credits;
-            
-            // Update balance in memory and UI
-            userBalance = data.balance;
-            updateBalanceDisplay();
-            
-            // Update total credits display
-            const totalCreditsElement = document.getElementById('total-credits');
-            if (totalCreditsElement) {
-                totalCreditsElement.textContent = totalCredits;
-            }
-            
-            // Reset timer
-            timeRemaining = 300;
-            
-            // Refresh balance from server to ensure consistency
-            setTimeout(() => {
-                fetchUserBalance();
-            }, 1000);
-            
-            // Show success notification
-            showNotification('Success', `Earned ${data.credits} credits! Your new balance is ${data.balance} credits.`);
-        } else {
-            showNotification('Error', data.error);
-            if (data.timeRemaining) {
-                timeRemaining = Math.ceil(data.timeRemaining / 1000);
-            }
-        }
-    } catch (error) {
-        console.error('Error claiming AFK reward:', error);
-        showNotification('Error', 'Failed to claim reward');
-    }
-}
-
-// Claim daily reward
-async function claimDailyReward() {
-    try {
-        const timestamp = new Date().getTime();
-        console.log(`[${timestamp}] Attempting to claim daily reward...`);
-        
-        document.getElementById('daily-btn').disabled = true;
-        document.getElementById('daily-btn').textContent = 'Claiming...';
-        
-        // Add timestamp to avoid caching
-        const response = await fetch(`/daily?t=${timestamp}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify({ timestamp }),
-            credentials: 'same-origin'
-        });
-        
-        console.log(`Response status: ${response.status}`);
-        const responseData = await response.text();
-        console.log(`Response data: ${responseData}`);
-        
-        try {
-            const data = JSON.parse(responseData);
-            console.log('Parsed response:', data);
-            
-            if (data.success) {
-                console.log(`Claimed ${data.credits} credits. New balance: ${data.balance}`);
-                
-                // Update all balance displays
-                updateAllBalanceDisplays(data.balance);
-                
-                // Disable the button and update text
-                document.getElementById('daily-btn').disabled = true;
-                document.getElementById('daily-btn').textContent = 'Claimed!';
-                document.getElementById('daily-btn').classList.add('claimed');
-                
-                // Show success notification
-                showNotification(data.message || `You earned ${data.credits} coins!`, 'success');
-                
-                // Refresh the page after a delay
-                setTimeout(() => {
-                    window.location.reload();
-                }, 3000);
-            } else {
-                console.error('Error claiming reward:', data.error);
-                document.getElementById('daily-btn').disabled = false;
-                document.getElementById('daily-btn').textContent = 'Claim Reward';
-                
-                // Show error notification
-                if (data.timeRemaining) {
-                    const hours = Math.ceil(data.timeRemaining / 3600000);
-                    showNotification(`You can claim again in ${hours} hours.`, 'warning');
-                } else {
-                    showNotification(data.error || 'Failed to claim reward', 'error');
-                }
-            }
-        } catch (jsonError) {
-            console.error('JSON parse error:', jsonError, responseData);
-            document.getElementById('daily-btn').disabled = false;
-            document.getElementById('daily-btn').textContent = 'Claim Reward';
-            showNotification('Server error. Please try again.', 'error');
-        }
-    } catch (error) {
-        console.error('Claim error:', error);
-        document.getElementById('daily-btn').disabled = false;
-        document.getElementById('daily-btn').textContent = 'Claim Reward';
-        showNotification('Network error. Please try again.', 'error');
-    }
-}
-
-// Copy referral link
-function copyReferralLink() {
-    const referralLink = document.getElementById('referral-link').value;
-    navigator.clipboard.writeText(referralLink)
-        .then(() => showNotification('Success', 'Referral link copied!'))
-        .catch(() => showNotification('Error', 'Failed to copy referral link'));
-}
-
-// Update leaderboard
-async function updateLeaderboard() {
-    try {
-        const response = await fetch('/api/earn/leaderboard');
-        const data = await response.json();
-        
-        if (data.success) {
-            const leaderboardBody = document.getElementById('leaderboard-body');
-            if (leaderboardBody) {
-                leaderboardBody.innerHTML = '';
-                
-                data.users.forEach((user, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="px-4 py-2">${index + 1}</td>
-                        <td class="px-4 py-2">${user.username}</td>
-                        <td class="px-4 py-2">${user.timeActive}</td>
-                        <td class="px-4 py-2">${user.credits}</td>
-                    `;
-                    leaderboardBody.appendChild(row);
-                });
-            }
-        }
-    } catch (error) {
-        console.error('Error updating leaderboard:', error);
-    }
-}
-
-// Function to show a notification
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
     
-    // Add notification to the page
-    document.body.appendChild(notification);
+    // Get notification elements
+    const notification = document.getElementById('notification');
+    const notificationText = document.getElementById('notification-text');
+    const notificationIcon = document.getElementById('notification-icon');
     
-    // Show notification with animation
+    if (!notification || !notificationText || !notificationIcon) {
+        console.error('Notification elements not found!');
+        return;
+    }
+    
+    // Set notification text
+    notificationText.textContent = message;
+    
+    // Clear any existing classes
+    notificationIcon.className = 'fas';
+    notification.className = 'fixed bottom-4 right-4 max-w-md p-4 rounded-lg shadow-lg transform transition-all duration-500 z-50';
+    
+    // Add appropriate classes based on type
+    switch (type) {
+        case 'success':
+            notification.classList.add('bg-green-800', 'text-white');
+            notificationIcon.classList.add('fa-check-circle', 'text-green-400');
+            break;
+        case 'error':
+            notification.classList.add('bg-red-800', 'text-white');
+            notificationIcon.classList.add('fa-exclamation-circle', 'text-red-400');
+            break;
+        case 'warning':
+            notification.classList.add('bg-yellow-800', 'text-white');
+            notificationIcon.classList.add('fa-exclamation-triangle', 'text-yellow-400');
+            break;
+        case 'info':
+        default:
+            notification.classList.add('bg-blue-800', 'text-white');
+            notificationIcon.classList.add('fa-info-circle', 'text-blue-400');
+            break;
+    }
+    
+    // Show notification
+    notification.classList.remove('translate-y-20', 'opacity-0');
+    
+    // Hide notification after 5 seconds
     setTimeout(() => {
-        notification.classList.add('show');
-    }, 10);
-    
-    // Remove notification after 5 seconds
-    setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-            notification.remove();
-        }, 500);
+        notification.classList.add('translate-y-20', 'opacity-0');
     }, 5000);
 }
-
-// Handle visibility change
-document.addEventListener('visibilitychange', () => {
-    sessionActive = !document.hidden;
-    if (document.hidden) {
-        showNotification('Warning', 'AFK earnings paused - tab not active');
-    } else {
-        showNotification('Info', 'AFK earnings resumed');
-    }
-});
 
 // Check if daily reward is available
 async function checkDailyRewardStatus() {
@@ -431,21 +549,82 @@ function updateAllBalanceDisplays(balance) {
     console.log(`Updated ${balanceElements.length} balance display elements to ${balance}`);
 }
 
-// Initialize on page load
-window.addEventListener('load', () => {
-    initAFKTimer();
-    updateLeaderboard();
-    setInterval(updateLeaderboard, 60000); // Update leaderboard every minute
+// Initialize when the DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, checking for AFK timer');
     
-    // Add event listener for daily reward button
+    // Load saved session data if the function exists
+    if (typeof loadAfkSessionData === 'function') {
+        loadAfkSessionData();
+    }
+    
+    // Set up tab visibility detection
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    // Check daily reward status
+    checkDailyRewardStatus();
+    
+    // Set up event listeners for UI elements
     const dailyBtn = document.getElementById('daily-btn');
     if (dailyBtn) {
         dailyBtn.addEventListener('click', claimDailyReward);
     }
     
-    // Check daily reward status on page load
-    checkDailyRewardStatus();
+    const copyBtn = document.getElementById('copy-btn');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', copyReferralLink);
+    }
     
-    // Fetch referrals
-    fetchReferrals();
+    // Make dropdown menu togglable
+    const dropdownBtn = document.getElementById('dropdownBtn');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    if (dropdownBtn && dropdownMenu) {
+        dropdownBtn.addEventListener('click', function() {
+            dropdownMenu.classList.toggle('hidden');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.add('hidden');
+            }
+        });
+    }
+    
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const mobileSearch = document.getElementById('mobileSearch');
+    if (mobileMenuBtn && sidebar) {
+        mobileMenuBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('-translate-x-full');
+            if (mobileSearch) {
+                mobileSearch.classList.add('hidden');
+            }
+        });
+    }
+    
+    // Toggle sidebar on mobile
+    const toggleSidebarBtn = document.getElementById('toggleSidebar');
+    if (toggleSidebarBtn && sidebar) {
+        toggleSidebarBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+    }
+    
+    // Process page-specific initialization
+    if (window.location.pathname === '/earn') {
+        fetchReferrals();
+        updateLeaderboard();
+    }
+});
+
+// Clean up when the page is unloaded
+window.addEventListener('beforeunload', function() {
+    // Save AFK session data
+    saveAfkSessionData();
+    
+    // Clear intervals
+    if (timerInterval) clearInterval(timerInterval);
+    if (statsUpdateInterval) clearInterval(statsUpdateInterval);
 });

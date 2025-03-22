@@ -330,7 +330,7 @@
                             <div class="flex justify-between items-center">
                                 <div>
                                     <h3 class="text-lg font-medium text-gray-300">Your Balance</h3>
-                                    <p class="text-2xl font-bold text-white"><span class="user-balance"><%= userinfo?.coins || 0 %></span> credits</p>
+                                    <p class="text-2xl font-bold text-white"><span id="afk-balance" class="user-balance"><%= userinfo?.coins || 0 %></span> credits</p>
                                 </div>
                                 <div class="w-12 h-12 bg-primary-500/10 rounded-full flex items-center justify-center">
                                     <i class="fas fa-coins text-primary-400 text-xl"></i>
@@ -371,15 +371,15 @@
                         <div class="space-y-3">
                             <div class="flex justify-between">
                                 <span class="text-gray-400">Total AFK time:</span>
-                                <span id="total-time">0 minutes</span>
+                                <span id="total-afk-time"><% if (locals.afkStats && afkStats.timeActive) { %><%= Math.floor(afkStats.timeActive / 3600) %>:<%= Math.floor((afkStats.timeActive % 3600) / 60).toString().padStart(2, '0') %>:<%= (afkStats.timeActive % 60).toString().padStart(2, '0') %><% } else { %>00:00:00<% } %></span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-400">Total earnings:</span>
-                                <span id="total-earnings">0 credits</span>
+                                <span id="total-earnings"><% if (locals.afkStats && afkStats.totalEarned) { %><%= afkStats.totalEarned %> credits<% } else { %>0 credits<% } %></span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-400">Longest session:</span>
-                                <span id="longest-session">0 minutes</span>
+                                <span class="text-gray-400">Sessions today:</span>
+                                <span id="total-sessions"><% if (locals.afkStats && afkStats.sessionsToday) { %><%= afkStats.sessionsToday %><% } else { %>1<% } %></span>
                             </div>
                         </div>
                     </div>
@@ -470,7 +470,12 @@
     
     <!-- Scripts -->
     <script>
-        // Timer functionality
+        // Variables for timer
+        let timeLeft = 300; // 5 minutes in seconds
+        let earnings = 0;
+        let timerInterval;
+        
+        // Get HTML elements
         const progressRing = document.getElementById('progress-ring-circle');
         const timerDisplay = document.getElementById('timer');
         const earningsDisplay = document.getElementById('total-credits');
@@ -489,11 +494,6 @@
             progressRing.style.strokeDashoffset = offset;
         }
         
-        // Variables for timer
-        let timeLeft = 300; // 5 minutes in seconds
-        let earnings = 0;
-        let timerInterval;
-        
         // Function to format time as mm:ss
         function formatTime(seconds) {
             const minutes = Math.floor(seconds / 60);
@@ -504,15 +504,9 @@
         // Function to update the timer
         function updateTimer() {
             if (timeLeft <= 0) {
-                // Reset timer
-                timeLeft = 300;
-                
-                // Add credits
-                earnings += 15;
-                earningsDisplay.textContent = earnings;
-                
-                // Show notification
-                showNotification('Earned 15 credits! Keep the page open to earn more.');
+                // Claim reward through earn.js function
+                claimAFKReward();
+                return;
             }
             
             // Update timer display
@@ -526,15 +520,215 @@
             timeLeft--;
         }
         
-        // Function to show notification
-        function showNotification(message) {
-            // Create notification element (you can implement this however you prefer)
-            console.log(message);
+        // Create a notification container if it doesn't exist
+        function createNotificationContainer() {
+            // Only create if it doesn't already exist
+            if (!document.getElementById('notification')) {
+                const notificationDiv = document.createElement('div');
+                notificationDiv.id = 'notification';
+                notificationDiv.className = 'fixed bottom-4 right-4 max-w-md p-4 rounded-lg shadow-lg transform transition-all duration-500 translate-y-20 opacity-0 z-50';
+                
+                const flexDiv = document.createElement('div');
+                flexDiv.className = 'flex items-center';
+                
+                const iconDiv = document.createElement('div');
+                iconDiv.id = 'notification-icon';
+                iconDiv.className = 'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mr-3';
+                
+                const iconElement = document.createElement('i');
+                iconElement.className = 'fas';
+                iconDiv.appendChild(iconElement);
+                
+                const textDiv = document.createElement('div');
+                textDiv.className = 'flex-grow';
+                
+                const text = document.createElement('p');
+                text.id = 'notification-text';
+                text.className = 'font-medium';
+                textDiv.appendChild(text);
+                
+                const closeButton = document.createElement('button');
+                closeButton.className = 'ml-4 text-gray-400 hover:text-white';
+                closeButton.onclick = hideNotification;
+                
+                const closeIcon = document.createElement('i');
+                closeIcon.className = 'fas fa-times';
+                closeButton.appendChild(closeIcon);
+                
+                flexDiv.appendChild(iconDiv);
+                flexDiv.appendChild(textDiv);
+                flexDiv.appendChild(closeButton);
+                
+                notificationDiv.appendChild(flexDiv);
+                document.body.appendChild(notificationDiv);
+            }
         }
         
-        // Start the timer
-        timerInterval = setInterval(updateTimer, 1000);
-        updateTimer();
+        // Function to hide notification
+        function hideNotification() {
+            const notification = document.getElementById('notification');
+            if (notification) {
+                notification.classList.add('translate-y-20', 'opacity-0');
+            }
+        }
+        
+        // Function to show notification (simplified version)
+        function showLocalNotification(message, type = 'info') {
+            createNotificationContainer();
+            
+            // Get notification elements
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            const notificationIcon = document.getElementById('notification-icon');
+            
+            if (!notification || !notificationText || !notificationIcon) {
+                console.error('Notification elements not found!');
+                return;
+            }
+            
+            // Set notification text
+            notificationText.textContent = message;
+            
+            // Clear any existing classes
+            notificationIcon.className = 'fas';
+            notification.className = 'fixed bottom-4 right-4 max-w-md p-4 rounded-lg shadow-lg transform transition-all duration-500 z-50';
+            
+            // Add appropriate classes based on type
+            switch (type) {
+                case 'success':
+                    notification.classList.add('bg-green-800', 'text-white');
+                    notificationIcon.classList.add('fa-check-circle', 'text-green-400');
+                    break;
+                case 'error':
+                    notification.classList.add('bg-red-800', 'text-white');
+                    notificationIcon.classList.add('fa-exclamation-circle', 'text-red-400');
+                    break;
+                case 'warning':
+                    notification.classList.add('bg-yellow-800', 'text-white');
+                    notificationIcon.classList.add('fa-exclamation-triangle', 'text-yellow-400');
+                    break;
+                case 'info':
+                default:
+                    notification.classList.add('bg-blue-800', 'text-white');
+                    notificationIcon.classList.add('fa-info-circle', 'text-blue-400');
+                    break;
+            }
+            
+            // Show notification
+            notification.classList.remove('translate-y-20', 'opacity-0');
+            
+            // Hide notification after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-y-20', 'opacity-0');
+            }, 5000);
+        }
+        
+        // Function to claim reward (connects to earn.js function)
+        async function claimAFKReward() {
+            try {
+                // Show loading state
+                timerDisplay.textContent = 'Claiming...';
+                
+                // Call API to claim reward
+                const response = await fetch('/api/earn/afk', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update balance display
+                    const balanceElement = document.querySelector('.user-balance');
+                    if (balanceElement && data.balance !== undefined) {
+                        balanceElement.textContent = data.balance;
+                    }
+                    
+                    // Update earnings
+                    earnings += data.credits;
+                    earningsDisplay.textContent = earnings;
+                    
+                    // Show success notification
+                    showLocalNotification(`You earned ${data.credits} credits!`, 'success');
+                    
+                    // Reset timer to 5 minutes
+                    timeLeft = 300;
+                    
+                    // Update total earnings in stats section if exists
+                    const totalEarningsElement = document.getElementById('total-earnings');
+                    if (totalEarningsElement && data.stats && data.stats.totalEarned) {
+                        totalEarningsElement.textContent = `${data.stats.totalEarned} credits`;
+                    }
+                    
+                    // Update total time in stats section if exists
+                    const totalTimeElement = document.getElementById('total-time');
+                    if (totalTimeElement && data.stats && data.stats.timeActive) {
+                        const hours = Math.floor(data.stats.timeActive / 3600);
+                        const minutes = Math.floor((data.stats.timeActive % 3600) / 60);
+                        const seconds = data.stats.timeActive % 60;
+                        totalTimeElement.textContent = `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                    }
+                } else {
+                    // Show error notification
+                    let errorMessage = data.error || 'Failed to claim reward';
+                    showLocalNotification(errorMessage, 'error');
+                    
+                    // If there's a specific time remaining, update the timer
+                    if (data.timeRemaining) {
+                        const secondsRemaining = Math.ceil(data.timeRemaining / 1000);
+                        timeLeft = secondsRemaining;
+                    } else {
+                        // Default to 5 minutes if no specific time is provided
+                        timeLeft = 300;
+                    }
+                }
+            } catch (error) {
+                console.error('Error claiming AFK reward:', error);
+                showLocalNotification('Error claiming reward. Please try again.', 'error');
+                
+                // Reset timer to 5 minutes
+                timeLeft = 300;
+            }
+        }
+        
+        // Create a ping function to keep the session active
+        async function pingServer() {
+            try {
+                await fetch('/api/earn/afk/ping', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                console.log('Ping sent to server');
+            } catch (error) {
+                console.error('Error pinging server:', error);
+            }
+        }
+        
+        // Start the timer when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create notification container
+            createNotificationContainer();
+            
+            // Start timer
+            timerInterval = setInterval(updateTimer, 1000);
+            updateTimer();
+            
+            // Setup ping every 30 seconds
+            setInterval(pingServer, 30000);
+            
+            // Initial ping
+            pingServer();
+            
+            // Show welcome notification
+            setTimeout(() => {
+                showLocalNotification('Keep this page open to earn credits every 5 minutes!', 'info');
+            }, 1000);
+        });
+        
+        // Clean up on page unload
+        window.addEventListener('beforeunload', function() {
+            clearInterval(timerInterval);
+        });
         
         // Mobile sidebar toggle
         const toggleSidebarBtn = document.getElementById('toggleSidebar');
