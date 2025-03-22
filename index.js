@@ -436,10 +436,16 @@ app.get('/dashboard', async (req, res) => {
 const adminRoutes = require('./api/admin.js');
 const serverRoutes = require('./api/servers.js');
 const { router: earnRouter } = require('./api/earn.js');
+const { router: storeRouter } = require('./api/store.js');
 
 // Register API routes - moved after main routes
 app.use('/api/servers', serverRoutes.router);
-app.use('/api', earnRouter);
+
+// Register earn routes correctly - this is the fix to ensure the API endpoints work properly
+app.use('/', earnRouter);
+
+// Register store routes
+app.use('/', storeRouter);
 
 // Add middleware for parsing request bodies
 app.use(express.json({
@@ -572,21 +578,25 @@ if (authModule.router) {
 // Then load other API files
 const apifiles = fs.readdirSync('./api').filter(file => file.endsWith('.js'));
 apifiles.forEach(file => {
-    if (file !== 'auth.js' && file !== 'admin.js') { // Skip auth.js and admin.js since we already loaded them
+    if (file !== 'auth.js' && file !== 'admin.js' && file !== 'earn.js' && file !== 'store.js') { // Skip files we already loaded
         try {
             let apiModule = require(`./api/${file}`);
-            if (apiModule && apiModule.router) {
-                app.use('/', apiModule.router);
-            } else if (typeof apiModule === 'function') {
-                apiModule(app, db);
-            } else if (apiModule && typeof apiModule.load === 'function') {
-                apiModule.load(app, db);
-            } else if (apiModule && typeof apiModule.getNests === 'function') {
-                // This is a data fetcher module (like fetch_eggs.js)
-                // We don't need to mount it as a router
-                console.log(`[API] Loaded data fetcher module: ${file}`);
+            if (apiModule) {
+              if (apiModule.router) {
+                  app.use('/api', apiModule.router);
+              } else if (typeof apiModule === 'function') {
+                  apiModule(app, db);
+              } else if (apiModule && typeof apiModule.load === 'function') {
+                  apiModule.load(app, db);
+              } else if (apiModule && typeof apiModule.getNests === 'function') {
+                  // This is a data fetcher module (like fetch_eggs.js)
+                  // We don't need to mount it as a router
+                  console.log(`[API] Loaded data fetcher module: ${file}`);
+              } else {
+                  console.warn(`Warning: API file ${file} doesn't export a router, load function, or initialization function`);
+              }
             } else {
-                console.warn(`Warning: API file ${file} doesn't export a router, load function, or initialization function`);
+              console.warn(`Warning: API file ${file} could not be loaded`);
             }
         } catch (error) {
             console.error(`Error loading API file ${file}:`, error);

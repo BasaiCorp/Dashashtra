@@ -9,6 +9,7 @@ const adminjs = require("./admin.js");
 const renew = require("./renewal.js");
 const path = require('path');
 const chalk = require('chalk');
+const userCoins = require('./user_coins.js');
 
 // Helper function to convert hex to decimal
 function hexToDecimal(hex) {
@@ -51,6 +52,7 @@ router.post('/servers/create', async (req, res) => {
 
     // Get user info
     const db = require('../index.js').db;
+    
     try {
         const user = await db.users.getUserById(req.session.userinfo.id);
         
@@ -137,6 +139,18 @@ router.post('/servers/create', async (req, res) => {
             return res.redirect('/create?err=NOTENOUGHCPU');
         }
 
+        // Calculate server cost
+        const ramCost = Math.floor(ram / 1024) * 50; // 50 coins per GB of RAM
+        const diskCost = Math.floor(disk / 1024) * 25; // 25 coins per GB of disk
+        const cpuCost = Math.floor(cpu / 10) * 30; // 30 coins per 10% CPU
+        const serverCost = ramCost + diskCost + cpuCost + 100; // Base cost of 100 coins for a server
+
+        // Check if user has enough coins
+        const userId = req.session.userinfo.id;
+        if (!userCoins.hasEnoughCoins(userId, serverCost)) {
+            return res.redirect(`/create?err=INSUFFICIENTCOINS&cost=${serverCost}`);
+        }
+
         // Get egg info
         let nest_id;
         let egg_id = egg; // Use the egg ID directly from the form
@@ -204,9 +218,7 @@ router.post('/servers/create', async (req, res) => {
             };
         }
 
-        // Create server on Pterodactyl
-        console.log(`[SERVER CREATE] Creating server with name: ${name}, ram: ${ram}, disk: ${disk}, cpu: ${cpu}, location: ${location}, nest: ${nest_id}, egg: ${egg_id}`);
-        
+        // Create server
         try {
             const serverData = {
                 name: name,
@@ -225,50 +237,63 @@ router.post('/servers/create', async (req, res) => {
                 feature_limits: eggInfo.feature_limits,
                 allocation: {
                     default: 0
-                },
-                deploy: {
+                }
+            };
+
+            // Add location if provided
+            if (location && location !== "0") {
+                serverData.deploy = {
                     locations: [parseInt(location)],
                     dedicated_ip: false,
                     port_range: []
-                },
-                start_on_completion: true,
-                nest: nest_id
-            };
-
-            console.log(`[SERVER CREATE] Sending request to Pterodactyl API with data:`, JSON.stringify(serverData, null, 2));
-
-            const response = await fetch(`${settings.pterodactyl.domain}/api/application/servers`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${settings.pterodactyl.key}`,
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify(serverData)
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                console.error('[SERVER CREATE] Error response from Pterodactyl API:', error);
-                
-                // Check for specific error messages
-                if (error.errors && error.errors.length > 0) {
-                    const errorDetail = error.errors[0].detail;
-                    if (errorDetail.includes("environment")) {
-                        console.error('[SERVER CREATE] Environment variable error:', errorDetail);
-                        return res.redirect('/create?err=ENVVARIABLEERROR');
-                    }
-                }
-                
-                return res.redirect('/create?err=CREATEFAILED');
+                };
             }
 
-            const serverResponse = await response.json();
-            console.log(`[SERVER CREATE] Server created successfully. Server ID: ${serverResponse.attributes.id}`);
+            // Create server on Pterodactyl
+            const response = await fetch(
+                `${settings.pterodactyl.domain}/api/application/servers`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${settings.pterodactyl.key}`,
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify(serverData)
+                }
+            );
 
-            // Server created successfully, redirect to server list
-            let redirectPath = theme.settings.redirect.createserver || "/servers";
-            return res.redirect(redirectPath);
+            if (response.status === 201) {
+                // Deduct coins from user
+                userCoins.removeCoins(userId, serverCost);
+                
+                // Also update in the old system for backward compatibility
+                const currentCoins = await db.get(`coins-${userId}`) || 0;
+                await db.set(`coins-${userId}`, Math.max(0, currentCoins - serverCost));
+                
+                console.log(chalk.green(`[SERVER CREATE] Server created successfully for user ${userId}. Deducted ${serverCost} coins.`));
+                
+                // Update user's server list
+                await fetch(
+                    `${settings.pterodactyl.domain}/api/application/users/${req.session.pterodactyl.id}?include=servers`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${settings.pterodactyl.key}`
+                        }
+                    }
+                ).then(response => response.json())
+                .then(data => {
+                    req.session.pterodactyl = data.attributes;
+                });
+                
+                return res.redirect('/dashboard?success=SERVERCREATED');
+            } else {
+                const errorData = await response.json();
+                console.error('[SERVER CREATE] Failed to create server:', errorData);
+                return res.redirect('/create?err=CREATEFAILED');
+            }
         } catch (error) {
             console.error('[SERVER CREATE] Error creating server:', error);
             return res.redirect('/create?err=CREATEFAILED');
@@ -415,6 +440,156 @@ router.put('/:id', async (req, res) => {
     } catch (error) {
         console.error(chalk.red('[SERVERS] Error updating server:'), error);
         res.status(500).json({ success: false, error: 'Failed to update server' });
+    }
+});
+
+// Purchase server resources
+router.post('/api/servers/resources/purchase', async (req, res) => {
+    if (!req.session.userinfo || !req.session.pterodactyl) {
+        return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { serverId, resourceType, amount, cost } = req.body;
+    const userId = req.session.userinfo.id;
+    const userCoins = require('./user_coins.js');
+
+    // Validate input
+    if (!serverId || !resourceType || !amount || !cost) {
+        return res.status(400).json({ success: false, error: 'Missing required parameters' });
+    }
+
+    // Check if user has enough coins
+    if (!userCoins.hasEnoughCoins(userId, cost)) {
+        return res.status(400).json({ success: false, error: 'Insufficient coins' });
+    }
+
+    try {
+        // Find the server in the user's server list
+        const servers = req.session.pterodactyl.relationships.servers.data;
+        const server = servers.find(s => s.attributes.identifier === serverId);
+
+        if (!server) {
+            return res.status(404).json({ success: false, error: 'Server not found' });
+        }
+
+        // Get current server limits
+        const currentLimits = {
+            ram: server.attributes.limits.memory,
+            disk: server.attributes.limits.disk,
+            cpu: server.attributes.limits.cpu
+        };
+
+        // Calculate new limits
+        const newLimits = { ...currentLimits };
+        
+        switch (resourceType) {
+            case 'ram':
+                newLimits.ram = currentLimits.ram + parseInt(amount);
+                break;
+            case 'disk':
+                newLimits.disk = currentLimits.disk + parseInt(amount);
+                break;
+            case 'cpu':
+                newLimits.cpu = currentLimits.cpu + parseInt(amount);
+                break;
+            default:
+                return res.status(400).json({ success: false, error: 'Invalid resource type' });
+        }
+
+        // Update server limits on Pterodactyl
+        const response = await fetch(
+            `${settings.pterodactyl.domain}/api/application/servers/${server.attributes.id}/build`,
+            {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${settings.pterodactyl.key}`,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    allocation: server.attributes.allocation,
+                    memory: newLimits.ram,
+                    swap: 0,
+                    disk: newLimits.disk,
+                    io: 500,
+                    cpu: newLimits.cpu,
+                    threads: null,
+                    feature_limits: server.attributes.feature_limits
+                })
+            }
+        );
+
+        if (response.status === 200) {
+            // Deduct coins from user
+            const newBalance = userCoins.removeCoins(userId, cost);
+            
+            // Also update in the old system for backward compatibility
+            const db = require('../index.js').db;
+            const currentCoins = await db.get(`coins-${userId}`) || 0;
+            await db.set(`coins-${userId}`, Math.max(0, currentCoins - cost));
+            
+            console.log(chalk.green(`[STORE] User ${userId} purchased ${amount} ${resourceType} for server ${serverId}. Deducted ${cost} coins.`));
+            
+            // Update user's server list
+            await fetch(
+                `${settings.pterodactyl.domain}/api/application/users/${req.session.pterodactyl.id}?include=servers`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${settings.pterodactyl.key}`
+                    }
+                }
+            ).then(response => response.json())
+            .then(data => {
+                req.session.pterodactyl = data.attributes;
+            });
+            
+            return res.json({ 
+                success: true, 
+                newBalance,
+                newLimits
+            });
+        } else {
+            const errorData = await response.json();
+            console.error('[STORE] Failed to update server resources:', errorData);
+            return res.status(500).json({ success: false, error: 'Failed to update server resources' });
+        }
+    } catch (error) {
+        console.error('[STORE] Error purchasing resources:', error);
+        return res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+});
+
+// Get server stats
+router.get('/api/servers/:serverId/stats', async (req, res) => {
+    if (!req.session.userinfo || !req.session.pterodactyl) {
+        return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
+    const { serverId } = req.params;
+
+    try {
+        // Find the server in the user's server list
+        const servers = req.session.pterodactyl.relationships.servers.data;
+        const server = servers.find(s => s.attributes.identifier === serverId);
+
+        if (!server) {
+            return res.status(404).json({ success: false, error: 'Server not found' });
+        }
+
+        // Return server stats
+        return res.json({
+            success: true,
+            stats: {
+                ram: server.attributes.limits.memory,
+                disk: server.attributes.limits.disk,
+                cpu: server.attributes.limits.cpu
+            }
+        });
+    } catch (error) {
+        console.error('[STORE] Error fetching server stats:', error);
+        return res.status(500).json({ success: false, error: 'Internal server error' });
     }
 });
 

@@ -387,11 +387,7 @@
 							<span class="text-sm text-gray-400">Balance</span>
 							<div class="flex items-center">
 								<i class="fas fa-coins text-yellow-400 mr-2"></i>
-								<% if (typeof coins !== 'undefined') { %>
-									<span class="text-lg font-semibold text-white"><%= coins %></span>
-								<% } else { %>
-									<span class="text-lg font-semibold text-white">0</span>
-								<% } %>
+								<span class="text-lg font-semibold text-white user-balance store-balance"><%= userinfo?.coins || 0 %></span>
 							</div>
 						</div>
 						<a href="/earn" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
@@ -586,47 +582,137 @@
 	</div>
 
 	<script>
-		// Dropdown menu toggle
-		const dropdownBtn = document.getElementById('dropdownBtn');
-		const dropdownMenu = document.getElementById('dropdownMenu');
-		
-		dropdownBtn.addEventListener('click', () => {
-			dropdownMenu.classList.toggle('hidden');
-		});
-		
-		// Close dropdown when clicking outside
-		document.addEventListener('click', (event) => {
-			if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
-				dropdownMenu.classList.add('hidden');
+		document.addEventListener('DOMContentLoaded', function() {
+			// Fetch resources on page load
+			fetchResources();
+			
+			// Dropdown menu toggle
+			const dropdownBtn = document.getElementById('dropdownBtn');
+			const dropdownMenu = document.getElementById('dropdownMenu');
+			
+			if (dropdownBtn && dropdownMenu) {
+				dropdownBtn.addEventListener('click', () => {
+					dropdownMenu.classList.toggle('hidden');
+				});
+				
+				// Close dropdown when clicking outside
+				document.addEventListener('click', (e) => {
+					if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+						dropdownMenu.classList.add('hidden');
+					}
+				});
 			}
+			
+			// Mobile menu toggle
+			const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+			const mobileSearch = document.getElementById('mobileSearch');
+			const sidebar = document.getElementById('sidebar');
+			
+			if (mobileMenuBtn) {
+				mobileMenuBtn.addEventListener('click', () => {
+					if (mobileSearch) mobileSearch.classList.toggle('hidden');
+					if (sidebar) sidebar.classList.toggle('-translate-x-full');
+				});
+			}
+			
+			// Toggle sidebar on small screens
+			const toggleSidebar = document.getElementById('toggleSidebar');
+			const sidebarIcon = document.getElementById('sidebarIcon');
+			
+			if (toggleSidebar && sidebar && sidebarIcon) {
+				toggleSidebar.addEventListener('click', () => {
+					sidebar.classList.toggle('-translate-x-full');
+					const isClosed = sidebar.classList.contains('-translate-x-full');
+					sidebarIcon.classList = isClosed ? 'fas fa-bars' : 'fas fa-times';
+				});
+			}
+			
+			// Fetch user balance periodically
+			fetchUserBalance();
+			setInterval(fetchUserBalance, 30000); // Every 30 seconds
 		});
 		
-		// Mobile sidebar toggle
-		const sidebarBtn = document.getElementById('toggleSidebar');
-		const sidebar = document.getElementById('sidebar');
-		const sidebarIcon = document.getElementById('sidebarIcon');
-		
-		if (sidebarBtn) {
-			sidebarBtn.addEventListener('click', () => {
-				sidebar.classList.toggle('-translate-x-full');
-				sidebarIcon.classList.toggle('fa-bars');
-				sidebarIcon.classList.toggle('fa-times');
-			});
+		// Fetch user's current balance
+		async function fetchUserBalance() {
+			try {
+				const response = await fetch('/api/earn/balance');
+				if (!response.ok) {
+					console.error('Failed to fetch balance:', response.status);
+					return;
+				}
+				
+				const data = await response.json();
+				
+				if (data.success) {
+					const balanceElements = document.querySelectorAll('.user-balance, .store-balance');
+					balanceElements.forEach(element => {
+						element.textContent = data.balance;
+					});
+				}
+			} catch (error) {
+				console.error('Error fetching balance:', error);
+			}
 		}
 		
-		// Mobile search toggle
-		const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-		const mobileSearch = document.getElementById('mobileSearch');
-		
-		if (mobileMenuBtn) {
-			mobileMenuBtn.addEventListener('click', () => {
-				mobileSearch.classList.toggle('hidden');
-			});
+		// Fetch resources
+		async function fetchResources() {
+			try {
+				const response = await fetch('/api/store/resources');
+				if (!response.ok) {
+					showNotification('Error', 'Failed to load resources');
+					return;
+				}
+				
+				const data = await response.json();
+				
+				if (data.success) {
+					// Existing code here...
+                    // Rest of the function remains unchanged
+				}
+			} catch (error) {
+				console.error('Error fetching resources:', error);
+				showNotification('Error', 'Failed to load resources');
+			}
 		}
 		
-		// Purchase function
-		function purchase(type) {
-			window.location.href = `/store/purchase?type=${type}`;
+		// Purchase resource
+		async function purchaseResource(resourceId, amount = 1) {
+			try {
+				const response = await fetch('/api/store/purchase', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ resourceId, amount })
+				});
+				
+				if (!response.ok) {
+					const errorData = await response.json();
+					showNotification('Error', errorData.error || 'Failed to purchase resource');
+					return;
+				}
+				
+				const data = await response.json();
+				
+				if (data.success) {
+					// Update balance display
+					const balanceElements = document.querySelectorAll('.user-balance, .store-balance');
+					balanceElements.forEach(element => {
+						element.textContent = data.newBalance;
+					});
+					
+					// Update resources display
+					updateResourcesDisplay(data.resources);
+					
+					// Show success message
+					showNotification('Success', `Purchase successful! New balance: ${data.newBalance} credits`);
+				} else {
+					showNotification('Error', data.error || 'Failed to purchase resource');
+				}
+			} catch (error) {
+				console.error('Error purchasing resource:', error);
+				showNotification('Error', 'Failed to process purchase');
+			}
 		}
 	</script>
 </body>

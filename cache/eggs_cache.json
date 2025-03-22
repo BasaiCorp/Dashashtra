@@ -2071,6 +2071,84 @@
           ]
         }
       }
+    },
+    {
+      "id": 23,
+      "uuid": "ab8608f3-784c-428f-894c-ed9f46c932ce",
+      "name": "MongoDB 7",
+      "nest": 5,
+      "author": "parker@parkervcp.com",
+      "description": "MongoDB is a general purpose, document-based, distributed database built for modern application developers and for my butt era.",
+      "docker_image": "ghcr.io/parkervcp/yolks:mongodb_7",
+      "docker_images": {
+        "MongoDB_7": "ghcr.io/parkervcp/yolks:mongodb_7"
+      },
+      "config": {
+        "files": {
+          "mongod.conf": {
+            "parser": "file",
+            "find": {
+              "#security:": "security: \r\n  authorization: \"enabled\""
+            }
+          }
+        },
+        "startup": {
+          "done": "child process started successfully"
+        },
+        "stop": "exit",
+        "logs": [],
+        "file_denylist": [],
+        "extends": null
+      },
+      "startup": "mongod --fork --dbpath /home/container/mongodb/ --port ${SERVER_PORT} --bind_ip 0.0.0.0 --logpath /home/container/logs/mongo.log -f /home/container/mongod.conf; until nc -z -v -w5 127.0.0.1 ${SERVER_PORT}; do echo 'Waiting for mongodb connection...'; sleep 5; done; mongosh --username ${MONGO_USER} --password ${MONGO_USER_PASS} --host 127.0.0.1:${SERVER_PORT} && mongosh --eval \"db.getSiblingDB('admin').shutdownServer()\" 127.0.0.1:${SERVER_PORT}",
+      "script": {
+        "privileged": true,
+        "install": "#!/bin/bash \r\nif [ ! -d /mnt/server/ ]; then\r\n    mkdir -p /mnt/server/\r\nfi\r\n\r\ncd /mnt/server/\r\n\r\ncp /etc/mongod.conf.orig /mnt/server/mongod.conf\r\n\r\nmkdir mongodb logs\r\n\r\nmongod --port 27017 --dbpath /mnt/server/mongodb/ --logpath /mnt/server/logs/mongo.log --fork\r\n\r\nmongosh --eval \"db.getSiblingDB('admin').createUser({user: '${MONGO_USER}', pwd: '${MONGO_USER_PASS}', roles: ['root']})\"\r\n\r\nmongosh --eval \"db.getSiblingDB('admin').shutdownServer()\"\r\n\r\n## install end\r\necho \"-----------------------------------------\"\r\necho \"Installation completed...\"\r\necho \"-----------------------------------------\"",
+        "entry": "bash",
+        "container": "mongo:7-jammy",
+        "extends": null
+      },
+      "created_at": "2025-03-21T10:43:07+00:00",
+      "updated_at": "2025-03-21T10:43:07+00:00",
+      "relationships": {
+        "variables": {
+          "object": "list",
+          "data": [
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 127,
+                "egg_id": 23,
+                "name": "Mongo Admin Username",
+                "description": "The MongoDB Admin user",
+                "env_variable": "MONGO_USER",
+                "default_value": "admin",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|string",
+                "created_at": "2025-03-21T10:43:07.000000Z",
+                "updated_at": "2025-03-21T10:43:07.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 128,
+                "egg_id": 23,
+                "name": "Mongo Admin Password",
+                "description": "",
+                "env_variable": "MONGO_USER_PASS",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|string",
+                "created_at": "2025-03-21T10:43:07.000000Z",
+                "updated_at": "2025-03-21T10:43:07.000000Z"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "6": [

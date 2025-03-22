@@ -11,6 +11,9 @@ router.post('/register', async (req, res) => {
         const { email, password, username, firstName, lastName } = req.body;
         console.log(`[REGISTER] Attempting to register user: ${email}`);
         
+        // Check for referral
+        const referrerId = req.query.ref || req.body.ref || null;
+        
         // Validate required fields
         if (!email || !password || !username || !firstName || !lastName) {
             return res.status(400).json({ error: 'All fields are required' });
@@ -90,6 +93,48 @@ router.post('/register', async (req, res) => {
 
             const user = await db.users.createUser(userData);
             console.log(`[DATABASE] Created local user with ID: ${user.lastInsertRowid}`);
+            
+            // Process referral reward if referrer exists
+            if (referrerId) {
+                try {
+                    // Temporarily using require here to access user_coins module
+                    const userCoins = require('./user_coins.js');
+                    
+                    // Award referral credits to the referrer
+                    const referralCredits = 200; // 200 credits per referral
+                    const newBalance = await userCoins.addCoins(referrerId, referralCredits);
+                    
+                    // Update referrer's session if they are online
+                    // Get all active sessions
+                    const sessionStore = req.sessionStore;
+                    if (sessionStore && typeof sessionStore.all === 'function') {
+                        sessionStore.all((err, sessions) => {
+                            if (err) {
+                                console.error('[REFERRAL] Error getting sessions:', err);
+                                return;
+                            }
+                            
+                            // Find referrer's session
+                            Object.keys(sessions).forEach(sid => {
+                                const session = sessions[sid];
+                                if (session.userinfo && session.userinfo.id === parseInt(referrerId)) {
+                                    // Update referrer's session with new balance and increment referral count
+                                    session.userinfo.coins = newBalance;
+                                    session.referrals = (session.referrals || 0) + 1;
+                                    sessionStore.set(sid, session, (err) => {
+                                        if (err) console.error('[REFERRAL] Error updating session:', err);
+                                    });
+                                }
+                            });
+                        });
+                    }
+                    
+                    console.log(`[REFERRAL] User ${referrerId} earned ${referralCredits} credits for referring ${email}`);
+                } catch (error) {
+                    console.error('[REFERRAL] Error processing referral reward:', error);
+                    // Non-critical error, continue with registration
+                }
+            }
             
             // Set default package
             await db.packages.createPackage(user.lastInsertRowid, {

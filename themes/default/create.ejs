@@ -549,7 +549,7 @@
 
 				<!-- Create Server Form -->
 				<div class="glass-card rounded-xl border border-gray-700 p-6 mb-8">
-					<form action="/api/servers/create" method="POST" class="space-y-6">
+					<form action="/api/servers/create" method="POST" id="createServerForm">
 						<!-- Server Name -->
 						<div>
 							<label class="form-label">Server Name</label>
@@ -621,6 +621,17 @@
 							<p class="form-helper">Choose the region where your server will be hosted</p>
 						</div>
 
+						<!-- Total Cost -->
+						<div class="bg-primary-500/10 rounded-lg p-4 mb-6">
+							<div class="flex justify-between items-center">
+								<div>
+									<h3 class="text-lg font-medium text-primary-300">Total Cost</h3>
+									<p class="text-sm text-gray-400">Base server cost: 100 coins</p>
+								</div>
+								<div class="text-2xl font-bold text-primary-400"><span id="total-cost">475</span> coins</div>
+							</div>
+						</div>
+
 						<!-- Submit Button -->
 						<div class="flex justify-end">
 							<button type="submit" class="btn-primary inline-flex items-center px-6 py-2 rounded-lg text-white font-medium">
@@ -643,7 +654,7 @@
 						<img src="<%= settings.logo %>" alt="Logo" class="h-8 mr-3">
 						<span class="text-lg font-semibold text-white"><%= settings.name %></span>
 					</div>
-					<p class="text-gray-400 text-sm mt-2">© 2024 <%= settings.name %>. All rights reserved.</p>
+					<p class="text-gray-400 text-sm mt-2"> 2024 <%= settings.name %>. All rights reserved.</p>
 				</div>
 				
 				<div class="flex space-x-6">

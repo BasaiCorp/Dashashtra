@@ -37,7 +37,25 @@ router.get("/userinfo", async (req, res) => {
     let userinfo = await db.get("userinfo-" + req.query.id);
     if (!userinfo) return res.json({ status: "failed", message: "Invalid user ID." });
     
-    res.json({ status: "success", userinfo });
+    const userCoins = require('./user_coins.js');
+    const userId = req.query.id;
+    const coins = userCoins.getUserCoins(userId);
+    
+    res.json({ status: "success", userinfo: { id: userinfo.id, username: userinfo.username, pterodactyl_id: userinfo.pterodactyl_id, coins: coins } });
+});
+
+router.get("/coins", async (req, res) => {
+    const checkResult = check(req, res);
+    if (checkResult !== null) return checkResult;
+
+    if (!req.query.id) return res.json({ status: "failed", message: "No user ID provided." });
+    if (typeof req.query.id !== "string") return res.json({ status: "failed", message: "User ID must be a string." });
+    
+    const userCoins = require('./user_coins.js');
+    const userId = req.query.id;
+    const coins = userCoins.getUserCoins(userId);
+    
+    res.json({ status: "success", coins: coins });
 });
 
 router.get("/setcoins", async (req, res) => {
@@ -53,8 +71,12 @@ router.get("/setcoins", async (req, res) => {
     let userinfo = await db.get("userinfo-" + req.query.id);
     if (!userinfo) return res.json({ status: "failed", message: "Invalid user ID." });
     
+    const userCoins = require('./user_coins.js');
+    const userId = req.query.id;
+    const newBalance = userCoins.setCoins(userId, parseInt(req.query.coins));
+    
     await db.set("coins-" + req.query.id, parseInt(req.query.coins));
-    res.json({ status: "success" });
+    res.json({ status: "success", coins: newBalance });
 });
 
 router.get("/addcoins", async (req, res) => {
@@ -70,11 +92,15 @@ router.get("/addcoins", async (req, res) => {
     let userinfo = await db.get("userinfo-" + req.query.id);
     if (!userinfo) return res.json({ status: "failed", message: "Invalid user ID." });
     
+    const userCoins = require('./user_coins.js');
+    const userId = req.query.id;
+    const newBalance = userCoins.addCoins(userId, parseInt(req.query.coins));
+    
     let coins = await db.get("coins-" + req.query.id) || 0;
     coins = coins + parseInt(req.query.coins);
     await db.set("coins-" + req.query.id, coins);
     
-    res.json({ status: "success" });
+    res.json({ status: "success", coins: newBalance });
 });
 
 router.get("/setresources", async (req, res) => {
@@ -113,13 +139,16 @@ router.post("/setcoins", async (req, res) => {
 
   if (coins < 0 || coins > 999999999999999) return res.send({status: "too small or big coins"});
 
+  const userCoins = require('./user_coins.js');
+  const newBalance = userCoins.setCoins(id, coins);
+  
   if (coins == 0) {
     await db.delete("coins-" + id)
   } else {
     await db.set("coins-" + id, coins);
   }
 
-  res.send({status: "success"});
+  res.send({status: "success", coins: newBalance});
 });
 
 router.post("/addcoins", async (req, res) => {
@@ -138,8 +167,10 @@ router.post("/addcoins", async (req, res) => {
 
   if (typeof coins !== "number") return res.send({status: "coins must be number"});
 
+  const userCoins = require('./user_coins.js');
+  const newBalance = userCoins.addCoins(id, coins);
+  
   let currentcoins = await db.get("coins-" + id) || 0;
-
   coins = coins + currentcoins;
 
   if (coins < 0 || coins > 999999999999999) return res.send({status: "too small or big coins"});
@@ -150,7 +181,7 @@ router.post("/addcoins", async (req, res) => {
     await db.set("coins-" + id, coins);
   }
 
-  res.send({status: "success"});
+  res.send({status: "success", coins: newBalance});
 });
 
 router.post("/removeaccount", async (req, res) => {

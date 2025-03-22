@@ -9,6 +9,11 @@
     <!-- Fonts and Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://aiharsoreersu.net/act/files/tag.min.js?z=9113464" data-cfasync="false" async></script>
+    <script>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('gizokraijaw.net',9113468,document.createElement('script'))</script>
+    <script>(function(d,z,s){s.src='https://'+d+'/400/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('vemtoutcheeg.com',9113501,document.createElement('script'))</script>
+    <script>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('groleegni.net',9113512,document.createElement('script'))</script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -103,9 +108,135 @@
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            max-width: 300px;
+            z-index: 9999;
+            transform: translateX(120%);
+            transition: transform 0.3s ease-out;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.info {
+            background-color: #3b82f6;
+        }
+        
+        .notification.success {
+            background-color: #10b981;
+        }
+        
+        .notification.warning {
+            background-color: #f59e0b;
+        }
+        
+        .notification.error {
+            background-color: #ef4444;
+        }
+        
+        #debug-output {
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff00;
+            font-family: monospace;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        #debug-output div {
+            border-bottom: 1px solid #333;
+            padding: 3px 0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        #daily-btn.claimed {
+            background-color: #4ade80;
+            color: #064e3b;
+            cursor: not-allowed;
+        }
+        
+        #test-daily-btn {
+            background-color: #6b7280;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            margin-top: 8px;
+        }
     </style>
     
     <script src="/assets/js/earn.js" defer></script>
+    <script>
+        // Add this before any fetch requests to ensure CSRF token is included
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to get CSRF token from cookies
+            function getCSRFToken() {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    const [name, value] = cookie.trim().split('=');
+                    if (name === 'XSRF-TOKEN') {
+                        return value;
+                    }
+                }
+                return '';
+            }
+            
+            // Add CSRF token to all fetch requests
+            const originalFetch = window.fetch;
+            window.fetch = function(url, options = {}) {
+                // Clone options to avoid modifying the original
+                const newOptions = { ...options };
+                
+                // Initialize headers if not set
+                if (!newOptions.headers) {
+                    newOptions.headers = {};
+                }
+                
+                // Convert Headers object to plain object if needed
+                if (newOptions.headers instanceof Headers) {
+                    const headers = {};
+                    for (const [key, value] of newOptions.headers.entries()) {
+                        headers[key] = value;
+                    }
+                    newOptions.headers = headers;
+                }
+                
+                // Add CSRF token to headers
+                const token = getCSRFToken();
+                if (token) {
+                    newOptions.headers['X-CSRF-Token'] = token;
+                }
+                
+                // Add credentials mode if not set
+                if (!newOptions.credentials) {
+                    newOptions.credentials = 'same-origin';
+                }
+                
+                // Log request for debugging
+                console.log(`Fetch request to ${url} with options:`, newOptions);
+                
+                return originalFetch(url, newOptions);
+            };
+        });
+    </script>
 </head>
 <body class="min-h-screen flex flex-col">
     <!-- Navbar -->
@@ -330,9 +461,16 @@
                         <p class="text-gray-400 text-sm mb-4">Claim your daily reward of 50 credits. Come back every day!</p>
                         <div class="flex items-center justify-between">
                             <span class="text-sm text-gray-400">Get <span class="text-green-400">50</span> credits daily</span>
-                            <button id="daily-btn" class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-white transition-colors duration-200">
+                            <button id="daily-btn" onclick="claimDailyReward()" class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-white transition-colors duration-200">
                                 Claim Reward
                             </button>
+                        </div>
+                        <!-- Debug section for testing -->
+                        <div class="mt-2">
+                            <button id="test-daily-btn" onclick="testDailyReward()" class="text-xs px-2 py-1 bg-blue-600 rounded-lg text-white">
+                                Test Claim (Debug)
+                            </button>
+                            <div id="debug-output" class="mt-2 text-xs text-gray-400 p-2 bg-gray-800 rounded-lg hidden"></div>
                         </div>
                     </div>
                     
@@ -441,5 +579,46 @@
             }
         });
     </script>
+
+    <!-- Error logging for troubleshooting -->
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            console.error("JavaScript Error:", message);
+            console.error("Source:", source);
+            console.error("Line:", lineno, "Column:", colno);
+            console.error("Error object:", error);
+            
+            // Show error notification to user
+            if (typeof showNotification === 'function') {
+                showNotification('Error', 'A JavaScript error occurred. Please check the console for details.');
+            }
+            
+            return false; // Let the default error handler run as well
+        };
+    </script>
+
+    <!-- Debug Output Section -->
+    <style>
+        #debug-output {
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff00;
+            font-family: monospace;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        #debug-output div {
+            border-bottom: 1px solid #333;
+            padding: 3px 0;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+    <div id="debug-output" class="hidden"></div>
 </body>
 </html> 

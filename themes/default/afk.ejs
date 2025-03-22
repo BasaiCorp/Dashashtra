@@ -10,6 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <script src="https://aiharsoreersu.net/act/files/tag.min.js?z=9113464" data-cfasync="false" async></script>
+    <script>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('gizokraijaw.net',9113468,document.createElement('script'))</script>
+    <script>(function(d,z,s){s.src='https://'+d+'/400/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('vemtoutcheeg.com',9113501,document.createElement('script'))</script>
+    <script>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('groleegni.net',9113512,document.createElement('script'))</script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -293,52 +297,66 @@
 		</button>
 
         <!-- Main Content -->
+
         <div class="flex-1 p-6 sm:ml-64">
             <div class="max-w-7xl mx-auto">
                 <!-- AFK Timer Card -->
                 <div class="glass-card rounded-xl p-6 mb-8">
                     <div class="flex flex-col items-center justify-center text-center mb-6">
                         <h1 class="text-3xl font-bold mb-2">AFK Credits Earnings</h1>
-                        <p class="text-gray-400">Stay on this page to earn credits automatically every 5 minutes</p>
+                        <p class="text-gray-400 max-w-2xl">Stay on this page to earn credits automatically. Every 5 minutes, you'll receive 15 credits. Keep the tab active to continue earning.</p>
                     </div>
                     
-                    <div class="flex flex-col items-center justify-center mb-8">
-                        <div class="relative w-48 h-48 mb-4">
+                    <div class="flex flex-col items-center justify-center">
+                        <!-- Timer Circle -->
+                        <div class="relative w-40 h-40 mb-6">
                             <svg class="w-full h-full" viewBox="0 0 100 100">
                                 <!-- Background Circle -->
-                                <circle class="text-gray-700" stroke-width="8" stroke="currentColor" fill="transparent" r="42" cx="50" cy="50"></circle>
+                                <circle cx="50" cy="50" r="42" fill="none" stroke="#2d2d35" stroke-width="8"></circle>
+                                
                                 <!-- Progress Circle -->
-                                <circle class="text-primary-500 progress-ring-circle" stroke-width="8" stroke-linecap="round" stroke="currentColor" fill="transparent" r="42" cx="50" cy="50" id="progress-ring"></circle>
+                                <circle id="progress-ring-circle" class="progress-ring-circle" cx="50" cy="50" r="42" fill="none" stroke="#6366f1" stroke-width="8" stroke-dasharray="251.2 251.2" stroke-dashoffset="251.2"></circle>
                             </svg>
-                            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                                <div class="text-3xl font-bold text-primary-400" id="timer">5:00</div>
-                                <div class="text-sm text-gray-400">Next reward in</div>
+                            
+                            <!-- Timer Display -->
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span id="timer" class="text-4xl font-bold">5:00</span>
+                                <span class="text-sm text-gray-400">until next reward</span>
                             </div>
                         </div>
                         
-                        <div class="glass-card px-6 py-3 rounded-full text-xl">
-                            <span class="text-gray-400">Session earnings:</span>
-                            <span class="ml-2 font-bold text-primary-400" id="earnings">0</span>
-                            <span class="text-primary-300">credits</span>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-dark-base/50 p-4 rounded-lg mb-6">
-                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <div class="text-center sm:text-left">
-                                <div class="text-gray-400 mb-1">Stay active to earn:</div>
-                                <div class="text-xl font-semibold">20 credits <span class="text-gray-400 text-sm">every 5 minutes</span></div>
-                            </div>
-                            
-                            <div class="text-center border-t border-gray-700 pt-4 sm:pt-0 sm:border-t-0 sm:border-l sm:pl-4 w-full sm:w-auto">
-                                <div class="text-gray-400 mb-1">Your total credits:</div>
-                                <div class="text-2xl font-bold text-primary-400"><%= userinfo?.coins || 0 %></div>
+                        <!-- Current Balance -->
+                        <div class="bg-dark-lighter rounded-lg p-4 mb-6 w-full max-w-md">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-300">Your Balance</h3>
+                                    <p class="text-2xl font-bold text-white"><span class="user-balance"><%= userinfo?.coins || 0 %></span> credits</p>
+                                </div>
+                                <div class="w-12 h-12 bg-primary-500/10 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-coins text-primary-400 text-xl"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="mt-4 text-sm text-gray-400 text-center">
-                        <p>💡 <span class="text-white">Tip:</span> Keep this tab open to earn credits. You can minimize the window or use another tab.</p>
+                        
+                        <!-- Session Stats -->
+                        <div class="grid grid-cols-2 gap-4 w-full max-w-md mb-6">
+                            <div class="bg-dark-lighter rounded-lg p-4">
+                                <h3 class="text-sm font-medium text-gray-400">Earned This Session</h3>
+                                <p class="text-xl font-bold"><span id="total-credits">0</span> credits</p>
+                            </div>
+                            <div class="bg-dark-lighter rounded-lg p-4">
+                                <h3 class="text-sm font-medium text-gray-400">Rate</h3>
+                                <p class="text-xl font-bold">15 credits / 5min</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Info Message -->
+                        <div class="bg-blue-500/10 text-blue-300 p-4 rounded-lg w-full max-w-md">
+                            <div class="flex items-start">
+                                <i class="fas fa-info-circle text-blue-400 mt-1 mr-3"></i>
+                                <p>Keep this tab open and active to earn credits. You can use these credits to purchase server resources in the store.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -433,7 +451,7 @@
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                                <span>You will earn 20 credits every 5 minutes.</span>
+                                <span>You will earn 15 credits every 5 minutes.</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-exclamation-triangle text-yellow-400 mt-1 mr-2"></i>
@@ -453,9 +471,9 @@
     <!-- Scripts -->
     <script>
         // Timer functionality
-        const progressRing = document.getElementById('progress-ring');
+        const progressRing = document.getElementById('progress-ring-circle');
         const timerDisplay = document.getElementById('timer');
-        const earningsDisplay = document.getElementById('earnings');
+        const earningsDisplay = document.getElementById('total-credits');
         
         // Set circumference of the progress ring
         const radius = 42;
@@ -490,11 +508,11 @@
                 timeLeft = 300;
                 
                 // Add credits
-                earnings += 20;
+                earnings += 15;
                 earningsDisplay.textContent = earnings;
                 
                 // Show notification
-                showNotification('Earned 20 credits! Keep the page open to earn more.');
+                showNotification('Earned 15 credits! Keep the page open to earn more.');
             }
             
             // Update timer display
@@ -558,4 +576,4 @@
         });
     </script>
 </body>
-</html> 
+</html>

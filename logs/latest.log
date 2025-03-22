@@ -1,0 +1,7 @@
+Log file created for debugging
+[2025-03-22T06:10:45.874Z] [checkAuth] Checking auth - Session exists: true
+[2025-03-22T06:10:45.875Z] [checkAuth] Authentication successful for user ID: 1
+[2025-03-22T06:11:02.948Z] [checkAuth] Checking auth - Session exists: true
+[2025-03-22T06:11:02.950Z] [checkAuth] Authentication successful for user ID: 1
+[2025-03-22T06:16:10.468Z] [checkAuth] Checking auth - Session exists: true
+[2025-03-22T06:16:10.468Z] [checkAuth] Authentication successful for user ID: 1
