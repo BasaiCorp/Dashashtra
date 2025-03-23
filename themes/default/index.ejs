@@ -1,1613 +1,1726 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="./assets/img/FlaxyNodes_logo.gif"/>
-    <title><%= extra.home.title %></title>
-    <% if (settings.api.arcio.enabled == true) { %>
-        <script async src="https://arc.io/widget.min.js#<%= settings.api.arcio.widgetid %>"></script>
-    <% } %>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: rgb(0, 89, 255);
-            --primary-rgb: 0, 89, 255;
-            --secondary-color: #2563eb;
-            --accent-color: #4f46e5;
-            --dark-bg: #0f172a;
-            --darker-bg: #020617;
-            --card-bg: #1e293b;
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: rgba(148, 163, 184, 0.1);
-            animation: rainbowColors 20s linear infinite;
-        }
-        
-        @keyframes rainbowColors {
-            0% { --primary-color: rgb(0, 89, 255); --primary-rgb: 0, 89, 255; }    /* Blue */
-            14% { --primary-color: rgb(75, 0, 130); --primary-rgb: 75, 0, 130; }   /* Indigo */
-            28% { --primary-color: rgb(238, 130, 238); --primary-rgb: 238, 130, 238; }/* Violet */
-            42% { --primary-color: rgb(255, 0, 0); --primary-rgb: 255, 0, 0; }    /* Red */
-            56% { --primary-color: rgb(255, 165, 0); --primary-rgb: 255, 165, 0; }  /* Orange */
-            70% { --primary-color: rgb(255, 255, 0); --primary-rgb: 255, 255, 0; }  /* Yellow */
-            84% { --primary-color: rgb(0, 255, 0); --primary-rgb: 0, 255, 0; }    /* Green */
-            100% { --primary-color: rgb(0, 89, 255); --primary-rgb: 0, 89, 255; }  /* Back to Blue */
-        }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
-        body {
-            background-color: var(--dark-bg);
-            color: var(--text-light);
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-            position: relative;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-        }
-        
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, var(--darker-bg), var(--dark-bg));
-            z-index: -2;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1320px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            box-sizing: border-box;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            border: none;
-            padding: 0.8rem 1.8rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
-        
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(var(--primary-rgb), 0.5);
-        }
-        
-        .btn-outline-light {
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            padding: 0.8rem 1.8rem;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-outline-light::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: 0.5s;
-        }
-        
-        .btn-outline-light:hover::before {
-            left: 100%;
-        }
-        
-        .btn-outline-light:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .hero-section {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 5rem 0;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-        
-        .hero-logo {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 2rem;
-            border-radius: 50%;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(var(--primary-rgb), 0.3);
-        }
-        
-        .hero-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .hero-title {
-            font-size: 5rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
-            color: var(--primary-color);
-            text-shadow: 0 0 30px rgba(var(--primary-rgb), 0.3);
-        }
-        
-        .hero-subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 2.5rem;
-            color: var(--text-muted);
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 0 1rem;
-        }
-        
-        .feature-card {
-            background-color: rgba(30, 41, 59, 0.5);
-            border-radius: 16px;
-            padding: 2rem;
-            height: 100%;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(var(--primary-rgb), 0.1);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-            text-align: center;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(var(--primary-rgb), 0.05), rgba(var(--primary-rgb), 0.05));
-            z-index: -1;
-        }
-        
-        .feature-card::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 30%;
-            bottom: -30%;
-            left: 0;
-            background: linear-gradient(to top, var(--primary-color), transparent);
-            opacity: 0;
-            transition: all 0.4s ease;
-            filter: blur(15px);
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 25px 50px -12px rgba(var(--primary-rgb), 0.35);
-            border-color: var(--primary-color);
-        }
-        
-        .feature-card:hover::after {
-            bottom: -15%;
-            opacity: 0.15;
-        }
-        
-        .feature-card h3 {
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-            color: var(--text-light);
-            transition: color 0.3s ease;
-        }
-        
-        .feature-card:hover h3 {
-            color: var(--primary-color);
-        }
-        
-        .feature-card p {
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin: 0;
-        }
-        
-        .icon-large {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-            display: inline-block;
-            color: var(--primary-color);
-            transition: all 0.4s ease;
-        }
-        
-        .feature-card:hover .icon-large {
-            transform: scale(1.2);
-        }
-        
-        .features-section {
-            padding: 6rem 0;
-            position: relative;
-            width: 100%;
-            box-sizing: border-box;
-            overflow: hidden;
-        }
-        
-        .features-section::before {
-            content: '';
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(var(--primary-rgb), 0.15), transparent 70%);
-            top: -150px;
-            right: -150px;
-            z-index: 0;
-        }
-        
-        .features-section::after {
-            content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(var(--primary-rgb), 0.1), transparent 70%);
-            bottom: -200px;
-            left: -200px;
-            z-index: 0;
-        }
-        
-        .section-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-align: center;
-            color: var(--primary-color);
-        }
-        
-        .section-subtitle {
-            color: var(--text-muted);
-            max-width: 800px;
-            margin: 0 auto 4rem auto;
-            text-align: center;
-            font-size: 1.25rem;
-            padding: 0 1rem;
-        }
-        
-        .cta-section {
-            padding: 7rem 0;
-            text-align: center;
-            position: relative;
-            margin: 0 auto 1.5rem;
-            border-radius: 24px;
-            background-color: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(var(--primary-rgb), 0.1);
-            box-shadow: 0 8px 32px rgba(2, 6, 23, 0.2);
-            transform: translateY(0);
-            transition: transform 0.3s ease;
-            width: calc(100% - 2rem);
-            max-width: 1500px;
-            box-sizing: border-box;
-            overflow: hidden;
-        }
-        
-        .cta-section:hover {
-            transform: translateY(-5px);
-        }
-        
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--primary-color), transparent);
-            top: 0;
-        }
-        
-        .cta-section::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at top right, rgba(var(--primary-rgb), 0.15), transparent 60%);
-            pointer-events: none;
-            border-radius: 24px;
-        }
-        
-        .cta-content {
-            position: relative;
-            z-index: 2;
-            padding: 3rem 1.5rem;
-        }
-        
-        .cta-section .section-title {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .cta-section .section-subtitle {
-            font-size: 1.3rem;
-            margin-bottom: 3rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .cta-section .btn {
-            padding: 1rem 2.5rem;
-            font-size: 1.1rem;
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            box-shadow: 0 10px 25px -5px rgba(var(--primary-rgb), 0.4);
-            min-width: 180px;
-        }
-        
-        .cta-section .btn-primary {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .cta-section .btn-primary:hover {
-            transform: translateY(-3px);
-            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
-            box-shadow: 0 15px 30px -5px rgba(var(--primary-rgb), 0.6);
-        }
-        
-        .cta-section .btn-outline-light {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(5px);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            margin-left: 1rem;
-        }
-        
-        .cta-section .btn-outline-light:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-3px);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 30px -10px rgba(255, 255, 255, 0.2);
-        }
-        
-        .cta-section .btn::after {
-            content: "";
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 8px;
-            height: 8px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-        }
-        
-        .cta-section .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-            z-index: -1;
-        }
-        
-        .cta-section .btn:hover::before {
-            left: 100%;
-        }
-        
-        @media (max-width: 576px) {
-            .cta-section .btn {
-                display: block;
-                margin: 0 auto 1rem auto;
-                width: 100%;
-                max-width: 280px;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flaxy Nodes | Premium Hosting Solutions</title>
+  <meta name="description" content="Premium hosting solutions with high performance, reliability, and exceptional support for all your needs.">
+  <link rel="icon" type="image/png" href="./assets/img/FlaxyNodes_logo.gif"/>
+  
+  <!-- Fonts and Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+              950: '#1e1b4b',
+            },
+            dark: {
+              base: '#0f0f12',
+              light: '#1a1a21',
+              lighter: '#24242e',
+              card: '#1a1a21'
             }
-            
-            .cta-section .btn-outline-light {
-                margin-left: auto;
-            }
-        }
-        
-        .stats-section {
-            padding: 6rem 0;
-            position: relative;
-            width: 100%;
-            box-sizing: border-box;
-            overflow: hidden;
-        }
-        
-        .stats-section::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--primary-color), transparent);
-            top: 0;
-        }
-        
-        .stat-card {
-            text-align: center;
-            padding: 2rem;
-            background-color: rgba(30, 41, 59, 0.5);
-            border-radius: 16px;
-            height: 100%;
-            border: 1px solid rgba(var(--primary-rgb), 0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            backdrop-filter: blur(10px);
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: -150%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(var(--primary-rgb), 0.1), transparent 70%);
-            opacity: 0;
-            transition: all 0.4s ease;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-10px) scale(1.03);
-            box-shadow: 0 20px 40px -10px rgba(var(--primary-rgb), 0.4);
-            border-color: var(--primary-color);
-        }
-        
-        .stat-card:hover::before {
-            top: -100%;
-            opacity: 1;
-        }
-        
-        .stat-number {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-            transition: all 0.3s ease;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .stat-card:hover .stat-number {
-            transform: scale(1.1);
-        }
-        
-        .stat-label {
-            color: var(--text-muted);
-            font-size: 1.25rem;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        
-        .stat-card:hover .stat-label {
-            color: var(--text-light);
-        }
-        
-        .floating-particles {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            overflow: hidden;
-            z-index: -1;
-            pointer-events: none;
-        }
-        
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            opacity: 0.1;
-            animation: float 15s infinite linear;
-        }
-        
-        @keyframes float {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateY(-1000px) rotate(720deg);
-                opacity: 0;
-            }
-        }
-        
-        .glow {
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--primary-color), transparent 70%);
-            opacity: 0.2;
-            z-index: 0;
-            animation: pulse 8s infinite ease-in-out;
-        }
-        
-        @keyframes pulse {
-            0% {
-                transform: scale(0.8);
-                opacity: 0.5;
-            }
-            50% {
-                transform: scale(1.1);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(0.8);
-                opacity: 0.5;
-            }
-        }
-        
-        .navbar {
-            background-color: transparent;
-            padding: 0.8rem 0;
-            position: fixed;
-            top: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            right: auto;
-            width: 96%;
-            max-width: 1500px;
-            z-index: 100;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(var(--primary-rgb), 0.1);
-            box-sizing: border-box;
-        }
-        
-        .navbar.scrolled {
-            top: 0.5rem;
-            background-color: rgba(2, 6, 23, 0.85);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.15);
-            border: 1px solid rgba(var(--primary-rgb), 0.1);
-            padding: 0.6rem 0;
-        }
-        
-        .navbar .container {
-            padding: 0 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-        
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: var(--primary-color);
-            position: relative;
-            padding: 0.3rem 0;
-            text-decoration: none;
-        }
-        
-        .navbar-brand::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 30%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary-color), transparent);
-            transition: width 0.3s ease;
-        }
-        
-        .navbar-brand:hover::after {
-            width: 100%;
-        }
-        
-        .navbar-nav {
-            display: flex;
-            align-items: center;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .nav-item {
-            margin: 0 0.2rem;
-        }
-        
-        .nav-link {
-            color: var(--text-muted);
-            font-weight: 500;
-            margin: 0 0.8rem;
-            padding: 0.4rem 0.8rem;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-            text-decoration: none;
-            display: block;
-            position: relative;
-        }
-        
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: var(--primary-color);
-            transform: translateX(-50%);
-            transition: width 0.3s ease;
-            opacity: 0;
-        }
-        
-        .nav-link:hover::after {
-            width: 60%;
-            opacity: 1;
-        }
-        
-        .nav-link:hover {
-            color: var(--text-light);
-            background: rgba(var(--primary-rgb), 0.1);
-            transform: translateY(-2px);
-        }
-        
-        .nav-link.active {
-            color: var(--primary-color);
-            background: rgba(var(--primary-rgb), 0.15);
-            font-weight: 600;
-        }
-        
-        .nav-link.active::after {
-            width: 60%;
-            opacity: 1;
-        }
-        
-        .btn-primary.nav-btn {
-            padding: 0.4rem 1.2rem;
-            border-radius: 10px;
-            margin-left: 0.8rem;
-            font-size: 0.95rem;
-            background-color: var(--primary-color);
-            text-decoration: none;
-            display: inline-block;
-            position: relative;
-            overflow: hidden;
-            font-weight: 700;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            box-shadow: 0 8px 15px -5px rgba(var(--primary-rgb), 0.4);
-            transition: all 0.3s ease;
-            border: none;
-            letter-spacing: 0.3px;
-        }
-        
-        .btn-primary.nav-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
-        
-        .btn-primary.nav-btn:hover::before {
-            left: 100%;
-        }
-        
-        .btn-primary.nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 20px -5px rgba(var(--primary-rgb), 0.5);
-            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
-        }
-        
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin-right: -0.5rem;
-            margin-left: -0.5rem;
-            width: 100%;
-            justify-content: center;
-        }
-        
-        .col-lg-4, .col-md-6, .col-lg-3, .col-lg-2 {
-            padding-right: 0.5rem;
-            padding-left: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .col-lg-4, .col-md-6 {
-            flex: 0 0 100%;
-            max-width: 100%;
-        }
-        
-        .col-lg-3 {
-            flex: 0 0 100%;
-            max-width: 100%;
-        }
-        
-        .col-lg-2 {
-            flex: 0 0 100%;
-            max-width: 100%;
-        }
-        
-        @media (min-width: 768px) {
-            .col-md-6 {
-                flex: 0 0 50%;
-                max-width: 50%;
-            }
-        }
-        
-        @media (min-width: 992px) {
-            .col-lg-4 {
-                flex: 0 0 33.333333%;
-                max-width: 33.333333%;
-            }
-            
-            .col-lg-3 {
-                flex: 0 0 25%;
-                max-width: 25%;
-            }
-            
-            .col-lg-2 {
-                flex: 0 0 16.666667%;
-                max-width: 16.666667%;
-            }
-        }
-        
-        .g-4 {
-            gap: 1rem;
-        }
-        
-        @media (max-width: 992px) {
-            .hero-title {
-                font-size: 3.5rem;
-            }
-            .section-title {
-                font-size: 2.5rem;
-            }
-            .container {
-                max-width: 100%;
-                padding: 0 1.5rem;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.8rem;
-            }
-            .hero-subtitle {
-                font-size: 1.2rem;
-            }
-            .section-title {
-                font-size: 2rem;
-            }
-            .navbar {
-                background-color: rgba(2, 6, 23, 0.95);
-                backdrop-filter: blur(10px);
-                padding: 1rem 0;
-                width: 98%;
-            }
-            .footer-col {
-                margin-bottom: 2rem;
-            }
-            .container {
-                padding: 0 1rem;
-            }
-            .cta-section, .footer {
-                width: calc(100% - 1rem);
-                border-radius: 16px;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .hero-title {
-                font-size: 2.3rem;
-            }
-            .section-title {
-                font-size: 1.8rem;
-            }
-            .hero-subtitle {
-                font-size: 1.1rem;
-            }
-            .container {
-                padding: 0 0.75rem;
-            }
-            .btn-lg {
-                padding: 0.75rem 1.5rem;
-                font-size: 1rem;
-            }
-            .stats-section, .features-section {
-                padding: 4rem 0;
-            }
-            .feature-card, .stat-card {
-                padding: 1.25rem;
-            }
-            .stat-number {
-                font-size: 2.5rem;
-            }
-            .footer {
-                padding: 4rem 0 2rem;
-            }
-            .feature-card:hover, .stat-card:hover {
-                transform: translateY(-5px);
-            }
-            .cta-section, .footer {
-                width: calc(100% - 0.5rem);
-            }
-            .navbar {
-                width: 99%;
-            }
-            .col-lg-4, .col-md-6, .col-lg-3, .col-lg-2 {
-                padding-right: 0.5rem;
-                padding-left: 0.5rem;
-                margin-bottom: 1rem;
-            }
-        }
-        
-        /* Footer Styles */
-        .footer {
-            background-color: rgba(2, 6, 23, 0.5);
-            padding: 6rem 0 2rem;
-            position: relative;
-            overflow: hidden;
-            margin: 0 auto 1.5rem;
-            border-radius: 24px;
-            border: 1px solid rgba(var(--primary-rgb), 0.1);
-            box-shadow: 0 -8px 32px rgba(2, 6, 23, 0.2);
-            transform: translateY(0);
-            transition: transform 0.3s ease;
-            backdrop-filter: blur(10px);
-            width: calc(100% - 2rem);
-            max-width: 1500px;
-            box-sizing: border-box;
-        }
-        
-        .footer:hover {
-            transform: translateY(-5px);
-        }
-        
-        .footer::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--primary-color), transparent);
-            top: 0;
-        }
-        
-        .footer::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at top right, rgba(var(--primary-rgb), 0.15), transparent 60%);
-            pointer-events: none;
-        }
-        
-        .footer-logo {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            display: inline-block;
-            color: var(--primary-color);
-            position: relative;
-            text-shadow: 0 0 10px rgba(var(--primary-rgb), 0.5);
-        }
-        
-        .footer-about {
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-            max-width: 350px;
-            line-height: 1.8;
-            font-size: 1.05rem;
-        }
-        
-        .footer-heading {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.8rem;
-            color: var(--primary-color);
-            position: relative;
-            padding-bottom: 0.8rem;
-        }
-        
-        .footer-heading::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary-color), transparent);
-        }
-        
-        .footer-links {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .footer-links li {
-            margin-bottom: 1rem;
-        }
-        
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            font-size: 1.05rem;
-            padding: 0.3rem 0;
-        }
-        
-        .footer-links a:hover {
-            color: var(--primary-color);
-            transform: translateX(8px);
-        }
-        
-        .footer-links a::before {
-            content: '→';
-            margin-right: 0.5rem;
-            opacity: 0;
-            transform: translateX(-5px);
-            transition: all 0.3s ease;
-        }
-        
-        .footer-links a:hover::before {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        
-        .social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            background: rgba(var(--primary-rgb), 0.15);
-            color: var(--text-light);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(var(--primary-rgb), 0.1);
-            font-size: 1.2rem;
-            text-decoration: none;
-        }
-        
-        .social-link:hover {
-            background-color: var(--primary-color);
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.3);
-        }
-        
-        .footer-bottom {
-            border-top: 1px solid rgba(148, 163, 184, 0.1);
-            padding-top: 2rem;
-            margin-top: 4rem;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            position: relative;
-        }
-        
-        .footer-bottom::before {
-            content: '';
-            position: absolute;
-            top: -1px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
-        }
-        
-        .mt-5 {
-            margin-top: 3rem;
-        }
-        
-        .me-3 {
-            margin-right: 1rem;
-        }
-        
-        .ms-auto {
-            margin-left: auto;
-        }
-        
-        .ms-2 {
-            margin-left: 0.5rem;
-        }
-        
-        .btn-lg {
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-        }
-        
-        .navbar-toggler {
-            padding: 0.25rem 0.75rem;
-            font-size: 1.25rem;
-            line-height: 1;
-            background-color: transparent;
-            border: 1px solid rgba(var(--primary-rgb), 0.2);
-            border-radius: 0.25rem;
-            color: var(--text-light);
-            cursor: pointer;
-        }
-        
-        .navbar-toggler-icon {
-            display: inline-block;
-            width: 1.5em;
-            height: 1.5em;
-            vertical-align: middle;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 100%;
-        }
-        
-        .collapse:not(.show) {
-            display: none;
-        }
-        
-        @media (max-width: 991.98px) {
-            .navbar-expand-lg .navbar-collapse {
-                flex-basis: 100%;
-                flex-grow: 1;
-                align-items: center;
-            }
-            
-            .navbar-expand-lg .navbar-nav {
-                flex-direction: column;
-                align-items: flex-start;
-                width: 100%;
-            }
-            
-            .navbar-expand-lg .navbar-nav .nav-link {
-                padding: 0.5rem 0;
-                width: 100%;
-            }
-            
-            .navbar-toggler {
-                display: block;
-            }
-            
-            .collapse:not(.show) {
-                display: none;
-            }
-            
-            .navbar .container {
-                flex-wrap: wrap;
-            }
-            
-            .navbar-collapse {
-                width: 100%;
-                margin-top: 1rem;
-            }
-            
-            .btn-primary.nav-btn {
-                margin-top: 0.5rem;
-                display: inline-block;
-                width: auto;
-            }
-        }
-        
-        @media (min-width: 992px) {
-            .navbar-expand-lg {
-                flex-flow: row nowrap;
-                justify-content: flex-start;
-            }
-            
-            .navbar-expand-lg .navbar-collapse {
-                display: flex !important;
-                flex-basis: auto;
-            }
-            
-            .navbar-expand-lg .navbar-nav {
-                flex-direction: row;
-            }
-        }
-        
-        .footer .row {
-            justify-content: flex-start;
-            flex-wrap: wrap;
-            width: 100%;
-            margin-left: 0;
-            margin-right: 0;
-            padding: 0 1rem;
-        }
-        
-        @media (min-width: 1400px) {
-            .container {
-                max-width: 1400px;
-            }
-            .navbar, .cta-section, .footer {
-                max-width: 1600px;
-            }
-        }
-        
-        .hero-section .btn-primary {
-            border-radius: 0;
-            border-top-left-radius: 12px;
-            border-bottom-left-radius: 12px;
-            padding: 0.7rem 1.8rem;
-            box-shadow: 0 10px 20px -5px rgba(var(--primary-rgb), 0.5);
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            z-index: 3;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-        }
-        
-        .hero-section .btn-outline-light {
-            border-radius: 0;
-            border-top-right-radius: 12px;
-            border-bottom-right-radius: 12px;
-            padding: 0.7rem 1.8rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            margin-left: -2px;
-            backdrop-filter: blur(5px);
-            background: rgba(255, 255, 255, 0.05);
-            z-index: 2;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-left: none;
-        }
-        
-        .hero-section .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px -5px rgba(var(--primary-rgb), 0.7);
-            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
-        }
-        
-        .hero-section .btn-outline-light:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px -10px rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Button group styles for hero section */
-        .hero-section .mt-5 {
-            display: inline-flex;
-            background: rgba(0, 0, 0, 0.1);
-            padding: 2px;
-            border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-        }
-        
-        .hero-section .btn-lg {
-            padding: 0.7rem 2rem;
-            font-size: 0.9rem;
-            margin: 0;
-            min-width: 140px;
-        }
-        
-        .hero-section .btn-primary::after {
-            content: "";
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 10px;
-            height: 10px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-        }
-        
-        @media (max-width: 576px) {
-            .hero-section .mt-5 {
-                padding: 0;
-                background: transparent;
-                box-shadow: none;
-                backdrop-filter: none;
-                border: none;
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-                width: 100%;
-                max-width: 280px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            
-            .hero-section .btn-primary, .hero-section .btn-outline-light {
-                border-radius: 12px;
-                margin: 0;
-                width: 100%;
-                text-align: center;
-                border: none;
-            }
-            
-            .hero-section .btn-primary {
-                box-shadow: 0 10px 20px -5px rgba(var(--primary-rgb), 0.4);
-            }
-            
-            .hero-section .btn-outline-light {
-                border: 2px solid rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-            }
-        }
-    </style>
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-in-out',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 3s ease-in-out infinite',
+            'bounce-slow': 'bounce 3s infinite',
+            'gradient': 'gradient 8s ease infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            gradient: {
+              '0%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' },
+              '100%': { backgroundPosition: '0% 50%' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+  
+  <!-- Custom Styles -->
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1a1a21;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #4338ca;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6366f1;
+    }
+    
+    /* Gradient animations */
+    .animate-gradient {
+      background-size: 200% 200%;
+      animation: gradient 8s ease infinite;
+    }
+    
+    .hero-gradient {
+      background: linear-gradient(135deg, #4338ca, #6366f1, #818cf8, #6366f1, #4338ca);
+      background-size: 300% 300%;
+      animation: gradient 8s ease infinite;
+    }
+    
+    /* Accessibility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+    
+    /* Responsive grid */
+    .auto-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-gap: 1.5rem;
+    }
+    
+    /* Image loading */
+    .lazy-load {
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    
+    .lazy-loaded {
+      opacity: 1;
+    }
+  </style>
 </head>
 
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark" id="mainNav">
-        <div class="container">
-            <a class="navbar-brand" href="/">Flaxy Nodes</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+<body class="bg-dark-base text-white antialiased">
+  <!-- Skip to content link for accessibility -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-4 focus:bg-primary-600 focus:text-white">Skip to content</a>
+  
+  <!-- Header/Navbar -->
+  <header class="sticky top-0 z-50 w-full backdrop-blur-md bg-dark-base/80 border-b border-dark-lighter">
+    <div class="container mx-auto px-4 md:px-6">
+      <nav class="flex items-center justify-between h-16 md:h-20">
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-2">
+          <img src="./assets/img/FlaxyNodes_logo.gif" alt="Flaxy Nodes Logo" class="h-10 w-10">
+          <span class="text-xl font-bold">Flaxy<span class="text-primary-500">Nodes</span></span>
+        </a>
+        
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center gap-6">
+          <a href="#features" class="text-gray-300 hover:text-white transition-colors">Features</a>
+          <a href="#pricing" class="text-gray-300 hover:text-white transition-colors">Pricing</a>
+          <a href="#status" class="text-gray-300 hover:text-white transition-colors">Status</a>
+          <a href="#faq" class="text-gray-300 hover:text-white transition-colors">FAQ</a>
+          <a href="#community" class="text-gray-300 hover:text-white transition-colors">Community</a>
+          <div class="relative group">
+            <button class="text-gray-300 hover:text-white transition-colors flex items-center gap-1">
+              Resources <i class="fas fa-chevron-down text-xs ml-1"></i>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/features">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/pricing">Pricing</a>
-                    </li>
-                    <% if (typeof userinfo !== 'undefined' && userinfo && typeof pterodactyl !== 'undefined' && pterodactyl) { %>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/dashboard">Dashboard</a>
-                        </li>
-                    <% } else { %>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-primary nav-btn" href="/register">Get Started</a>
-                        </li>
-                    <% } %>
-                </ul>
+            <div class="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-dark-light py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+              <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-lighter">Documentation</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-lighter">Tutorials</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-lighter">API Reference</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-lighter">Support Center</a>
             </div>
+          </div>
         </div>
-    </nav>
+        
+        <!-- Auth Buttons -->
+        <div class="hidden md:flex items-center gap-3">
+          <a href="/login" class="px-4 py-2 text-sm font-medium text-white hover:text-primary-300 transition-colors">Login</a>
+          <a href="/register" class="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-all">Sign Up</a>
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-dark-lighter">
+          <span class="sr-only">Open menu</span>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </nav>
+      
+      <!-- Mobile Menu (hidden by default) -->
+      <div id="mobile-menu" class="md:hidden hidden bg-dark-light rounded-lg mt-2 p-4">
+        <div class="flex flex-col space-y-3">
+          <a href="#features" class="text-gray-300 hover:text-white transition-colors py-2">Features</a>
+          <a href="#pricing" class="text-gray-300 hover:text-white transition-colors py-2">Pricing</a>
+          <a href="#status" class="text-gray-300 hover:text-white transition-colors py-2">Status</a>
+          <a href="#faq" class="text-gray-300 hover:text-white transition-colors py-2">FAQ</a>
+          <a href="#community" class="text-gray-300 hover:text-white transition-colors py-2">Community</a>
+          
+          <button id="mobile-resources-button" class="text-gray-300 hover:text-white transition-colors py-2 flex items-center justify-between">
+            Resources
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          
+          <div id="mobile-resources-dropdown" class="hidden pl-4 space-y-2 mt-1">
+            <a href="#" class="block py-2 text-sm text-gray-400 hover:text-white">Documentation</a>
+            <a href="#" class="block py-2 text-sm text-gray-400 hover:text-white">Tutorials</a>
+            <a href="#" class="block py-2 text-sm text-gray-400 hover:text-white">API Reference</a>
+            <a href="#" class="block py-2 text-sm text-gray-400 hover:text-white">Support Center</a>
+          </div>
+          
+          <div class="pt-4 border-t border-dark-lighter flex flex-col space-y-3">
+            <a href="/login" class="py-2 text-center text-white hover:text-primary-300 transition-colors">Login</a>
+            <a href="/register" class="py-2 text-center text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-all">Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
 
+  <main id="main-content">
     <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="floating-particles" id="particles-container">
-            <!-- Particles will be added via JavaScript -->
-        </div>
-        <div class="glow" style="top: 20%; left: 60%;"></div>
-        <div class="glow" style="bottom: 10%; left: 30%;"></div>
-        <div class="container hero-content">
-            <div class="hero-logo">
-                <img src="/assets/img/FlaxyNodes_logo.gif" alt="Flaxy Nodes Logo">
-            </div>
-            <h1 class="hero-title">Flaxy Nodes</h1>
-            <p class="hero-subtitle">Premium game server hosting with unbeatable performance, reliability, and support. Start your gaming journey today.</p>
+    <section class="relative overflow-hidden py-20 md:py-28 lg:py-32">
+      <!-- Background Effects -->
+      <div class="absolute inset-0 bg-dark-base z-0">
+        <div class="absolute top-0 right-0 w-1/2 h-1/2 bg-primary-900/20 rounded-full blur-3xl transform translate-x-1/3 -translate-y-1/3"></div>
+        <div class="absolute bottom-0 left-0 w-1/2 h-1/2 bg-primary-800/20 rounded-full blur-3xl transform -translate-x-1/3 translate-y-1/3"></div>
+      </div>
+      
+      <!-- Grid Pattern -->
+      <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMzMTJlODEiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djZoNnYtNmgtNnptNiAwaDZ2LTZoLTZ2NnptMCA2djZoNnYtNmgtNnptNi02aDZ2LTZoLTZ2NnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20 z-0"></div>
+      
+      <div class="container mx-auto px-4 md:px-6 relative z-10">
+        <div class="flex flex-col lg:flex-row items-center gap-12">
+          <div class="flex-1 text-center lg:text-left max-w-3xl mx-auto lg:mx-0">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-900/50 text-primary-300 mb-6">
+              <span class="w-2 h-2 rounded-full bg-primary-400 mr-2 animate-pulse"></span>
+              Premium Hosting Solutions
+            </span>
             
-            <div class="mt-5">
-                <% if (typeof userinfo !== 'undefined' && userinfo && typeof pterodactyl !== 'undefined' && pterodactyl) { %>
-                    <a href="/dashboard" class="btn btn-primary btn-lg">Go to Dashboard</a>
-                    <a href="/create" class="btn btn-outline-light btn-lg">Create Server</a>
-                <% } else { %>
-                    <a href="/register" class="btn btn-primary btn-lg">Get Started</a>
-                    <a href="/login" class="btn btn-outline-light btn-lg">Login</a>
-                <% } %>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Features Section -->
-    <section class="features-section">
-        <div class="container">
-            <h2 class="section-title">Why Choose Flaxy Nodes?</h2>
-            <p class="section-subtitle">We provide the best game hosting experience with cutting-edge technology and exceptional support</p>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+              Elevate Your Projects with 
+              <span class="hero-gradient text-transparent bg-clip-text">Enterprise-Grade</span> 
+              <span class="relative whitespace-nowrap">
+                Hosting
+                <svg aria-hidden="true" viewBox="0 0 418 42" class="absolute left-0 top-full mt-1 h-[0.58em] w-full fill-primary-500/40" preserveAspectRatio="none">
+                  <path d="M203.371.916c-26.013-2.078-76.686 1.963-124.73 9.946L67.3 12.749C35.421 18.062 18.2 21.766 6.004 25.934 1.244 27.561.828 27.778.874 28.61c.07 1.214.828 1.121 9.595-1.176 9.072-2.377 17.15-3.92 39.246-7.496C123.565 7.986 157.869 4.492 195.942 5.046c7.461.108 19.25 1.696 19.17 2.582-.107 1.183-7.874 4.31-25.75 10.366-21.992 7.45-35.43 12.534-36.701 13.884-2.173 2.308-.202 4.407 4.442 4.734 2.654.187 3.263.157 15.593-.78 35.401-2.686 57.944-3.488 88.365-3.143 46.327.526 75.721 2.23 130.788 7.584 19.787 1.924 20.814 1.98 24.557 1.332l.066-.011c1.201-.203 1.53-1.825.399-2.335-2.911-1.31-4.893-1.604-22.048-3.261-57.509-5.556-87.871-7.36-132.059-7.842-23.239-.254-33.617-.116-50.627.674-11.629.54-42.371 2.494-46.696 2.967-2.359.259 8.133-3.625 26.504-9.81 23.239-7.825 27.934-10.149 28.304-14.005.417-4.348-3.529-6-16.878-7.066Z" />
+                </svg>
+              </span>
+            </h1>
             
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
-                    <div class="feature-card">
-                        <i class="fas fa-bolt icon-large"></i>
-                        <h3>High Performance</h3>
-                        <p>Experience lightning-fast servers with NVMe SSDs and the latest AMD Ryzen processors for lag-free gaming.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="feature-card">
-                        <i class="fas fa-shield-alt icon-large"></i>
-                        <h3>DDoS Protection</h3>
-                        <p>Our enterprise-grade DDoS protection ensures your servers stay online even during attacks.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="feature-card">
-                        <i class="fas fa-headset icon-large"></i>
-                        <h3>24/7 Support</h3>
-                        <p>Our expert support team is available around the clock to help you with any issues or questions.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="feature-card">
-                        <i class="fas fa-server icon-large"></i>
-                        <h3>Instant Setup</h3>
-                        <p>Get your server up and running in seconds with our automated deployment system.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="feature-card">
-                        <i class="fas fa-sliders-h icon-large"></i>
-                        <h3>Full Control</h3>
-                        <p>Manage your server with our intuitive control panel. Install mods, change settings, and more with ease.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="feature-card">
-                        <i class="fas fa-coins icon-large"></i>
-                        <h3>Affordable Plans</h3>
-                        <p>High-quality hosting at competitive prices with flexible resource allocation to fit your needs.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Stats Section -->
-    <section class="stats-section">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-lg-3 col-md-6">
-                    <div class="stat-card">
-                        <div class="stat-number">99.9%</div>
-                        <div class="stat-label">Uptime</div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="stat-card">
-                        <div class="stat-number">5000+</div>
-                        <div class="stat-label">Active Servers</div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="stat-card">
-                        <div class="stat-number">15,000+</div>
-                        <div class="stat-label">Happy Users</div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="stat-card">
-                        <div class="stat-number">10+</div>
-                        <div class="stat-label">Global Locations</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container cta-content">
-            <h2 class="section-title">Ready to Level Up Your Game?</h2>
-            <p class="section-subtitle">Join thousands of gamers who trust Flaxy Nodes for reliable, high-performance game hosting</p>
+            <p class="text-lg md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto lg:mx-0">
+              Experience lightning-fast performance, rock-solid reliability, and exceptional support. Your success is our priority with 99.9% uptime guarantee.
+            </p>
             
-            <div class="mt-5">
-                <% if (typeof userinfo !== 'undefined' && userinfo && typeof pterodactyl !== 'undefined' && pterodactyl) { %>
-                    <a href="/dashboard" class="btn btn-primary btn-lg">Go to Dashboard</a>
-                <% } else { %>
-                    <a href="/register" class="btn btn-primary btn-lg me-3">Create Account</a>
-                    <a href="/login" class="btn btn-outline-light btn-lg">Login</a>
-                <% } %>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <a href="#pricing" class="px-8 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium transition-all shadow-lg shadow-primary-600/20 hover:shadow-primary-600/40">
+                Get Started
+              </a>
+              <a href="#features" class="px-8 py-3 rounded-lg bg-dark-light hover:bg-dark-lighter text-white font-medium border border-primary-800/30 transition-all group flex items-center justify-center">
+                Explore Features
+                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+              </a>
             </div>
+            
+            <div class="mt-10 flex items-center justify-center lg:justify-start space-x-6 text-sm text-gray-400">
+              <div class="flex items-center">
+                <svg class="w-5 h-5 text-primary-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>99.9% Uptime</span>
+              </div>
+              <div class="flex items-center">
+                <svg class="w-5 h-5 text-primary-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>24/7 Support</span>
+              </div>
+              <div class="flex items-center">
+                <svg class="w-5 h-5 text-primary-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Free Migration</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex-1 w-full max-w-xl mx-auto lg:mx-0">
+            <div class="relative">
+              <!-- Main Image -->
+              <div class="bg-dark-light p-3 rounded-xl shadow-2xl shadow-primary-900/20 animate-float">
+                <img src="https://placehold.co/600x400/1a1a21/6366f1?text=Server+Infrastructure" alt="Flaxy Nodes Server Infrastructure" class="rounded-lg w-full h-auto">
+                
+                <!-- Floating Elements -->
+                <div class="absolute -top-6 -right-6 bg-dark-light p-3 rounded-lg shadow-lg animate-float" style="animation-delay: 0.5s">
+                  <div class="bg-primary-600 text-white px-3 py-2 rounded flex items-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <span class="font-medium">High Performance</span>
+                  </div>
+                </div>
+                
+                <div class="absolute -bottom-5 -left-5 bg-dark-light p-3 rounded-lg shadow-lg animate-float" style="animation-delay: 1s">
+                  <div class="bg-primary-900 text-primary-200 px-3 py-2 rounded flex items-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <span class="font-medium">Advanced Security</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 footer-col">
-                    <div class="footer-logo">Flaxy Nodes</div>
-                    <p class="footer-about">Premium game server hosting with unbeatable performance, reliability, and support for gamers worldwide.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
-                
-                <div class="col-lg-2 col-md-6 footer-col">
-                    <h4 class="footer-heading">Company</h4>
-                    <ul class="footer-links">
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/team">Our Team</a></li>
-                        <li><a href="/careers">Careers</a></li>
-                        <li><a href="/contact">Contact Us</a></li>
-                    </ul>
-                </div>
-                
-                <div class="col-lg-2 col-md-6 footer-col">
-                    <h4 class="footer-heading">Services</h4>
-                    <ul class="footer-links">
-                        <li><a href="/minecraft">Minecraft</a></li>
-                        <li><a href="/valheim">Valheim</a></li>
-                        <li><a href="/ark">ARK</a></li>
-                        <li><a href="/rust">Rust</a></li>
-                        <li><a href="/csgo">CS:GO</a></li>
-                    </ul>
-                </div>
-                
-                <div class="col-lg-2 col-md-6 footer-col">
-                    <h4 class="footer-heading">Support</h4>
-                    <ul class="footer-links">
-                        <li><a href="/help">Help Center</a></li>
-                        <li><a href="/faq">FAQ</a></li>
-                        <li><a href="/tickets">Tickets</a></li>
-                        <li><a href="/status">Server Status</a></li>
-                    </ul>
-                </div>
-                
-                <div class="col-lg-2 col-md-6 footer-col">
-                    <h4 class="footer-heading">Legal</h4>
-                    <ul class="footer-links">
-                        <li><a href="/terms">Terms of Service</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
-                        <li><a href="/refund">Refund Policy</a></li>
-                        <li><a href="/legal">Legal Notices</a></li>
-                    </ul>
-                </div>
+    <!-- Service Overview Section -->
+    <section class="py-20 bg-dark-light">
+      <div class="container mx-auto px-4 md:px-6">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="text-primary-500 font-semibold text-sm uppercase tracking-wider">Our Services</span>
+          <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">Premium Hosting Solutions</h2>
+          <p class="text-gray-400">Discover our range of high-performance hosting options designed to meet all your project requirements.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Hosting Service 1 -->
+          <div class="bg-dark-base rounded-lg p-6 border border-dark-lighter transition-all duration-300 hover:border-primary-600/50 hover:shadow-lg hover:shadow-primary-900/5">
+            <div class="w-12 h-12 bg-primary-900/30 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">VPS Hosting</h3>
+            <p class="text-gray-400 mb-4">High-performance virtual private servers with dedicated resources and full root access.</p>
+            <ul class="space-y-2 mb-6">
+              <li class="flex items-center text-sm text-gray-300">
+                <svg class="w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Dedicated CPU & RAM
+              </li>
+              <li class="flex items-center text-sm text-gray-300">
+                <svg class="w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                SSD Storage
+              </li>
+              <li class="flex items-center text-sm text-gray-300">
+                <svg class="w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Root Access
+              </li>
+            </ul>
+            <a href="#pricing" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium">
+              Learn More
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </a>
+          </div>
+          
+          <!-- Hosting Service 2 -->
+          <div class="bg-dark-base rounded-lg p-6 border border-dark-lighter transition-all duration-300 hover:border-primary-600/50 hover:shadow-lg hover:shadow-primary-900/5">
+            <div class="w-12 h-12 bg-primary-900/30 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">Game Servers</h3>
+            <p class="text-gray-400 mb-4">Optimized hosting for popular games with low latency and high performance.</p>
+            <ul class="space-y-2 mb-6">
+              <li class="flex items-center text-sm text-gray-300">
+                <svg class="w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Low Latency Network
+              </li>
+              <li class="flex items-center text-sm text-gray-300">
+                <svg class="w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Easy Control Panel
+              </li>
+              <li class="flex items-center text-sm text-gray-300">
+                <svg class="w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                DDoS Protection
+              </li>
+            </ul>
+            <a href="#pricing" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium">
+              Learn More
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </a>
+          </div>
+          
+          <!-- Hosting Service 3 -->
+          <div class="bg-dark-base rounded-lg p-6 border border-dark-lighter transition-all duration-300 hover:border-primary-600/50 hover:shadow-lg hover:shadow-primary-900/5">
+            <div class="w-12 h-12 bg-primary-900/30 rounded-lg flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">Web Hosting</h3>
+            <p class="text-gray-400 mb-4">Fast and reliable web hosting with easy management and scalable resources.</p>
+            <ul class="space-y-2 mb-6">
+              <li class="flex items-center text-sm text-gray-300">
+                <svg class="w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Free SSL Certificates
+              </li>
+              <li class="flex items-center text-sm text-gray-300">
+                <svg class="w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                One-Click Installs
+              </li>
+              <li class="flex items-center text-sm text-gray-300">
+                <svg class="w-4 h-4 text-primary-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                99.9% Uptime
+              </li>
+            </ul>
+            <a href="#pricing" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium">
+              Learn More
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Feature Showcase Section -->
+    <section id="features" class="py-24">
+      <div class="container mx-auto px-4 md:px-6">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="text-primary-500 font-semibold text-sm uppercase tracking-wider">Why Choose Us</span>
+          <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">Features That Set Us Apart</h2>
+          <p class="text-gray-400">Our hosting platform is built with cutting-edge technology and designed with your needs in mind.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+          <!-- Feature 1 -->
+          <div class="group">
+            <div class="relative">
+              <div class="w-14 h-14 bg-primary-900/30 rounded-lg flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-primary-600/30">
+                <svg class="w-7 h-7 text-primary-400 group-hover:text-primary-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+              </div>
+              <div class="absolute -inset-1 rounded-lg bg-gradient-to-r from-primary-600/20 to-primary-900/20 opacity-0 group-hover:opacity-100 transition-opacity blur"></div>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">High Performance</h3>
+            <p class="text-gray-400 mb-4">Enjoy blazing fast speeds with our optimized infrastructure powered by the latest AMD EPYC processors and NVMe SSDs.</p>
+            <a href="#" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium">
+              Learn More
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </a>
+          </div>
+          
+          <!-- Feature 2 -->
+          <div class="group">
+            <div class="relative">
+              <div class="w-14 h-14 bg-primary-900/30 rounded-lg flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-primary-600/30">
+                <svg class="w-7 h-7 text-primary-400 group-hover:text-primary-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+              </div>
+              <div class="absolute -inset-1 rounded-lg bg-gradient-to-r from-primary-600/20 to-primary-900/20 opacity-0 group-hover:opacity-100 transition-opacity blur"></div>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">Advanced Security</h3>
+            <p class="text-gray-400 mb-4">Rest easy with enterprise-grade security features including DDoS protection, firewalls, and regular security audits.</p>
+            <a href="#" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium">
+              Learn More
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </a>
+          </div>
+          
+          <!-- Feature 3 -->
+          <div class="group">
+            <div class="relative">
+              <div class="w-14 h-14 bg-primary-900/30 rounded-lg flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-primary-600/30">
+                <svg class="w-7 h-7 text-primary-400 group-hover:text-primary-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+              </div>
+              <div class="absolute -inset-1 rounded-lg bg-gradient-to-r from-primary-600/20 to-primary-900/20 opacity-0 group-hover:opacity-100 transition-opacity blur"></div>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">Intuitive Control Panel</h3>
+            <p class="text-gray-400 mb-4">Manage your services effortlessly with our user-friendly dashboard designed for both beginners and experts.</p>
+            <a href="#" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium">
+              Learn More
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </a>
+          </div>
+          
+          <!-- Feature 4 -->
+          <div class="group">
+            <div class="relative">
+              <div class="w-14 h-14 bg-primary-900/30 rounded-lg flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-primary-600/30">
+                <svg class="w-7 h-7 text-primary-400 group-hover:text-primary-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+              </div>
+              <div class="absolute -inset-1 rounded-lg bg-gradient-to-r from-primary-600/20 to-primary-900/20 opacity-0 group-hover:opacity-100 transition-opacity blur"></div>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">99.9% Uptime Guarantee</h3>
+            <p class="text-gray-400 mb-4">We guarantee reliable service with our enterprise-grade infrastructure and redundant systems.</p>
+            <a href="#" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium">
+              Learn More
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </a>
+          </div>
+          
+          <!-- Feature 5 -->
+          <div class="group">
+            <div class="relative">
+              <div class="w-14 h-14 bg-primary-900/30 rounded-lg flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-primary-600/30">
+                <svg class="w-7 h-7 text-primary-400 group-hover:text-primary-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
+                </svg>
+              </div>
+              <div class="absolute -inset-1 rounded-lg bg-gradient-to-r from-primary-600/20 to-primary-900/20 opacity-0 group-hover:opacity-100 transition-opacity blur"></div>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">Automatic Backups</h3>
+            <p class="text-gray-400 mb-4">Your data is always safe with our automated backup system, ensuring you never lose important information.</p>
+            <a href="#" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium">
+              Learn More
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </a>
+          </div>
+          
+          <!-- Feature 6 -->
+          <div class="group">
+            <div class="relative">
+              <div class="w-14 h-14 bg-primary-900/30 rounded-lg flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-primary-600/30">
+                <svg class="w-7 h-7 text-primary-400 group-hover:text-primary-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+              </div>
+              <div class="absolute -inset-1 rounded-lg bg-gradient-to-r from-primary-600/20 to-primary-900/20 opacity-0 group-hover:opacity-100 transition-opacity blur"></div>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">24/7 Expert Support</h3>
+            <p class="text-gray-400 mb-4">Our team of experts is available around the clock to help you with any issues or questions you might have.</p>
+            <a href="#" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium">
+              Learn More
+              <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Plans Section -->
+    <section id="pricing" class="py-24 bg-dark-light">
+      <div class="container mx-auto px-4 md:px-6">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="text-primary-500 font-semibold text-sm uppercase tracking-wider">Pricing</span>
+          <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">Choose Your Ideal Plan</h2>
+          <p class="text-gray-400">Transparent pricing with no hidden fees. Choose the perfect plan for your needs.</p>
+          
+          <div class="mt-6 inline-flex items-center p-1 bg-dark-base rounded-lg">
+            <button class="px-4 py-2 text-sm font-medium rounded-md bg-primary-600 text-white">Monthly</button>
+            <button class="px-4 py-2 text-sm font-medium rounded-md text-gray-300 hover:text-white transition-colors">Yearly (Save 20%)</button>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <!-- Basic Plan -->
+          <div class="bg-dark-base rounded-xl overflow-hidden border border-dark-lighter transition-all duration-300 hover:border-primary-600/30 hover:shadow-xl hover:shadow-primary-900/5">
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Basic</h3>
+              <p class="text-gray-400 text-sm mb-6">Perfect for small projects and personal websites</p>
+              
+              <div class="flex items-baseline mb-6">
+                <span class="text-3xl font-bold">₹399</span>
+                <span class="text-gray-400 ml-1 text-sm">/month</span>
+              </div>
+              
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">2 CPU Cores</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">2GB RAM</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">40GB SSD Storage</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">1TB Bandwidth</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">24/7 Basic Support</span>
+                </li>
+              </ul>
+              
+              <a href="/register" class="block w-full py-3 px-4 text-center text-white bg-primary-600 hover:bg-primary-700 rounded-lg font-medium transition-colors">Select Plan</a>
+            </div>
+          </div>
+          
+          <!-- Pro Plan (Featured) -->
+          <div class="bg-dark-base rounded-xl overflow-hidden border-2 border-primary-600 transition-all duration-300 hover:shadow-xl hover:shadow-primary-600/10 relative transform scale-105 md:scale-110 z-10">
+            <div class="absolute top-0 inset-x-0 flex justify-center">
+              <span class="bg-primary-600 text-white text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-b-md">Most Popular</span>
             </div>
             
-            <div class="footer-bottom">
-                <p>&copy; <%= new Date().getFullYear() %> Flaxy Nodes. All rights reserved.</p>
+            <div class="p-8 pt-10">
+              <h3 class="text-xl font-bold mb-2">Pro</h3>
+              <p class="text-gray-400 text-sm mb-6">Ideal for growing businesses and applications</p>
+              
+              <div class="flex items-baseline mb-6">
+                <span class="text-3xl font-bold">₹999</span>
+                <span class="text-gray-400 ml-1 text-sm">/month</span>
+              </div>
+              
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">4 CPU Cores</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">8GB RAM</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">120GB NVMe SSD</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">3TB Bandwidth</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">Priority Support</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">Free Backups</span>
+                </li>
+              </ul>
+              
+              <a href="/register" class="block w-full py-3 px-4 text-center text-white bg-primary-600 hover:bg-primary-700 rounded-lg font-medium transition-colors">Select Plan</a>
             </div>
+          </div>
+          
+          <!-- Enterprise Plan -->
+          <div class="bg-dark-base rounded-xl overflow-hidden border border-dark-lighter transition-all duration-300 hover:border-primary-600/30 hover:shadow-xl hover:shadow-primary-900/5">
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Enterprise</h3>
+              <p class="text-gray-400 text-sm mb-6">Advanced solutions for high-demand applications</p>
+              
+              <div class="flex items-baseline mb-6">
+                <span class="text-3xl font-bold">₹2,499</span>
+                <span class="text-gray-400 ml-1 text-sm">/month</span>
+              </div>
+              
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">8 CPU Cores</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">16GB RAM</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">300GB NVMe SSD</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">5TB Bandwidth</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">Dedicated Support</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="text-gray-300">Advanced Security</span>
+                </li>
+              </ul>
+              
+              <a href="/register" class="block w-full py-3 px-4 text-center text-white bg-primary-600 hover:bg-primary-700 rounded-lg font-medium transition-colors">Select Plan</a>
+            </div>
+          </div>
         </div>
+        
+        <div class="mt-12 text-center">
+          <p class="text-gray-400 mb-4">Need a custom solution? We've got you covered.</p>
+          <a href="/contact" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium">
+            Contact us for custom pricing
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Performance Metrics Section -->
+    <section class="py-20 bg-dark-base relative overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 z-0">
+          <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMzMTJlODEiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PHBhdGggZD0iTTM2IDM0djZoNnYtNmgtNnptNiAwaDZ2LTZoLTZ2NnptMCA2djZoNnYtNmgtNnptNi02aDZ2LTZoLTZ2NnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-10"></div>
+          <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-primary-700/10 to-transparent rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+          <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-primary-500 font-semibold text-sm uppercase tracking-wider">Performance</span>
+            <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">Our Reliability Metrics</h2>
+            <p class="text-gray-400">Our infrastructure is designed to provide the highest level of performance and reliability.</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Uptime Metric -->
+            <div class="bg-dark-light p-8 rounded-xl relative group hover:shadow-lg hover:shadow-primary-900/5 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-r from-primary-600/5 to-primary-900/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+              <div class="relative">
+                <div class="flex items-center justify-center mb-8">
+                  <svg class="w-16 h-16 text-primary-500" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+                    <path class="text-dark-lighter" fill="currentColor" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-width="0"></path>
+                    <path class="text-primary-500" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="99.9, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-linecap="round"></path>
+                    <text x="18" y="21" text-anchor="middle" fill="white" font-size="10" font-weight="bold">99.9%</text>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-center mb-3">Uptime Guarantee</h3>
+                <p class="text-gray-400 text-center">Our servers maintain a consistent 99.9% uptime, ensuring your services are always available.</p>
+              </div>
+            </div>
+            
+            <!-- Speed Metric -->
+            <div class="bg-dark-light p-8 rounded-xl relative group hover:shadow-lg hover:shadow-primary-900/5 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-r from-primary-600/5 to-primary-900/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+              <div class="relative">
+                <div class="flex items-center justify-center mb-8">
+                  <div class="relative w-16 h-16">
+                    <svg class="w-16 h-16 transform rotate-[-90deg]" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+                      <path class="text-dark-lighter" fill="currentColor" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-width="0"></path>
+                      <path class="text-primary-400" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="85, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-linecap="round"></path>
+                    </svg>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <div class="text-center">
+                        <span class="text-lg font-bold text-white">25ms</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <h3 class="text-xl font-semibold text-center mb-3">Response Time</h3>
+                <p class="text-gray-400 text-center">Fast response times with an average of just 25ms, providing a seamless experience.</p>
+              </div>
+            </div>
+            
+            <!-- Security Metric -->
+            <div class="bg-dark-light p-8 rounded-xl relative group hover:shadow-lg hover:shadow-primary-900/5 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-r from-primary-600/5 to-primary-900/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+              <div class="relative">
+                <div class="flex items-center justify-center mb-8">
+                  <svg class="w-16 h-16 text-primary-500" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+                    <path class="text-dark-lighter" fill="currentColor" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-width="0"></path>
+                    <path class="text-primary-600" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="95, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-linecap="round"></path>
+                    <text x="18" y="21" text-anchor="middle" fill="white" font-size="10" font-weight="bold">A+</text>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-center mb-3">Security Rating</h3>
+                <p class="text-gray-400 text-center">Top-tier security measures with A+ security ratings from independent security auditors.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-16 max-w-4xl mx-auto bg-dark-light rounded-xl p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3 w-64 h-64 bg-gradient-to-br from-primary-600/30 to-primary-900/10 rounded-full blur-3xl"></div>
+            <div class="relative z-10">
+              <div class="flex items-center justify-between mb-8 flex-wrap gap-4">
+                <div>
+                  <h3 class="text-xl font-semibold">Monthly Performance Report</h3>
+                  <p class="text-gray-400 mt-1">Last 30 days of server performance metrics</p>
+                </div>
+                <div class="flex space-x-2">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-primary-900/50 text-primary-300">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary-400 mr-1"></span>
+                    Uptime
+                  </span>
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-900/50 text-purple-300">
+                    <span class="w-1.5 h-1.5 rounded-full bg-purple-400 mr-1"></span>
+                    Response
+                  </span>
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-teal-900/50 text-teal-300">
+                    <span class="w-1.5 h-1.5 rounded-full bg-teal-400 mr-1"></span>
+                    Traffic
+                  </span>
+                </div>
+              </div>
+              
+              <!-- Performance Graph -->
+              <div class="h-64 w-full">
+                <!-- Mock Graph Bars -->
+                <div class="flex h-full items-end space-x-2">
+                  <% for(let i = 1; i <= 30; i++) { 
+                    const height = 70 + Math.floor(Math.random() * 25); 
+                    const responseHeight = 60 + Math.floor(Math.random() * 30);
+                    const trafficHeight = 50 + Math.floor(Math.random() * 40);
+                  %>
+                    <div class="flex-1 flex flex-col space-y-1">
+                      <div class="group relative">
+                        <div class="h-<%= height %>% bg-gradient-to-t from-primary-600 to-primary-400 rounded-t opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <span class="text-xs font-medium"><%= height %>%</span>
+                        </div>
+                      </div>
+                      <div class="h-<%= responseHeight %>% bg-gradient-to-t from-purple-600 to-purple-400 rounded-t opacity-60 group-hover:opacity-80 transition-opacity"></div>
+                      <div class="h-<%= trafficHeight %>% bg-gradient-to-t from-teal-600 to-teal-400 rounded-t opacity-60 group-hover:opacity-80 transition-opacity"></div>
+                    </div>
+                  <% } %>
+                </div>
+                
+                <!-- X-Axis Labels -->
+                <div class="flex justify-between mt-4 text-xs text-gray-500">
+                  <span>Apr 1</span>
+                  <span>Apr 10</span>
+                  <span>Apr 20</span>
+                  <span>Apr 30</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    <!-- Server Status Dashboard -->
+    <section id="status" class="py-20">
+      <div class="container mx-auto px-4 md:px-6">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="text-primary-500 font-semibold text-sm uppercase tracking-wider">System Status</span>
+          <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">Real-time Server Status</h2>
+          <p class="text-gray-400">Monitor our infrastructure performance in real-time with our transparent status dashboard.</p>
+        </div>
+        
+        <div class="bg-dark-light rounded-xl overflow-hidden shadow-lg">
+          <div class="p-6 border-b border-dark-lighter">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+              <div class="flex items-center space-x-2">
+                <div class="h-3 w-3 rounded-full bg-green-500 animate-pulse"></div>
+                <h3 class="font-medium">All Systems Operational</h3>
+              </div>
+              <div class="flex items-center text-sm text-gray-400">
+                <span>Last updated: 5 minutes ago</span>
+                <button class="ml-3 text-primary-400 hover:text-primary-300 transition-colors">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="divide-y divide-dark-lighter">
+            <!-- Server 1 -->
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                  <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+                  </svg>
+                  <h4 class="font-semibold">Mumbai Node</h4>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="h-2.5 w-2.5 rounded-full bg-green-500"></div>
+                  <span class="text-sm text-green-400">Operational</span>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-dark-base p-3 rounded-lg">
+                  <div class="text-xs text-gray-400 mb-1">CPU Load</div>
+                  <div class="flex items-center justify-between">
+                    <span class="font-medium">28%</span>
+                    <div class="w-24 bg-dark-lighter rounded-full h-2">
+                      <div class="bg-green-500 h-2 rounded-full" style="width: 28%"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-dark-base p-3 rounded-lg">
+                  <div class="text-xs text-gray-400 mb-1">Memory Usage</div>
+                  <div class="flex items-center justify-between">
+                    <span class="font-medium">45%</span>
+                    <div class="w-24 bg-dark-lighter rounded-full h-2">
+                      <div class="bg-blue-500 h-2 rounded-full" style="width: 45%"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-dark-base p-3 rounded-lg">
+                  <div class="text-xs text-gray-400 mb-1">Network</div>
+                  <div class="flex items-center justify-between">
+                    <span class="font-medium">18%</span>
+                    <div class="w-24 bg-dark-lighter rounded-full h-2">
+                      <div class="bg-purple-500 h-2 rounded-full" style="width: 18%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Server 2 -->
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                  <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+                  </svg>
+                  <h4 class="font-semibold">Delhi Node</h4>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="h-2.5 w-2.5 rounded-full bg-green-500"></div>
+                  <span class="text-sm text-green-400">Operational</span>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-dark-base p-3 rounded-lg">
+                  <div class="text-xs text-gray-400 mb-1">CPU Load</div>
+                  <div class="flex items-center justify-between">
+                    <span class="font-medium">32%</span>
+                    <div class="w-24 bg-dark-lighter rounded-full h-2">
+                      <div class="bg-green-500 h-2 rounded-full" style="width: 32%"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-dark-base p-3 rounded-lg">
+                  <div class="text-xs text-gray-400 mb-1">Memory Usage</div>
+                  <div class="flex items-center justify-between">
+                    <span class="font-medium">52%</span>
+                    <div class="w-24 bg-dark-lighter rounded-full h-2">
+                      <div class="bg-blue-500 h-2 rounded-full" style="width: 52%"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-dark-base p-3 rounded-lg">
+                  <div class="text-xs text-gray-400 mb-1">Network</div>
+                  <div class="flex items-center justify-between">
+                    <span class="font-medium">24%</span>
+                    <div class="w-24 bg-dark-lighter rounded-full h-2">
+                      <div class="bg-purple-500 h-2 rounded-full" style="width: 24%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Server 3 -->
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                  <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+                  </svg>
+                  <h4 class="font-semibold">Bangalore Node</h4>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <div class="h-2.5 w-2.5 rounded-full bg-green-500"></div>
+                  <span class="text-sm text-green-400">Operational</span>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-dark-base p-3 rounded-lg">
+                  <div class="text-xs text-gray-400 mb-1">CPU Load</div>
+                  <div class="flex items-center justify-between">
+                    <span class="font-medium">41%</span>
+                    <div class="w-24 bg-dark-lighter rounded-full h-2">
+                      <div class="bg-green-500 h-2 rounded-full" style="width: 41%"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-dark-base p-3 rounded-lg">
+                  <div class="text-xs text-gray-400 mb-1">Memory Usage</div>
+                  <div class="flex items-center justify-between">
+                    <span class="font-medium">38%</span>
+                    <div class="w-24 bg-dark-lighter rounded-full h-2">
+                      <div class="bg-blue-500 h-2 rounded-full" style="width: 38%"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-dark-base p-3 rounded-lg">
+                  <div class="text-xs text-gray-400 mb-1">Network</div>
+                  <div class="flex items-center justify-between">
+                    <span class="font-medium">33%</span>
+                    <div class="w-24 bg-dark-lighter rounded-full h-2">
+                      <div class="bg-purple-500 h-2 rounded-full" style="width: 33%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="p-6 border-t border-dark-lighter">
+            <a href="/status" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium">
+              View detailed status history
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-24 bg-dark-light relative overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 z-0">
+          <div class="absolute top-0 right-0 w-1/3 h-1/2 bg-gradient-to-bl from-primary-900/10 to-transparent rounded-full blur-3xl"></div>
+          <div class="absolute bottom-0 left-0 w-1/3 h-1/2 bg-gradient-to-tr from-primary-900/10 to-transparent rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+          <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-primary-500 font-semibold text-sm uppercase tracking-wider">Testimonials</span>
+            <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">What Our Clients Say</h2>
+            <p class="text-gray-400">Don't just take our word for it. Here's what our customers have to say about our services.</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Testimonial 1 -->
+            <div class="bg-dark-base p-8 rounded-xl relative group hover:shadow-lg hover:shadow-primary-900/5 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-r from-primary-600/5 to-primary-900/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+              
+              <!-- Quote Icon -->
+              <div class="absolute -top-4 -left-4 w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                </svg>
+              </div>
+              
+              <div class="relative z-10">
+                <div class="mb-6">
+                  <div class="flex text-yellow-400 mb-3">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                  </div>
+                  <p class="text-gray-300 italic">"Flaxy Nodes has been a game-changer for our business. The performance is outstanding, and the customer support team is always responsive and helpful. We've never experienced any significant downtime."</p>
+                </div>
+                
+                <div class="flex items-center">
+                  <img src="https://placehold.co/80x80/1a1a21/6366f1?text=A" alt="Amit Sharma" class="w-12 h-12 rounded-full mr-4">
+                  <div>
+                    <h4 class="font-semibold">Amit Sharma</h4>
+                    <p class="text-sm text-gray-400">CTO, TechStart</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Testimonial 2 -->
+            <div class="bg-dark-base p-8 rounded-xl relative group hover:shadow-lg hover:shadow-primary-900/5 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-r from-primary-600/5 to-primary-900/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+              
+              <!-- Quote Icon -->
+              <div class="absolute -top-4 -left-4 w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                </svg>
+              </div>
+              
+              <div class="relative z-10">
+                <div class="mb-6">
+                  <div class="flex text-yellow-400 mb-3">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                  </div>
+                  <p class="text-gray-300 italic">"We migrated from another provider, and the difference is night and day. The servers are lightning fast, and the control panel is intuitive. Best hosting decision we've made."</p>
+                </div>
+                
+                <div class="flex items-center">
+                  <img src="https://placehold.co/80x80/1a1a21/6366f1?text=P" alt="Priya Patel" class="w-12 h-12 rounded-full mr-4">
+                  <div>
+                    <h4 class="font-semibold">Priya Patel</h4>
+                    <p class="text-sm text-gray-400">Developer, GameCraft</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Testimonial 3 -->
+            <div class="bg-dark-base p-8 rounded-xl relative group hover:shadow-lg hover:shadow-primary-900/5 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-r from-primary-600/5 to-primary-900/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+              
+              <!-- Quote Icon -->
+              <div class="absolute -top-4 -left-4 w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                </svg>
+              </div>
+              
+              <div class="relative z-10">
+                <div class="mb-6">
+                  <div class="flex text-yellow-400 mb-3">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                  </div>
+                  <p class="text-gray-300 italic">"As a startup, finding reliable and affordable hosting was crucial. Flaxy Nodes exceeded our expectations with their Pro plan. The performance is exceptional, and scaling is a breeze."</p>
+                </div>
+                
+                <div class="flex items-center">
+                  <img src="https://placehold.co/80x80/1a1a21/6366f1?text=R" alt="Rahul Gupta" class="w-12 h-12 rounded-full mr-4">
+                  <div>
+                    <h4 class="font-semibold">Rahul Gupta</h4>
+                    <p class="text-sm text-gray-400">Founder, CloudEdge</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Client Logos -->
+          <div class="mt-20">
+            <h3 class="text-center text-gray-400 mb-10 text-sm uppercase tracking-wider font-medium">Trusted by innovative companies</h3>
+            
+            <div class="flex flex-wrap justify-center items-center gap-12 opacity-70">
+              <img src="https://placehold.co/120x40/1a1a21/6366f1?text=COMPANY+1" alt="Company 1" class="h-8">
+              <img src="https://placehold.co/150x40/1a1a21/6366f1?text=COMPANY+2" alt="Company 2" class="h-8">
+              <img src="https://placehold.co/130x40/1a1a21/6366f1?text=COMPANY+3" alt="Company 3" class="h-8">
+              <img src="https://placehold.co/140x40/1a1a21/6366f1?text=COMPANY+4" alt="Company 4" class="h-8">
+              <img src="https://placehold.co/160x40/1a1a21/6366f1?text=COMPANY+5" alt="Company 5" class="h-8">
+            </div>
+          </div>
+        </div>
+      </section>
+
+    <!-- Technical Specifications Section -->
+    <section class="py-20">
+      <div class="container mx-auto px-4 md:px-6">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="text-primary-500 font-semibold text-sm uppercase tracking-wider">Tech Specs</span>
+          <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">Our Technology Stack</h2>
+          <p class="text-gray-400">Powered by cutting-edge technology to ensure speed, reliability, and security.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+          <!-- Server Specifications -->
+          <div>
+            <h3 class="text-2xl font-bold mb-6 flex items-center">
+              <svg class="w-6 h-6 text-primary-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+              </svg>
+              Server Specifications
+            </h3>
+            
+            <div class="space-y-6">
+              <div class="bg-dark-light p-6 rounded-lg">
+                <h4 class="font-semibold mb-4">Hardware</h4>
+                <ul class="space-y-3">
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">Latest AMD EPYC Processors</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">High-Speed NVMe SSD Storage</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">ECC DDR4 RAM</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">Redundant Power Supplies</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="bg-dark-light p-6 rounded-lg">
+                <h4 class="font-semibold mb-4">Software</h4>
+                <ul class="space-y-3">
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">Linux KVM Virtualization</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">Latest Kernel Versions</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">Customized Control Panel</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">Docker & Kubernetes Support</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Network Infrastructure -->
+          <div>
+            <h3 class="text-2xl font-bold mb-6 flex items-center">
+              <svg class="w-6 h-6 text-primary-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+              </svg>
+              Network Infrastructure
+            </h3>
+            
+            <div class="space-y-6">
+              <div class="bg-dark-light p-6 rounded-lg">
+                <h4 class="font-semibold mb-4">Connectivity</h4>
+                <ul class="space-y-3">
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">Multiple 10Gbps Network Interfaces</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">Tier-1 Transit Providers</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">Multiple Edge Locations in India</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">Low-Latency Routing</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="bg-dark-light p-6 rounded-lg">
+                <h4 class="font-semibold mb-4">Security</h4>
+                <ul class="space-y-3">
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">100 Gbps DDoS Protection</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">Advanced Firewall Protection</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">Real-time Security Monitoring</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="w-5 h-5 text-primary-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-300">SSL/TLS Encryption</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="py-24 bg-dark-light relative overflow-hidden">
+      <!-- Background Elements -->
+      <div class="absolute inset-0 z-0">
+        <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-primary-900/10 to-transparent rounded-full blur-3xl"></div>
+      </div>
+      
+      <div class="container mx-auto px-4 md:px-6 relative z-10">
+        <div class="flex flex-col lg:flex-row items-center gap-12">
+          <div class="flex-1 text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
+            <span class="text-primary-500 font-semibold text-sm uppercase tracking-wider">Join Our Community</span>
+            <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">Connect with Fellow Developers</h2>
+            <p class="text-gray-400 mb-6">Join our thriving Discord community with over 5,000 members. Share knowledge, get support, and connect with like-minded developers.</p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <a href="https://discord.gg/flaxy-nodes" target="_blank" rel="noopener noreferrer" class="px-8 py-3 rounded-lg bg-[#5865F2] hover:bg-[#4752c4] text-white font-medium transition-all shadow-lg shadow-[#5865F2]/20 hover:shadow-[#5865F2]/40 flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                  <path d="M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.971,0-52.843-26.587-52.843-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.844,59.239C470.715,310.993,447.538,337.58,417.871,337.58Z"/>
+                </svg>
+                Join Discord Community
+              </a>
+            </div>
+            
+            <div class="mt-10 flex flex-wrap justify-center lg:justify-start gap-x-8 gap-y-4">
+              <div class="flex items-center">
+                <svg class="w-5 h-5 text-primary-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <span>5,000+ Members</span>
+              </div>
+              <div class="flex items-center">
+                <svg class="w-5 h-5 text-primary-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                </svg>
+                <span>Active Discussions</span>
+              </div>
+              <div class="flex items-center">
+                <svg class="w-5 h-5 text-primary-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+                <span>24/7 Support</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex-1 w-full max-w-md mx-auto lg:mx-0">
+            <div class="bg-dark-base p-6 rounded-xl shadow-2xl shadow-primary-900/20 border border-dark-lighter relative overflow-hidden">
+              <!-- Discord-like UI -->
+              <div class="absolute top-0 left-0 w-full h-1 bg-[#5865F2]"></div>
+              
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                  <div class="h-10 w-10 bg-[#5865F2] rounded-full flex items-center justify-center mr-3">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                      <path d="M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.971,0-52.843-26.587-52.843-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.844,59.239C470.715,310.993,447.538,337.58,417.871,337.58Z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 class="font-bold">Flaxy Nodes Community</h3>
+                      <p class="text-xs text-gray-400">5,238 members online</p>
+                    </div>
+                  </div>
+                  
+                  <div class="flex space-x-2">
+                    <div class="h-2.5 w-2.5 rounded-full bg-green-500"></div>
+                    <div class="h-2.5 w-2.5 rounded-full bg-yellow-500"></div>
+                    <div class="h-2.5 w-2.5 rounded-full bg-red-500"></div>
+                  </div>
+                </div>
+                
+                <!-- Chat Messages -->
+                <div class="space-y-4 mb-6">
+                  <div class="flex">
+                    <img src="https://placehold.co/36x36/1a1a21/6366f1?text=U1" alt="User 1" class="w-9 h-9 rounded-full mr-3">
+                    <div>
+                      <div class="flex items-center mb-1">
+                        <span class="font-medium text-blue-400 mr-2">DevMaster</span>
+                        <span class="text-xs text-gray-500">Today at 10:23 AM</span>
+                      </div>
+                      <p class="text-gray-300">Just deployed my app on Flaxy Nodes. The performance is amazing! 🚀</p>
+                    </div>
+                  </div>
+                  
+                  <div class="flex">
+                    <img src="https://placehold.co/36x36/1a1a21/6366f1?text=U2" alt="User 2" class="w-9 h-9 rounded-full mr-3">
+                    <div>
+                      <div class="flex items-center mb-1">
+                        <span class="font-medium text-green-400 mr-2">CloudExpert</span>
+                        <span class="text-xs text-gray-500">Today at 10:25 AM</span>
+                      </div>
+                      <p class="text-gray-300">Yeah, their NVMe drives are super fast. Have you tried their Mumbai node?</p>
+                    </div>
+                  </div>
+                  
+                  <div class="flex">
+                    <img src="https://placehold.co/36x36/1a1a21/6366f1?text=U1" alt="User 1" class="w-9 h-9 rounded-full mr-3">
+                    <div>
+                      <div class="flex items-center mb-1">
+                        <span class="font-medium text-blue-400 mr-2">DevMaster</span>
+                        <span class="text-xs text-gray-500">Today at 10:28 AM</span>
+                      </div>
+                      <p class="text-gray-300">Not yet, but I'll check it out. Support team was really helpful with migration.</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Chat Input -->
+                <div class="flex items-center bg-dark-lighter rounded-lg p-2">
+                  <div class="flex-1 bg-dark-base rounded-lg px-4 py-2 text-gray-400">Join the conversation...</div>
+                  <button class="ml-2 text-primary-400 hover:text-primary-300 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resources & FAQ Section -->
+    <section id="resources" class="py-24 relative overflow-hidden">
+      <div class="absolute inset-0 z-0">
+        <div class="absolute top-0 left-0 w-1/3 h-1/2 bg-gradient-to-br from-primary-900/10 to-transparent rounded-full blur-3xl"></div>
+      </div>
+      
+      <div class="container mx-auto px-4 md:px-6 relative z-10">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="text-primary-500 font-semibold text-sm uppercase tracking-wider">Resources & Support</span>
+          <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">Frequently Asked Questions</h2>
+          <p class="text-gray-400">Find answers to the most common questions about our hosting services.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10 max-w-5xl mx-auto">
+          <div class="bg-dark-light p-6 rounded-xl shadow-lg shadow-dark-lighter/10">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+              <svg class="w-6 h-6 text-primary-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              What is the uptime guarantee?
+            </h3>
+            <p class="text-gray-400">We guarantee 99.95% uptime for all our VPS and dedicated hosting plans. In the rare case where we don't meet this SLA, you'll receive credits on your account as compensation.</p>
+          </div>
+          
+          <div class="bg-dark-light p-6 rounded-xl shadow-lg shadow-dark-lighter/10">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+              <svg class="w-6 h-6 text-primary-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              How does billing work?
+            </h3>
+            <p class="text-gray-400">We offer flexible monthly billing with no long-term contracts. You can pay via credit card, UPI, or online banking. Our auto-renewal system ensures your services remain uninterrupted.</p>
+          </div>
+          
+          <div class="bg-dark-light p-6 rounded-xl shadow-lg shadow-dark-lighter/10">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+              <svg class="w-6 h-6 text-primary-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+              </svg>
+              How secure are your servers?
+            </h3>
+            <p class="text-gray-400">Security is our priority. We implement multiple layers of protection including 100 Gbps DDoS protection, regular security patches, network monitoring, and hardware firewalls to keep your data safe.</p>
+          </div>
+          
+          <div class="bg-dark-light p-6 rounded-xl shadow-lg shadow-dark-lighter/10">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+              <svg class="w-6 h-6 text-primary-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              How long does deployment take?
+            </h3>
+            <p class="text-gray-400">Most virtual servers are deployed instantly after payment confirmation. Dedicated servers typically take 4-24 hours depending on hardware configuration and customization requirements.</p>
+          </div>
+          
+          <div class="bg-dark-light p-6 rounded-xl shadow-lg shadow-dark-lighter/10">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+              <svg class="w-6 h-6 text-primary-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              Can I upgrade my plan?
+            </h3>
+            <p class="text-gray-400">Yes, you can seamlessly upgrade your plan at any time through our control panel. Downgrades can be processed at the end of your current billing cycle.</p>
+          </div>
+          
+          <div class="bg-dark-light p-6 rounded-xl shadow-lg shadow-dark-lighter/10">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+              <svg class="w-6 h-6 text-primary-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+              </svg>
+              What kind of support do you offer?
+            </h3>
+            <p class="text-gray-400">We provide 24/7 technical support via live chat, email, and ticketing system for all customers. Higher-tier plans include priority support and direct phone access to our senior engineers.</p>
+          </div>
+        </div>
+        
+        <div class="mt-12 text-center">
+          <a href="/faq" class="inline-flex items-center text-primary-500 hover:text-primary-400 font-medium transition-colors">
+            View All FAQs
+            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Call to Action Section -->
+    <section class="py-20 bg-gradient-to-r from-primary-900 to-purple-900 relative overflow-hidden">
+      <!-- Background Elements -->
+      <div class="absolute inset-0 z-0">
+        <div class="absolute top-0 right-0 w-1/3 h-1/2 bg-white/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-1/3 h-1/2 bg-white/5 rounded-full blur-3xl"></div>
+      </div>
+      
+      <div class="container mx-auto px-4 md:px-6 relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">Ready to Power Your Applications?</h2>
+          <p class="text-xl text-purple-100 mb-8">Experience lightning-fast, reliable hosting optimized for Indian developers.</p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <a href="/pricing" class="px-8 py-4 rounded-lg bg-white hover:bg-gray-100 text-primary-900 font-medium text-lg transition-all shadow-lg hover:shadow-xl">
+              Get Started Now
+            </a>
+            <a href="/contact" class="px-8 py-4 rounded-lg bg-transparent hover:bg-white/10 text-white border border-white border-opacity-30 font-medium text-lg transition-all">
+              Contact Sales
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-dark-base pt-16 pb-8 relative z-10">
+      <div class="container mx-auto px-4 md:px-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
+          <!-- Company Info -->
+          <div>
+            <a href="/" class="flex items-center mb-6">
+              <img src="/img/logo-white.svg" alt="Flaxy Nodes" class="h-8">
+            </a>
+            <p class="text-gray-400 mb-6">High-performance cloud hosting optimized for Indian developers. Lightning-fast servers in Mumbai, Delhi, and Bangalore.</p>
+            <div class="flex space-x-4">
+              <a href="https://twitter.com/flaxynodes" class="text-gray-400 hover:text-primary-500 transition-colors">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
+                </svg>
+              </a>
+              <a href="https://github.com/flaxynodes" class="text-gray-400 hover:text-primary-500 transition-colors">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+                </svg>
+              </a>
+              <a href="https://www.linkedin.com/company/flaxynodes" class="text-gray-400 hover:text-primary-500 transition-colors">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M7.5 5.25a3 3 0 013-3h3a3 3 0 013 3v.205c.933.236 1.803.633 2.538 1.162a7.966 7.966 0 01-.353 1.67 5.989 5.989 0 00-1.176-.599c-1.011-.401-1.96-.401-3.009 0-1.047.4-2.136 1.309-3.01 3.035-1.398 2.795-1.494 5.535.083 6.552.88.565 2.081.451 3.412-.188.602-.289 1.216-.664 1.824-1.137a7.966 7.966 0 012.056.375 9.944 9.944 0 01-2.297 1.631c-1.626.77-3.45.998-5.003-.072-1.55-1.068-2.155-3.236-1.687-5.512.465-2.262 1.99-4.818 4.624-6.826.022-.018.047-.034.071-.051A3 3 0 017.5 5.25zm1.5 0a1.5 1.5 0 00-1.5 1.5v1.676c.649-.176 1.344-.293 2.072-.293h1.12a.5.5 0 01.5.5.5.5 0 01-.5.5h-1.12c-.665 0-1.308.112-1.912.291a9.978 9.978 0 00-1.255.656 8.978 8.978 0 011.735 4.673c.348 2.378.046 4.345-1.116 5.307-1.163.964-2.77.994-4.3.234A8.883 8.883 0 01.644 17.42l-.55.089A6 6 0 008.449 20.97c2.012.164 4.097-.231 5.864-1.078a11.439 11.439 0 003.913-3.039c.803-.938 1.433-1.948 1.858-2.938.426-.992.65-1.96.65-2.865 0-4.498-3.636-8.149-8.149-8.149H10.5a1.5 1.5 0 00-1.5 1.5z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Products -->
+          <div>
+            <h3 class="text-lg font-bold mb-6">Products</h3>
+            <ul class="space-y-4">
+              <li><a href="/vps" class="text-gray-400 hover:text-primary-500 transition-colors">VPS Hosting</a></li>
+              <li><a href="/dedicated" class="text-gray-400 hover:text-primary-500 transition-colors">Dedicated Servers</a></li>
+              <li><a href="/managed" class="text-gray-400 hover:text-primary-500 transition-colors">Managed Hosting</a></li>
+              <li><a href="/storage" class="text-gray-400 hover:text-primary-500 transition-colors">Object Storage</a></li>
+              <li><a href="/database" class="text-gray-400 hover:text-primary-500 transition-colors">Database Services</a></li>
+            </ul>
+          </div>
+          
+          <!-- Company -->
+          <div>
+            <h3 class="text-lg font-bold mb-6">Company</h3>
+            <ul class="space-y-4">
+              <li><a href="/about" class="text-gray-400 hover:text-primary-500 transition-colors">About Us</a></li>
+              <li><a href="/careers" class="text-gray-400 hover:text-primary-500 transition-colors">Careers</a></li>
+              <li><a href="/blog" class="text-gray-400 hover:text-primary-500 transition-colors">Blog</a></li>
+              <li><a href="/legal/privacy" class="text-gray-400 hover:text-primary-500 transition-colors">Privacy Policy</a></li>
+              <li><a href="/legal/terms" class="text-gray-400 hover:text-primary-500 transition-colors">Terms of Service</a></li>
+            </ul>
+          </div>
+          
+          <!-- Support -->
+          <div>
+            <h3 class="text-lg font-bold mb-6">Support</h3>
+            <ul class="space-y-4">
+              <li><a href="/contact" class="text-gray-400 hover:text-primary-500 transition-colors">Contact Us</a></li>
+              <li><a href="/support" class="text-gray-400 hover:text-primary-500 transition-colors">Support Center</a></li>
+              <li><a href="/status" class="text-gray-400 hover:text-primary-500 transition-colors">System Status</a></li>
+              <li><a href="/docs" class="text-gray-400 hover:text-primary-500 transition-colors">Documentation</a></li>
+              <li><a href="/api" class="text-gray-400 hover:text-primary-500 transition-colors">API Reference</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="pt-8 border-t border-gray-800">
+          <div class="flex flex-col md:flex-row md:justify-between items-center">
+            <p class="text-gray-500 text-sm order-2 md:order-1 mt-4 md:mt-0">© 2023 Flaxy Nodes. All rights reserved.</p>
+            <div class="flex items-center space-x-6 order-1 md:order-2">
+              <a href="/legal/privacy" class="text-gray-500 hover:text-gray-400 text-sm">Privacy Policy</a>
+              <a href="/legal/terms" class="text-gray-500 hover:text-gray-400 text-sm">Terms of Service</a>
+              <a href="/legal/cookies" class="text-gray-500 hover:text-gray-400 text-sm">Cookie Policy</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </footer>
 
+    <!-- JavaScript for Mobile Menu Toggle -->
     <script>
-        // Check for redirection
-        if (window.location.search.includes('redirected=true')) {
-            const alertBox = document.createElement('div');
-            alertBox.className = 'alert alert-info alert-dismissible fade show';
-            alertBox.setAttribute('role', 'alert');
-            alertBox.innerHTML = `
-                You've been redirected to the homepage. Please login to continue.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            `;
-            document.body.insertBefore(alertBox, document.body.firstChild);
-        }
-
-        // Create particles
-        document.addEventListener('DOMContentLoaded', function() {
-            const container = document.querySelector('.floating-particles');
-            
-            // Clear existing particles
-            container.innerHTML = '';
-            
-            // Create new particles
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                // Set random styles
-                particle.style.left = (Math.random() * 100) + '%';
-                particle.style.top = (Math.random() * 100) + '%';
-                particle.style.width = (Math.random() * 15 + 3) + 'px';
-                particle.style.height = (Math.random() * 15 + 3) + 'px';
-                particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
-                particle.style.animationDelay = (Math.random() * 5) + 's';
-                
-                container.appendChild(particle);
-            }
-            
-            // Navbar scroll effect
-            const navbar = document.getElementById('mainNav');
-            
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
-            
-            // Apply rainbow color effect to elements
-            function updateRainbowElements() {
-                // Get the current primary color from CSS variable
-                const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim();
-                
-                // Update elements that need the current primary color
-                document.querySelectorAll('.particle').forEach(particle => {
-                    particle.style.backgroundColor = primaryColor;
-                    particle.style.opacity = '0.1';
-                });
-                
-                document.querySelectorAll('.glow').forEach(glow => {
-                    glow.style.background = `radial-gradient(circle, ${primaryColor}, transparent 70%)`;
-                    glow.style.opacity = '0.2';
-                });
-                
-                // Request next animation frame
-                requestAnimationFrame(updateRainbowElements);
-            }
-            
-            // Start the animation loop
-            updateRainbowElements();
+      document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileResourcesButton = document.getElementById('mobile-resources-button');
+        const mobileResourcesDropdown = document.getElementById('mobile-resources-dropdown');
+        
+        // Toggle mobile menu
+        mobileMenuButton.addEventListener('click', function() {
+          mobileMenu.classList.toggle('hidden');
         });
+        
+        // Toggle resources dropdown
+        mobileResourcesButton.addEventListener('click', function() {
+          mobileResourcesDropdown.classList.toggle('hidden');
+        });
+      });
     </script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  </main>
 </body>
-
 </html>

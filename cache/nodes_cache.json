@@ -818,7 +818,7 @@
                 "alias": "in.flaxynodes.fun",
                 "port": 3004,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -2154,7 +2154,7 @@
                 "feature_limits": {
                   "databases": 0,
                   "allocations": 0,
-                  "backups": 0
+                  "backups": 5
                 },
                 "user": 36,
                 "node": 2,
@@ -2176,7 +2176,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-21T07:13:10+00:00",
+                "updated_at": "2025-03-23T15:57:54+00:00",
                 "created_at": "2025-03-21T07:12:36+00:00"
               }
             },
@@ -2373,6 +2373,55 @@
                 "updated_at": "2025-03-23T10:19:43+00:00",
                 "created_at": "2025-03-23T10:12:28+00:00"
               }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 89,
+                "external_id": null,
+                "uuid": "11ea56e4-d1cb-41c0-a6a2-3585f748de57",
+                "identifier": "11ea56e4",
+                "name": "frf",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 0,
+                  "swap": 0,
+                  "disk": 0,
+                  "io": 500,
+                  "cpu": 0,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 0
+                },
+                "user": 36,
+                "node": 2,
+                "allocation": 30,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "11ea56e4-d1cb-41c0-a6a2-3585f748de57",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-23T16:13:24+00:00",
+                "created_at": "2025-03-23T16:13:01+00:00"
+              }
             }
           ]
         }
@@ -2403,8 +2452,8 @@
       "created_at": "2025-03-20T09:07:19+00:00",
       "updated_at": "2025-03-22T11:32:39+00:00",
       "allocated_resources": {
-        "memory": 87504,
-        "disk": 343480
+        "memory": 99504,
+        "disk": 393480
       },
       "relationships": {
         "allocations": {
@@ -2528,7 +2577,7 @@
                 "alias": "in-2.flaxynodes.fun",
                 "port": 2035,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -3235,7 +3284,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-23T08:16:05+00:00",
+                "updated_at": "2025-03-23T15:21:07+00:00",
                 "created_at": "2025-03-20T09:55:41+00:00"
               }
             },
@@ -3627,7 +3676,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-23T14:15:24+00:00",
+                "updated_at": "2025-03-23T14:21:16+00:00",
                 "created_at": "2025-03-23T11:50:04+00:00"
               }
             },
@@ -3678,6 +3727,55 @@
                 },
                 "updated_at": "2025-03-23T13:07:12+00:00",
                 "created_at": "2025-03-23T13:06:51+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 88,
+                "external_id": null,
+                "uuid": "4ce22baa-3bf5-4035-8646-ce48d09b94c4",
+                "identifier": "4ce22baa",
+                "name": "cyber (exp - 23april)",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 12000,
+                  "swap": 0,
+                  "disk": 50000,
+                  "io": 500,
+                  "cpu": 250,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 1
+                },
+                "user": 62,
+                "node": 3,
+                "allocation": 123,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "1.21.4",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_UUID": "4ce22baa-3bf5-4035-8646-ce48d09b94c4",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-23T15:17:23+00:00",
+                "created_at": "2025-03-23T15:06:58+00:00"
               }
             }
           ]
@@ -4080,7 +4178,7 @@
                 "external_id": null,
                 "uuid": "3afaa9c3-7fb0-49ac-b6a4-d9cf9a95efdf",
                 "identifier": "3afaa9c3",
-                "name": "Tonight Gamerz' Server [EXPIRE ON 14 APRIL]",
+                "name": "Tonight Gamerz' Server [EXPIRE ON 24 APRIL]",
                 "description": "",
                 "status": null,
                 "suspended": false,
@@ -4118,7 +4216,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 3
                   }
                 },
-                "updated_at": "2025-03-22T19:30:48+00:00",
+                "updated_at": "2025-03-23T16:19:54+00:00",
                 "created_at": "2025-03-20T09:22:20+00:00"
               }
             },
