@@ -271,11 +271,24 @@
 			servers: 0
 		};
 		
+		// Calculate total resources (package + extra)
+		const extraData = typeof extraresources !== 'undefined' ? extraresources : {
+			ram: 0,
+			disk: 0,
+			cpu: 0,
+			servers: 0
+		};
+		
+		const totalRam = packageData.ram + extraData.ram;
+		const totalDisk = packageData.disk + extraData.disk;
+		const totalCpu = packageData.cpu + extraData.cpu;
+		const totalServers = packageData.servers + extraData.servers;
+		
 		// Available resources
-		const availableRam = (packageData.ram || 0) - ram;
-		const availableDisk = (packageData.disk || 0) - disk;
-		const availableCpu = (packageData.cpu || 0) - cpu;
-		const availableServers = (packageData.servers || 0) - servers;
+		const availableRam = totalRam - ram;
+		const availableDisk = totalDisk - disk;
+		const availableCpu = totalCpu - cpu;
+		const availableServers = totalServers - servers;
 	%>
 
 	<!-- Navbar -->
@@ -475,10 +488,10 @@
 										<p class="text-gray-400 text-sm">Memory Resources</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= availableRam %> <span class="text-gray-400 text-sm">/ <%= packageData.ram %> MB</span></span>
+								<span class="text-xl font-bold text-white"><%= availableRam %> <span class="text-gray-400 text-sm">/ <%= totalRam %> MB</span></span>
 							</div>
 							<div class="progress-bar">
-								<div class="progress-bar-fill ram" style="width: <%= ((ram / packageData.ram) * 100).toFixed(2) + '%' %>"></div>
+								<div class="progress-bar-fill ram" style="width: <%= ((ram / totalRam) * 100).toFixed(2) + '%' %>"></div>
 							</div>
 						</div>
 					</div>
@@ -496,10 +509,10 @@
 										<p class="text-gray-400 text-sm">Storage Resources</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= availableDisk %> <span class="text-gray-400 text-sm">/ <%= packageData.disk %> MB</span></span>
+								<span class="text-xl font-bold text-white"><%= availableDisk %> <span class="text-gray-400 text-sm">/ <%= totalDisk %> MB</span></span>
 							</div>
 							<div class="progress-bar">
-								<div class="progress-bar-fill disk" style="width: <%= ((disk / packageData.disk) * 100).toFixed(2) + '%' %>"></div>
+								<div class="progress-bar-fill disk" style="width: <%= ((disk / totalDisk) * 100).toFixed(2) + '%' %>"></div>
 							</div>
 						</div>
 					</div>
@@ -517,10 +530,10 @@
 										<p class="text-gray-400 text-sm">Processor Resources</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= availableCpu %> <span class="text-gray-400 text-sm">/ <%= packageData.cpu %>%</span></span>
+								<span class="text-xl font-bold text-white"><%= availableCpu %> <span class="text-gray-400 text-sm">/ <%= totalCpu %>%</span></span>
 							</div>
 							<div class="progress-bar">
-								<div class="progress-bar-fill cpu" style="width: <%= ((cpu / packageData.cpu) * 100).toFixed(2) + '%' %>"></div>
+								<div class="progress-bar-fill cpu" style="width: <%= ((cpu / totalCpu) * 100).toFixed(2) + '%' %>"></div>
 							</div>
 						</div>
 					</div>
@@ -538,14 +551,81 @@
 										<p class="text-gray-400 text-sm">Server Slots</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= availableServers %> <span class="text-gray-400 text-sm">/ <%= packageData.servers %></span></span>
+								<span class="text-xl font-bold text-white"><%= availableServers %> <span class="text-gray-400 text-sm">/ <%= totalServers %></span></span>
 							</div>
 							<div class="progress-bar">
-								<div class="progress-bar-fill servers" style="width: <%= ((servers / packageData.servers) * 100).toFixed(2) + '%' %>"></div>
+								<div class="progress-bar-fill servers" style="width: <%= ((servers / totalServers) * 100).toFixed(2) + '%' %>"></div>
 							</div>
 						</div>
 					</div>
 				</div>
+
+				<!-- Error Messages -->
+				<% if (req.query.err) { %>
+					<div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-6">
+						<div class="flex items-start">
+							<div class="flex-shrink-0">
+								<i class="fas fa-exclamation-triangle text-red-400 text-xl"></i>
+							</div>
+							<div class="ml-3">
+								<h3 class="text-lg font-medium text-red-400">
+									<% if (req.query.err === 'RAMEXCEED') { %>
+										Not Enough RAM
+									<% } else if (req.query.err === 'DISKEXCEED') { %>
+										Not Enough Disk Space
+									<% } else if (req.query.err === 'CPUEXCEED') { %>
+										Not Enough CPU Resources
+									<% } else if (req.query.err === 'SERVEREXCEED') { %>
+										Server Limit Reached
+									<% } else if (req.query.err === 'MISSINGVARIABLE') { %>
+										Missing Required Information
+									<% } else if (req.query.err === 'NOTENOUGHRAM') { %>
+										Minimum RAM Requirement Not Met
+									<% } else if (req.query.err === 'NOTENOUGHDISK') { %>
+										Minimum Disk Requirement Not Met
+									<% } else if (req.query.err === 'NOTENOUGHCPU') { %>
+										Minimum CPU Requirement Not Met
+									<% } else if (req.query.err === 'CONNECTIONERROR') { %>
+										Connection Error
+									<% } else if (req.query.err === 'NOALLOCATIONS') { %>
+										No Available Allocations
+									<% } else if (req.query.err === 'INVALIDLOCATION') { %>
+										Invalid Location Selected
+									<% } else { %>
+										Error Creating Server
+									<% } %>
+								</h3>
+								<div class="mt-2 text-sm text-gray-200">
+									<% if (req.query.err === 'RAMEXCEED') { %>
+										You don't have enough RAM available to create this server. You requested <%= req.query.err_ram %> MB but you only have <%= availableRam %> MB available.
+									<% } else if (req.query.err === 'DISKEXCEED') { %>
+										You don't have enough disk space available to create this server. You requested <%= req.query.err_disk %> MB but you only have <%= availableDisk %> MB available.
+									<% } else if (req.query.err === 'CPUEXCEED') { %>
+										You don't have enough CPU resources available to create this server. You requested <%= req.query.err_cpu %>% but you only have <%= availableCpu %>% available.
+									<% } else if (req.query.err === 'SERVEREXCEED') { %>
+										You have reached your maximum server limit. You need to upgrade your plan or purchase more server slots from the store to create additional servers.
+									<% } else if (req.query.err === 'MISSINGVARIABLE') { %>
+										Please fill in all required fields to create a server.
+									<% } else if (req.query.err === 'NOTENOUGHRAM') { %>
+										The minimum RAM requirement is 1024 MB. Please allocate at least 1024 MB of RAM to your server.
+									<% } else if (req.query.err === 'NOTENOUGHDISK') { %>
+										The minimum disk requirement is 1024 MB. Please allocate at least 1024 MB of disk space to your server.
+									<% } else if (req.query.err === 'NOTENOUGHCPU') { %>
+										The minimum CPU requirement is 10%. Please allocate at least 10% CPU to your server.
+									<% } else if (req.query.err === 'CONNECTIONERROR') { %>
+										Could not establish a connection to the game server node. This usually indicates a network issue between the panel and the node. Please try again in a few minutes or contact an administrator if the problem persists.
+									<% } else if (req.query.err === 'NOALLOCATIONS') { %>
+										The server could not be created because there are no available allocations (IP addresses and ports) on the selected node. Please try a different location or contact an administrator to add more allocations.
+									<% } else if (req.query.err === 'INVALIDLOCATION') { %>
+										The selected location is not valid or is not available for your account. Please choose a different location and try again.
+									<% } else { %>
+										An unexpected error occurred while trying to create your server. Please try again or contact support if the problem persists.
+									<% } %>
+								</div>
+							</div>
+						</div>
+					</div>
+				<% } %>
 
 				<!-- Create Server Form -->
 				<div class="glass-card rounded-xl border border-gray-700 p-6 mb-8">
@@ -586,6 +666,14 @@
 							<p class="form-helper">Choose the game type for your server</p>
 						</div>
 
+						<!-- Egg-specific Variables -->
+						<div id="eggVariables" class="mb-6 p-4 border border-gray-700/50 rounded-lg hidden">
+							<h3 class="text-lg font-semibold mb-4">Server Configuration</h3>
+							<div id="variableContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<!-- Variables will be added here dynamically -->
+							</div>
+						</div>
+
 						<!-- Resource Allocation -->
 						<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 							<div>
@@ -612,7 +700,17 @@
 								<option value="">Select location</option>
 								<% if (typeof locations !== 'undefined' && locations.length > 0) { %>
 									<% locations.forEach(location => { %>
-										<option value="<%= location.id %>"><%= location.short %><% if (location.long) { %> - <%= location.long %><% } %></option>
+										<% 
+											// Skip the Germany location
+											const locationName = location.short ? location.short.toLowerCase() : '';
+											const locationLong = location.long ? location.long.toLowerCase() : '';
+											const isGermany = locationName.includes('germany') || locationLong.includes('germany') || 
+												locationName.includes('german') || locationLong.includes('german');
+											
+											if (!isGermany) { 
+										%>
+											<option value="<%= location.id %>"><%= location.short %><% if (location.long) { %> - <%= location.long %><% } %></option>
+										<% } %>
 									<% }); %>
 								<% } else { %>
 									<option value="1">Default Location</option>
@@ -621,19 +719,8 @@
 							<p class="form-helper">Choose the region where your server will be hosted</p>
 						</div>
 
-						<!-- Total Cost -->
-						<div class="bg-primary-500/10 rounded-lg p-4 mb-6">
-							<div class="flex justify-between items-center">
-								<div>
-									<h3 class="text-lg font-medium text-primary-300">Total Cost</h3>
-									<p class="text-sm text-gray-400">Base server cost: 100 coins</p>
-								</div>
-								<div class="text-2xl font-bold text-primary-400"><span id="total-cost">475</span> coins</div>
-							</div>
-						</div>
-
 						<!-- Submit Button -->
-						<div class="flex justify-end">
+						<div class="flex justify-end mt-6">
 							<button type="submit" class="btn-primary inline-flex items-center px-6 py-2 rounded-lg text-white font-medium">
 								<i class="fas fa-plus mr-2"></i>
 								Create Server
@@ -741,6 +828,114 @@
 		document.addEventListener('click', (e) => {
 			if (!mobileMenuBtn.contains(e.target) && !mobileSearch.contains(e.target)) {
 				mobileSearch.classList.add('hidden');
+			}
+		});
+
+		// Dynamic egg variables handling
+		document.addEventListener('DOMContentLoaded', () => {
+			const eggSelect = document.querySelector('select[name="egg"]');
+			const eggVariables = document.getElementById('eggVariables');
+			const variableContainer = document.getElementById('variableContainer');
+
+			// Load egg variables when egg type is selected
+			eggSelect.addEventListener('change', async () => {
+				const eggId = eggSelect.value;
+				if (!eggId) {
+					eggVariables.classList.add('hidden');
+					return;
+				}
+
+				// Clear previous variables
+				variableContainer.innerHTML = '';
+
+				try {
+					// Load egg variables from cache
+					await loadEggVariables(eggId);
+				} catch (error) {
+					console.error('Error loading egg variables:', error);
+				}
+			});
+
+			async function loadEggVariables(eggId) {
+				// Hardcoded egg variables for common eggs
+				const eggVariableMap = {
+					// Vanilla Minecraft (ID 5)
+					'5': [
+						{
+							name: 'Server Jar File',
+							description: 'The name of the server jarfile to run the server with.',
+							env_variable: 'SERVER_JARFILE',
+							default_value: 'server.jar'
+						},
+						{
+							name: 'Minecraft Version',
+							description: 'The version of Minecraft Vanilla to install. Use "latest" for the latest version.',
+							env_variable: 'VANILLA_VERSION',
+							default_value: 'latest'
+						}
+					],
+					// SpongeVanilla (ID 4)
+					'4': [
+						{
+							name: 'Sponge Version',
+							description: 'The version of SpongeVanilla to download and use.',
+							env_variable: 'SPONGE_VERSION',
+							default_value: '1.12.2-7.3.0'
+						},
+						{
+							name: 'Server Jar File',
+							description: 'The name of the Jarfile to use when running SpongeVanilla.',
+							env_variable: 'SERVER_JARFILE',
+							default_value: 'server.jar'
+						}
+					],
+					// Paper (ID 2)
+					'2': [
+						{
+							name: 'Minecraft Version',
+							description: 'The version of minecraft to download. Leave at latest for the latest version.',
+							env_variable: 'MINECRAFT_VERSION',
+							default_value: 'latest'
+						},
+						{
+							name: 'Server Jar File',
+							description: 'The name of the server jarfile to run the server with.',
+							env_variable: 'SERVER_JARFILE',
+							default_value: 'server.jar'
+						},
+						{
+							name: 'Build Number',
+							description: 'The build number for the paper release. Leave at latest for the latest version.',
+							env_variable: 'BUILD_NUMBER',
+							default_value: 'latest'
+						}
+					]
+				};
+
+				// Check if we have hardcoded variables for this egg
+				if (eggVariableMap[eggId]) {
+					// Show the variables section
+					eggVariables.classList.remove('hidden');
+
+					// Add input fields for each variable
+					eggVariableMap[eggId].forEach(variable => {
+						const fieldId = `env_${variable.env_variable.toLowerCase()}`;
+						const fieldName = variable.env_variable.toLowerCase();
+						
+						const variableField = document.createElement('div');
+						variableField.innerHTML = `
+							<label class="form-label">${variable.name}</label>
+							<input type="text" id="${fieldId}" name="${fieldName}" class="form-input w-full" 
+								placeholder="${variable.description}" value="${variable.default_value}" required>
+							<p class="form-helper">${variable.description}</p>
+						`;
+						
+						variableContainer.appendChild(variableField);
+					});
+				} else {
+					// No variables, hide the section
+					eggVariables.classList.add('hidden');
+				}
 			}
 		});
 	</script>

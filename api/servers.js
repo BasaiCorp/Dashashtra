@@ -10,6 +10,7 @@ const renew = require("./renewal.js");
 const path = require('path');
 const chalk = require('chalk');
 const userCoins = require('./user_coins.js');
+const eggHandler = require('./egg_handler.js');
 
 // Helper function to convert hex to decimal
 function hexToDecimal(hex) {
@@ -113,18 +114,27 @@ router.post('/servers/create', async (req, res) => {
         const package = await db.packages.getUserPackage(req.session.userinfo.id);
         const packagename = package ? package.name : settings.api.client.packages.default;
         const packagedata = settings.api.client.packages.list[packagename];
+        
+        // Get extra resources purchased from store
+        const extraResources = await db.resources.getUserResources(req.session.userinfo.id);
+        
+        // Calculate total available resources (package + extra)
+        const totalRam = packagedata.ram + extraResources.ram;
+        const totalDisk = packagedata.disk + extraResources.disk; 
+        const totalCpu = packagedata.cpu + extraResources.cpu;
+        const totalServers = packagedata.servers + extraResources.servers;
 
         // Check if user has enough resources
-        if (ram + currentram > packagedata.ram) {
+        if (ram + currentram > totalRam) {
             return res.redirect(`/create?err=RAMEXCEED&err_ram=${ram}`);
         }
-        if (disk + currentdisk > packagedata.disk) {
+        if (disk + currentdisk > totalDisk) {
             return res.redirect(`/create?err=DISKEXCEED&err_disk=${disk}`);
         }
-        if (cpu + currentcpu > packagedata.cpu) {
+        if (cpu + currentcpu > totalCpu) {
             return res.redirect(`/create?err=CPUEXCEED&err_cpu=${cpu}`);
         }
-        if (currentservers >= packagedata.servers) {
+        if (currentservers >= totalServers) {
             return res.redirect('/create?err=SERVEREXCEED');
         }
 
@@ -139,115 +149,38 @@ router.post('/servers/create', async (req, res) => {
             return res.redirect('/create?err=NOTENOUGHCPU');
         }
 
-        // Calculate server cost
-        const ramCost = Math.floor(ram / 1024) * 50; // 50 coins per GB of RAM
-        const diskCost = Math.floor(disk / 1024) * 25; // 25 coins per GB of disk
-        const cpuCost = Math.floor(cpu / 10) * 30; // 30 coins per 10% CPU
-        const serverCost = ramCost + diskCost + cpuCost + 100; // Base cost of 100 coins for a server
-
-        // Check if user has enough coins
-        const userId = req.session.userinfo.id;
-        if (!userCoins.hasEnoughCoins(userId, serverCost)) {
-            return res.redirect(`/create?err=INSUFFICIENTCOINS&cost=${serverCost}`);
-        }
-
         // Get egg info
         let nest_id;
         let egg_id = egg; // Use the egg ID directly from the form
 
-        // Get egg info from cache
-        let eggInfo = {};
-        try {
-            // Try to get egg info from cache
-            const eggCache = JSON.parse(fs.readFileSync(path.join(__dirname, '../cache/eggs.json')));
-            if (eggCache[egg_id]) {
-                console.log(`[SERVER CREATE] Using egg info from cache for egg ID ${egg_id}`);
-                
-                // Get the nest ID from the egg cache
-                nest_id = eggCache[egg_id].nestId || 1;
-                
-                eggInfo = {
-                    docker_image: eggCache[egg_id].docker_image,
-                    startup: eggCache[egg_id].startup,
-                    environment: {}
-                };
-                
-                // Add environment variables with default values
-                eggCache[egg_id].variables.forEach(variable => {
-                    eggInfo.environment[variable.env_variable] = variable.default_value;
-                });
-
-                // Set feature limits
-                eggInfo.feature_limits = {
-                    databases: 1,
-                    backups: 1,
-                    allocations: 1
-                };
-            } else {
-                // Fallback to a default configuration
-                console.log('[SERVER CREATE] Egg not found in cache, using default configuration');
-                nest_id = 1;
-                eggInfo = {
-                    docker_image: "quay.io/pterodactyl/core:java",
-                    startup: "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
-                    environment: {
-                        SERVER_JARFILE: "server.jar"
-                    },
-                    feature_limits: {
-                        databases: 1,
-                        backups: 1,
-                        allocations: 1
-                    }
-                };
-            }
-        } catch (error) {
-            console.error('Error getting egg info:', error);
-            // Use a default configuration
-            nest_id = 1;
-            eggInfo = {
-                docker_image: "quay.io/pterodactyl/core:java",
-                startup: "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
-                environment: {
-                    SERVER_JARFILE: "server.jar"
-                },
-                feature_limits: {
-                    databases: 1,
-                    backups: 1,
-                    allocations: 1
-                }
-            };
-        }
-
         // Create server
         try {
-            const serverData = {
-                name: name,
-                user: req.session.pterodactyl.id, // Automatically set the user ID
-                egg: egg_id,
-                docker_image: eggInfo.docker_image,
-                startup: eggInfo.startup,
-                environment: eggInfo.environment,
-                limits: {
-                    memory: ram,
-                    swap: 0,
-                    disk: disk,
-                    io: 500,
-                    cpu: cpu
-                },
-                feature_limits: eggInfo.feature_limits,
-                allocation: {
-                    default: 0
+            // Collect any additional environment variables from the form
+            const additionalVars = {};
+            for (const key in req.body) {
+                // Check if the key might be an environment variable (lowercase with underscores)
+                if (key.includes('_') && key === key.toLowerCase()) {
+                    additionalVars[key.toUpperCase()] = req.body[key];
                 }
-            };
-
-            // Add location if provided
-            if (location && location !== "0") {
-                serverData.deploy = {
-                    locations: [parseInt(location)],
-                    dedicated_ip: false,
-                    port_range: []
-                };
             }
+
+            // Log all available form data for debugging
+            console.log('[SERVER CREATE] Form data:', req.body);
+
+            // Use the egg handler to create server data with proper environment variables
+            const serverData = eggHandler.createServerData({
+                name: name,
+                userId: req.session.pterodactyl.id,
+                eggId: egg_id,
+                ram: ram,
+                disk: disk, 
+                cpu: cpu,
+                location: location,
+                additionalEnvironment: additionalVars
+            });
+
+            // Log the server data being sent to Pterodactyl
+            console.log('[SERVER CREATE] Server data to be sent:', JSON.stringify(serverData, null, 2));
 
             // Create server on Pterodactyl
             const response = await fetch(
@@ -263,15 +196,10 @@ router.post('/servers/create', async (req, res) => {
                 }
             );
 
+            const responseData = await response.json();
+
             if (response.status === 201) {
-                // Deduct coins from user
-                userCoins.removeCoins(userId, serverCost);
-                
-                // Also update in the old system for backward compatibility
-                const currentCoins = await db.get(`coins-${userId}`) || 0;
-                await db.set(`coins-${userId}`, Math.max(0, currentCoins - serverCost));
-                
-                console.log(chalk.green(`[SERVER CREATE] Server created successfully for user ${userId}. Deducted ${serverCost} coins.`));
+                console.log(chalk.green(`[SERVER CREATE] Server created successfully for user ${req.session.userinfo.id}.`));
                 
                 // Update user's server list
                 await fetch(
@@ -290,12 +218,40 @@ router.post('/servers/create', async (req, res) => {
                 
                 return res.redirect('/dashboard?success=SERVERCREATED');
             } else {
-                const errorData = await response.json();
-                console.error('[SERVER CREATE] Failed to create server:', errorData);
+                // Check for specific error types from Pterodactyl
+                if (responseData.errors && responseData.errors.length > 0) {
+                    const error = responseData.errors[0];
+                    console.error('[SERVER CREATE] Failed to create server:', responseData);
+                    
+                    // Handle specific error codes
+                    if (error.code === 'DaemonConnectionException') {
+                        return res.redirect('/create?err=CONNECTIONERROR');
+                    } else if (error.detail && error.detail.includes('allocation')) {
+                        return res.redirect('/create?err=NOALLOCATIONS');
+                    } else if (error.detail && error.detail.includes('location')) {
+                        return res.redirect('/create?err=INVALIDLOCATION');
+                    }
+                }
+                
                 return res.redirect('/create?err=CREATEFAILED');
             }
         } catch (error) {
             console.error('[SERVER CREATE] Error creating server:', error);
+            
+            // Check for daemon connection issues
+            if (error.message && error.message.includes('ECONNREFUSED')) {
+                return res.redirect('/create?err=CONNECTIONERROR');
+            }
+            
+            // Check if we have a JSON response with error details
+            if (error.response && error.response.data && error.response.data.errors) {
+                const pterodactylError = error.response.data.errors[0];
+                if (pterodactylError.code === 'DaemonConnectionException') {
+                    console.log('[SERVER CREATE] Daemon connection error detected');
+                    return res.redirect('/create?err=CONNECTIONERROR');
+                }
+            }
+            
             return res.redirect('/create?err=CREATEFAILED');
         }
     } catch (error) {

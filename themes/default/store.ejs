@@ -186,6 +186,9 @@
 	</style>
 </head>
 <body class="min-h-screen">
+	<!-- Notification Container -->
+	<div id="notification-container" class="fixed top-4 right-4 z-50 w-80 max-w-full space-y-4"></div>
+	
 	<%
 		const userData = {
 			id: userinfo.id,
@@ -399,7 +402,7 @@
 				<!-- Resource Packages Grid -->
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 					<!-- RAM Package -->
-					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200">
+					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="ram">
 						<div class="flex items-center justify-between mb-4">
 							<div class="p-3 rounded-lg bg-blue-500/10">
 								<i class="fas fa-memory text-2xl text-blue-400"></i>
@@ -437,7 +440,7 @@
 					</div>
 
 					<!-- Disk Package -->
-					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200">
+					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="disk">
 						<div class="flex items-center justify-between mb-4">
 							<div class="p-3 rounded-lg bg-green-500/10">
 								<i class="fas fa-hdd text-2xl text-green-400"></i>
@@ -465,7 +468,7 @@
 								<span class="text-sm text-gray-400">Price</span>
 								<div class="flex items-center">
 									<i class="fas fa-coins text-yellow-400 mr-1"></i>
-									<span class="text-xl font-semibold text-white">75</span>
+									<span class="text-xl font-semibold text-white">125</span>
 								</div>
 							</div>
 							<button onclick="purchase('disk')" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
@@ -475,7 +478,7 @@
 					</div>
 
 					<!-- CPU Package -->
-					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200">
+					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="cpu">
 						<div class="flex items-center justify-between mb-4">
 							<div class="p-3 rounded-lg bg-purple-500/10">
 								<i class="fas fa-microchip text-2xl text-purple-400"></i>
@@ -513,7 +516,7 @@
 					</div>
 
 					<!-- Server Slot Package -->
-					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200">
+					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="slot">
 						<div class="flex items-center justify-between mb-4">
 							<div class="p-3 rounded-lg bg-yellow-500/10">
 								<i class="fas fa-server text-2xl text-yellow-400"></i>
@@ -675,9 +678,39 @@
 			}
 		}
 		
+		// Purchase function
+		function purchase(resourceType) {
+			console.log(`Attempting to purchase ${resourceType}...`);
+			
+			// Show loading indicator
+			const button = event.target.closest('button');
+			const originalText = button.innerHTML;
+			button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
+			button.disabled = true;
+			
+			// Perform purchase
+			purchaseResource(resourceType)
+				.then(() => {
+					// Reset button after purchase (success case handled in purchaseResource)
+					setTimeout(() => {
+						button.innerHTML = originalText;
+						button.disabled = false;
+					}, 1000);
+				})
+				.catch(error => {
+					// Handle error and reset button
+					console.error('Purchase error:', error);
+					showNotification('Error', 'Failed to process purchase');
+					button.innerHTML = originalText;
+					button.disabled = false;
+				});
+		}
+		
 		// Purchase resource
 		async function purchaseResource(resourceId, amount = 1) {
 			try {
+				console.log(`Sending purchase request for ${resourceId}, amount: ${amount}`);
+				
 				const response = await fetch('/api/store/purchase', {
 					method: 'POST',
 					headers: {
@@ -686,13 +719,14 @@
 					body: JSON.stringify({ resourceId, amount })
 				});
 				
+				console.log('Purchase response status:', response.status);
+				const data = await response.json();
+				console.log('Purchase response data:', data);
+				
 				if (!response.ok) {
-					const errorData = await response.json();
-					showNotification('Error', errorData.error || 'Failed to purchase resource');
+					showNotification('Error', data.error || 'Failed to purchase resource');
 					return;
 				}
-				
-				const data = await response.json();
 				
 				if (data.success) {
 					// Update balance display
@@ -704,14 +738,105 @@
 					// Update resources display
 					updateResourcesDisplay(data.resources);
 					
-					// Show success message
+					// Show success message with animation
 					showNotification('Success', `Purchase successful! New balance: ${data.newBalance} credits`);
+					
+					// Add visual feedback
+					const resourceCard = document.querySelector(`[data-resource="${resourceId}"]`);
+					if (resourceCard) {
+						resourceCard.classList.add('border-green-500');
+						setTimeout(() => {
+							resourceCard.classList.remove('border-green-500');
+						}, 2000);
+					}
 				} else {
 					showNotification('Error', data.error || 'Failed to purchase resource');
 				}
 			} catch (error) {
 				console.error('Error purchasing resource:', error);
 				showNotification('Error', 'Failed to process purchase');
+				throw error; // Re-throw for the purchase function to catch
+			}
+		}
+		
+		// Function to show notifications
+		function showNotification(title, message) {
+			const notificationContainer = document.getElementById('notification-container');
+			if (!notificationContainer) {
+				console.error('Notification container not found');
+				return;
+			}
+			
+			const notification = document.createElement('div');
+			notification.className = 'notification flex items-start p-4 mb-4 bg-dark-lighter rounded-lg border border-gray-700 shadow-lg animate-fade-in';
+			
+			const iconClass = title.toLowerCase().includes('error') ? 'fa-times-circle text-red-500' : 'fa-check-circle text-green-500';
+			
+			notification.innerHTML = `
+				<div class="flex-shrink-0 mr-3">
+					<i class="fas ${iconClass} text-2xl"></i>
+				</div>
+				<div class="flex-1">
+					<h4 class="text-white text-sm font-semibold mb-1">${title}</h4>
+					<p class="text-gray-300 text-sm">${message}</p>
+				</div>
+				<button class="ml-4 text-gray-400 hover:text-white">
+					<i class="fas fa-times"></i>
+				</button>
+			`;
+			
+			// Add close button functionality
+			const closeButton = notification.querySelector('button');
+			closeButton.addEventListener('click', () => {
+				notification.classList.add('opacity-0');
+				setTimeout(() => {
+					notification.remove();
+				}, 300);
+			});
+			
+			notificationContainer.appendChild(notification);
+			
+			// Auto remove after 5 seconds
+			setTimeout(() => {
+				if (notification.parentNode) {
+					notification.classList.add('opacity-0');
+					setTimeout(() => {
+						if (notification.parentNode) {
+							notification.remove();
+						}
+					}, 300);
+				}
+			}, 5000);
+		}
+		
+		// Function to update resources display
+		function updateResourcesDisplay(resources) {
+			if (!resources) return;
+			
+			console.log('Updating resources display:', resources);
+			
+			// Update RAM display
+			const ramElement = document.querySelector('.user-ram');
+			if (ramElement && resources.ram !== undefined) {
+				ramElement.textContent = resources.ram + ' MB';
+			}
+			
+			// Update disk display
+			const diskElement = document.querySelector('.user-disk');
+			if (diskElement && resources.disk !== undefined) {
+				diskElement.textContent = resources.disk + ' MB';
+			}
+			
+			// Update CPU display
+			const cpuElement = document.querySelector('.user-cpu');
+			if (cpuElement && resources.cpu !== undefined) {
+				cpuElement.textContent = resources.cpu + '%';
+			}
+			
+			// Update servers display
+			const serversElement = document.querySelector('.user-servers');
+			if (serversElement && resources.servers !== undefined) {
+				serversElement.textContent = resources.servers;
 			}
 		}
 	</script>

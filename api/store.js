@@ -18,14 +18,8 @@ router.get('/api/store/resources', checkAuth, async (req, res) => {
     try {
         const userId = req.session.userinfo.id;
         
-        // Since db.get is not a function, we'll use a default object or implement proper DB retrieval
-        // For now, use a default object or if you have a different method to get extra resources
-        const extra = {
-            ram: 0,
-            disk: 0,
-            cpu: 0,
-            servers: 0
-        };
+        // Get user resources from the database
+        const extra = await db.resources.getUserResources(userId);
         
         // Get balance from user_coins module for accuracy
         const balance = await userCoins.getUserCoins(userId);
@@ -47,7 +41,7 @@ router.get('/api/store/resources', checkAuth, async (req, res) => {
             balance: balance,
             prices: settings.api.client.coins.store || {
                 ram: { per: 100 },
-                disk: { per: 75 },
+                disk: { per: 125 },
                 cpu: { per: 150 },
                 servers: { per: 200 }
             }
@@ -62,10 +56,15 @@ router.get('/api/store/resources', checkAuth, async (req, res) => {
 router.post('/api/store/purchase', checkAuth, async (req, res) => {
     try {
         const userId = req.session.userinfo.id;
-        const { resourceId, amount = 1 } = req.body;
+        let { resourceId, amount = 1 } = req.body;
         
         if (!userId || !resourceId) {
             return res.status(400).json({ success: false, error: 'Missing required parameters' });
+        }
+        
+        // Map 'slot' to 'servers' for price checking
+        if (resourceId === 'slot') {
+            resourceId = 'servers';
         }
         
         // Get price settings
@@ -83,20 +82,31 @@ router.post('/api/store/purchase', checkAuth, async (req, res) => {
             return res.status(400).json({ success: false, error: 'Insufficient credits' });
         }
         
-        // Since db.get is not available, for now we'll just use a fixed structure
-        // In a production environment, you should implement proper resource storage
-        let extra = {
+        // Initialize resource update object
+        let resourceUpdate = {
             ram: 0,
             disk: 0,
             cpu: 0,
             servers: 0
         };
         
-        // Update resources based on purchase
-        extra[resourceId] += amount;
+        // Set resource amounts based on what's shown in the UI
+        // Map 'slot' to 'servers' and use appropriate amounts for each resource
+        if (resourceId === 'ram') {
+            resourceUpdate.ram = 1024 * amount; // 1024 MB per RAM package as shown in UI
+        } else if (resourceId === 'disk') {
+            resourceUpdate.disk = 2048 * amount; // 2048 MB per disk package as shown in UI
+        } else if (resourceId === 'cpu') {
+            resourceUpdate.cpu = 100 * amount; // 100% per CPU package as shown in UI
+        } else if (resourceId === 'servers') {
+            resourceUpdate.servers = 1 * amount; // 1 server slot per package as shown in UI
+        }
         
-        // In a real implementation, you would save the updated resources here
-        // For example: await db.updateUserResources(userId, extra);
+        // Save the updated resources to the database
+        await db.resources.updateUserResources(userId, resourceUpdate);
+        
+        // Get the updated resources to return
+        const updatedResources = await db.resources.getUserResources(userId);
         
         // Remove coins for purchase
         const newBalance = await userCoins.removeCoins(userId, cost);
@@ -118,7 +128,7 @@ router.post('/api/store/purchase', checkAuth, async (req, res) => {
         res.json({
             success: true,
             newBalance,
-            resources: extra,
+            resources: updatedResources,
             message: 'Purchase successful'
         });
     } catch (error) {
@@ -132,15 +142,10 @@ router.get('/api/store/user/resources', checkAuth, async (req, res) => {
     try {
         const userId = req.session.userinfo.id;
         
-        // Since db.get is not available, using a default object
-        const extra = {
-            ram: 0,
-            disk: 0,
-            cpu: 0,
-            servers: 0
-        };
+        // Get user resources from the database
+        const resources = await db.resources.getUserResources(userId);
         
-        res.json({ success: true, resources: extra });
+        res.json({ success: true, resources });
     } catch (error) {
         console.error(chalk.red('[STORE] Error fetching user resources:'), error);
         res.status(500).json({ success: false, error: 'Internal server error' });

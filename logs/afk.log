@@ -38,3 +38,89 @@
 2025-03-22T11:28:11.033Z [checkAuth] Authentication successful for user ID: 1
 2025-03-22T11:28:41.027Z [checkAuth] Checking auth - Session exists: true
 2025-03-22T11:28:41.027Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:33:03.479Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:33:03.480Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:43:24.580Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:43:24.581Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:43:24.582Z [AFK] User 1 attempting to claim reward via new endpoint
+2025-03-23T03:43:24.583Z [AFK] Time since last reward for user 1: 1742701404583ms
+2025-03-23T03:43:24.583Z [AFK] Time since last activity for user 1: 13775ms
+2025-03-23T03:43:24.584Z [AFK] User 1 earned 24 credits
+2025-03-23T03:43:24.585Z [AFK] User 1 current balance: 30
+2025-03-23T03:43:24.843Z [AFK] Added 24 credits to user 1
+2025-03-23T03:43:24.844Z [AFK] User 1 new balance: 54
+2025-03-23T03:43:39.004Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:43:39.005Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:43:39.005Z [AFK] User 1 attempting to claim reward via new endpoint
+2025-03-23T03:43:39.006Z [AFK] Time since last reward for user 1: 14423ms
+2025-03-23T03:43:39.006Z [AFK] User 1 attempted to claim reward too soon. Time remaining: 285577ms
+2025-03-23T03:43:53.906Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:43:53.906Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:43:53.907Z [AFK] User 1 attempting to claim reward via new endpoint
+2025-03-23T03:43:53.907Z [AFK] Time since last reward for user 1: 29324ms
+2025-03-23T03:43:53.908Z [AFK] User 1 attempted to claim reward too soon. Time remaining: 270676ms
+2025-03-23T03:43:59.333Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:43:59.334Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:43:59.334Z [AFK] User 1 attempting to claim reward via new endpoint
+2025-03-23T03:43:59.334Z [AFK] Time since last reward for user 1: 34751ms
+2025-03-23T03:43:59.335Z [AFK] User 1 attempted to claim reward too soon. Time remaining: 265249ms
+2025-03-23T03:44:04.730Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:44:04.731Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:49:31.415Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:49:31.416Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:49:31.416Z [AFK] User 1 attempting to claim reward via new endpoint
+2025-03-23T03:49:31.416Z [AFK] Time since last reward for user 1: 366833ms
+2025-03-23T03:49:31.416Z [AFK] Time since last activity for user 1: 380608ms
+2025-03-23T03:49:31.416Z [AFK] User 1 session expired. Last activity: 2025-03-23T03:43:10.808Z
+2025-03-23T03:50:07.509Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:50:07.509Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:50:07.509Z [AFK] User 1 attempting to claim reward via new endpoint
+2025-03-23T03:50:07.509Z [AFK] Time since last reward for user 1: 402926ms
+2025-03-23T03:50:07.509Z [AFK] Time since last activity for user 1: 416701ms
+2025-03-23T03:50:07.510Z [AFK] User 1 session expired. Last activity: 2025-03-23T03:43:10.808Z
+2025-03-23T03:50:13.308Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:50:13.308Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:50:17.048Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:50:17.050Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:50:46.444Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:50:46.445Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:51:16.431Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:51:16.431Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:51:46.426Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:51:46.426Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:52:16.428Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:52:16.428Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:52:46.430Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:52:46.431Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:53:16.424Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:53:16.424Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:53:46.432Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:53:46.433Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:54:16.428Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:54:16.429Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:54:32.889Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:54:32.889Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T03:54:58.769Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T03:54:58.769Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T04:05:07.719Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T04:05:07.803Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T04:05:37.656Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T04:05:37.657Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T04:10:16.464Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T04:10:16.465Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T04:10:33.107Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T04:10:33.108Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T04:11:03.552Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T04:11:03.552Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T04:11:33.302Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T04:11:33.302Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T04:12:03.301Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T04:12:03.302Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T04:12:33.301Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T04:12:33.301Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T04:13:03.313Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T04:13:03.314Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T04:13:07.995Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T04:13:07.996Z [checkAuth] Authentication successful for user ID: 1
+2025-03-23T04:42:59.949Z [checkAuth] Checking auth - Session exists: true
+2025-03-23T04:42:59.950Z [checkAuth] Authentication successful for user ID: 1

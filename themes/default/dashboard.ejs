@@ -244,6 +244,25 @@
 			cpu: 0,
 			servers: 0
 		};
+		
+		// Calculate total resources (package + extra)
+		const extraData = typeof extraresources !== 'undefined' ? extraresources : {
+			ram: 0,
+			disk: 0,
+			cpu: 0,
+			servers: 0
+		};
+		
+		const totalRam = packageData.ram + extraData.ram;
+		const totalDisk = packageData.disk + extraData.disk;
+		const totalCpu = packageData.cpu + extraData.cpu;
+		const totalServers = packageData.servers + extraData.servers;
+		
+		// Available resources
+		const availableRam = totalRam - ram;
+		const availableDisk = totalDisk - disk;
+		const availableCpu = totalCpu - cpu;
+		const availableServers = totalServers - servers;
 	%>
 
 	<!-- Navbar -->
@@ -447,10 +466,10 @@
 										<p class="text-gray-400 text-sm">Memory Usage</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= ram %> <span class="text-gray-400 text-sm">/ <%= packageData.ram %> MB</span></span>
+								<span class="text-xl font-bold text-white"><%= totalRam %> <span class="text-gray-400 text-sm">/ <%= packageData.ram + extraData.ram %> MB</span></span>
 							</div>
 							<div class="progress-bar">
-								<div class="progress-bar-fill ram" style="width: <%= ((ram / packageData.ram) * 100).toFixed(2) + '%' %>"></div>
+								<div class="progress-bar-fill ram" style="width: <%= ((totalRam / (packageData.ram + extraData.ram)) * 100).toFixed(2) + '%' %>"></div>
 							</div>
 						</div>
 					</div>
@@ -468,10 +487,10 @@
 										<p class="text-gray-400 text-sm">Storage Usage</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= disk %> <span class="text-gray-400 text-sm">/ <%= packageData.disk %> MB</span></span>
+								<span class="text-xl font-bold text-white"><%= totalDisk %> <span class="text-gray-400 text-sm">/ <%= packageData.disk + extraData.disk %> MB</span></span>
 							</div>
 							<div class="progress-bar">
-								<div class="progress-bar-fill disk" style="width: <%= ((disk / packageData.disk) * 100).toFixed(2) + '%' %>"></div>
+								<div class="progress-bar-fill disk" style="width: <%= ((totalDisk / (packageData.disk + extraData.disk)) * 100).toFixed(2) + '%' %>"></div>
 							</div>
 						</div>
 					</div>
@@ -489,10 +508,10 @@
 										<p class="text-gray-400 text-sm">Processor Usage</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= cpu %> <span class="text-gray-400 text-sm">/ <%= packageData.cpu %>%</span></span>
+								<span class="text-xl font-bold text-white"><%= totalCpu %> <span class="text-gray-400 text-sm">/ <%= packageData.cpu + extraData.cpu %>%</span></span>
 							</div>
 							<div class="progress-bar">
-								<div class="progress-bar-fill cpu" style="width: <%= ((cpu / packageData.cpu) * 100).toFixed(2) + '%' %>"></div>
+								<div class="progress-bar-fill cpu" style="width: <%= ((totalCpu / (packageData.cpu + extraData.cpu)) * 100).toFixed(2) + '%' %>"></div>
 							</div>
 						</div>
 					</div>
@@ -510,10 +529,10 @@
 										<p class="text-gray-400 text-sm">Active Instances</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= pterodactyl.relationships.servers.data.length %> <span class="text-gray-400 text-sm">/ <%= packageData.servers %></span></span>
+								<span class="text-xl font-bold text-white"><%= totalServers %> <span class="text-gray-400 text-sm">/ <%= packageData.servers + extraData.servers %></span></span>
 							</div>
 							<div class="progress-bar">
-								<div class="progress-bar-fill servers" style="width: <%= ((pterodactyl.relationships.servers.data.length / packageData.servers) * 100).toFixed(2) + '%' %>"></div>
+								<div class="progress-bar-fill servers" style="width: <%= ((totalServers / (packageData.servers + extraData.servers)) * 100).toFixed(2) + '%' %>"></div>
 							</div>
 						</div>
 					</div>

@@ -7,278 +7,134 @@
     d.getElementsByTagName('head')[0].appendChild(s);
 })(document, window, document.createElement('script'));
 
-let afkTimer = null;
-let timeRemaining = 300; // 5 minutes in seconds
-let totalCredits = 0;
-let sessionActive = true;
-let userBalance = 0;
-let totalAfkTime = 0; // Track total AFK time in seconds
-let lastTimerUpdate = Date.now();
-let reconnectAttempts = 0;
-let statsUpdateInterval = null;
-
-// Global variables for AFK timer
+// AFK Timer Variables
 let timerInterval = null;
+let remainingSeconds = 300; // 5 minutes in seconds
+let totalCredits = 0;
 let isTimerRunning = false;
+let totalAFKTime = 0;
+let isVisible = true;
+let sessionStartTime = Date.now();
+let lastUpdateTime = Date.now(); // Track when timer was last updated
 
-/**
- * Initialize the AFK timer with the progress ring
- */
-function initAFKTimer() {
-    console.log('Initializing AFK timer');
+// DOM elements that will be accessed multiple times
+let timerElement;
+let progressRingCircle;
+let totalAFKTimeElement;
+let totalCreditsElement;
+let balanceElement;
+
+// Initialize event listeners when DOM content is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('AFK System: DOM fully loaded, initializing...');
     
-    // Make sure we have the timer element
-    const timerElement = document.getElementById('timer');
+    // Find all the DOM elements we need
+    timerElement = document.getElementById('timer');
+    progressRingCircle = document.getElementById('progress-ring-circle');
+    totalAFKTimeElement = document.getElementById('total-afk-time');
+    totalCreditsElement = document.getElementById('total-credits');
+    balanceElement = document.getElementById('afk-balance');
+    
+    // Verify critical elements exist
     if (!timerElement) {
-        console.error('Timer element not found!');
+        console.error('AFK System: Timer element not found!');
         return;
     }
-    
-    // Reset timer state
-    timeRemaining = 300; // 5 minutes in seconds
-    updateTimerDisplay(timeRemaining);
-    
-    // Make sure progress ring is found
-    const progressRing = document.getElementById('progress-ring-circle');
-    if (!progressRing) {
-        console.error('Progress ring element not found!');
-    } else {
-        // Initialize progress ring to full circle (no progress)
-        progressRing.style.strokeDashoffset = '0';
+    if (!progressRingCircle) {
+        console.error('AFK System: Progress ring element not found!');
+        // We can continue without the progress ring
     }
     
-    // Start the timer if not already running
-    if (!isTimerRunning) {
-        startAFKTimer();
-    }
-}
-
-/**
- * Start the AFK timer countdown
- */
-function startAFKTimer() {
-    console.log('Starting AFK timer');
-    
-    // Clear any existing interval
-    if (timerInterval) {
-        clearInterval(timerInterval);
-    }
-    
-    isTimerRunning = true;
-    
-    // Update timer every second
-    timerInterval = setInterval(() => {
-        // Decrement time remaining
-        timeRemaining--;
-        
-        // Update the display
-        updateTimerDisplay(timeRemaining);
-        
-        // Check if timer has reached zero
-        if (timeRemaining <= 0) {
-            console.log('Timer completed!');
-            claimAFKReward();
-            timeRemaining = 300; // Reset to 5 minutes
-        }
-    }, 1000);
-}
-
-/**
- * Update the timer display and progress ring
- * @param {number} seconds - Seconds remaining
- */
-function updateTimerDisplay(seconds) {
-    // Get timer element
-    const timerElement = document.getElementById('timer');
-    if (!timerElement) {
-        console.error('Timer element not found when updating!');
-        return;
-    }
-    
-    // Calculate minutes and seconds
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    
-    // Format as MM:SS
-    timerElement.textContent = `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-    
-    // Update progress ring if it exists
-    const progressRing = document.getElementById('progress-ring-circle');
-    if (progressRing) {
-        // Calculate progress percentage (inverted: 0% = full circle, 100% = empty)
-        const progress = 1 - (seconds / 300);
-        
-        // Convert to stroke-dashoffset (251.2 is the circumference of the circle)
-        // 0 = full circle, 251.2 = empty circle
-        const offset = progress * 251.2;
-        progressRing.style.strokeDashoffset = offset;
-    }
-}
-
-/**
- * Claim AFK reward when timer completes
- */
-async function claimAFKReward() {
-    try {
-        console.log('Claiming AFK reward');
-        
-        // Show loading state
-        const timerElement = document.getElementById('timer');
-        if (timerElement) {
-            timerElement.textContent = 'Claiming...';
-        }
-        
-        // Send request to claim reward
-        const response = await fetch('/api/earn/afk', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        });
-        
-        const data = await response.json();
-        console.log('Claim response:', data);
-        
-        if (data.success) {
-            // Update balance display
-            const balanceElement = document.getElementById('afk-balance');
-            if (balanceElement && data.balance !== undefined) {
-                balanceElement.textContent = data.balance;
-            }
-            
-            // Show success notification
-            showNotification('success', `You earned ${data.credits} credits!`);
-            
-            // Reset and restart timer
-            timeRemaining = 300;
-            updateTimerDisplay(timeRemaining);
-            
-            // Update AFK stats
-            fetchAfkStats();
-        } else {
-            // Show error notification
-            let errorMessage = data.error || 'Failed to claim reward';
-            showNotification('error', errorMessage);
-            
-            // If there's a specific time remaining, update the timer
-            if (data.timeRemaining) {
-                const secondsRemaining = Math.ceil(data.timeRemaining / 1000);
-                timeRemaining = secondsRemaining;
-                updateTimerDisplay(timeRemaining);
-            }
-        }
-    } catch (error) {
-        console.error('Error claiming AFK reward:', error);
-        showNotification('error', 'Error claiming reward. Please try again.');
-        
-        // Reset timer
-        timeRemaining = 300;
-        updateTimerDisplay(timeRemaining);
-    }
-}
-
-// Handle tab visibility changes
-function handleVisibilityChange() {
-    if (document.hidden) {
-        sessionActive = false;
-        // Use the local notification function if it exists
-        if (typeof showLocalNotification === 'function') {
-            showLocalNotification('AFK earnings paused - tab not active', 'warning');
-        } else if (typeof showNotification === 'function') {
-            showNotification('warning', 'AFK earnings paused - tab not active');
-        }
-    } else {
-        sessionActive = true;
-        lastTimerUpdate = Date.now(); // Reset timer reference point
-        if (typeof showLocalNotification === 'function') {
-            showLocalNotification('AFK earnings resumed', 'info');
-        } else if (typeof showNotification === 'function') {
-            showNotification('info', 'AFK earnings resumed');
-        }
-    }
-}
-
-// Attempt to reconnect websocket if connection fails
-function setupWebSocketReconnect() {
-    // If the server implements a websocket connection, this will help reconnect
-    window.addEventListener('online', () => {
-        if (reconnectAttempts < 5) {
-            reconnectAttempts++;
-            showNotification('Info', 'Network connection restored, reconnecting...');
-            fetchUserBalance();
-            updateAfkStats();
-        }
+    console.log('AFK System: DOM elements found:', {
+        timer: !!timerElement,
+        ring: !!progressRingCircle,
+        totalTime: !!totalAFKTimeElement,
+        totalCredits: !!totalCreditsElement,
+        balance: !!balanceElement
     });
-}
+    
+    // Initialize visible content
+    if (timerElement) timerElement.textContent = '5:00';
+    if (progressRingCircle) {
+        const circumference = 2 * Math.PI * 40;
+        progressRingCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+        progressRingCircle.style.strokeDashoffset = '0';
+    }
+    
+    // Initialize systems
+    initAFKStats();
+    initPingSystem();
+    initNotificationSystem();
+    
+    // Set up visibility change handlers
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleWindowFocus);
+    window.addEventListener('blur', handleWindowBlur);
+    
+    // Start the timer with a slight delay to ensure everything is loaded
+    setTimeout(function() {
+        console.log('AFK System: Starting timer...');
+        startTimer();
+        showNotification('AFK timer started - stay on this page to earn credits', 'info');
+    }, 500);
+    
+    console.log('AFK System: Initialization complete');
+});
 
-// Update AFK statistics display
-function updateAfkStats() {
-    const totalTimeElement = document.getElementById('total-afk-time');
-    if (totalTimeElement) {
-        totalTimeElement.textContent = formatTime(totalAfkTime);
-    }
+/**
+ * Initialize AFK stats by fetching from server
+ */
+async function initAFKStats() {
+    console.log('AFK System: Initializing AFK stats...');
     
-    const sessionsElement = document.getElementById('total-sessions');
-    if (sessionsElement) {
-        // Get session count from localStorage or default to 1
-        const sessionCount = parseInt(localStorage.getItem('afkSessionCount') || '1');
-        sessionsElement.textContent = sessionCount;
-    }
+    // Load saved session data if available
+    loadSessionData();
     
-    const creditsEarnedElement = document.getElementById('total-credits');
-    if (creditsEarnedElement) {
-        creditsEarnedElement.textContent = totalCredits;
-    }
-    
-    // Save AFK session data to localStorage for persistence
-    saveAfkSessionData();
-}
-
-// Save AFK session data to localStorage
-function saveAfkSessionData() {
-    try {
-        localStorage.setItem('afkTotalTime', totalAfkTime.toString());
-        localStorage.setItem('afkTotalCredits', totalCredits.toString());
-        
-        // Increment session count if not already counted
-        if (!localStorage.getItem('afkSessionToday')) {
-            const today = new Date().toDateString();
-            localStorage.setItem('afkSessionToday', today);
+    // Fetch current stats from server
+    fetch('/api/earn/stats')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server responded with ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('AFK System: Stats loaded successfully:', data);
             
-            const sessionCount = parseInt(localStorage.getItem('afkSessionCount') || '0') + 1;
-            localStorage.setItem('afkSessionCount', sessionCount.toString());
-        }
-    } catch (error) {
-        console.error('Error saving AFK session data:', error);
-    }
+            if (data && data.data) {
+                // Update total time
+                if (totalAFKTimeElement && data.data.timeActive) {
+                    totalAFKTime = data.data.timeActive;
+                    totalAFKTimeElement.textContent = formatTime(totalAFKTime);
+                }
+                
+                // Update total credits
+                if (totalCreditsElement && data.data.totalEarned) {
+                    totalCredits = parseInt(data.data.totalEarned);
+                    totalCreditsElement.textContent = totalCredits;
+                }
+                
+                // Update balance
+                if (balanceElement && data.data.currentBalance) {
+                    balanceElement.textContent = data.data.currentBalance;
+                }
+            }
+        })
+        .catch(error => {
+            console.error('AFK System: Error loading stats:', error);
+            showNotification('Failed to load AFK stats', 'error');
+        });
 }
 
-// Load AFK session data from localStorage
-function loadAfkSessionData() {
-    try {
-        const savedTotalTime = localStorage.getItem('afkTotalTime');
-        if (savedTotalTime) {
-            totalAfkTime = parseInt(savedTotalTime);
-        }
-        
-        const savedTotalCredits = localStorage.getItem('afkTotalCredits');
-        if (savedTotalCredits) {
-            totalCredits = parseInt(savedTotalCredits);
-        }
-        
-        // Check if session is from a different day
-        const today = new Date().toDateString();
-        const savedDate = localStorage.getItem('afkSessionToday');
-        if (savedDate !== today) {
-            localStorage.setItem('afkSessionToday', today);
-        }
-        
-        updateAfkStats();
-    } catch (error) {
-        console.error('Error loading AFK session data:', error);
-    }
-}
-
-// Format time in HH:MM:SS
+/**
+ * Format seconds into a readable time string (HH:MM:SS)
+ */
 function formatTime(seconds) {
+    if (typeof seconds !== 'number' || isNaN(seconds)) {
+        return '00:00:00';
+    }
+    
+    seconds = Math.max(0, Math.floor(seconds));
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
@@ -286,345 +142,494 @@ function formatTime(seconds) {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
-// Fetch user's current balance
-async function fetchUserBalance() {
-    try {
-        console.log('Fetching user balance...');
-        const response = await fetch('/api/earn/balance');
+/**
+ * Format minutes and seconds for timer display
+ */
+function formatTimerDisplay(seconds) {
+    if (typeof seconds !== 'number' || isNaN(seconds)) {
+        return '5:00';
+    }
+    
+    seconds = Math.max(0, Math.floor(seconds));
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    
+    return `${minutes}:${secs.toString().padStart(2, '0')}`;
+}
+
+/**
+ * Start the AFK timer countdown
+ */
+function startTimer() {
+    // Clear any existing timer
+    if (timerInterval) {
+        console.log('AFK System: Clearing existing timer interval');
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+    
+    // Reset timer state
+    remainingSeconds = 300; // 5 minutes
+    isTimerRunning = true;
+    lastUpdateTime = Date.now(); // Reset timestamp
+    
+    // Update display initially
+    updateTimerDisplay();
+    
+    console.log('AFK System: Timer starting with interval');
+    
+    // Set up the timer to update every second
+    timerInterval = setInterval(function() {
+        // Calculate actual elapsed time since last update
+        const now = Date.now();
+        const elapsed = (now - lastUpdateTime) / 1000; // Convert to seconds
+        lastUpdateTime = now;
         
-        if (!response.ok) {
-            console.error('Failed to fetch balance:', response.status, response.statusText);
+        // Don't update when tab is not visible
+        if (!isVisible) {
+            console.log('AFK System: Timer paused - tab not visible');
             return;
         }
         
-        const data = await response.json();
-        
-        if (data.success) {
-            console.log('Balance fetched successfully:', data.balance);
-            userBalance = data.balance;
-            updateBalanceDisplay();
+        // If elapsed time is unexpectedly large (> 2 seconds), 
+        // it means the browser throttled our timer
+        if (elapsed > 2) {
+            console.log(`AFK System: Browser throttled timer - ${elapsed.toFixed(1)}s elapsed`);
+            // Decrement by actual elapsed time, but cap at 60 seconds to prevent skipping too much
+            remainingSeconds -= Math.min(elapsed, 60);
         } else {
-            console.error('Balance fetch returned error:', data.error);
+            // Normal update - decrement by 1 second
+            remainingSeconds--;
         }
-    } catch (error) {
-        console.error('Error fetching user balance:', error);
-    }
+        
+        console.log(`AFK System: Timer tick - ${remainingSeconds.toFixed(1)}s remaining`);
+        
+        // Update the display
+        updateTimerDisplay();
+        
+        // Check if timer has reached zero
+        if (remainingSeconds <= 0) {
+            console.log('AFK System: Timer complete, claiming reward');
+            clearInterval(timerInterval);
+            timerInterval = null;
+            isTimerRunning = false;
+            claimReward();
+        }
+    }, 1000);
+    
+    console.log('AFK System: Timer started with interval ID:', timerInterval);
 }
 
-// Fetch user's referral count
-async function fetchReferrals() {
-    try {
-        const response = await fetch('/api/earn/referrals');
-        
-        if (!response.ok) {
-            console.error('Failed to fetch referrals:', response.status, response.statusText);
-            return;
-        }
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            const totalReferralsElement = document.getElementById('total-referrals');
-            if (totalReferralsElement) {
-                totalReferralsElement.textContent = data.referrals;
-            }
-        } else {
-            console.error('Referrals fetch returned error:', data.error);
-        }
-    } catch (error) {
-        console.error('Error fetching referrals:', error);
-    }
-}
-
-// Update the balance display
-function updateBalanceDisplay() {
-    console.log('Updating balance display to:', userBalance);
-    
-    // Update balance displays on the earn page
-    const balanceElements = document.querySelectorAll('.user-balance');
-    balanceElements.forEach(element => {
-        element.textContent = userBalance;
-    });
-    
-    // Also update any balance display in the navbar if it exists
-    const navBalanceElements = document.querySelectorAll('.nav-balance, .sidebar-balance');
-    navBalanceElements.forEach(element => {
-        element.textContent = userBalance;
-    });
-    
-    // If we're on a store page, update any store balance elements
-    const storeBalanceElements = document.querySelectorAll('.store-balance');
-    storeBalanceElements.forEach(element => {
-        element.textContent = userBalance;
-    });
-    
-    // Update the header balance display that shows "Your Credits: X"
-    const headerBalance = document.querySelector('.glass-card .text-primary-400');
-    if (headerBalance) {
-        headerBalance.textContent = userBalance;
+/**
+ * Update the timer display and progress ring
+ */
+function updateTimerDisplay() {
+    // Update timer text
+    if (timerElement) {
+        const displayText = formatTimerDisplay(remainingSeconds);
+        timerElement.textContent = displayText;
+        console.log(`AFK System: Timer display updated to ${displayText}`);
     }
     
-    // Update the AFK page balance display if present
-    const afkBalanceElement = document.getElementById('afk-balance');
-    if (afkBalanceElement) {
-        afkBalanceElement.textContent = userBalance;
+    // Update progress ring if it exists
+    if (progressRingCircle) {
+        const circumference = 2 * Math.PI * 40; // 2πr where r=40
+        const progress = remainingSeconds / 300; // 300 seconds = 5 minutes (full timer)
+        const offset = circumference * (1 - progress);
+        
+        progressRingCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+        progressRingCircle.style.strokeDashoffset = offset;
     }
 }
 
 /**
- * Show notification to the user
- * @param {string} type - Type of notification (success, error, warning, info)
- * @param {string} message - Message to display
+ * Claim AFK reward when timer completes
  */
-function showNotification(type, message) {
-    console.log(`Showing ${type} notification:`, message);
+async function claimReward() {
+    console.log('AFK System: Claiming reward...');
     
-    // If the AFK page's showLocalNotification function exists, use that instead
-    if (typeof showLocalNotification === 'function') {
-        showLocalNotification(message, type);
+    // Show loading state
+    if (timerElement) {
+        timerElement.textContent = 'Claiming...';
+    }
+    
+    // Make API request to claim the reward
+    fetch('/api/earn/claim', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        console.log('AFK System: Claim response received:', response.status);
+        if (!response.ok) {
+            throw new Error(`Server responded with ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('AFK System: Reward claimed successfully:', data);
+        
+        // Update total credits earned
+        if (data.amount && totalCreditsElement) {
+            totalCredits += parseInt(data.amount);
+            totalCreditsElement.textContent = totalCredits;
+        }
+        
+        // Update user balance
+        if (data.balance && balanceElement) {
+            balanceElement.textContent = data.balance;
+        }
+        
+        // Show success notification
+        showNotification(`Earned ${data.amount} credits! Balance: ${data.balance}`, 'success');
+        
+        // Start the timer again
+        startTimer();
+    })
+    .catch(error => {
+        console.error('AFK System: Error claiming reward:', error);
+        showNotification('Failed to claim reward. Restarting timer...', 'error');
+        
+        // Restart timer anyway
+        startTimer();
+    });
+}
+
+/**
+ * Handle visibility change (tab becomes visible/hidden)
+ */
+function handleVisibilityChange() {
+    const wasVisible = isVisible;
+    isVisible = document.visibilityState === 'visible';
+    console.log(`AFK System: Visibility changed - Tab is ${isVisible ? 'visible' : 'hidden'}`);
+    
+    if (isVisible && !wasVisible) {
+        // Tab became visible again - sync timer to compensate for throttling
+        const now = Date.now();
+        const elapsedSeconds = (now - lastUpdateTime) / 1000;
+        
+        console.log(`AFK System: Tab visible after ${elapsedSeconds.toFixed(1)}s - syncing timer`);
+        
+        // Only decrement time if it's been a reasonable amount of time (avoid extreme jumps)
+        if (elapsedSeconds > 1 && elapsedSeconds < 300) {
+            remainingSeconds -= Math.min(elapsedSeconds, 60); // Cap at 60 seconds to avoid extreme jumps
+            // If timer would go below zero, claim reward immediately
+            if (remainingSeconds <= 0) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                isTimerRunning = false;
+                remainingSeconds = 0;
+                updateTimerDisplay();
+                claimReward();
+            } else {
+                updateTimerDisplay();
+            }
+        }
+        
+        // Reset the timestamp
+        lastUpdateTime = now;
+        
+        showNotification('AFK timer resumed', 'info');
+    } else if (!isVisible && wasVisible) {
+        // Tab is now hidden - save the current timestamp
+        lastUpdateTime = Date.now();
+        updateTotalAFKTime();
+    }
+}
+
+/**
+ * Handle window focus
+ */
+function handleWindowFocus() {
+    const wasVisible = isVisible;
+    isVisible = true;
+    console.log('AFK System: Window focused');
+    
+    if (!wasVisible) {
+        // Same logic as when visibility changes to visible
+        const now = Date.now();
+        const elapsedSeconds = (now - lastUpdateTime) / 1000;
+        
+        console.log(`AFK System: Window focused after ${elapsedSeconds.toFixed(1)}s - syncing timer`);
+        
+        // Only decrement time if it's been a reasonable amount of time
+        if (elapsedSeconds > 1 && elapsedSeconds < 300) {
+            remainingSeconds -= Math.min(elapsedSeconds, 60);
+            if (remainingSeconds <= 0) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                isTimerRunning = false;
+                remainingSeconds = 0;
+                updateTimerDisplay();
+                claimReward();
+            } else {
+                updateTimerDisplay();
+            }
+        }
+        
+        lastUpdateTime = now;
+    }
+}
+
+/**
+ * Handle window blur
+ */
+function handleWindowBlur() {
+    isVisible = false;
+    console.log('AFK System: Window blurred');
+    lastUpdateTime = Date.now();
+    updateTotalAFKTime();
+}
+
+/**
+ * Update the total AFK time display
+ */
+function updateTotalAFKTime() {
+    if (!totalAFKTimeElement) return;
+    
+    const now = Date.now();
+    const sessionTime = Math.floor((now - sessionStartTime) / 1000);
+    
+    if (sessionTime > 0) {
+        totalAFKTime += sessionTime;
+        totalAFKTimeElement.textContent = formatTime(totalAFKTime);
+        sessionStartTime = now; // Reset for next update
+    }
+}
+
+/**
+ * Setup notifications
+ */
+function initNotificationSystem() {
+    console.log('AFK System: Initializing notification system...');
+    
+    if (!document.getElementById('notification-container')) {
+        const container = document.createElement('div');
+        container.id = 'notification-container';
+        container.className = 'fixed top-4 right-4 z-50 flex flex-col items-end space-y-2';
+        document.body.appendChild(container);
+        console.log('AFK System: Created notification container');
+    }
+}
+
+/**
+ * Show a notification
+ * @param {string} message - Message to display
+ * @param {string} type - Type of notification (success, error, warning, info)
+ */
+function showNotification(message, type = 'info') {
+    const container = document.getElementById('notification-container');
+    if (!container) {
+        console.error('AFK System: Notification container not found');
         return;
     }
     
-    // Get notification elements
-    const notification = document.getElementById('notification');
-    const notificationText = document.getElementById('notification-text');
-    const notificationIcon = document.getElementById('notification-icon');
+    console.log(`AFK System: Showing notification - ${type}: ${message}`);
     
-    if (!notification || !notificationText || !notificationIcon) {
-        console.error('Notification elements not found!');
-        return;
-    }
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification p-3 rounded-lg shadow-lg flex items-center ${
+        type === 'success' ? 'bg-green-600' : 
+        type === 'error' ? 'bg-red-600' : 
+        'bg-blue-600'
+    } text-white max-w-xs animate-fade-in`;
     
-    // Set notification text
-    notificationText.textContent = message;
+    // Add icon based on type
+    const iconClass = 
+        type === 'success' ? 'fa-check-circle' : 
+        type === 'error' ? 'fa-exclamation-circle' : 
+        'fa-info-circle';
     
-    // Clear any existing classes
-    notificationIcon.className = 'fas';
-    notification.className = 'fixed bottom-4 right-4 max-w-md p-4 rounded-lg shadow-lg transform transition-all duration-500 z-50';
+    notification.innerHTML = `
+        <i class="fas ${iconClass} mr-2"></i>
+        <span>${message}</span>
+    `;
     
-    // Add appropriate classes based on type
-    switch (type) {
-        case 'success':
-            notification.classList.add('bg-green-800', 'text-white');
-            notificationIcon.classList.add('fa-check-circle', 'text-green-400');
-            break;
-        case 'error':
-            notification.classList.add('bg-red-800', 'text-white');
-            notificationIcon.classList.add('fa-exclamation-circle', 'text-red-400');
-            break;
-        case 'warning':
-            notification.classList.add('bg-yellow-800', 'text-white');
-            notificationIcon.classList.add('fa-exclamation-triangle', 'text-yellow-400');
-            break;
-        case 'info':
-        default:
-            notification.classList.add('bg-blue-800', 'text-white');
-            notificationIcon.classList.add('fa-info-circle', 'text-blue-400');
-            break;
-    }
+    // Add to container
+    container.appendChild(notification);
     
-    // Show notification
-    notification.classList.remove('translate-y-20', 'opacity-0');
-    
-    // Hide notification after 5 seconds
+    // Remove after 5 seconds
     setTimeout(() => {
-        notification.classList.add('translate-y-20', 'opacity-0');
+        notification.classList.add('animate-fade-out');
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
     }, 5000);
 }
 
-// Check if daily reward is available
-async function checkDailyRewardStatus() {
-    try {
-        const response = await fetch('/api/earn/daily/status');
-        const data = await response.json();
-        
-        const dailyBtn = document.getElementById('daily-btn');
-        if (!dailyBtn) return;
-        
-        if (data.available) {
-            dailyBtn.disabled = false;
-            dailyBtn.classList.remove('bg-gray-500');
-            dailyBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+/**
+ * Setup ping system to keep session alive
+ */
+function initPingSystem() {
+    console.log('AFK System: Initializing ping system...');
+    
+    // Ping server every 30 seconds to keep session alive
+    setInterval(() => {
+        if (isVisible) {
+            pingServer();
+        }
+    }, 30000);
+    
+    // Update stats every minute
+    setInterval(() => {
+        if (isVisible) {
+            fetchAFKStats();
+        }
+    }, 60000);
+}
+
+/**
+ * Ping server to keep session alive
+ */
+async function pingServer() {
+    console.log('AFK System: Pinging server...');
+    
+    fetch('/api/earn/ping', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ timestamp: Date.now() })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('AFK System: Ping successful');
         } else {
-            dailyBtn.disabled = true;
-            dailyBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
-            dailyBtn.classList.add('bg-gray-500');
-            
-            // Show time remaining if available
-            if (data.timeRemaining) {
-                const hours = Math.ceil(data.timeRemaining / 3600000);
-                dailyBtn.textContent = `Available in ${hours}h`;
-            } else {
-                dailyBtn.textContent = 'Already Claimed';
-            }
+            console.error('AFK System: Ping failed:', response.status);
         }
-    } catch (error) {
-        console.error('Error checking daily reward status:', error);
-    }
-}
-
-// Test function for claiming daily reward (for debugging)
-async function testDailyReward() {
-    const debugOutput = document.getElementById('debug-output');
-    debugOutput.innerHTML = '';
-    debugOutput.classList.remove('hidden');
-    
-    function log(message) {
-        console.log(message);
-        debugOutput.innerHTML += `<div>${message}</div>`;
-    }
-    
-    try {
-        log('Starting test claim...');
-        log(`Current time: ${new Date().toISOString()}`);
-        
-        // Direct fetch call
-        log('Making direct fetch call to /daily...');
-        const response = await fetch('/daily', {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            credentials: 'same-origin'
-        });
-        
-        log(`Response status: ${response.status} (${response.statusText})`);
-        
-        // Get response headers
-        const headers = {};
-        response.headers.forEach((value, key) => {
-            headers[key] = value;
-            log(`Response header: ${key}: ${value}`);
-        });
-        
-        // Get response text
-        const responseText = await response.text();
-        log(`Response body: ${responseText.substring(0, 100)}${responseText.length > 100 ? '...' : ''}`);
-        
-        try {
-            // Try parsing JSON
-            const data = JSON.parse(responseText);
-            log(`Parsed JSON: ${JSON.stringify(data)}`);
-            
-            if (data.success) {
-                log(`Success! Credits: ${data.credits}, Balance: ${data.balance}`);
-                // Update all balance displays on the page
-                updateAllBalanceDisplays(data.balance);
-                
-                // Disable the claim button if available
-                const dailyBtn = document.getElementById('daily-btn');
-                if (dailyBtn) {
-                    dailyBtn.disabled = true;
-                    dailyBtn.textContent = 'Claimed!';
-                    dailyBtn.classList.add('claimed');
-                }
-                
-                // Show a success message
-                log(`${data.message || 'Reward claimed successfully!'}`);
-            } else {
-                log(`Error: ${data.error}`);
-                if (data.timeRemaining) {
-                    const hours = Math.ceil(data.timeRemaining / 3600000);
-                    log(`Time remaining: ${hours} hours`);
-                }
-            }
-        } catch (jsonError) {
-            log(`Error parsing JSON: ${jsonError.message}`);
-        }
-    } catch (error) {
-        log(`Error: ${error.message}`);
-        console.error('Test claim error:', error);
-    }
-}
-
-// Function to update all balance displays on the page
-function updateAllBalanceDisplays(balance) {
-    // Find all elements displaying the balance and update them
-    const balanceElements = document.querySelectorAll('.balance-display, .user-balance, .text-primary-400');
-    balanceElements.forEach(element => {
-        element.textContent = balance;
+    })
+    .catch(error => {
+        console.error('AFK System: Ping error:', error);
     });
-    
-    console.log(`Updated ${balanceElements.length} balance display elements to ${balance}`);
 }
 
-// Initialize when the DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, checking for AFK timer');
+/**
+ * Fetch AFK stats from server
+ */
+async function fetchAFKStats() {
+    console.log('AFK System: Fetching updated stats...');
     
-    // Load saved session data if the function exists
-    if (typeof loadAfkSessionData === 'function') {
-        loadAfkSessionData();
-    }
-    
-    // Set up tab visibility detection
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    
-    // Check daily reward status
-    checkDailyRewardStatus();
-    
-    // Set up event listeners for UI elements
-    const dailyBtn = document.getElementById('daily-btn');
-    if (dailyBtn) {
-        dailyBtn.addEventListener('click', claimDailyReward);
-    }
-    
-    const copyBtn = document.getElementById('copy-btn');
-    if (copyBtn) {
-        copyBtn.addEventListener('click', copyReferralLink);
-    }
-    
-    // Make dropdown menu togglable
-    const dropdownBtn = document.getElementById('dropdownBtn');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    if (dropdownBtn && dropdownMenu) {
-        dropdownBtn.addEventListener('click', function() {
-            dropdownMenu.classList.toggle('hidden');
+    fetch('/api/earn/stats')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server responded with ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('AFK System: Stats updated successfully');
+            
+            if (data && data.data) {
+                // Update total time display
+                if (totalAFKTimeElement && data.data.timeActive) {
+                    totalAFKTime = data.data.timeActive;
+                    totalAFKTimeElement.textContent = formatTime(totalAFKTime);
+                }
+                
+                // Update balance display
+                if (balanceElement && data.data.currentBalance) {
+                    balanceElement.textContent = data.data.currentBalance;
+                }
+            }
+        })
+        .catch(error => {
+            console.error('AFK System: Error updating stats:', error);
         });
+}
+
+/**
+ * Save session data before page unload
+ */
+function saveSessionData() {
+    try {
+        const sessionData = {
+            totalCredits,
+            totalAFKTime,
+            lastUpdateTime: Date.now()
+        };
         
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                dropdownMenu.classList.add('hidden');
-            }
-        });
+        localStorage.setItem('afkSessionData', JSON.stringify(sessionData));
+        console.log('AFK System: Session data saved');
+    } catch (error) {
+        console.error('AFK System: Error saving session data:', error);
     }
-    
-    // Mobile menu toggle
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const sidebar = document.getElementById('sidebar');
-    const mobileSearch = document.getElementById('mobileSearch');
-    if (mobileMenuBtn && sidebar) {
-        mobileMenuBtn.addEventListener('click', function() {
-            sidebar.classList.toggle('-translate-x-full');
-            if (mobileSearch) {
-                mobileSearch.classList.add('hidden');
-            }
-        });
+}
+
+/**
+ * Load session data on page load
+ */
+function loadSessionData() {
+    try {
+        const data = localStorage.getItem('afkSessionData');
+        if (!data) {
+            console.log('AFK System: No session data found');
+            return;
+        }
+        
+        const sessionData = JSON.parse(data);
+        const now = Date.now();
+        
+        // Only use data if it's not too old (less than 1 hour)
+        if (sessionData.lastUpdateTime && (now - sessionData.lastUpdateTime) < 3600000) {
+            totalCredits = sessionData.totalCredits || 0;
+            totalAFKTime = sessionData.totalAFKTime || 0;
+            
+            console.log('AFK System: Session data loaded:', {
+                totalCredits,
+                totalAFKTime
+            });
+        } else {
+            console.log('AFK System: Saved data too old, starting fresh');
+        }
+    } catch (error) {
+        console.error('AFK System: Error loading session data:', error);
     }
+}
+
+// Handle page unload
+window.addEventListener('beforeunload', function() {
+    updateTotalAFKTime();
+    saveSessionData();
     
-    // Toggle sidebar on mobile
-    const toggleSidebarBtn = document.getElementById('toggleSidebar');
-    if (toggleSidebarBtn && sidebar) {
-        toggleSidebarBtn.addEventListener('click', function() {
-            sidebar.classList.toggle('-translate-x-full');
-        });
-    }
-    
-    // Process page-specific initialization
-    if (window.location.pathname === '/earn') {
-        fetchReferrals();
-        updateLeaderboard();
+    if (timerInterval) {
+        clearInterval(timerInterval);
     }
 });
 
-// Clean up when the page is unloaded
-window.addEventListener('beforeunload', function() {
-    // Save AFK session data
-    saveAfkSessionData();
-    
-    // Clear intervals
-    if (timerInterval) clearInterval(timerInterval);
-    if (statsUpdateInterval) clearInterval(statsUpdateInterval);
-});
+// Add required styles for animations
+(function addRequiredStyles() {
+    if (!document.getElementById('afk-system-styles')) {
+        const styleElement = document.createElement('style');
+        styleElement.id = 'afk-system-styles';
+        styleElement.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateY(0); }
+                to { opacity: 0; transform: translateY(-10px); }
+            }
+            
+            .animate-fade-in {
+                animation: fadeIn 0.3s ease-out forwards;
+            }
+            
+            .animate-fade-out {
+                animation: fadeOut 0.3s ease-in forwards;
+            }
+            
+            .progress-ring-circle {
+                transition: stroke-dashoffset 0.35s;
+                transform-origin: center;
+                transform: rotate(-90deg);
+            }
+        `;
+        document.head.appendChild(styleElement);
+        console.log('AFK System: Added required CSS styles');
+    }
+})();

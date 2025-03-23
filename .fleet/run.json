@@ -1,0 +1,9 @@
+{
+    "configurations": [
+        {
+            "type": "browser",
+            "name": "Browser configuration",
+            "url": ""
+        }
+    ]
+}

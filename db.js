@@ -113,6 +113,19 @@ authDb.prepare(`CREATE TABLE IF NOT EXISTS "databases" (
     FOREIGN KEY (server_id) REFERENCES servers(id)
 )`).run();
 
+// Create user_resources table for storing purchased resources
+authDb.prepare(`CREATE TABLE IF NOT EXISTS "user_resources" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_id" INTEGER NOT NULL,
+    "ram" INTEGER DEFAULT 0,
+    "disk" INTEGER DEFAULT 0,
+    "cpu" INTEGER DEFAULT 0,
+    "servers" INTEGER DEFAULT 0,
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+)`).run();
+
 // Create user methods
 const userMethods = {
     async createUser(userData) {
@@ -271,9 +284,82 @@ const serverMethods = {
     }
 };
 
+// Create resource methods
+const resourceMethods = {
+    async getUserResources(userId) {
+        const stmt = authDb.prepare('SELECT * FROM user_resources WHERE user_id = ?');
+        const result = stmt.get(userId);
+        
+        // If no resources exist yet, create a default entry with zeros
+        if (!result) {
+            await this.initUserResources(userId);
+            return { user_id: userId, ram: 0, disk: 0, cpu: 0, servers: 0 };
+        }
+        
+        return result;
+    },
+    
+    async initUserResources(userId) {
+        const stmt = authDb.prepare(`
+            INSERT OR IGNORE INTO user_resources (user_id, ram, disk, cpu, servers)
+            VALUES (?, 0, 0, 0, 0)
+        `);
+        return stmt.run(userId);
+    },
+    
+    async updateUserResources(userId, resourceData) {
+        // First ensure the user has a resource record
+        await this.initUserResources(userId);
+        
+        // Then update with new values
+        const stmt = authDb.prepare(`
+            UPDATE user_resources SET
+                ram = ram + ?,
+                disk = disk + ?,
+                cpu = cpu + ?,
+                servers = servers + ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE user_id = ?
+        `);
+        
+        return stmt.run(
+            resourceData.ram || 0,
+            resourceData.disk || 0,
+            resourceData.cpu || 0,
+            resourceData.servers || 0,
+            userId
+        );
+    },
+    
+    async setUserResources(userId, resourceData) {
+        // First ensure the user has a resource record
+        await this.initUserResources(userId);
+        
+        // Then set specific values
+        const stmt = authDb.prepare(`
+            UPDATE user_resources SET
+                ram = ?,
+                disk = ?,
+                cpu = ?,
+                servers = ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE user_id = ?
+        `);
+        
+        return stmt.run(
+            resourceData.ram || 0,
+            resourceData.disk || 0,
+            resourceData.cpu || 0,
+            resourceData.servers || 0,
+            userId
+        );
+    }
+};
+
 module.exports = {
     users: userMethods,
     packages: packageMethods,
     servers: serverMethods,
+    resources: resourceMethods,
     db: authDb
 };

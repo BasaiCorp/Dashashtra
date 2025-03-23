@@ -57,17 +57,18 @@ module.exports.renderdataeval =
         // Get user's pterodactyl information
         renderdata.pterodactyl = req.session.pterodactyl;
 
-        // Get extra resources (if enabled)
-        renderdata.extraresources = {
-          ram: 0,
-          disk: 0,
-          cpu: 0,
-          servers: 0
-        };
+        // Get extra resources from database
+        renderdata.extraresources = await db.resources.getUserResources(req.session.userinfo.id);
 
         // Get coins if enabled
         if (newsettings.api.client.coins.enabled) {
-          renderdata.coins = 0; // Initialize with default value
+          try {
+            const userCoins = require('./api/user_coins.js');
+            renderdata.coins = await userCoins.getUserCoins(req.session.userinfo.id);
+          } catch (coinError) {
+            console.error('Error fetching user coins:', coinError);
+            renderdata.coins = 0;
+          }
         }
 
       } catch (error) {
@@ -432,21 +433,6 @@ app.get('/dashboard', async (req, res) => {
     }
 });
 
-// Import API routes
-const adminRoutes = require('./api/admin.js');
-const serverRoutes = require('./api/servers.js');
-const { router: earnRouter } = require('./api/earn.js');
-const { router: storeRouter } = require('./api/store.js');
-
-// Register API routes - moved after main routes
-app.use('/api/servers', serverRoutes.router);
-
-// Register earn routes correctly - this is the fix to ensure the API endpoints work properly
-app.use('/', earnRouter);
-
-// Register store routes
-app.use('/', storeRouter);
-
 // Add middleware for parsing request bodies
 app.use(express.json({
   inflate: true,
@@ -462,6 +448,22 @@ app.use(express.urlencoded({
   extended: true,
   limit: '500kb'
 }));
+
+// Import API routes
+const adminRoutes = require('./api/admin.js');
+const serverRoutes = require('./api/servers.js');
+const { router: earnRouter } = require('./api/earn.js');
+const { router: storeRouter } = require('./api/store.js');
+
+// Register API routes - moved after body parser middleware
+app.use('/api/servers', serverRoutes.router);
+app.use('/api/admin', adminRoutes.router);
+
+// Register earn routes correctly - this is the fix to ensure the API endpoints work properly
+app.use('/', earnRouter);
+
+// Register store routes
+app.use('/', storeRouter);
 
 // Load the website.
 module.exports.app = app;
@@ -603,9 +605,6 @@ apifiles.forEach(file => {
         }
     }
 });
-
-// Register admin routes last to ensure proper route handling
-app.use('/admin', adminRoutes.router);
 
 // Explicit route handlers for login and register pages
 app.get('/login', async (req, res) => {

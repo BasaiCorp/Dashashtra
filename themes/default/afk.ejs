@@ -101,11 +101,31 @@
             border-right: 1px solid #2d2d35;
         }
         
+        .main-content {
+            background-color: #0f0f12;
+        }
+        
+        .bg-dark-card {
+            background-color: #1a1a1f;
+        }
+        
+        .bg-dark-lighter {
+            background-color: #202026;
+        }
+        
+        .menu-item.active {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: #fff;
+        }
+        
+        .menu-item.active i {
+            color: #6366f1;
+        }
+        
         .glass-card {
-            background: rgba(26, 26, 33, 0.7);
+            background: rgba(26, 26, 31, 0.7);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .progress-ring-circle {
@@ -115,9 +135,15 @@
         }
     </style>
     
+    <!-- JavaScript -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/e3ff8bb9d4.js" crossorigin="anonymous"></script>
     <script src="/assets/js/earn.js" defer></script>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen">
+    <!-- Notification Toast -->
+    <div id="notification-container" class="fixed top-4 right-4 z-50 flex flex-col items-end space-y-2"></div>
+    
     <!-- Navbar -->
 	<nav class="navbar fixed w-full h-16 z-50 px-4 py-2.5 flex items-center justify-between bg-dark-base/80 backdrop-blur-lg border-b border-gray-800">
 		<!-- Left side - Logo and Brand -->
@@ -297,475 +323,375 @@
 		</button>
 
         <!-- Main Content -->
+        <div class="p-4 sm:ml-64 pt-5 w-full main-content min-h-screen flex flex-col">
+            <div class="p-4 flex-grow">
+                <!-- Welcome Message -->
+                <div class="mb-8 glass-card p-6 rounded-xl animate-fade-in">
+                    <h1 class="text-3xl font-bold mb-2">AFK Credits Earnings</h1>
+                    <p class="text-gray-400">Stay on this page to earn credits automatically. Every 5 minutes, you'll receive 15 credits. Keep the tab active to continue earning.</p>
+                </div>
 
-        <div class="flex-1 p-6 sm:ml-64">
-            <div class="max-w-7xl mx-auto">
-                <!-- AFK Timer Card -->
-                <div class="glass-card rounded-xl p-6 mb-8">
-                    <div class="flex flex-col items-center justify-center text-center mb-6">
-                        <h1 class="text-3xl font-bold mb-2">AFK Credits Earnings</h1>
-                        <p class="text-gray-400 max-w-2xl">Stay on this page to earn credits automatically. Every 5 minutes, you'll receive 15 credits. Keep the tab active to continue earning.</p>
+                <!-- AFK Timer -->
+                <div class="flex flex-col items-center p-6 space-y-4">
+                    <h3 class="text-xl font-semibold text-white mb-2">AFK Timer</h3>
+                    
+                    <!-- Timer Progress Ring -->
+                    <div class="relative h-36 w-36 flex items-center justify-center">
+                        <svg class="h-full w-full" viewBox="0 0 100 100">
+                            <!-- Background Ring -->
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="#2d2d35" stroke-width="8" />
+                            
+                            <!-- Progress Ring -->
+                            <circle id="progress-ring-circle" class="progress-ring-circle" cx="50" cy="50" r="40" fill="none" stroke="#6366f1" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="0" />
+                        </svg>
+                        
+                        <!-- Timer Display -->
+                        <div class="absolute">
+                            <span id="timer" class="text-3xl font-bold text-white">5:00</span>
+                        </div>
                     </div>
                     
-                    <div class="flex flex-col items-center justify-center">
-                        <!-- Timer Circle -->
-                        <div class="relative w-40 h-40 mb-6">
-                            <svg class="w-full h-full" viewBox="0 0 100 100">
-                                <!-- Background Circle -->
-                                <circle cx="50" cy="50" r="42" fill="none" stroke="#2d2d35" stroke-width="8"></circle>
-                                
-                                <!-- Progress Circle -->
-                                <circle id="progress-ring-circle" class="progress-ring-circle" cx="50" cy="50" r="42" fill="none" stroke="#6366f1" stroke-width="8" stroke-dasharray="251.2 251.2" stroke-dashoffset="251.2"></circle>
-                            </svg>
-                            
-                            <!-- Timer Display -->
-                            <div class="absolute inset-0 flex flex-col items-center justify-center">
-                                <span id="timer" class="text-4xl font-bold">5:00</span>
-                                <span class="text-sm text-gray-400">until next reward</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Current Balance -->
-                        <div class="bg-dark-lighter rounded-lg p-4 mb-6 w-full max-w-md">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <h3 class="text-lg font-medium text-gray-300">Your Balance</h3>
-                                    <p class="text-2xl font-bold text-white"><span id="afk-balance" class="user-balance"><%= userinfo?.coins || 0 %></span> credits</p>
-                                </div>
-                                <div class="w-12 h-12 bg-primary-500/10 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-coins text-primary-400 text-xl"></i>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Session Stats -->
-                        <div class="grid grid-cols-2 gap-4 w-full max-w-md mb-6">
-                            <div class="bg-dark-lighter rounded-lg p-4">
-                                <h3 class="text-sm font-medium text-gray-400">Earned This Session</h3>
-                                <p class="text-xl font-bold"><span id="total-credits">0</span> credits</p>
-                            </div>
-                            <div class="bg-dark-lighter rounded-lg p-4">
-                                <h3 class="text-sm font-medium text-gray-400">Rate</h3>
-                                <p class="text-xl font-bold">15 credits / 5min</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Info Message -->
-                        <div class="bg-blue-500/10 text-blue-300 p-4 rounded-lg w-full max-w-md">
-                            <div class="flex items-start">
-                                <i class="fas fa-info-circle text-blue-400 mt-1 mr-3"></i>
-                                <p>Keep this tab open and active to earn credits. You can use these credits to purchase server resources in the store.</p>
-                            </div>
-                        </div>
+                    <!-- Instructions -->
+                    <p class="text-gray-300 text-center text-sm mt-4">Stay on this page to earn credits every 5 minutes</p>
+                    
+                    <!-- User's Balance -->
+                    <div class="flex items-center mt-3 space-x-2">
+                        <i class="fas fa-coins text-yellow-400"></i>
+                        <span class="text-white">Your Balance:</span>
+                        <span id="afk-balance" class="balance-display font-bold text-yellow-400"><%= userCoinsBalance %></span>
                     </div>
                 </div>
                 
-                <!-- Information Cards Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <!-- AFK Stats -->
-                    <div class="glass-card rounded-xl p-6">
-                        <div class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4">
-                            <i class="fas fa-chart-line text-2xl text-blue-400"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">AFK Stats</h3>
-                        <div class="space-y-3">
-                            <div class="flex justify-between">
-                                <span class="text-gray-400">Total AFK time:</span>
-                                <span id="total-afk-time"><% if (locals.afkStats && afkStats.timeActive) { %><%= Math.floor(afkStats.timeActive / 3600) %>:<%= Math.floor((afkStats.timeActive % 3600) / 60).toString().padStart(2, '0') %>:<%= (afkStats.timeActive % 60).toString().padStart(2, '0') %><% } else { %>00:00:00<% } %></span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-400">Total earnings:</span>
-                                <span id="total-earnings"><% if (locals.afkStats && afkStats.totalEarned) { %><%= afkStats.totalEarned %> credits<% } else { %>0 credits<% } %></span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-400">Sessions today:</span>
-                                <span id="total-sessions"><% if (locals.afkStats && afkStats.sessionsToday) { %><%= afkStats.sessionsToday %><% } else { %>1<% } %></span>
-                            </div>
-                        </div>
-                    </div>
+                <!-- AFK Stats -->
+                <div class="flex flex-col p-6 space-y-4">
+                    <h3 class="text-xl font-semibold text-white mb-2">Your Stats</h3>
                     
-                    <!-- Earnings Boosters -->
-                    <div class="glass-card rounded-xl p-6">
-                        <div class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mb-4">
-                            <i class="fas fa-rocket text-2xl text-green-400"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">Earnings Boosters</h3>
-                        <div class="space-y-4">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 bg-dark-base rounded-lg flex items-center justify-center mr-3">
-                                    <i class="fas fa-star text-yellow-400"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="flex justify-between">
-                                        <span>Premium Boost</span>
-                                        <span class="text-gray-400">+10%</span>
-                                    </div>
-                                    <div class="mt-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
-                                        <div class="h-full bg-yellow-400 rounded-full" style="width: 0%"></div>
-                                    </div>
-                                </div>
+                    <div class="grid grid-cols-1 gap-4">
+                        <!-- Time Active -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-clock text-indigo-400"></i>
+                                <span class="text-gray-300">Total AFK Time:</span>
                             </div>
-                            
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 bg-dark-base rounded-lg flex items-center justify-center mr-3">
-                                    <i class="fas fa-users text-purple-400"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="flex justify-between">
-                                        <span>Referral Boost</span>
-                                        <span class="text-gray-400">+5%</span>
-                                    </div>
-                                    <div class="mt-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
-                                        <div class="h-full bg-purple-400 rounded-full" style="width: 0%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 bg-dark-base rounded-lg flex items-center justify-center mr-3">
-                                    <i class="fas fa-calendar-check text-blue-400"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="flex justify-between">
-                                        <span>Streak Boost</span>
-                                        <span class="text-gray-400">+2%</span>
-                                    </div>
-                                    <div class="mt-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
-                                        <div class="h-full bg-blue-400 rounded-full" style="width: 0%"></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <span id="total-afk-time" class="font-medium text-white">00:00:00</span>
                         </div>
-                    </div>
-                    
-                    <!-- Rules & Information -->
-                    <div class="glass-card rounded-xl p-6">
-                        <div class="w-12 h-12 bg-red-500/10 rounded-lg flex items-center justify-center mb-4">
-                            <i class="fas fa-info-circle text-2xl text-red-400"></i>
+                        
+                        <!-- Total Credits Earned -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-coins text-yellow-400"></i>
+                                <span class="text-gray-300">Total Credits Earned:</span>
+                            </div>
+                            <span id="total-credits" class="font-medium text-white"><%= afkStats?.totalEarned || 0 %></span>
                         </div>
-                        <h3 class="text-xl font-semibold mb-2">Rules & Information</h3>
-                        <ul class="space-y-2 text-sm">
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                                <span>Keep this page open to earn credits automatically.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                                <span>You will earn 15 credits every 5 minutes.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-exclamation-triangle text-yellow-400 mt-1 mr-2"></i>
-                                <span>Using automation tools to earn credits is not allowed.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-exclamation-triangle text-yellow-400 mt-1 mr-2"></i>
-                                <span>Multiple AFK sessions across accounts is prohibited.</span>
-                            </li>
-                        </ul>
+                        
+                        <!-- Sessions Today -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-calendar-check text-green-400"></i>
+                                <span class="text-gray-300">Sessions Today:</span>
+                            </div>
+                            <span id="total-sessions" class="font-medium text-white">1</span>
+                        </div>
                     </div>
                 </div>
             </div>
+            
+            <!-- Footer -->
+            <footer class="w-full py-6 border-t border-gray-800 bg-dark-base mt-auto">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <div class="mb-4 md:mb-0">
+                            <div class="flex items-center">
+                                <img src="<%= settings.logo %>" alt="Logo" class="h-8 mr-3">
+                                <span class="text-lg font-semibold text-white"><%= settings.name %></span>
+                            </div>
+                            <p class="text-gray-400 text-sm mt-2">© 2024 <%= settings.name %>. All rights reserved.</p>
+                        </div>
+                        
+                        <div class="flex space-x-6">
+                            <a href="/terms" class="text-gray-400 hover:text-white transition-colors duration-200">Terms</a>
+                            <a href="/privacy" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy</a>
+                            <a href="/contact" class="text-gray-400 hover:text-white transition-colors duration-200">Contact</a>
+                            <a href="https://discord.gg/<%= settings.discord?.id || '' %>" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
+                                <i class="fab fa-discord mr-1"></i> Discord
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
     
     <!-- Scripts -->
     <script>
-        // Variables for timer
-        let timeLeft = 300; // 5 minutes in seconds
-        let earnings = 0;
-        let timerInterval;
+        // AFK Timer Variables
+        let timerInterval = null;
+        let remainingSeconds = 300; // 5 minutes in seconds
+        let isTimerRunning = false;
+        let isVisible = true;
         
-        // Get HTML elements
-        const progressRing = document.getElementById('progress-ring-circle');
-        const timerDisplay = document.getElementById('timer');
-        const earningsDisplay = document.getElementById('total-credits');
+        // DOM elements
+        let timerElement;
+        let progressRingCircle;
         
-        // Set circumference of the progress ring
-        const radius = 42;
-        const circumference = radius * 2 * Math.PI;
-        
-        // Set initial properties of the progress ring
-        progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
-        progressRing.style.strokeDashoffset = `${circumference}`;
-        
-        // Function to update the progress ring
-        function setProgress(percent) {
-            const offset = circumference - percent / 100 * circumference;
-            progressRing.style.strokeDashoffset = offset;
-        }
-        
-        // Function to format time as mm:ss
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-        }
-        
-        // Function to update the timer
-        function updateTimer() {
-            if (timeLeft <= 0) {
-                // Claim reward through earn.js function
-                claimAFKReward();
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('AFK page loaded, initializing timer directly in the page');
+            
+            // Find DOM elements
+            timerElement = document.getElementById('timer');
+            progressRingCircle = document.getElementById('progress-ring-circle');
+            
+            if (!timerElement) {
+                console.error('Timer element not found!');
                 return;
             }
             
-            // Update timer display
-            timerDisplay.textContent = formatTime(timeLeft);
+            // Set initial timer value
+            timerElement.textContent = '5:00';
             
-            // Update progress ring
-            const progress = ((300 - timeLeft) / 300) * 100;
-            setProgress(progress);
+            // Initialize progress ring
+            if (progressRingCircle) {
+                const circumference = 2 * Math.PI * 40;
+                progressRingCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+                progressRingCircle.style.strokeDashoffset = '0';
+            }
             
-            // Decrement time
-            timeLeft--;
+            // Setup visibility detection
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+            
+            // Start the timer with a slight delay
+            setTimeout(startTimer, 500);
+            
+            console.log('Timer initialization complete');
+        });
+        
+        // Start the timer countdown
+        function startTimer() {
+            console.log('Starting AFK timer');
+            
+            // Clear any existing timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            // Reset timer state
+            remainingSeconds = 300; // 5 minutes
+            isTimerRunning = true;
+            
+            // Update display initially
+            updateTimerDisplay();
+            
+            // Set up the timer to update every second
+            timerInterval = setInterval(function() {
+                // Don't update when tab is not visible
+                if (!isVisible) {
+                    return;
+                }
+                
+                // Decrement the time
+                remainingSeconds--;
+                console.log(`Timer tick: ${remainingSeconds}s remaining`);
+                
+                // Update the display
+                updateTimerDisplay();
+                
+                // Check if timer has reached zero
+                if (remainingSeconds <= 0) {
+                    console.log('Timer complete, claiming reward');
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    isTimerRunning = false;
+                    claimReward();
+                }
+            }, 1000);
         }
         
-        // Create a notification container if it doesn't exist
-        function createNotificationContainer() {
-            // Only create if it doesn't already exist
-            if (!document.getElementById('notification')) {
-                const notificationDiv = document.createElement('div');
-                notificationDiv.id = 'notification';
-                notificationDiv.className = 'fixed bottom-4 right-4 max-w-md p-4 rounded-lg shadow-lg transform transition-all duration-500 translate-y-20 opacity-0 z-50';
+        // Update the timer display and progress ring
+        function updateTimerDisplay() {
+            // Format time as M:SS
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = Math.floor(remainingSeconds % 60);
+            const displayText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update timer text
+            if (timerElement) {
+                timerElement.textContent = displayText;
+            }
+            
+            // Update progress ring if it exists
+            if (progressRingCircle) {
+                const circumference = 2 * Math.PI * 40; // 2πr where r=40
+                const progress = remainingSeconds / 300; // 300 seconds = 5 minutes (full timer)
+                const offset = circumference * (1 - progress);
                 
-                const flexDiv = document.createElement('div');
-                flexDiv.className = 'flex items-center';
-                
-                const iconDiv = document.createElement('div');
-                iconDiv.id = 'notification-icon';
-                iconDiv.className = 'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mr-3';
-                
-                const iconElement = document.createElement('i');
-                iconElement.className = 'fas';
-                iconDiv.appendChild(iconElement);
-                
-                const textDiv = document.createElement('div');
-                textDiv.className = 'flex-grow';
-                
-                const text = document.createElement('p');
-                text.id = 'notification-text';
-                text.className = 'font-medium';
-                textDiv.appendChild(text);
-                
-                const closeButton = document.createElement('button');
-                closeButton.className = 'ml-4 text-gray-400 hover:text-white';
-                closeButton.onclick = hideNotification;
-                
-                const closeIcon = document.createElement('i');
-                closeIcon.className = 'fas fa-times';
-                closeButton.appendChild(closeIcon);
-                
-                flexDiv.appendChild(iconDiv);
-                flexDiv.appendChild(textDiv);
-                flexDiv.appendChild(closeButton);
-                
-                notificationDiv.appendChild(flexDiv);
-                document.body.appendChild(notificationDiv);
+                progressRingCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+                progressRingCircle.style.strokeDashoffset = offset;
             }
         }
         
-        // Function to hide notification
-        function hideNotification() {
-            const notification = document.getElementById('notification');
-            if (notification) {
-                notification.classList.add('translate-y-20', 'opacity-0');
+        // Handle visibility change
+        function handleVisibilityChange() {
+            isVisible = document.visibilityState === 'visible';
+            console.log(`Visibility changed - Tab is ${isVisible ? 'visible' : 'hidden'}`);
+            
+            // When tab becomes visible again, show notification
+            if (isVisible) {
+                const notification = document.getElementById('notification-container');
+                if (notification) {
+                    const notif = document.createElement('div');
+                    notif.className = "notification p-3 rounded-lg shadow-lg flex items-center bg-blue-600 text-white max-w-xs";
+                    notif.innerHTML = `
+                        <i class="fas fa-info-circle mr-2"></i>
+                        <span>AFK timer resumed</span>
+                    `;
+                    notification.appendChild(notif);
+                    setTimeout(() => {
+                        if (notif.parentNode) {
+                            notif.parentNode.removeChild(notif);
+                        }
+                    }, 3000);
+                }
             }
         }
         
-        // Function to show notification (simplified version)
-        function showLocalNotification(message, type = 'info') {
-            createNotificationContainer();
+        // Claim reward when timer reaches zero
+        async function claimReward() {
+            console.log('Claiming reward...');
             
-            // Get notification elements
-            const notification = document.getElementById('notification');
-            const notificationText = document.getElementById('notification-text');
-            const notificationIcon = document.getElementById('notification-icon');
+            // Show loading state
+            if (timerElement) {
+                timerElement.textContent = 'Claiming...';
+            }
             
-            if (!notification || !notificationText || !notificationIcon) {
-                console.error('Notification elements not found!');
+            // Also update progress ring to show it's processing
+            if (progressRingCircle) {
+                progressRingCircle.style.stroke = '#22c55e'; // Green color
+                progressRingCircle.style.strokeDashoffset = '0'; // Full circle
+            }
+            
+            try {
+                // Log that we're about to call the API
+                console.log('Sending claim request to /api/earn/claim endpoint...');
+                
+                // Call the API to claim reward with a timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+                
+                const response = await fetch('/api/earn/claim', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ timestamp: Date.now() }), // Add timestamp for logging
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                console.log('API response received, status:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text().catch(() => 'No error text available');
+                    console.error('API error response:', response.status, errorText);
+                    throw new Error(`Server responded with ${response.status}: ${errorText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Reward claimed successfully, data:', data);
+                
+                // Show debug alert for troubleshooting
+                alert(`Reward claimed! Response: ${JSON.stringify(data)}`);
+                
+                // Update total credits earned
+                const totalCreditsElement = document.getElementById('total-credits');
+                if (data.amount && totalCreditsElement) {
+                    const currentCredits = parseInt(totalCreditsElement.textContent || '0');
+                    const newTotal = currentCredits + parseInt(data.amount);
+                    console.log(`Updating total credits: ${currentCredits} + ${data.amount} = ${newTotal}`);
+                    totalCreditsElement.textContent = newTotal;
+                }
+                
+                // Update balance
+                const balanceElement = document.getElementById('afk-balance');
+                if (data.balance && balanceElement) {
+                    console.log(`Updating balance display to: ${data.balance}`);
+                    balanceElement.textContent = data.balance;
+                }
+                
+                // Show success notification
+                showNotification(`Earned ${data.amount} credits! Balance: ${data.balance}`, 'success');
+                
+                // Start the timer again
+                startTimer();
+            } catch (error) {
+                console.error('Error claiming reward:', error);
+                
+                // Show debug alert for troubleshooting
+                alert(`Error claiming reward: ${error.message}`);
+                
+                // Show more specific error notification based on error type
+                if (error.name === 'AbortError') {
+                    showNotification('Request timed out. Check your connection and try again.', 'error');
+                } else if (error.message.includes('Failed to fetch')) {
+                    showNotification('Network error. Check your connection and try again.', 'error');
+                } else {
+                    showNotification(`Error: ${error.message}. Restarting timer...`, 'error');
+                }
+                
+                // Reset progress ring to normal
+                if (progressRingCircle) {
+                    progressRingCircle.style.stroke = '#6366f1'; // Back to default indigo
+                }
+                
+                // Restart timer anyway
+                startTimer();
+            }
+        }
+        
+        // Show a notification
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notification-container');
+            if (!container) {
+                console.error('Notification container not found');
                 return;
             }
             
-            // Set notification text
-            notificationText.textContent = message;
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification p-3 rounded-lg shadow-lg flex items-center ${
+                type === 'success' ? 'bg-green-600' : 
+                type === 'error' ? 'bg-red-600' : 
+                'bg-blue-600'
+            } text-white max-w-xs`;
             
-            // Clear any existing classes
-            notificationIcon.className = 'fas';
-            notification.className = 'fixed bottom-4 right-4 max-w-md p-4 rounded-lg shadow-lg transform transition-all duration-500 z-50';
+            // Add icon based on type
+            const iconClass = 
+                type === 'success' ? 'fa-check-circle' : 
+                type === 'error' ? 'fa-exclamation-circle' : 
+                'fa-info-circle';
             
-            // Add appropriate classes based on type
-            switch (type) {
-                case 'success':
-                    notification.classList.add('bg-green-800', 'text-white');
-                    notificationIcon.classList.add('fa-check-circle', 'text-green-400');
-                    break;
-                case 'error':
-                    notification.classList.add('bg-red-800', 'text-white');
-                    notificationIcon.classList.add('fa-exclamation-circle', 'text-red-400');
-                    break;
-                case 'warning':
-                    notification.classList.add('bg-yellow-800', 'text-white');
-                    notificationIcon.classList.add('fa-exclamation-triangle', 'text-yellow-400');
-                    break;
-                case 'info':
-                default:
-                    notification.classList.add('bg-blue-800', 'text-white');
-                    notificationIcon.classList.add('fa-info-circle', 'text-blue-400');
-                    break;
-            }
+            notification.innerHTML = `
+                <i class="fas ${iconClass} mr-2"></i>
+                <span>${message}</span>
+            `;
             
-            // Show notification
-            notification.classList.remove('translate-y-20', 'opacity-0');
+            // Add to container
+            container.appendChild(notification);
             
-            // Hide notification after 5 seconds
+            // Remove after 5 seconds
             setTimeout(() => {
-                notification.classList.add('translate-y-20', 'opacity-0');
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
             }, 5000);
         }
         
-        // Function to claim reward (connects to earn.js function)
-        async function claimAFKReward() {
-            try {
-                // Show loading state
-                timerDisplay.textContent = 'Claiming...';
-                
-                // Call API to claim reward
-                const response = await fetch('/api/earn/afk', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    // Update balance display
-                    const balanceElement = document.querySelector('.user-balance');
-                    if (balanceElement && data.balance !== undefined) {
-                        balanceElement.textContent = data.balance;
-                    }
-                    
-                    // Update earnings
-                    earnings += data.credits;
-                    earningsDisplay.textContent = earnings;
-                    
-                    // Show success notification
-                    showLocalNotification(`You earned ${data.credits} credits!`, 'success');
-                    
-                    // Reset timer to 5 minutes
-                    timeLeft = 300;
-                    
-                    // Update total earnings in stats section if exists
-                    const totalEarningsElement = document.getElementById('total-earnings');
-                    if (totalEarningsElement && data.stats && data.stats.totalEarned) {
-                        totalEarningsElement.textContent = `${data.stats.totalEarned} credits`;
-                    }
-                    
-                    // Update total time in stats section if exists
-                    const totalTimeElement = document.getElementById('total-time');
-                    if (totalTimeElement && data.stats && data.stats.timeActive) {
-                        const hours = Math.floor(data.stats.timeActive / 3600);
-                        const minutes = Math.floor((data.stats.timeActive % 3600) / 60);
-                        const seconds = data.stats.timeActive % 60;
-                        totalTimeElement.textContent = `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-                    }
-                } else {
-                    // Show error notification
-                    let errorMessage = data.error || 'Failed to claim reward';
-                    showLocalNotification(errorMessage, 'error');
-                    
-                    // If there's a specific time remaining, update the timer
-                    if (data.timeRemaining) {
-                        const secondsRemaining = Math.ceil(data.timeRemaining / 1000);
-                        timeLeft = secondsRemaining;
-                    } else {
-                        // Default to 5 minutes if no specific time is provided
-                        timeLeft = 300;
-                    }
-                }
-            } catch (error) {
-                console.error('Error claiming AFK reward:', error);
-                showLocalNotification('Error claiming reward. Please try again.', 'error');
-                
-                // Reset timer to 5 minutes
-                timeLeft = 300;
-            }
-        }
-        
-        // Create a ping function to keep the session active
-        async function pingServer() {
-            try {
-                await fetch('/api/earn/afk/ping', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                console.log('Ping sent to server');
-            } catch (error) {
-                console.error('Error pinging server:', error);
-            }
-        }
-        
-        // Start the timer when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            // Create notification container
-            createNotificationContainer();
-            
-            // Start timer
-            timerInterval = setInterval(updateTimer, 1000);
-            updateTimer();
-            
-            // Setup ping every 30 seconds
-            setInterval(pingServer, 30000);
-            
-            // Initial ping
-            pingServer();
-            
-            // Show welcome notification
-            setTimeout(() => {
-                showLocalNotification('Keep this page open to earn credits every 5 minutes!', 'info');
-            }, 1000);
-        });
-        
         // Clean up on page unload
         window.addEventListener('beforeunload', function() {
-            clearInterval(timerInterval);
-        });
-        
-        // Mobile sidebar toggle
-        const toggleSidebarBtn = document.getElementById('toggleSidebar');
-        const sidebarIcon = document.getElementById('sidebarIcon');
-        const sidebar = document.getElementById('sidebar');
-        
-        toggleSidebarBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('-translate-x-full');
-            if (sidebar.classList.contains('-translate-x-full')) {
-                sidebarIcon.classList.remove('fa-times');
-                sidebarIcon.classList.add('fa-bars');
-            } else {
-                sidebarIcon.classList.remove('fa-bars');
-                sidebarIcon.classList.add('fa-times');
-            }
-        });
-        
-        // Mobile menu button
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileSearch = document.getElementById('mobileSearch');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileSearch.classList.toggle('hidden');
-        });
-        
-        // Dropdown functionality
-        const dropdownBtn = document.getElementById('dropdownBtn');
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        
-        dropdownBtn.addEventListener('click', () => {
-            dropdownMenu.classList.toggle('hidden');
-        });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (event) => {
-            if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                dropdownMenu.classList.add('hidden');
+            if (timerInterval) {
+                clearInterval(timerInterval);
             }
         });
     </script>

@@ -271,12 +271,28 @@
 			servers: 0
 		};
 		
+		// Calculate total resources (package + extra)
+		const extraData = typeof extraresources !== 'undefined' ? extraresources : {
+			ram: 0,
+			disk: 0,
+			cpu: 0,
+			servers: 0
+		};
+		
+		const totalRam = packageData.ram + extraData.ram;
+		const totalDisk = packageData.disk + extraData.disk;
+		const totalCpu = packageData.cpu + extraData.cpu;
+		const totalServers = packageData.servers + extraData.servers;
+		
 		// Available resources
-		const availableRam = (packageData.ram || 0) - ram;
-		const availableDisk = (packageData.disk || 0) - disk;
-		const availableCpu = (packageData.cpu || 0) - cpu;
-		const availableServers = (packageData.servers || 0) - servers;
+		const availableRam = totalRam - ram;
+		const availableDisk = totalDisk - disk;
+		const availableCpu = totalCpu - cpu;
+		const availableServers = totalServers - servers;
 	%>
+
+	<!-- Notification Toast -->
+	<div id="notification-container" class="fixed top-4 right-4 z-50 flex flex-col items-end space-y-2"></div>
 
 	<!-- Navbar -->
 	<nav class="navbar fixed w-full h-16 z-50 px-4 py-2.5 flex items-center justify-between bg-dark-base/80 backdrop-blur-lg border-b border-gray-800">
@@ -392,9 +408,15 @@
 						</a>
 					</li>
 					<li>
-						<a href="/servers" class="menu-item flex items-center p-3 text-white rounded-lg bg-primary-600">
-							<i class="fas fa-server w-5 h-5 text-white transition duration-75"></i>
-							<span class="ml-3">Servers</span>
+						<a href="/servers" class="menu-item flex items-center p-3 text-white rounded-lg active">
+							<i class="fas fa-server w-5 h-5 text-primary-400 transition duration-75"></i>
+							<span class="ml-3">My Servers</span>
+						</a>
+					</li>
+					<li>
+						<a href="/servers/new" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+							<i class="fas fa-plus w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Create Server</span>
 						</a>
 					</li>
 					<li>
@@ -434,7 +456,7 @@
 						</a>
 					</li>
 					<li>
-						<a href="<%= settings.pterodactyl.domain %>" target="_blank" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+						<a href="<%= settings.pterodactyl?.domain || '#' %>" target="_blank" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
 							<i class="fas fa-external-link-alt w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
 							<span class="ml-3">Panel</span>
 						</a>
@@ -450,6 +472,11 @@
 				</ul>
 			</div>
 		</aside>
+		
+		<!-- Mobile menu button -->
+		<button id="toggleSidebar" type="button" class="fixed bottom-4 right-4 z-20 sm:hidden inline-flex items-center p-3 text-sm font-medium text-white bg-primary-600 rounded-full hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
+			<i id="sidebarIcon" class="fas fa-bars"></i>
+		</button>
 
 		<!-- Main Content -->
 		<div class="p-4 sm:ml-64 pt-5 w-full main-content">
@@ -475,10 +502,10 @@
 										<p class="text-gray-400 text-sm">Memory Resources</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= availableRam %> <span class="text-gray-400 text-sm">/ <%= packageData.ram %> MB</span></span>
+								<span class="text-xl font-bold text-white"><%= availableRam %> <span class="text-gray-400 text-sm">/ <%= totalRam %> MB</span></span>
 							</div>
 							<div class="progress-bar">
-								<div class="progress-bar-fill ram" style="width: <%= ((ram / packageData.ram) * 100).toFixed(2) + '%' %>"></div>
+								<div class="progress-bar-fill ram" style="width: <%= ((ram / totalRam) * 100).toFixed(2) + '%' %>"></div>
 							</div>
 						</div>
 					</div>
@@ -496,10 +523,10 @@
 										<p class="text-gray-400 text-sm">Storage Resources</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= availableDisk %> <span class="text-gray-400 text-sm">/ <%= packageData.disk %> MB</span></span>
+								<span class="text-xl font-bold text-white"><%= availableDisk %> <span class="text-gray-400 text-sm">/ <%= totalDisk %> MB</span></span>
 							</div>
 							<div class="progress-bar">
-								<div class="progress-bar-fill disk" style="width: <%= ((disk / packageData.disk) * 100).toFixed(2) + '%' %>"></div>
+								<div class="progress-bar-fill disk" style="width: <%= ((disk / totalDisk) * 100).toFixed(2) + '%' %>"></div>
 							</div>
 						</div>
 					</div>
@@ -517,10 +544,10 @@
 										<p class="text-gray-400 text-sm">Processor Resources</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= availableCpu %> <span class="text-gray-400 text-sm">/ <%= packageData.cpu %>%</span></span>
+								<span class="text-xl font-bold text-white"><%= availableCpu %> <span class="text-gray-400 text-sm">/ <%= totalCpu %>%</span></span>
 							</div>
 							<div class="progress-bar">
-								<div class="progress-bar-fill cpu" style="width: <%= ((cpu / packageData.cpu) * 100).toFixed(2) + '%' %>"></div>
+								<div class="progress-bar-fill cpu" style="width: <%= ((cpu / totalCpu) * 100).toFixed(2) + '%' %>"></div>
 							</div>
 						</div>
 					</div>
@@ -538,10 +565,10 @@
 										<p class="text-gray-400 text-sm">Server Slots</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= availableServers %> <span class="text-gray-400 text-sm">/ <%= packageData.servers %></span></span>
+								<span class="text-xl font-bold text-white"><%= availableServers %> <span class="text-gray-400 text-sm">/ <%= totalServers %></span></span>
 							</div>
 							<div class="progress-bar">
-								<div class="progress-bar-fill servers" style="width: <%= ((servers / packageData.servers) * 100).toFixed(2) + '%' %>"></div>
+								<div class="progress-bar-fill servers" style="width: <%= ((servers / totalServers) * 100).toFixed(2) + '%' %>"></div>
 							</div>
 						</div>
 					</div>
@@ -595,7 +622,7 @@
 													<span class="text-sm text-gray-300"><%= server.attributes.limits.memory %> MB</span>
 												</div>
 												<div class="w-full bg-gray-700 rounded-full h-2">
-													<div class="bg-indigo-500 h-2 rounded-full" style="width: <%= (server.attributes.limits.memory / packageData.ram) * 100 %>%"></div>
+													<div class="bg-indigo-500 h-2 rounded-full" style="width: <%= (server.attributes.limits.memory / totalRam) * 100 %>%"></div>
 												</div>
 											</div>
 
@@ -605,7 +632,7 @@
 													<span class="text-sm text-gray-300"><%= server.attributes.limits.cpu %>%</span>
 												</div>
 												<div class="w-full bg-gray-700 rounded-full h-2">
-													<div class="bg-amber-500 h-2 rounded-full" style="width: <%= (server.attributes.limits.cpu / packageData.cpu) * 100 %>%"></div>
+													<div class="bg-amber-500 h-2 rounded-full" style="width: <%= (server.attributes.limits.cpu / totalCpu) * 100 %>%"></div>
 												</div>
 											</div>
 
@@ -615,7 +642,7 @@
 													<span class="text-sm text-gray-300"><%= server.attributes.limits.disk %> MB</span>
 												</div>
 												<div class="w-full bg-gray-700 rounded-full h-2">
-													<div class="bg-green-500 h-2 rounded-full" style="width: <%= (server.attributes.limits.disk / packageData.disk) * 100 %>%"></div>
+													<div class="bg-green-500 h-2 rounded-full" style="width: <%= (server.attributes.limits.disk / totalDisk) * 100 %>%"></div>
 												</div>
 											</div>
 										</div>
