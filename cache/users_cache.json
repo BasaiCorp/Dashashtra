@@ -21,103 +21,197 @@
             {
               "object": "server",
               "attributes": {
-                "id": 38,
+                "id": 83,
                 "external_id": null,
-                "uuid": "23b59a37-80ab-4f5e-956c-0c228a16499a",
-                "identifier": "23b59a37",
-                "name": "FlaxyNodes Bot",
+                "uuid": "48849269-b706-4cf9-a129-2c8a25690392",
+                "identifier": "48849269",
+                "name": "Proxy",
                 "description": "",
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 1024,
+                  "memory": 1536,
                   "swap": 250,
-                  "disk": 2048,
+                  "disk": 5120,
+                  "io": 500,
+                  "cpu": 200,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 155,
+                  "allocations": 155,
+                  "backups": 155
+                },
+                "user": 1,
+                "node": 1,
+                "allocation": 307,
+                "nest": 1,
+                "egg": 15,
+                "container": {
+                  "startup_command": "java -Xms128M -Xmx1024M -Duser.timezone=Europe/Bucharest -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar server.jar",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "VELOCITY_VERSION": "latest",
+                    "SERVER_JARFILE": "velocity.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -Xmx1024M -Duser.timezone=Europe/Bucharest -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar server.jar",
+                    "P_SERVER_LOCATION": "Germany",
+                    "P_SERVER_UUID": "48849269-b706-4cf9-a129-2c8a25690392",
+                    "P_SERVER_ALLOCATION_LIMIT": 155
+                  }
+                },
+                "updated_at": "2025-03-23T13:20:14+00:00",
+                "created_at": "2025-03-23T13:08:17+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 84,
+                "external_id": null,
+                "uuid": "ce4fcd9b-46aa-4ed1-b2d0-eef29dfea97b",
+                "identifier": "ce4fcd9b",
+                "name": "Hub",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 3072,
+                  "swap": 250,
+                  "disk": 5120,
                   "io": 500,
                   "cpu": 0,
                   "threads": null,
                   "oom_disabled": true
                 },
                 "feature_limits": {
-                  "databases": 55,
-                  "allocations": 55,
-                  "backups": 55
+                  "databases": 155,
+                  "allocations": 155,
+                  "backups": 155
                 },
                 "user": 1,
                 "node": 1,
-                "allocation": 25,
-                "nest": 7,
-                "egg": 21,
+                "allocation": 3,
+                "nest": 1,
+                "egg": 2,
                 "container": {
-                  "startup_command": "if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == \"1\" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ \"${MAIN_FILE}\" == \"*.js\" ]]; then /usr/local/bin/node \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; else /usr/local/bin/ts-node --esm \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; fi",
-                  "image": "ghcr.io/parkervcp/yolks:nodejs_22",
+                  "startup_command": "java -Xms256M -Xmx4096M -Duser.timezone=Europe/Bucharest -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar server.jar nogui",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "GIT_ADDRESS": "",
-                    "BRANCH": "",
-                    "USER_UPLOAD": "0",
-                    "AUTO_UPDATE": "0",
-                    "NODE_PACKAGES": "tslib",
-                    "USERNAME": "",
-                    "ACCESS_TOKEN": "",
-                    "UNNODE_PACKAGES": "",
-                    "MAIN_FILE": "src/index.js",
-                    "NODE_ARGS": "npm i",
-                    "STARTUP": "if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == \"1\" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ \"${MAIN_FILE}\" == \"*.js\" ]]; then /usr/local/bin/node \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; else /usr/local/bin/ts-node --esm \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; fi",
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms256M -Xmx4096M -Duser.timezone=Europe/Bucharest -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar server.jar nogui",
                     "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "23b59a37-80ab-4f5e-956c-0c228a16499a",
-                    "P_SERVER_ALLOCATION_LIMIT": 55
+                    "P_SERVER_UUID": "ce4fcd9b-46aa-4ed1-b2d0-eef29dfea97b",
+                    "P_SERVER_ALLOCATION_LIMIT": 155
                   }
                 },
-                "updated_at": "2025-03-21T10:36:51+00:00",
-                "created_at": "2025-03-21T10:36:10+00:00"
+                "updated_at": "2025-03-23T13:20:25+00:00",
+                "created_at": "2025-03-23T13:09:31+00:00"
               }
             },
             {
               "object": "server",
               "attributes": {
-                "id": 39,
+                "id": 85,
                 "external_id": null,
-                "uuid": "8312b259-1847-4ef6-b6e5-749c58b9c00d",
-                "identifier": "8312b259",
-                "name": "MongoDB (Bot)",
+                "uuid": "959e47a7-b3b0-4695-94e1-47c651a5d5be",
+                "identifier": "959e47a7",
+                "name": "Hide&Seek",
                 "description": "",
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 512,
-                  "swap": 0,
-                  "disk": 1024,
+                  "memory": 7168,
+                  "swap": 250,
+                  "disk": 15360,
                   "io": 500,
-                  "cpu": 50,
+                  "cpu": 400,
                   "threads": null,
                   "oom_disabled": true
                 },
                 "feature_limits": {
-                  "databases": 55,
-                  "allocations": 55,
-                  "backups": 55
+                  "databases": 155,
+                  "allocations": 155,
+                  "backups": 155
                 },
                 "user": 1,
                 "node": 1,
-                "allocation": 24,
-                "nest": 5,
-                "egg": 23,
+                "allocation": 7,
+                "nest": 1,
+                "egg": 2,
                 "container": {
-                  "startup_command": "mongod --fork --dbpath /home/container/mongodb/ --port ${SERVER_PORT} --bind_ip 0.0.0.0 --logpath /home/container/logs/mongo.log -f /home/container/mongod.conf; until nc -z -v -w5 127.0.0.1 ${SERVER_PORT}; do echo 'Waiting for mongodb connection...'; sleep 5; done; mongosh --username ${MONGO_USER} --password ${MONGO_USER_PASS} --host 127.0.0.1:${SERVER_PORT} && mongosh --eval \"db.getSiblingDB('admin').shutdownServer()\" 127.0.0.1:${SERVER_PORT}",
-                  "image": "ghcr.io/parkervcp/yolks:mongodb_7",
+                  "startup_command": "java -Xms512M -Xmx8192M -Duser.timezone=Europe/Bucharest -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar server.jar nogui",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "MONGO_USER": "admin",
-                    "MONGO_USER_PASS": "admin",
-                    "STARTUP": "mongod --fork --dbpath /home/container/mongodb/ --port ${SERVER_PORT} --bind_ip 0.0.0.0 --logpath /home/container/logs/mongo.log -f /home/container/mongod.conf; until nc -z -v -w5 127.0.0.1 ${SERVER_PORT}; do echo 'Waiting for mongodb connection...'; sleep 5; done; mongosh --username ${MONGO_USER} --password ${MONGO_USER_PASS} --host 127.0.0.1:${SERVER_PORT} && mongosh --eval \"db.getSiblingDB('admin').shutdownServer()\" 127.0.0.1:${SERVER_PORT}",
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms512M -Xmx8192M -Duser.timezone=Europe/Bucharest -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar server.jar nogui",
                     "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "8312b259-1847-4ef6-b6e5-749c58b9c00d",
-                    "P_SERVER_ALLOCATION_LIMIT": 55
+                    "P_SERVER_UUID": "959e47a7-b3b0-4695-94e1-47c651a5d5be",
+                    "P_SERVER_ALLOCATION_LIMIT": 155
                   }
                 },
-                "updated_at": "2025-03-21T10:44:31+00:00",
-                "created_at": "2025-03-21T10:44:11+00:00"
+                "updated_at": "2025-03-23T13:20:36+00:00",
+                "created_at": "2025-03-23T13:10:39+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 87,
+                "external_id": null,
+                "uuid": "da0f67c1-7fbf-43ed-8e61-b12dc855e4bb",
+                "identifier": "da0f67c1",
+                "name": "Earth SMP",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 12288,
+                  "swap": 512,
+                  "disk": 35840,
+                  "io": 500,
+                  "cpu": 600,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 155,
+                  "allocations": 155,
+                  "backups": 5
+                },
+                "user": 1,
+                "node": 1,
+                "allocation": 8,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms512M -Xmx12288M -Duser.timezone=Europe/Bucharest -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar server.jar nogui",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms512M -Xmx12288M -Duser.timezone=Europe/Bucharest -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar server.jar nogui",
+                    "P_SERVER_LOCATION": "Germany",
+                    "P_SERVER_UUID": "da0f67c1-7fbf-43ed-8e61-b12dc855e4bb",
+                    "P_SERVER_ALLOCATION_LIMIT": 155
+                  }
+                },
+                "updated_at": "2025-03-23T13:19:24+00:00",
+                "created_at": "2025-03-23T13:19:21+00:00"
               }
             }
           ]
@@ -414,7 +508,57 @@
       "relationships": {
         "servers": {
           "object": "list",
-          "data": []
+          "data": [
+            {
+              "object": "server",
+              "attributes": {
+                "id": 81,
+                "external_id": null,
+                "uuid": "512b8c80-4cf9-420b-bd23-b1027db7a498",
+                "identifier": "512b8c80",
+                "name": "Mrhostboy",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 0,
+                  "swap": 0,
+                  "disk": 0,
+                  "io": 500,
+                  "cpu": 0,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 2
+                },
+                "user": 6,
+                "node": 6,
+                "allocation": 273,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India 3",
+                    "P_SERVER_UUID": "512b8c80-4cf9-420b-bd23-b1027db7a498",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-23T12:58:01+00:00",
+                "created_at": "2025-03-23T12:57:51+00:00"
+              }
+            }
+          ]
         }
       }
     }
@@ -726,7 +870,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-22T09:35:28+00:00",
+                "updated_at": "2025-03-23T07:31:58+00:00",
                 "created_at": "2025-03-20T09:31:30+00:00"
               }
             },
@@ -798,7 +942,7 @@
       "root_admin": false,
       "2fa": false,
       "created_at": "2025-03-20T09:29:20+00:00",
-      "updated_at": "2025-03-22T05:10:10+00:00",
+      "updated_at": "2025-03-23T04:56:56+00:00",
       "relationships": {
         "servers": {
           "object": "list",
@@ -810,7 +954,7 @@
                 "external_id": null,
                 "uuid": "9b4ef330-bf73-4689-9233-93038cca0f8a",
                 "identifier": "9b4ef330",
-                "name": "PAid Shehe [EXP - 14 april]",
+                "name": "PAid Shehe [EXP - 17 May]",
                 "description": "HyperMC",
                 "status": null,
                 "suspended": false,
@@ -829,8 +973,8 @@
                   "backups": 2
                 },
                 "user": 10,
-                "node": 3,
-                "allocation": 129,
+                "node": 2,
+                "allocation": 29,
                 "nest": 1,
                 "egg": 2,
                 "container": {
@@ -843,12 +987,12 @@
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_LOCATION": "India",
                     "P_SERVER_UUID": "9b4ef330-bf73-4689-9233-93038cca0f8a",
                     "P_SERVER_ALLOCATION_LIMIT": 2
                   }
                 },
-                "updated_at": "2025-03-22T14:44:19+00:00",
+                "updated_at": "2025-03-23T12:08:51+00:00",
                 "created_at": "2025-03-20T16:27:50+00:00"
               }
             }
@@ -1203,7 +1347,7 @@
                   "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "MINECRAFT_VERSION": "1.20.4",
+                    "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
@@ -1213,7 +1357,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-22T17:24:42+00:00",
+                "updated_at": "2025-03-23T08:16:05+00:00",
                 "created_at": "2025-03-20T09:55:41+00:00"
               }
             }
@@ -1372,11 +1516,11 @@
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 16420,
+                  "memory": 0,
                   "swap": 0,
                   "disk": 40000,
                   "io": 500,
-                  "cpu": 400,
+                  "cpu": 0,
                   "threads": null,
                   "oom_disabled": true
                 },
@@ -1405,7 +1549,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-23T04:11:11+00:00",
+                "updated_at": "2025-03-23T12:52:33+00:00",
                 "created_at": "2025-03-20T10:57:18+00:00"
               }
             },
@@ -1421,12 +1565,12 @@
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 15258,
+                  "memory": 0,
                   "swap": 0,
-                  "disk": 15258,
+                  "disk": 0,
                   "io": 500,
-                  "cpu": 400,
-                  "threads": "4",
+                  "cpu": 0,
+                  "threads": "0",
                   "oom_disabled": true
                 },
                 "feature_limits": {
@@ -1454,7 +1598,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-22T14:20:12+00:00",
+                "updated_at": "2025-03-23T13:42:58+00:00",
                 "created_at": "2025-03-20T11:09:16+00:00"
               }
             }
@@ -1489,8 +1633,8 @@
                 "external_id": null,
                 "uuid": "431629b0-4f78-495c-a789-7b0363ee2827",
                 "identifier": "431629b0",
-                "name": "Bzrk's Server [EXPIRE ON 17 APRIL]",
-                "description": "[EXPIRE ON 17 APRIL]",
+                "name": "Bzrk's Server [EXPIRE ON 14 APRIL]",
+                "description": "[EXPIRE ON 14 APRIL]",
                 "status": null,
                 "suspended": false,
                 "limits": {
@@ -1527,7 +1671,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-20T11:12:52+00:00",
+                "updated_at": "2025-03-23T07:18:57+00:00",
                 "created_at": "2025-03-20T11:12:42+00:00"
               }
             }
@@ -1562,7 +1706,7 @@
                 "external_id": null,
                 "uuid": "8a8ab1bf-a6d5-4be1-a737-04a8a3d88961",
                 "identifier": "8a8ab1bf",
-                "name": "Tishan Sarkar [EXPIRE ON 20 APRIL]",
+                "name": "Tishan Sarkar [EXPIRE ON 8 APRIL]",
                 "description": "[EXPIRE ON 20 APRIL]",
                 "status": null,
                 "suspended": false,
@@ -1600,7 +1744,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-20T11:17:43+00:00",
+                "updated_at": "2025-03-23T07:53:52+00:00",
                 "created_at": "2025-03-20T11:17:33+00:00"
               }
             }
@@ -1689,14 +1833,14 @@
       "external_id": null,
       "uuid": "03153024-37ee-41b6-afd2-4613004c1acf",
       "username": "rormafia",
-      "email": "samirkhansamir271@gmail.com",
+      "email": "animefactory000@gmail.com",
       "first_name": "PREMIUM",
       "last_name": "Mafia",
       "language": "en",
       "root_admin": false,
       "2fa": false,
       "created_at": "2025-03-20T11:45:48+00:00",
-      "updated_at": "2025-03-22T16:22:12+00:00",
+      "updated_at": "2025-03-23T07:32:31+00:00",
       "relationships": {
         "servers": {
           "object": "list",
@@ -1708,7 +1852,7 @@
                 "external_id": null,
                 "uuid": "115bb00f-6a7a-4d51-ae58-25d72fe88e0a",
                 "identifier": "115bb00f",
-                "name": "Syprim's Server (exp - 2feb 2026)",
+                "name": "Death Mc (exp - 2feb 2026)",
                 "description": "",
                 "status": null,
                 "suspended": false,
@@ -1739,14 +1883,14 @@
                     "MINECRAFT_VERSION": "1.21.1",
                     "SERVER_JARFILE": "server.jar",
                     "DL_PATH": "",
-                    "BUILD_NUMBER": "130",
+                    "BUILD_NUMBER": "132",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
                     "P_SERVER_UUID": "115bb00f-6a7a-4d51-ae58-25d72fe88e0a",
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-23T04:15:18+00:00",
+                "updated_at": "2025-03-23T09:34:32+00:00",
                 "created_at": "2025-03-22T16:19:46+00:00"
               }
             }
@@ -1777,31 +1921,31 @@
             {
               "object": "server",
               "attributes": {
-                "id": 52,
+                "id": 77,
                 "external_id": null,
-                "uuid": "7f4ecaff-a19e-406d-a901-7fb5cdc00d9c",
-                "identifier": "7f4ecaff",
-                "name": "Vansh permanent",
-                "description": "",
+                "uuid": "ec38f65b-e45a-4e37-a1dd-df20023bfc9d",
+                "identifier": "ec38f65b",
+                "name": "vansh's server [permanent]",
+                "description": "[PERMANENT]",
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 20480,
+                  "memory": 16000,
                   "swap": 0,
-                  "disk": 102400,
-                  "io": 1000,
+                  "disk": 80000,
+                  "io": 500,
                   "cpu": 0,
                   "threads": null,
                   "oom_disabled": true
                 },
                 "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 3
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
                 },
                 "user": 25,
-                "node": 6,
-                "allocation": 303,
+                "node": 3,
+                "allocation": 120,
                 "nest": 1,
                 "egg": 2,
                 "container": {
@@ -1811,16 +1955,16 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
+                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "India 3",
-                    "P_SERVER_UUID": "7f4ecaff-a19e-406d-a901-7fb5cdc00d9c",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
+                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_UUID": "ec38f65b-e45a-4e37-a1dd-df20023bfc9d",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-22T11:52:16+00:00",
-                "created_at": "2025-03-22T11:52:01+00:00"
+                "updated_at": "2025-03-23T14:15:24+00:00",
+                "created_at": "2025-03-23T11:50:04+00:00"
               }
             }
           ]
@@ -1854,8 +1998,8 @@
                 "external_id": null,
                 "uuid": "8883904d-9baa-4979-be3b-6fba494761bc",
                 "identifier": "8883904d",
-                "name": "Shaurya Infinite Specs server [EXPIRE ON 19 APRIL]",
-                "description": "[EXPIRE ON 19 APRIL]",
+                "name": "Shaurya Infinite Specs server [EXPIRE ON 10 APRIL]",
+                "description": "[EXPIRE ON 10 APRIL]",
                 "status": null,
                 "suspended": false,
                 "limits": {
@@ -1892,7 +2036,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-20T12:05:57+00:00",
+                "updated_at": "2025-03-23T07:54:21+00:00",
                 "created_at": "2025-03-20T12:05:28+00:00"
               }
             }
@@ -1972,11 +2116,11 @@
             {
               "object": "server",
               "attributes": {
-                "id": 67,
+                "id": 76,
                 "external_id": null,
-                "uuid": "96c4b7ce-84a0-46f2-a3a0-23e7e1c575ad",
-                "identifier": "96c4b7ce",
-                "name": "Thunder_MC [25 july]",
+                "uuid": "06025ce6-7bdb-473e-8eab-f1589b894a0b",
+                "identifier": "06025ce6",
+                "name": "Thunder_MC[25 may]",
                 "description": "Thunder is Best",
                 "status": null,
                 "suspended": false,
@@ -1984,7 +2128,7 @@
                   "memory": 0,
                   "swap": 0,
                   "disk": 0,
-                  "io": 500,
+                  "io": 1000,
                   "cpu": 0,
                   "threads": null,
                   "oom_disabled": true
@@ -1995,8 +2139,8 @@
                   "backups": 15
                 },
                 "user": 27,
-                "node": 3,
-                "allocation": 130,
+                "node": 2,
+                "allocation": 59,
                 "nest": 1,
                 "egg": 2,
                 "container": {
@@ -2004,18 +2148,18 @@
                   "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "MINECRAFT_VERSION": "1.20.4",
+                    "MINECRAFT_VERSION": "1.21.4",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
+                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "India 2",
-                    "P_SERVER_UUID": "96c4b7ce-84a0-46f2-a3a0-23e7e1c575ad",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "06025ce6-7bdb-473e-8eab-f1589b894a0b",
                     "P_SERVER_ALLOCATION_LIMIT": 15
                   }
                 },
-                "updated_at": "2025-03-22T17:18:17+00:00",
-                "created_at": "2025-03-22T17:17:23+00:00"
+                "updated_at": "2025-03-23T10:19:43+00:00",
+                "created_at": "2025-03-23T10:12:28+00:00"
               }
             }
           ]
@@ -2191,8 +2335,8 @@
                 "external_id": null,
                 "uuid": "85e8402d-49b3-4f22-90b4-9cde418ed436",
                 "identifier": "85e8402d",
-                "name": "Lenxs Infinite Specs Server [EXPIRE ON 25 APRIL]",
-                "description": "[EXPIRE ON 25 APRIL]",
+                "name": "Lenxs Infinite Specs Server [EXPIRE ON 12 APRIL]",
+                "description": "[EXPIRE ON 12 APRIL]",
                 "status": null,
                 "suspended": false,
                 "limits": {
@@ -2229,7 +2373,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-20T15:45:00+00:00",
+                "updated_at": "2025-03-23T07:55:00+00:00",
                 "created_at": "2025-03-20T15:44:31+00:00"
               }
             }
@@ -2252,7 +2396,7 @@
       "root_admin": false,
       "2fa": false,
       "created_at": "2025-03-20T16:42:16+00:00",
-      "updated_at": "2025-03-20T18:50:37+00:00",
+      "updated_at": "2025-03-23T08:09:16+00:00",
       "relationships": {
         "servers": {
           "object": "list",
@@ -2371,7 +2515,7 @@
       "root_admin": true,
       "2fa": false,
       "created_at": "2025-03-21T01:12:14+00:00",
-      "updated_at": "2025-03-21T01:12:14+00:00",
+      "updated_at": "2025-03-23T13:37:14+00:00",
       "relationships": {
         "servers": {
           "object": "list",
@@ -2445,79 +2589,6 @@
       "2fa": false,
       "created_at": "2025-03-21T08:13:31+00:00",
       "updated_at": "2025-03-21T09:46:39+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 35,
-                "external_id": null,
-                "uuid": "d8e94647-a26c-46d0-b3b0-628a481c21e3",
-                "identifier": "d8e94647",
-                "name": "GOAT MC",
-                "description": "sub",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 8024,
-                  "swap": 0,
-                  "disk": 20000,
-                  "io": 500,
-                  "cpu": 200,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 37,
-                "node": 6,
-                "allocation": 282,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.20.1",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "India 3",
-                    "P_SERVER_UUID": "d8e94647-a26c-46d0-b3b0-628a481c21e3",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-22T10:18:01+00:00",
-                "created_at": "2025-03-21T08:14:01+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 38,
-      "external_id": null,
-      "uuid": "001d5426-c0c3-41d7-a1cc-3a74c843739d",
-      "username": "flaxy",
-      "email": "minecraftgamerbd1092@gmail.com",
-      "first_name": "Ka",
-      "last_name": "Ka",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-21T08:15:14+00:00",
-      "updated_at": "2025-03-21T08:21:40+00:00",
       "relationships": {
         "servers": {
           "object": "list",
@@ -2713,7 +2784,7 @@
                 "external_id": null,
                 "uuid": "047359b7-5a13-45ea-ad78-de8d93383633",
                 "identifier": "047359b7",
-                "name": "dyaan (exp - 21may)",
+                "name": "dyaan (exp - 14april)",
                 "description": "",
                 "status": null,
                 "suspended": false,
@@ -2751,7 +2822,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-22T07:23:15+00:00",
+                "updated_at": "2025-03-23T08:11:35+00:00",
                 "created_at": "2025-03-21T15:25:54+00:00"
               }
             }
@@ -3024,18 +3095,18 @@
   {
     "object": "user",
     "attributes": {
-      "id": 54,
+      "id": 59,
       "external_id": null,
-      "uuid": "ee94588c-ca9d-43f4-8fbc-b3b3c0c603f4",
-      "username": "qwqww",
-      "email": "qeqwe@flaxynodes.fun",
-      "first_name": "qqw",
-      "last_name": "qwe",
+      "uuid": "002f57f9-dc84-470c-909c-8a62e80bc984",
+      "username": "snackkvz",
+      "email": "snack@sub.fun",
+      "first_name": "Server",
+      "last_name": "Subuser",
       "language": "en",
       "root_admin": false,
       "2fa": false,
-      "created_at": "2025-03-22T16:42:42+00:00",
-      "updated_at": "2025-03-22T16:42:42+00:00",
+      "created_at": "2025-03-23T08:23:58+00:00",
+      "updated_at": "2025-03-23T08:23:58+00:00",
       "relationships": {
         "servers": {
           "object": "list",
@@ -3047,18 +3118,18 @@
   {
     "object": "user",
     "attributes": {
-      "id": 55,
+      "id": 60,
       "external_id": null,
-      "uuid": "7ba9f57d-b4df-4c38-9ed2-caa749df9442",
-      "username": "rey",
-      "email": "dawd@dsda.ds",
-      "first_name": "dwda",
-      "last_name": "dwadawd",
+      "uuid": "502fb81e-c5d4-4dd9-9403-a4a8eb1da5f1",
+      "username": "rajrup",
+      "email": "adminitzrajrup@flaxynodes.fun",
+      "first_name": "PANELADMIN",
+      "last_name": "RajRup",
       "language": "en",
-      "root_admin": false,
+      "root_admin": true,
       "2fa": false,
-      "created_at": "2025-03-22T22:10:00+00:00",
-      "updated_at": "2025-03-22T22:10:00+00:00",
+      "created_at": "2025-03-23T09:00:03+00:00",
+      "updated_at": "2025-03-23T09:00:03+00:00",
       "relationships": {
         "servers": {
           "object": "list",
@@ -3070,22 +3141,72 @@
   {
     "object": "user",
     "attributes": {
-      "id": 56,
+      "id": 61,
       "external_id": null,
-      "uuid": "ee24c34b-e8ab-4044-8ad5-eea3a14d5bd4",
-      "username": "osamamor",
-      "email": "aa9478022@gmail.com",
-      "first_name": "Osama",
-      "last_name": "Mo",
+      "uuid": "ff301055-b557-4993-846f-6eafce872534",
+      "username": "rhdhdh",
+      "email": "rocksky1yt69@gmail.com",
+      "first_name": "Hdhdhd",
+      "last_name": "Premium",
       "language": "en",
       "root_admin": false,
       "2fa": false,
-      "created_at": "2025-03-23T01:05:05+00:00",
-      "updated_at": "2025-03-23T01:05:05+00:00",
+      "created_at": "2025-03-23T13:06:10+00:00",
+      "updated_at": "2025-03-23T13:06:10+00:00",
       "relationships": {
         "servers": {
           "object": "list",
-          "data": []
+          "data": [
+            {
+              "object": "server",
+              "attributes": {
+                "id": 82,
+                "external_id": null,
+                "uuid": "31f0f3c9-4b07-4de4-8101-506e8b47340e",
+                "identifier": "31f0f3c9",
+                "name": "Blulock ( permanent )",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 0,
+                  "swap": 0,
+                  "disk": 0,
+                  "io": 500,
+                  "cpu": 0,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 5
+                },
+                "user": 61,
+                "node": 3,
+                "allocation": 122,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_UUID": "31f0f3c9-4b07-4de4-8101-506e8b47340e",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-23T13:07:12+00:00",
+                "created_at": "2025-03-23T13:06:51+00:00"
+              }
+            }
+          ]
         }
       }
     }

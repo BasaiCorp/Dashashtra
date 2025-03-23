@@ -154,6 +154,12 @@ const ejs = require("ejs");
 const session = require("express-session");
 const indexjs = require("./index.js");
 
+// Load admin router
+const adminRouter = require('./api/admin.js').router;
+
+// Load routes
+const dashboardRouter = require('./routes/dashboard.js');
+
 // Sets up saving session data.
 let sessionStore;
 
@@ -187,6 +193,14 @@ app.use(session({
         maxAge: 86400000 // 24 hours
     }
 }));
+
+// Set up body parsing middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Register routers
+app.use('/admin', adminRouter);
+app.use('/dashboard', dashboardRouter);
 
 // Root route handler
 app.get('/', async (req, res) => {
@@ -433,31 +447,13 @@ app.get('/dashboard', async (req, res) => {
     }
 });
 
-// Add middleware for parsing request bodies
-app.use(express.json({
-  inflate: true,
-  limit: '500kb',
-  reviver: null,
-  strict: true,
-  type: 'application/json',
-  verify: undefined
-}));
-
-// Add middleware for parsing form data
-app.use(express.urlencoded({ 
-  extended: true,
-  limit: '500kb'
-}));
-
 // Import API routes
-const adminRoutes = require('./api/admin.js');
 const serverRoutes = require('./api/servers.js');
 const { router: earnRouter } = require('./api/earn.js');
 const { router: storeRouter } = require('./api/store.js');
 
 // Register API routes - moved after body parser middleware
 app.use('/api/servers', serverRoutes.router);
-app.use('/api/admin', adminRoutes.router);
 
 // Register earn routes correctly - this is the fix to ensure the API endpoints work properly
 app.use('/', earnRouter);

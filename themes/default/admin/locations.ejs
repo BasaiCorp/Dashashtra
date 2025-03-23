@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Management | Flaxy Nodes</title>
+    <link rel="icon" type="image/png" href="./assets/img/FlaxyNodes_logo.gif"/>
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                            950: '#1e1b4b',
+                        },
+                        dark: {
+                            base: '#0f0f12',
+                            light: '#1a1a21',
+                            lighter: '#24242e',
+                            card: '#1a1a21'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0f0f12;
+            color: #f5f5f7;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(26, 26, 31, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: #6366f1;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e1e24;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3a3a43;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a4a55;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-3xl font-bold">Location Management</h1>
+            <button type="button" class="btn-primary text-white font-medium" data-bs-toggle="modal" data-bs-target="#createLocationModal">
+                <i class="fas fa-plus mr-2"></i> Create New Location
+            </button>
+        </div>
+        
+        <!-- Introduction Card -->
+        <div class="glass-card rounded-2xl p-6 mb-8 animate-fade-in">
+            <div class="flex items-start">
+                <div class="w-12 h-12 rounded-full bg-primary-500/10 flex items-center justify-center mr-4">
+                    <i class="fas fa-map-marker-alt text-primary-500 text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-semibold mb-2">Server Locations</h2>
+                    <p class="text-gray-300">Locations help organize your nodes by physical or logical groupings. Each node must be assigned to a location to help maintain organization of your infrastructure.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Location Map -->
+        <div class="glass-card rounded-2xl p-6 mb-8 animate-fade-in">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold">Location Map</h2>
+            </div>
+            <div class="rounded-xl overflow-hidden bg-dark-lighter h-64 lg:h-96 relative">
+                <div id="location-map" class="w-full h-full">
+                    <!-- Map will be rendered here via JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Locations Table -->
+        <div class="glass-card rounded-2xl p-6 mb-8 animate-fade-in">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold">All Locations</h2>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-left text-gray-400 text-sm border-b border-gray-700">
+                            <th class="pb-3 font-medium">ID</th>
+                            <th class="pb-3 font-medium">Name</th>
+                            <th class="pb-3 font-medium">Short Code</th>
+                            <th class="pb-3 font-medium">Description</th>
+                            <th class="pb-3 font-medium">Nodes</th>
+                            <th class="pb-3 font-medium">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (locations && locations.length > 0) { %>
+                            <% locations.forEach(location => { %>
+                                <tr class="border-b border-gray-700/50 hover:bg-dark-lighter/30 transition-colors duration-150">
+                                    <td class="py-4"><%= location.id %></td>
+                                    <td class="py-4">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-primary-500/10 flex items-center justify-center mr-3">
+                                                <i class="fas fa-map-marker-alt text-primary-500"></i>
+                                            </div>
+                                            <span><%= location.name %></span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4">
+                                        <span class="px-2 py-1 rounded-lg text-xs font-medium bg-dark-lighter text-primary-400">
+                                            <%= location.short_code || 'N/A' %>
+                                        </span>
+                                    </td>
+                                    <td class="py-4 max-w-xs truncate"><%= location.description || 'No description provided' %></td>
+                                    <td class="py-4"><%= location.nodes ? location.nodes.length : 0 %></td>
+                                    <td class="py-4">
+                                        <div class="flex space-x-2">
+                                            <button onclick="editLocation('<%= location.id %>')" class="p-2 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors duration-200" title="Edit Location">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <% if (!location.nodes || location.nodes.length === 0) { %>
+                                            <button onclick="deleteLocation('<%= location.id %>')" class="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors duration-200" title="Delete Location">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                            <% } else { %>
+                                            <button disabled class="p-2 rounded-lg bg-gray-500/10 text-gray-400 cursor-not-allowed" title="Cannot delete location with nodes">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="6" class="py-4 text-center text-gray-400">No locations found</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Create Location Modal -->
+    <div class="fixed inset-0 z-50 hidden items-center justify-center overflow-y-auto overflow-x-hidden" id="createLocationModal" tabindex="-1" aria-labelledby="createLocationModalLabel" aria-hidden="true">
+        <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+        <div class="relative max-w-lg w-full p-6 mx-auto my-8">
+            <div class="bg-dark-light rounded-xl shadow-xl border border-gray-700 p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <h3 class="text-xl font-semibold text-white" id="createLocationModalLabel">Create New Location</h3>
+                    <button type="button" class="text-gray-400 hover:text-white" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form action="/admin/locations/create" method="POST">
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-gray-400 mb-1">Location Name</label>
+                        <input type="text" id="name" name="name" class="w-full py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" placeholder="New York City" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="short_code" class="block text-sm font-medium text-gray-400 mb-1">Short Code</label>
+                        <input type="text" id="short_code" name="short_code" class="w-full py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" placeholder="NYC" maxlength="5" required>
+                        <p class="mt-1 text-xs text-gray-400">A short identifier for this location (max 5 characters).</p>
+                    </div>
+                    <div class="mb-6">
+                        <label for="description" class="block text-sm font-medium text-gray-400 mb-1">Description</label>
+                        <textarea id="description" name="description" rows="3" class="w-full py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" placeholder="Describe this location..."></textarea>
+                    </div>
+                    <div class="flex items-center justify-end">
+                        <button type="button" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors duration-200 mr-3" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors duration-200">
+                            Create Location
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Delete Location Function
+        function deleteLocation(locationId) {
+            if (confirm('Are you sure you want to delete this location? This action cannot be undone.')) {
+                window.location.href = `/admin/locations/${locationId}/delete`;
+            }
+        }
+        
+        // Edit Location Function
+        function editLocation(locationId) {
+            window.location.href = `/admin/locations/${locationId}/edit`;
+        }
+        
+        // Modal Controls
+        document.addEventListener('DOMContentLoaded', function() {
+            const createLocationBtn = document.querySelector('[data-bs-target="#createLocationModal"]');
+            const createLocationModal = document.getElementById('createLocationModal');
+            const closeBtns = document.querySelectorAll('[data-bs-dismiss="modal"]');
+            
+            createLocationBtn.addEventListener('click', function() {
+                createLocationModal.classList.remove('hidden');
+                createLocationModal.classList.add('flex');
+            });
+            
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    createLocationModal.classList.add('hidden');
+                    createLocationModal.classList.remove('flex');
+                });
+            });
+            
+            // Close modal when clicking outside
+            createLocationModal.addEventListener('click', function(event) {
+                if (event.target === createLocationModal) {
+                    createLocationModal.classList.add('hidden');
+                    createLocationModal.classList.remove('flex');
+                }
+            });
+        });
+        
+        // Placeholder for map - in production you'd use a proper map library
+        document.addEventListener('DOMContentLoaded', function() {
+            const mapContainer = document.getElementById('location-map');
+            if (mapContainer) {
+                // Display a placeholder message
+                mapContainer.innerHTML = `
+                    <div class="flex items-center justify-center h-full">
+                        <div class="text-center">
+                            <i class="fas fa-map-marked-alt text-primary-500 text-4xl mb-3"></i>
+                            <p class="text-gray-400">Map visualization would be displayed here.</p>
+                            <p class="text-xs text-gray-500 mt-2">Integrate with your preferred mapping library.</p>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html> 

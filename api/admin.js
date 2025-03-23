@@ -11,6 +11,8 @@ const { getUsers, getUserById, updateUser } = require('./fetch_users');
 const { getServers, getServerById, updateServerDetails, updateServerBuild, suspendServer, unsuspendServer, deleteServer } = require('./fetch_servers');
 const { getNodes, getNodeById, getNodeAllocations } = require('./fetch_nodes');
 const { getNests, getEggs, getNestById, getEggById, createNest, updateNest, deleteNest, createEgg, updateEgg, deleteEgg } = require('./fetch_eggs');
+const axios = require('axios');
+const path = require('path');
 
 if (settings.pterodactyl) if (settings.pterodactyl.domain) {
     if (settings.pterodactyl.domain.slice(-1) == "/") settings.pterodactyl.domain = settings.pterodactyl.domain.slice(0, -1);
@@ -158,16 +160,30 @@ router.get('/users', checkAdmin, async (req, res) => {
         
         const users = await getUsers();
         
-        res.render('admin/users', {
-            title: 'User Management',
-            users
-        });
+        // Get theme and render properly
+        let theme = indexjs.get(req);
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        // Add users to render data
+        renderData.users = users;
+        renderData.title = 'User Management';
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/admin/users.ejs`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[ADMIN] Error rendering admin users page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the admin users page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
     } catch (error) {
         console.error(chalk.red('[ADMIN] Error loading users management:'), error);
-        res.status(500).render('404', { 
-            title: 'Error',
-            error: 'An error occurred while loading the users management page.'
-        });
+        res.status(500).send('An error occurred while loading the users management page.');
     }
 });
 
@@ -548,17 +564,31 @@ router.get('/nests', checkAdmin, async (req, res) => {
             getEggs(true)  // Force update to get fresh data
         ]);
         
-        res.render('themes/default/admin/nests', {
-            title: 'Nests & Eggs Management',
-            nests,
-            eggs
-        });
+        // Get theme and render properly
+        let theme = indexjs.get(req);
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        // Add nests and eggs to render data
+        renderData.nests = nests;
+        renderData.eggs = eggs;
+        renderData.title = 'Nests & Eggs Management';
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/admin/nests.ejs`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[ADMIN] Error rendering admin nests page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the admin nests page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
     } catch (error) {
         console.error(chalk.red('[ADMIN] Error loading nests management:'), error);
-        res.status(500).render('404', { 
-            title: 'Error',
-            error: 'An error occurred while loading the nests management page.'
-        });
+        res.status(500).send('An error occurred while loading the nests management page.');
     }
 });
 
@@ -736,6 +766,541 @@ router.delete('/nests/:nestId/eggs/:eggId', checkAdmin, async (req, res) => {
             title: 'Error',
             error: 'An error occurred while deleting the egg.'
         });
+    }
+});
+
+// Settings Management
+router.get('/settings', checkAdmin, async (req, res) => {
+    try {
+        console.log(chalk.blue('[ADMIN] Settings management page accessed'));
+        
+        // Get theme and render properly
+        let theme = indexjs.get(req);
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        // Add settings to render data
+        renderData.settings = settings;
+        renderData.title = 'Settings Management';
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/admin/settings.ejs`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[ADMIN] Error rendering admin settings page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the admin settings page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error loading settings management:'), error);
+        res.status(500).send('An error occurred while loading the settings management page.');
+    }
+});
+
+// Nodes Management
+router.get('/nodes', checkAdmin, async (req, res) => {
+    try {
+        console.log(chalk.blue('[ADMIN] Nodes management page accessed'));
+        
+        // Fetch nodes and locations
+        const [nodes, locations] = await Promise.all([
+            getNodes(),
+            getNestById(1) // Using nest 1 as a placeholder for locations
+        ]);
+        
+        // Calculate resource statistics
+        const totalServers = nodes.reduce((sum, node) => sum + (node.servers || 0), 0);
+        const totalMemory = nodes.reduce((sum, node) => sum + (node.memory || 0), 0);
+        const availableMemory = nodes.reduce((sum, node) => sum + ((node.memory || 0) - (node.memory_usage || 0)), 0);
+        const totalDisk = nodes.reduce((sum, node) => sum + (node.disk || 0), 0);
+        const availableDisk = nodes.reduce((sum, node) => sum + ((node.disk || 0) - (node.disk_usage || 0)), 0);
+        const totalAllocations = nodes.reduce((sum, node) => sum + (node.allocations?.length || 0), 0);
+        const availableAllocations = nodes.reduce((sum, node) => sum + (node.allocations?.filter(a => !a.assigned)?.length || 0), 0);
+        
+        // Get theme and render properly
+        let theme = indexjs.get(req);
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        // Add data to render
+        renderData.nodes = nodes;
+        renderData.locations = locations || [];
+        renderData.totalServers = totalServers;
+        renderData.totalMemory = totalMemory;
+        renderData.availableMemory = availableMemory;
+        renderData.totalDisk = totalDisk;
+        renderData.availableDisk = availableDisk;
+        renderData.totalAllocations = totalAllocations;
+        renderData.availableAllocations = availableAllocations;
+        renderData.title = 'Node Management';
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/admin/nodes.ejs`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[ADMIN] Error rendering admin nodes page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the admin nodes page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error loading nodes management:'), error);
+        res.status(500).send('An error occurred while loading the nodes management page.');
+    }
+});
+
+// Locations Management
+router.get('/locations', checkAdmin, async (req, res) => {
+    try {
+        console.log(chalk.blue('[ADMIN] Locations management page accessed'));
+        
+        // Get all locations
+        let locations = [];
+        try {
+            const response = await axios.get(
+                `${process.env.PTERODACTYL_DOMAIN}/api/application/locations`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${process.env.PTERODACTYL_API_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                }
+            );
+            
+            if (response.data && response.data.data) {
+                locations = response.data.data.map(location => ({
+                    id: location.attributes.id,
+                    short: location.attributes.short,
+                    long: location.attributes.long,
+                    nodes: location.attributes.relationships?.nodes?.data?.length || 0
+                }));
+            }
+        } catch (error) {
+            console.error(chalk.red('[ADMIN] Error fetching locations:'), error.message);
+            // Continue with empty locations array
+        }
+        
+        // Get theme and render properly
+        let theme = indexjs.get(req);
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        // Add locations to render data
+        renderData.locations = locations;
+        renderData.title = 'Location Management';
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/admin/locations.ejs`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[ADMIN] Error rendering admin locations page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the admin locations page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error loading locations management:'), error);
+        res.status(500).send('An error occurred while loading the locations management page.');
+    }
+});
+
+// Mounts Management
+router.get('/mounts', checkAdmin, async (req, res) => {
+    try {
+        console.log(chalk.blue('[ADMIN] Mounts management page accessed'));
+        
+        const nodes = await getNodes(true);
+        
+        // Get all mounts
+        let mounts = [];
+        try {
+            const response = await axios.get(`${process.env.PTERODACTYL_DOMAIN}/api/application/mounts`, {
+                headers: {
+                    'Authorization': `Bearer ${process.env.PTERODACTYL_API_KEY}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (response.data && response.data.data) {
+                mounts = response.data.data;
+            }
+        } catch (error) {
+            console.error(chalk.red('[ADMIN] Error fetching mounts:'), error.message);
+            // Continue with empty mounts array
+        }
+        
+        // Get theme and render properly
+        let theme = indexjs.get(req);
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        // Add data to render
+        renderData.mounts = mounts;
+        renderData.nodes = nodes;
+        renderData.title = 'Mounts Management';
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/admin/mounts.ejs`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[ADMIN] Error rendering admin mounts page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the admin mounts page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error loading mounts management:'), error);
+        res.status(500).send('An error occurred while loading the mounts management page.');
+    }
+});
+
+// Databases Management
+router.get('/databases', checkAdmin, async (req, res) => {
+    try {
+        console.log(chalk.blue('[ADMIN] Databases management page accessed'));
+        
+        // Get all nodes for reference
+        const nodes = await getNodes(true);
+        
+        // Get all database hosts
+        let databaseHosts = [];
+        try {
+            const response = await axios.get(
+                `${process.env.PTERODACTYL_DOMAIN}/api/application/database-hosts`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${process.env.PTERODACTYL_API_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                }
+            );
+            
+            if (response.data && response.data.data) {
+                databaseHosts = response.data.data.map(host => ({
+                    id: host.attributes.id,
+                    name: host.attributes.name,
+                    host: host.attributes.host,
+                    port: host.attributes.port,
+                    username: host.attributes.username,
+                    max_databases: host.attributes.max_databases,
+                    database_count: host.attributes.relationships?.databases?.data?.length || 0,
+                    node_id: host.attributes.node,
+                    node_name: nodes.find(n => n.id === host.attributes.node)?.name || 'Unknown',
+                    type: host.attributes.driver
+                }));
+            }
+        } catch (error) {
+            console.error(chalk.red('[ADMIN] Error fetching database hosts:'), error.message);
+            // Continue with empty database hosts array
+        }
+        
+        // Get all databases
+        let databases = [];
+        try {
+            const response = await axios.get(
+                `${process.env.PTERODACTYL_DOMAIN}/api/application/databases`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${process.env.PTERODACTYL_API_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                }
+            );
+            
+            if (response.data && response.data.data) {
+                databases = response.data.data.map(db => ({
+                    id: db.attributes.id,
+                    name: db.attributes.name,
+                    host_id: db.attributes.host_id,
+                    host_name: databaseHosts.find(h => h.id === db.attributes.host_id)?.name || 'Unknown',
+                    server_id: db.attributes.server,
+                    username: db.attributes.username,
+                    connections_from: db.attributes.connections_from,
+                    max_connections: db.attributes.max_connections,
+                    created_at: new Date(db.attributes.created_at).toLocaleString()
+                }));
+            }
+        } catch (error) {
+            console.error(chalk.red('[ADMIN] Error fetching databases:'), error.message);
+            // Continue with empty databases array
+        }
+        
+        // Get theme and render properly
+        let theme = indexjs.get(req);
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        // Add data to render
+        renderData.databaseHosts = databaseHosts;
+        renderData.databases = databases;
+        renderData.nodes = nodes;
+        renderData.title = 'Database Management';
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/admin/databases.ejs`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[ADMIN] Error rendering admin databases page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the admin databases page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error loading databases management:'), error);
+        res.status(500).send('An error occurred while loading the databases management page.');
+    }
+});
+
+// Allocations Management
+router.get('/allocations', checkAdmin, async (req, res) => {
+    try {
+        console.log(chalk.blue('[ADMIN] Allocations management page accessed'));
+        
+        // Get all nodes
+        const nodes = await getNodes(true);
+        
+        // Get all allocations from all nodes
+        let allocations = [];
+        for (const node of nodes) {
+            try {
+                const nodeAllocations = await axios.get(
+                    `${process.env.PTERODACTYL_DOMAIN}/api/application/nodes/${node.id}/allocations`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${process.env.PTERODACTYL_API_KEY}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    }
+                );
+                
+                if (nodeAllocations.data && nodeAllocations.data.data) {
+                    // Add the node name and FQDN to each allocation
+                    const formattedAllocations = nodeAllocations.data.data.map(alloc => ({
+                        ...alloc.attributes,
+                        node_name: node.name,
+                        node_fqdn: node.fqdn
+                    }));
+                    
+                    allocations = [...allocations, ...formattedAllocations];
+                }
+            } catch (error) {
+                console.error(chalk.red(`[ADMIN] Error fetching allocations for node ${node.id}:`), error.message);
+                // Continue with other nodes
+            }
+        }
+        
+        // Get theme and render properly
+        let theme = indexjs.get(req);
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        // Add allocations and nodes to render data
+        renderData.allocations = allocations;
+        renderData.nodes = nodes;
+        renderData.title = 'Allocation Management';
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/admin/allocations.ejs`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[ADMIN] Error rendering admin allocations page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the admin allocations page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error loading allocations management:'), error);
+        res.status(500).send('An error occurred while loading the allocations management page.');
+    }
+});
+
+// Allocations POST endpoints
+router.post('/allocations/create', checkAdmin, async (req, res) => {
+    try {
+        const { node_id, ip, port, alias } = req.body;
+        console.log(chalk.blue(`[ADMIN] Creating new allocation on node ${node_id}`));
+        
+        // Make API request to create allocation
+        const response = await fetch(
+            `${settings.pterodactyl.domain}/api/application/nodes/${node_id}/allocations`,
+            {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${settings.pterodactyl.key}`
+                },
+                body: JSON.stringify({
+                    ip: ip,
+                    ports: [port.toString()],
+                    alias: alias || null
+                })
+            }
+        );
+        
+        if (!response.ok) {
+            throw new Error(`Failed to create allocation: ${response.status} ${response.statusText}`);
+        }
+        
+        console.log(chalk.green(`[ADMIN] Allocation created successfully on node ${node_id}`));
+        res.redirect('/admin/allocations');
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error creating allocation:'), error);
+        res.status(500).send('An error occurred while creating the allocation.');
+    }
+});
+
+router.post('/allocations/bulk', checkAdmin, async (req, res) => {
+    try {
+        const { node_id, ip, port_start, port_end } = req.body;
+        console.log(chalk.blue(`[ADMIN] Creating bulk allocations on node ${node_id}`));
+        
+        // Make API request to create allocations
+        const response = await fetch(
+            `${settings.pterodactyl.domain}/api/application/nodes/${node_id}/allocations`,
+            {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${settings.pterodactyl.key}`
+                },
+                body: JSON.stringify({
+                    ip: ip,
+                    ports: [`${port_start}-${port_end}`]
+                })
+            }
+        );
+        
+        if (!response.ok) {
+            throw new Error(`Failed to create allocations: ${response.status} ${response.statusText}`);
+        }
+        
+        console.log(chalk.green(`[ADMIN] Bulk allocations created successfully on node ${node_id}`));
+        res.redirect('/admin/allocations');
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error creating bulk allocations:'), error);
+        res.status(500).send('An error occurred while creating bulk allocations.');
+    }
+});
+
+router.get('/allocations/:id/delete', checkAdmin, async (req, res) => {
+    try {
+        const allocationId = req.params.id;
+        console.log(chalk.blue(`[ADMIN] Deleting allocation ${allocationId}`));
+        
+        // Make API request to delete allocation
+        const response = await fetch(
+            `${settings.pterodactyl.domain}/api/application/allocations/${allocationId}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${settings.pterodactyl.key}`
+                }
+            }
+        );
+        
+        if (!response.ok) {
+            throw new Error(`Failed to delete allocation: ${response.status} ${response.statusText}`);
+        }
+        
+        console.log(chalk.green(`[ADMIN] Allocation ${allocationId} deleted successfully`));
+        res.redirect('/admin/allocations');
+    } catch (error) {
+        console.error(chalk.red(`[ADMIN] Error deleting allocation ${req.params.id}:`), error);
+        res.status(500).send('An error occurred while deleting the allocation.');
+    }
+});
+
+// Settings POST endpoint
+router.post('/settings/general', checkAdmin, async (req, res) => {
+    try {
+        console.log(chalk.blue('[ADMIN] Updating general settings'));
+        
+        // Read current settings
+        const settingsData = JSON.parse(fs.readFileSync("./settings.json").toString());
+        
+        // Update general settings
+        settingsData.website = settingsData.website || {};
+        if (req.body.site_name) settingsData.website.name = req.body.site_name;
+        if (req.body.site_description) settingsData.website.description = req.body.site_description;
+        if (req.body.favicon_url) settingsData.website.favicon = req.body.favicon_url;
+        if (req.body.logo_url) settingsData.website.logo = req.body.logo_url;
+        if (req.body.primary_color) settingsData.website.primaryColor = req.body.primary_color;
+        if (req.body.analytics_id) settingsData.website.analytics = req.body.analytics_id;
+        
+        // Update maintenance settings
+        settingsData.website.maintenance = {
+            enabled: req.body.maintenance_mode === '1',
+            message: req.body.maintenance_message || 'Our site is currently undergoing scheduled maintenance. Please check back soon!'
+        };
+        
+        // Save updated settings
+        fs.writeFileSync("./settings.json", JSON.stringify(settingsData, null, 4));
+        
+        console.log(chalk.green('[ADMIN] General settings updated successfully'));
+        res.redirect('/admin/settings?success=true');
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error updating general settings:'), error);
+        res.status(500).send('An error occurred while updating the settings.');
+    }
+});
+
+router.post('/settings/panel', checkAdmin, async (req, res) => {
+    try {
+        console.log(chalk.blue('[ADMIN] Updating panel settings'));
+        
+        // Read current settings
+        const settingsData = JSON.parse(fs.readFileSync("./settings.json").toString());
+        
+        // Update panel settings
+        settingsData.pterodactyl = settingsData.pterodactyl || {};
+        if (req.body.panel_url) settingsData.pterodactyl.domain = req.body.panel_url;
+        if (req.body.pterodactyl_key) settingsData.pterodactyl.key = req.body.pterodactyl_key;
+        
+        // Update features
+        settingsData.website = settingsData.website || {};
+        settingsData.website.features = req.body.features || [];
+        
+        // Update renewal settings
+        settingsData.renewal = settingsData.renewal || {};
+        if (req.body.renewal_days) settingsData.renewal.days = parseInt(req.body.renewal_days);
+        if (req.body.renewal_cost) settingsData.renewal.cost = parseInt(req.body.renewal_cost);
+        
+        // Save updated settings
+        fs.writeFileSync("./settings.json", JSON.stringify(settingsData, null, 4));
+        
+        console.log(chalk.green('[ADMIN] Panel settings updated successfully'));
+        res.redirect('/admin/settings?success=true');
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error updating panel settings:'), error);
+        res.status(500).send('An error occurred while updating the settings.');
     }
 });
 

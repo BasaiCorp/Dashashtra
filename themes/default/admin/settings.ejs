@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Settings | Flaxy Nodes</title>
+    <link rel="icon" type="image/png" href="./assets/img/FlaxyNodes_logo.gif"/>
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                            950: '#1e1b4b',
+                        },
+                        dark: {
+                            base: '#0f0f12',
+                            light: '#1a1a21',
+                            lighter: '#24242e',
+                            card: '#1a1a21'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0f0f12;
+            color: #f5f5f7;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(26, 26, 31, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: #6366f1;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e1e24;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3a3a43;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a4a55;
+        }
+        
+        /* Settings tabs styling */
+        .settings-tab.active {
+            background-color: rgba(99, 102, 241, 0.1);
+            border-color: #6366f1;
+            color: #fff;
+        }
+        
+        .settings-tab.active i {
+            color: #6366f1;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-3xl font-bold">Admin Settings</h1>
+        </div>
+        
+        <div class="flex flex-col lg:flex-row gap-6">
+            <!-- Settings Navigation -->
+            <div class="w-full lg:w-64">
+                <div class="glass-card rounded-2xl p-4 sticky top-8">
+                    <h2 class="text-lg font-semibold mb-4 px-2">Settings</h2>
+                    <nav>
+                        <ul class="space-y-1">
+                            <li>
+                                <button class="settings-tab w-full flex items-center p-3 text-left rounded-lg active" data-tab="general">
+                                    <i class="fas fa-cog w-5 h-5 text-primary-400 mr-3"></i>
+                                    <span>General</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="settings-tab w-full flex items-center p-3 text-left text-gray-300 rounded-lg hover:text-white" data-tab="panel">
+                                    <i class="fas fa-tachometer-alt w-5 h-5 text-gray-400 mr-3"></i>
+                                    <span>Panel</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="settings-tab w-full flex items-center p-3 text-left text-gray-300 rounded-lg hover:text-white" data-tab="security">
+                                    <i class="fas fa-shield-alt w-5 h-5 text-gray-400 mr-3"></i>
+                                    <span>Security</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="settings-tab w-full flex items-center p-3 text-left text-gray-300 rounded-lg hover:text-white" data-tab="mail">
+                                    <i class="fas fa-envelope w-5 h-5 text-gray-400 mr-3"></i>
+                                    <span>Mail</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="settings-tab w-full flex items-center p-3 text-left text-gray-300 rounded-lg hover:text-white" data-tab="registration">
+                                    <i class="fas fa-user-plus w-5 h-5 text-gray-400 mr-3"></i>
+                                    <span>Registration</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="settings-tab w-full flex items-center p-3 text-left text-gray-300 rounded-lg hover:text-white" data-tab="store">
+                                    <i class="fas fa-shopping-cart w-5 h-5 text-gray-400 mr-3"></i>
+                                    <span>Store</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="settings-tab w-full flex items-center p-3 text-left text-gray-300 rounded-lg hover:text-white" data-tab="api">
+                                    <i class="fas fa-code w-5 h-5 text-gray-400 mr-3"></i>
+                                    <span>API</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="settings-tab w-full flex items-center p-3 text-left text-gray-300 rounded-lg hover:text-white" data-tab="backups">
+                                    <i class="fas fa-database w-5 h-5 text-gray-400 mr-3"></i>
+                                    <span>Backups</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="settings-tab w-full flex items-center p-3 text-left text-gray-300 rounded-lg hover:text-white" data-tab="webhooks">
+                                    <i class="fas fa-link w-5 h-5 text-gray-400 mr-3"></i>
+                                    <span>Webhooks</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="settings-tab w-full flex items-center p-3 text-left text-gray-300 rounded-lg hover:text-white" data-tab="advanced">
+                                    <i class="fas fa-tools w-5 h-5 text-gray-400 mr-3"></i>
+                                    <span>Advanced</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            
+            <!-- Settings Content -->
+            <div class="flex-1">
+                <!-- General Settings Tab -->
+                <div id="general" class="settings-content glass-card rounded-2xl p-6 animate-fade-in">
+                    <h2 class="text-xl font-semibold mb-6">General Settings</h2>
+                    
+                    <form action="/admin/settings/general" method="POST">
+                        <div class="space-y-6">
+                            <div>
+                                <label for="site_name" class="block text-sm font-medium text-gray-400 mb-1">Site Name</label>
+                                <input type="text" id="site_name" name="site_name" class="w-full py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" value="<%= settings.site_name || 'Flaxy Nodes' %>" required>
+                                <p class="mt-1 text-xs text-gray-400">The name of your hosting panel.</p>
+                            </div>
+                            
+                            <div>
+                                <label for="site_description" class="block text-sm font-medium text-gray-400 mb-1">Site Description</label>
+                                <textarea id="site_description" name="site_description" rows="2" class="w-full py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none"><%= settings.site_description || 'Free Minecraft Server Hosting' %></textarea>
+                                <p class="mt-1 text-xs text-gray-400">A short description of your hosting service.</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="favicon_url" class="block text-sm font-medium text-gray-400 mb-1">Favicon URL</label>
+                                    <input type="text" id="favicon_url" name="favicon_url" class="w-full py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" value="<%= settings.favicon_url || '/assets/img/favicon.png' %>">
+                                    <p class="mt-1 text-xs text-gray-400">URL to your site favicon.</p>
+                                </div>
+                                
+                                <div>
+                                    <label for="logo_url" class="block text-sm font-medium text-gray-400 mb-1">Logo URL</label>
+                                    <input type="text" id="logo_url" name="logo_url" class="w-full py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" value="<%= settings.logo_url || '/assets/img/logo.png' %>">
+                                    <p class="mt-1 text-xs text-gray-400">URL to your site logo.</p>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="primary_color" class="block text-sm font-medium text-gray-400 mb-1">Primary Color</label>
+                                <div class="flex items-center">
+                                    <input type="color" id="primary_color" name="primary_color" class="w-12 h-10 p-1 bg-dark-lighter rounded-lg border border-gray-700 cursor-pointer" value="<%= settings.primary_color || '#6366f1' %>">
+                                    <input type="text" id="primary_color_hex" class="ml-3 w-32 py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" value="<%= settings.primary_color || '#6366f1' %>" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
+                                </div>
+                                <p class="mt-1 text-xs text-gray-400">Primary accent color for your site.</p>
+                            </div>
+                            
+                            <div>
+                                <label for="analytics_id" class="block text-sm font-medium text-gray-400 mb-1">Google Analytics ID</label>
+                                <input type="text" id="analytics_id" name="analytics_id" class="w-full py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" value="<%= settings.analytics_id || '' %>" placeholder="UA-XXXXXXXXX-X">
+                                <p class="mt-1 text-xs text-gray-400">Google Analytics tracking ID (optional).</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">Maintenance Mode</label>
+                                <div class="flex items-center space-x-4">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="maintenance_mode" value="0" class="w-4 h-4 text-primary-600 bg-dark-lighter border-gray-700 focus:ring-primary-500 focus:ring-2" <%= !settings.maintenance_mode || settings.maintenance_mode == '0' ? 'checked' : '' %>>
+                                        <span class="ml-2 text-gray-300">Disabled</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="maintenance_mode" value="1" class="w-4 h-4 text-primary-600 bg-dark-lighter border-gray-700 focus:ring-primary-500 focus:ring-2" <%= settings.maintenance_mode == '1' ? 'checked' : '' %>>
+                                        <span class="ml-2 text-gray-300">Enabled</span>
+                                    </label>
+                                </div>
+                                <p class="mt-1 text-xs text-gray-400">Enable maintenance mode to prevent user access.</p>
+                            </div>
+                            
+                            <div>
+                                <label for="maintenance_message" class="block text-sm font-medium text-gray-400 mb-1">Maintenance Message</label>
+                                <textarea id="maintenance_message" name="maintenance_message" rows="2" class="w-full py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none"><%= settings.maintenance_message || 'Our site is currently undergoing scheduled maintenance. Please check back soon!' %></textarea>
+                                <p class="mt-1 text-xs text-gray-400">Message to display during maintenance mode.</p>
+                            </div>
+                            
+                            <div class="pt-4 border-t border-gray-700 flex justify-end">
+                                <button type="submit" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors duration-200">
+                                    Save General Settings
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Panel Settings Tab (Hidden by default) -->
+                <div id="panel" class="settings-content glass-card rounded-2xl p-6 animate-fade-in hidden">
+                    <h2 class="text-xl font-semibold mb-6">Panel Settings</h2>
+                    
+                    <form action="/admin/settings/panel" method="POST">
+                        <div class="space-y-6">
+                            <div>
+                                <label for="panel_url" class="block text-sm font-medium text-gray-400 mb-1">Panel URL</label>
+                                <input type="url" id="panel_url" name="panel_url" class="w-full py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" value="<%= settings.panel_url || 'https://panel.example.com' %>" required>
+                                <p class="mt-1 text-xs text-gray-400">The URL to your Pterodactyl panel.</p>
+                            </div>
+                            
+                            <div>
+                                <label for="pterodactyl_key" class="block text-sm font-medium text-gray-400 mb-1">Admin API Key</label>
+                                <input type="password" id="pterodactyl_key" name="pterodactyl_key" class="w-full py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" value="<%= settings.pterodactyl_key ? '••••••••••••••••' : '' %>" required>
+                                <p class="mt-1 text-xs text-gray-400">Your Pterodactyl panel admin API key.</p>
+                            </div>
+                            
+                            <div>
+                                <label for="client_features" class="block text-sm font-medium text-gray-400 mb-1">Enabled Features</label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="features[]" value="server_create" class="w-4 h-4 text-primary-600 bg-dark-lighter border-gray-700 rounded focus:ring-primary-500 focus:ring-2" <%= settings.features && settings.features.includes('server_create') ? 'checked' : '' %>>
+                                        <span class="ml-2 text-gray-300">Server Creation</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="features[]" value="server_delete" class="w-4 h-4 text-primary-600 bg-dark-lighter border-gray-700 rounded focus:ring-primary-500 focus:ring-2" <%= settings.features && settings.features.includes('server_delete') ? 'checked' : '' %>>
+                                        <span class="ml-2 text-gray-300">Server Deletion</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="features[]" value="database_create" class="w-4 h-4 text-primary-600 bg-dark-lighter border-gray-700 rounded focus:ring-primary-500 focus:ring-2" <%= settings.features && settings.features.includes('database_create') ? 'checked' : '' %>>
+                                        <span class="ml-2 text-gray-300">Database Creation</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="features[]" value="subdomain_create" class="w-4 h-4 text-primary-600 bg-dark-lighter border-gray-700 rounded focus:ring-primary-500 focus:ring-2" <%= settings.features && settings.features.includes('subdomain_create') ? 'checked' : '' %>>
+                                        <span class="ml-2 text-gray-300">Subdomain Creation</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="features[]" value="backup_create" class="w-4 h-4 text-primary-600 bg-dark-lighter border-gray-700 rounded focus:ring-primary-500 focus:ring-2" <%= settings.features && settings.features.includes('backup_create') ? 'checked' : '' %>>
+                                        <span class="ml-2 text-gray-300">Backup Creation</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="features[]" value="store" class="w-4 h-4 text-primary-600 bg-dark-lighter border-gray-700 rounded focus:ring-primary-500 focus:ring-2" <%= settings.features && settings.features.includes('store') ? 'checked' : '' %>>
+                                        <span class="ml-2 text-gray-300">Store</span>
+                                    </label>
+                                </div>
+                                <p class="mt-1 text-xs text-gray-400">Features that clients can access in the panel.</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="renewal_days" class="block text-sm font-medium text-gray-400 mb-1">Renewal Days</label>
+                                    <input type="number" id="renewal_days" name="renewal_days" class="w-full py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" value="<%= settings.renewal_days || '30' %>" min="1" required>
+                                    <p class="mt-1 text-xs text-gray-400">Days before server renewal is required.</p>
+                                </div>
+                                
+                                <div>
+                                    <label for="renewal_cost" class="block text-sm font-medium text-gray-400 mb-1">Renewal Cost</label>
+                                    <input type="number" id="renewal_cost" name="renewal_cost" class="w-full py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" value="<%= settings.renewal_cost || '0' %>" min="0" required>
+                                    <p class="mt-1 text-xs text-gray-400">Credits needed to renew a server.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-4 border-t border-gray-700 flex justify-end">
+                                <button type="submit" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors duration-200">
+                                    Save Panel Settings
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Other settings tabs would be added here, each with the 'hidden' class -->
+                
+                <!-- Security Settings Tab (Hidden by default) -->
+                <div id="security" class="settings-content glass-card rounded-2xl p-6 animate-fade-in hidden">
+                    <h2 class="text-xl font-semibold mb-6">Security Settings</h2>
+                    <!-- Security settings form would go here -->
+                    <p class="text-gray-400">Security settings content will be implemented here.</p>
+                </div>
+                
+                <!-- Mail Settings Tab (Hidden by default) -->
+                <div id="mail" class="settings-content glass-card rounded-2xl p-6 animate-fade-in hidden">
+                    <h2 class="text-xl font-semibold mb-6">Mail Settings</h2>
+                    <!-- Mail settings form would go here -->
+                    <p class="text-gray-400">Mail settings content will be implemented here.</p>
+                </div>
+                
+                <!-- Registration Settings Tab (Hidden by default) -->
+                <div id="registration" class="settings-content glass-card rounded-2xl p-6 animate-fade-in hidden">
+                    <h2 class="text-xl font-semibold mb-6">Registration Settings</h2>
+                    <!-- Registration settings form would go here -->
+                    <p class="text-gray-400">Registration settings content will be implemented here.</p>
+                </div>
+                
+                <!-- Store Settings Tab (Hidden by default) -->
+                <div id="store" class="settings-content glass-card rounded-2xl p-6 animate-fade-in hidden">
+                    <h2 class="text-xl font-semibold mb-6">Store Settings</h2>
+                    <!-- Store settings form would go here -->
+                    <p class="text-gray-400">Store settings content will be implemented here.</p>
+                </div>
+                
+                <!-- API Settings Tab (Hidden by default) -->
+                <div id="api" class="settings-content glass-card rounded-2xl p-6 animate-fade-in hidden">
+                    <h2 class="text-xl font-semibold mb-6">API Settings</h2>
+                    <!-- API settings form would go here -->
+                    <p class="text-gray-400">API settings content will be implemented here.</p>
+                </div>
+                
+                <!-- Backups Settings Tab (Hidden by default) -->
+                <div id="backups" class="settings-content glass-card rounded-2xl p-6 animate-fade-in hidden">
+                    <h2 class="text-xl font-semibold mb-6">Backups Settings</h2>
+                    <!-- Backups settings form would go here -->
+                    <p class="text-gray-400">Backups settings content will be implemented here.</p>
+                </div>
+                
+                <!-- Webhooks Settings Tab (Hidden by default) -->
+                <div id="webhooks" class="settings-content glass-card rounded-2xl p-6 animate-fade-in hidden">
+                    <h2 class="text-xl font-semibold mb-6">Webhooks Settings</h2>
+                    <!-- Webhooks settings form would go here -->
+                    <p class="text-gray-400">Webhooks settings content will be implemented here.</p>
+                </div>
+                
+                <!-- Advanced Settings Tab (Hidden by default) -->
+                <div id="advanced" class="settings-content glass-card rounded-2xl p-6 animate-fade-in hidden">
+                    <h2 class="text-xl font-semibold mb-6">Advanced Settings</h2>
+                    <!-- Advanced settings form would go here -->
+                    <p class="text-gray-400">Advanced settings content will be implemented here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Tab switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.settings-tab');
+            const tabContents = document.querySelectorAll('.settings-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const target = this.getAttribute('data-tab');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Show the selected tab content
+                    document.getElementById(target).classList.remove('hidden');
+                    
+                    // Update active state on tabs
+                    tabs.forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+            
+            // Sync color input with text input
+            const colorPicker = document.getElementById('primary_color');
+            const colorText = document.getElementById('primary_color_hex');
+            
+            if (colorPicker && colorText) {
+                colorPicker.addEventListener('input', function() {
+                    colorText.value = this.value;
+                });
+                
+                colorText.addEventListener('input', function() {
+                    if (this.value.match(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/)) {
+                        colorPicker.value = this.value;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html> 
