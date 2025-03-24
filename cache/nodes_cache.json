@@ -12,19 +12,19 @@
       "scheme": "https",
       "behind_proxy": false,
       "maintenance_mode": false,
-      "memory": 46080,
-      "memory_overallocate": -1,
-      "disk": 179200,
-      "disk_overallocate": 500,
+      "memory": 4294967295,
+      "memory_overallocate": 0,
+      "disk": 4294967295,
+      "disk_overallocate": 0,
       "upload_size": 1024,
       "daemon_listen": 8080,
       "daemon_sftp": 2022,
       "daemon_base": "/var/lib/pterodactyl/volumes",
       "created_at": "2025-03-20T07:56:56+00:00",
-      "updated_at": "2025-03-20T10:57:00+00:00",
+      "updated_at": "2025-03-24T08:02:05+00:00",
       "allocated_resources": {
-        "memory": 31136,
-        "disk": 72464
+        "memory": 33792,
+        "disk": 78908
       },
       "relationships": {
         "allocations": {
@@ -60,7 +60,7 @@
                 "alias": "fn-1.flaxynodes.fun",
                 "port": 25566,
                 "notes": null,
-                "assigned": true
+                "assigned": false
               }
             },
             {
@@ -71,7 +71,7 @@
                 "alias": "fn-1.flaxynodes.fun",
                 "port": 25567,
                 "notes": null,
-                "assigned": true
+                "assigned": false
               }
             },
             {
@@ -181,7 +181,7 @@
                 "alias": "fn-1.flaxynodes.fun",
                 "port": 25577,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -192,7 +192,7 @@
                 "alias": "fn-1.flaxynodes.fun",
                 "port": 25578,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -203,7 +203,7 @@
                 "alias": "fn-1.flaxynodes.fun",
                 "port": 25579,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -335,55 +335,6 @@
             {
               "object": "server",
               "attributes": {
-                "id": 12,
-                "external_id": null,
-                "uuid": "4fabf166-8cca-423b-b064-4e84ff6c482d",
-                "identifier": "4fabf166",
-                "name": "LittlePlayz Infinite specs server [EXPIRE ON 14 APRIL]",
-                "description": "[EXPIRE ON 20 APRIL]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 13,
-                "node": 1,
-                "allocation": 2,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.21",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "4fabf166-8cca-423b-b064-4e84ff6c482d",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
-                  }
-                },
-                "updated_at": "2025-03-22T13:47:41+00:00",
-                "created_at": "2025-03-20T09:49:25+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
                 "id": 22,
                 "external_id": null,
                 "uuid": "29c34f8d-6e56-4a90-a59b-8b508bda570c",
@@ -439,55 +390,6 @@
             {
               "object": "server",
               "attributes": {
-                "id": 53,
-                "external_id": null,
-                "uuid": "b2cda121-e7ed-4745-9707-29b15de6ce97",
-                "identifier": "b2cda121",
-                "name": "Boost Reward Creepy",
-                "description": "Server will be suspended when creepyexe removed the boost!!!",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 6048,
-                  "swap": 0,
-                  "disk": 10000,
-                  "io": 500,
-                  "cpu": 200,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 50,
-                "node": 1,
-                "allocation": 1,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "b2cda121-e7ed-4745-9707-29b15de6ce97",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-22T13:29:10+00:00",
-                "created_at": "2025-03-22T13:29:05+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
                 "id": 70,
                 "external_id": null,
                 "uuid": "56135163-5dd3-48b4-9f7c-e596e5490e2b",
@@ -522,7 +424,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "Germany",
@@ -620,7 +521,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms256M -Xmx4096M -Duser.timezone=Europe/Bucharest -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar server.jar nogui",
                     "P_SERVER_LOCATION": "Germany",
@@ -669,7 +569,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms512M -Xmx8192M -Duser.timezone=Europe/Bucharest -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar server.jar nogui",
                     "P_SERVER_LOCATION": "Germany",
@@ -718,7 +617,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms512M -Xmx12288M -Duser.timezone=Europe/Bucharest -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar server.jar nogui",
                     "P_SERVER_LOCATION": "Germany",
@@ -728,6 +626,100 @@
                 },
                 "updated_at": "2025-03-23T13:19:24+00:00",
                 "created_at": "2025-03-23T13:19:21+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 93,
+                "external_id": null,
+                "uuid": "a6c96b16-9902-4640-939f-2b4a5bfb9628",
+                "identifier": "a6c96b16",
+                "name": "PteroStats",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 512,
+                  "swap": 0,
+                  "disk": 1024,
+                  "io": 500,
+                  "cpu": 0,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 1929,
+                  "allocations": 1929,
+                  "backups": 1929
+                },
+                "user": 1,
+                "node": 1,
+                "allocation": 12,
+                "nest": 5,
+                "egg": 24,
+                "container": {
+                  "startup_command": "npm install && /usr/local/bin/node \"/home/container/index.js\" ${NODE_ARGS}",
+                  "image": "ghcr.io/parkervcp/yolks:nodejs_21",
+                  "installed": 1,
+                  "environment": {
+                    "NODE_ARGS": "",
+                    "STARTUP": "npm install && /usr/local/bin/node \"/home/container/index.js\" ${NODE_ARGS}",
+                    "P_SERVER_LOCATION": "Germany",
+                    "P_SERVER_UUID": "a6c96b16-9902-4640-939f-2b4a5bfb9628",
+                    "P_SERVER_ALLOCATION_LIMIT": 1929
+                  }
+                },
+                "updated_at": "2025-03-24T07:06:37+00:00",
+                "created_at": "2025-03-24T07:05:21+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 95,
+                "external_id": null,
+                "uuid": "e2ebf6a9-2aa1-44a9-9415-e7276b7112d2",
+                "identifier": "e2ebf6a9",
+                "name": "MINEPLAY",
+                "description": "GIVEN BY INSANE.GOD",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 8192,
+                  "swap": 0,
+                  "disk": 15420,
+                  "io": 500,
+                  "cpu": 300,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 0
+                },
+                "user": 65,
+                "node": 1,
+                "allocation": 13,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java --add-modules=jdk.incubator.vector -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java --add-modules=jdk.incubator.vector -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "Germany",
+                    "P_SERVER_UUID": "e2ebf6a9-2aa1-44a9-9415-e7276b7112d2",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-24T07:37:59+00:00",
+                "created_at": "2025-03-24T07:34:01+00:00"
               }
             }
           ]
@@ -759,8 +751,8 @@
       "created_at": "2025-03-20T08:52:06+00:00",
       "updated_at": "2025-03-20T10:01:58+00:00",
       "allocated_resources": {
-        "memory": 41408,
-        "disk": 223424
+        "memory": 47456,
+        "disk": 233424
       },
       "relationships": {
         "allocations": {
@@ -862,7 +854,7 @@
                 "alias": "in.flaxynodes.fun",
                 "port": 3008,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -1720,7 +1712,7 @@
                 "alias": "in.flaxynodes.fun",
                 "port": 3086,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -1776,7 +1768,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.20.1",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
@@ -1825,7 +1816,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
@@ -1835,6 +1825,54 @@
                 },
                 "updated_at": "2025-03-20T12:27:49+00:00",
                 "created_at": "2025-03-20T09:32:47+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 12,
+                "external_id": null,
+                "uuid": "4fabf166-8cca-423b-b064-4e84ff6c482d",
+                "identifier": "4fabf166",
+                "name": "LittlePlayz Infinite specs server [EXPIRE ON 14 APRIL]",
+                "description": "[EXPIRE ON 20 APRIL]",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 0,
+                  "swap": 0,
+                  "disk": 0,
+                  "io": 500,
+                  "cpu": 0,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
+                },
+                "user": 13,
+                "node": 2,
+                "allocation": 112,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "1.21",
+                    "SERVER_JARFILE": "server.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "4fabf166-8cca-423b-b064-4e84ff6c482d",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
+                  }
+                },
+                "updated_at": "2025-03-24T08:15:07+00:00",
+                "created_at": "2025-03-20T09:49:25+00:00"
               }
             },
             {
@@ -1874,7 +1912,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
@@ -1923,7 +1960,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.21",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
@@ -1972,7 +2008,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
@@ -2021,7 +2056,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.21",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
@@ -2070,7 +2104,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
@@ -2109,7 +2142,7 @@
                 },
                 "user": 10,
                 "node": 2,
-                "allocation": 29,
+                "allocation": 306,
                 "nest": 1,
                 "egg": 2,
                 "container": {
@@ -2119,7 +2152,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.21.4",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
@@ -2127,7 +2159,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 2
                   }
                 },
-                "updated_at": "2025-03-23T12:08:51+00:00",
+                "updated_at": "2025-03-24T07:57:32+00:00",
                 "created_at": "2025-03-20T16:27:50+00:00"
               }
             },
@@ -2168,7 +2200,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
@@ -2217,7 +2248,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.20.1",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "196",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
@@ -2227,6 +2257,54 @@
                 },
                 "updated_at": "2025-03-23T08:11:35+00:00",
                 "created_at": "2025-03-21T15:25:54+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 53,
+                "external_id": null,
+                "uuid": "b2cda121-e7ed-4745-9707-29b15de6ce97",
+                "identifier": "b2cda121",
+                "name": "Boost Reward Creepy",
+                "description": "Server will be suspended when creepyexe removed the boost!!!",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 6048,
+                  "swap": 0,
+                  "disk": 10000,
+                  "io": 500,
+                  "cpu": 200,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 0
+                },
+                "user": 50,
+                "node": 2,
+                "allocation": 34,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "b2cda121-e7ed-4745-9707-29b15de6ce97",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-24T08:12:21+00:00",
+                "created_at": "2025-03-22T13:29:05+00:00"
               }
             },
             {
@@ -2283,7 +2361,7 @@
                 "external_id": null,
                 "uuid": "115bb00f-6a7a-4d51-ae58-25d72fe88e0a",
                 "identifier": "115bb00f",
-                "name": "Death Mc (exp - 2feb 2026)",
+                "name": "Aqua Mc (exp - 2feb 2026)",
                 "description": "",
                 "status": null,
                 "suspended": false,
@@ -2313,7 +2391,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.21.1",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "132",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
@@ -2321,7 +2398,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-23T09:34:32+00:00",
+                "updated_at": "2025-03-24T08:00:46+00:00",
                 "created_at": "2025-03-22T16:19:46+00:00"
               }
             },
@@ -2362,7 +2439,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.21.4",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
@@ -2411,7 +2487,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India",
@@ -3227,7 +3302,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 2",
@@ -3276,7 +3350,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 2",
@@ -3284,7 +3357,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-23T15:21:07+00:00",
+                "updated_at": "2025-03-24T08:12:42+00:00",
                 "created_at": "2025-03-20T09:55:41+00:00"
               }
             },
@@ -3325,7 +3398,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 2",
@@ -3374,7 +3446,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 2",
@@ -3423,7 +3494,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 2",
@@ -3521,7 +3591,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 2",
@@ -3570,7 +3639,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.21.4",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 2",
@@ -3619,7 +3687,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 2",
@@ -3627,7 +3694,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-24T05:06:19+00:00",
+                "updated_at": "2025-03-24T07:43:54+00:00",
                 "created_at": "2025-03-22T17:14:33+00:00"
               }
             },
@@ -3668,7 +3735,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.21",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 2",
@@ -3717,7 +3783,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.20.4",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 2",
@@ -3766,7 +3831,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.21.4",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 2",
@@ -3815,7 +3879,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.21",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 2",
@@ -4257,7 +4320,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.20.1",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 3",
@@ -4355,7 +4417,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.21.3",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 3",
@@ -4404,7 +4465,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.21",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 3",
@@ -4453,7 +4513,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.20.1",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 3",
@@ -4502,7 +4561,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.21",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 3",
@@ -4551,7 +4609,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 3",
@@ -4600,7 +4657,6 @@
                   "environment": {
                     "MINECRAFT_VERSION": "1.21",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "https://api.papermc.io/v2/projects/paper/versions/${VERSION}/builds/latest/downloads/paper-${VERSION}-latest.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "India 3",

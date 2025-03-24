@@ -66,17 +66,18 @@
             "attributes": {
               "id": 2,
               "uuid": "f1f12e5b-db29-47e5-958a-e9a87948cd57",
-              "name": "Paper",
+              "name": "Purpur",
               "nest": 1,
               "author": "parker@pterodactyl.io",
-              "description": "High performance Spigot fork that aims to fix gameplay and mechanics inconsistencies.",
-              "docker_image": "ghcr.io/pterodactyl/yolks:java_21",
+              "description": "A drop-in replacement for Paper servers designed for configurability, and new fun and exciting gameplay features.",
+              "docker_image": "ghcr.io/pterodactyl/yolks:java_8",
               "docker_images": {
-                "Java 21": "ghcr.io/pterodactyl/yolks:java_21",
-                "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
-                "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+                "Java 8": "ghcr.io/pterodactyl/yolks:java_8",
                 "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
-                "Java 8": "ghcr.io/pterodactyl/yolks:java_8"
+                "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+                "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
+                "Java 18": "ghcr.io/pterodactyl/yolks:java_18",
+                "Java 21": "ghcr.io/pterodactyl/yolks:java_21"
               },
               "config": {
                 "files": {
@@ -84,8 +85,7 @@
                     "parser": "properties",
                     "find": {
                       "server-ip": "0.0.0.0",
-                      "server-port": "{{server.build.default.port}}",
-                      "query.port": "{{server.build.default.port}}"
+                      "server-port": "{{server.build.default.port}}"
                     }
                   }
                 },
@@ -97,16 +97,16 @@
                 "file_denylist": [],
                 "extends": null
               },
-              "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+              "startup": "java --add-modules=jdk.incubator.vector -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
               "script": {
                 "privileged": true,
-                "install": "#!/bin/ash\r\n# Paper Installation Script\r\n# Server Files: /mnt/server\r\n\r\nPROJECT=paper\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n    echo -e \"Using supplied download url: ${DL_PATH}\"\r\n    DOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n    VER_EXISTS=`curl -s https://api.papermc.io/v2/projects/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep -m1 true`\r\n    LATEST_VERSION=`curl -s https://api.papermc.io/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n    if [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n        echo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n    else\r\n        echo -e \"Specified version not found. Defaulting to the latest ${PROJECT} version\"\r\n        MINECRAFT_VERSION=${LATEST_VERSION}\r\n    fi\r\n\r\n    BUILD_EXISTS=`curl -s https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep -m1 true`\r\n    LATEST_BUILD=`curl -s https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\n\r\n    if [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n        echo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n    else\r\n        echo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n        BUILD_NUMBER=${LATEST_BUILD}\r\n    fi\r\n\r\n    JAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n    echo \"Version being downloaded\"\r\n    echo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n    echo -e \"Build: ${BUILD_NUMBER}\"\r\n    echo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n    DOWNLOAD_URL=https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o server.jar ${DOWNLOAD_URL}\"\r\n# Always save as server.jar\r\ncurl -o server.jar ${DOWNLOAD_URL}\r\n\r\n# Download server.properties if missing\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
+                "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=purpur\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds.all | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r '.builds.latest'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION}/${BUILD_NUMBER}/download\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
                 "entry": "ash",
-                "container": "ghcr.io/pterodactyl/installers:alpine",
+                "container": "ghcr.io/parkervcp/installers:alpine",
                 "extends": null
               },
               "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-23T06:43:20+00:00"
+              "updated_at": "2025-03-24T07:32:28+00:00"
             }
           },
           {
@@ -815,6 +815,46 @@
               },
               "created_at": "2025-03-21T10:43:07+00:00",
               "updated_at": "2025-03-21T10:43:07+00:00"
+            }
+          },
+          {
+            "object": "egg",
+            "attributes": {
+              "id": 24,
+              "uuid": "b4564c5c-3ca6-44a0-8986-6720cb801a23",
+              "name": "PteroStats",
+              "nest": 5,
+              "author": "hello@lezetho.co.uk",
+              "description": "a generic node.js egg\r\n\r\nThis will clone a git repo. it defaults to master if no branch is specified.\r\n\r\nInstalls the node_modules on install. If you set user_upload then I assume you know what you are doing.",
+              "docker_image": "ghcr.io/parkervcp/yolks:nodejs_21",
+              "docker_images": {
+                "NodeJS 21": "ghcr.io/parkervcp/yolks:nodejs_21",
+                "NodeJS 20": "ghcr.io/parkervcp/yolks:nodejs_20",
+                "NodeJS 19": "ghcr.io/parkervcp/yolks:nodejs_19",
+                "NodeJS 18": "ghcr.io/parkervcp/yolks:nodejs_18"
+              },
+              "config": {
+                "files": {},
+                "startup": {
+                  "done": [
+                    "PteroStats installed."
+                  ]
+                },
+                "stop": "^C",
+                "logs": [],
+                "file_denylist": [],
+                "extends": null
+              },
+              "startup": "npm install && /usr/local/bin/node \"/home/container/index.js\" ${NODE_ARGS}",
+              "script": {
+                "privileged": true,
+                "install": "#!/bin/bash\r\n# PteroStats Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napt update\r\napt install -y git curl jq file unzip make gcc g++ python3 python3-dev python3-pip libtool\r\n\r\necho -e \"Updating npm. please wait...\"\r\nnpm install npm@latest --location=global\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\ngit clone https://github.com/HirziDevs/PteroStats.git ./\r\n\r\necho \"Installing nodejs packages\"\r\nif [[ ! -z ${NODE_PACKAGES} ]]; then\r\n    /usr/local/bin/npm install ${NODE_PACKAGES}\r\nfi\r\n\r\nif [ -f /mnt/server/package.json ]; then\r\n    /usr/local/bin/npm install --production\r\nfi\r\n\r\necho -e \"Install completed\"\r\nexit 0",
+                "entry": "bash",
+                "container": "node:18-bookworm-slim",
+                "extends": null
+              },
+              "created_at": "2025-03-24T07:04:12+00:00",
+              "updated_at": "2025-03-24T07:04:12+00:00"
             }
           }
         ]
