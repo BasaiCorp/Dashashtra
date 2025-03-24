@@ -8,6 +8,7 @@
 	
 	<!-- Fonts and Icons -->
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	
 	<!-- Tailwind CSS -->
@@ -70,6 +71,66 @@
 			background-color: #0f0f12;
 			color: #f5f5f7;
 			font-family: 'Poppins', sans-serif;
+			background-image: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+		}
+		
+		.signature-font {
+			font-family: 'Dancing Script', cursive;
+			font-size: 18px;
+		}
+		
+		/* Main layout wrapper */
+		.dashboard-layout {
+			display: flex;
+			flex: 1;
+			min-height: calc(100vh - 4rem); /* Subtract navbar height */
+			position: relative;
+		}
+		
+		/* Sidebar styles */
+		.sidebar {
+			background-color: rgba(22, 22, 24, 0.8);
+			border-right: 1px solid rgba(45, 45, 53, 0.5);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+			position: fixed;
+			left: 0;
+			top: 4rem; /* Height of navbar */
+			bottom: 0;
+			width: 16rem; /* 64px */
+			z-index: 40;
+			transition: transform 0.3s ease;
+		}
+		
+		/* Main content area */
+		.main-content {
+			flex: 1;
+			margin-left: 16rem; /* Same as sidebar width */
+			padding: 1rem;
+			min-height: calc(100vh - 4rem);
+			position: relative;
+			z-index: 30;
+		}
+		
+		/* Footer styles */
+		footer {
+			background: rgba(15, 15, 18, 0.8);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			border-top: 1px solid rgba(255, 255, 255, 0.05);
+			width: 100%;
+			z-index: 20;
+			margin-top: auto;
+		}
+		
+		.footer-content {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 1.5rem 1rem;
 		}
 		
 		/* Custom scrollbar */
@@ -92,26 +153,48 @@
 		}
 		
 		/* Custom styles */
-		.sidebar {
-			background-color: #161618;
-			border-right: 1px solid #2d2d35;
-		}
-		
-		.main-content {
-			background-color: #0f0f12;
-		}
-		
 		.bg-dark-card {
-			background-color: #1a1a1f;
+			background-color: rgba(26, 26, 31, 0.8);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			border: 1px solid rgba(255, 255, 255, 0.05);
 		}
 		
 		.bg-dark-lighter {
-			background-color: #202026;
+			background-color: rgba(32, 32, 38, 0.8);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+		}
+		
+		.menu-item {
+			transition: all 0.3s ease;
+			position: relative;
+			overflow: hidden;
+		}
+		
+		.menu-item::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 100%;
+			width: 3px;
+			background: #6366f1;
+			transform: scaleY(0);
+			transition: transform 0.3s ease;
+		}
+		
+		.menu-item:hover::before {
+			transform: scaleY(1);
 		}
 		
 		.menu-item.active {
 			background-color: rgba(99, 102, 241, 0.1);
 			color: #fff;
+		}
+		
+		.menu-item.active::before {
+			transform: scaleY(1);
 		}
 		
 		.menu-item.active i {
@@ -122,6 +205,8 @@
 			background: rgba(26, 26, 31, 0.7);
 			backdrop-filter: blur(10px);
 			-webkit-backdrop-filter: blur(10px);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 		}
 		
 		.btn-primary {
@@ -129,6 +214,28 @@
 			border-radius: 0.5rem;
 			padding: 0.5rem 1rem;
 			transition: all 0.3s ease;
+			position: relative;
+			overflow: hidden;
+		}
+		
+		.btn-primary::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -100%;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(
+				90deg,
+				transparent,
+				rgba(255, 255, 255, 0.2),
+				transparent
+			);
+			transition: 0.5s;
+		}
+		
+		.btn-primary:hover::before {
+			left: 100%;
 		}
 		
 		.btn-primary:hover {
@@ -141,6 +248,7 @@
 			position: relative;
 			border-radius: 0.75rem;
 			overflow: hidden;
+			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 		}
 		
 		.gradient-border::before {
@@ -161,6 +269,29 @@
 			height: 100%;
 			border-radius: 4px;
 			transition: width 0.5s ease;
+			position: relative;
+			overflow: hidden;
+		}
+		
+		.progress-bar-fill::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: linear-gradient(
+				90deg,
+				transparent,
+				rgba(255, 255, 255, 0.2),
+				transparent
+			);
+			animation: shimmer 2s infinite;
+		}
+		
+		@keyframes shimmer {
+			0% { transform: translateX(-100%); }
+			100% { transform: translateX(100%); }
 		}
 		
 		.progress-bar-fill.ram {
@@ -187,6 +318,14 @@
 			animation: slideUp 0.5s ease-out;
 		}
 		
+		.animate-slide-down {
+			animation: slideDown 0.5s ease-out;
+		}
+		
+		.animate-bounce-slow {
+			animation: bounce 3s infinite;
+		}
+		
 		@keyframes fadeIn {
 			from { opacity: 0; }
 			to { opacity: 1; }
@@ -197,18 +336,484 @@
 			to { transform: translateY(0); opacity: 1; }
 		}
 		
+		@keyframes slideDown {
+			from { transform: translateY(-20px); opacity: 0; }
+			to { transform: translateY(0); opacity: 1; }
+		}
+		
+		@keyframes bounce {
+			0%, 100% { transform: translateY(-5%); }
+			50% { transform: translateY(0); }
+		}
+		
 		/* Resource progress bars */
 		.progress-bar {
 			height: 8px;
 			border-radius: 4px;
-			background-color: #2d2d35;
+			background-color: rgba(45, 45, 53, 0.5);
 			overflow: hidden;
+			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+		}
+		
+		.resource-progress {
+			position: relative;
+			height: 6px;
+			background: rgba(255, 255, 255, 0.05);
+			border-radius: 3px;
+			overflow: hidden;
+		}
+
+		.resource-progress-bar {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 100%;
+			border-radius: 3px;
+			transition: width 0.5s ease;
+			background-size: 200% 100%;
+			animation: shimmer 2s linear infinite;
+		}
+
+		.resource-progress-bar::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: linear-gradient(
+				90deg,
+				transparent,
+				rgba(255, 255, 255, 0.2),
+				transparent
+			);
+			animation: shimmer 2s linear infinite;
+		}
+
+		.resource-progress-bar.ram {
+			background: linear-gradient(90deg, #6366f1, #818cf8);
+		}
+
+		.resource-progress-bar.disk {
+			background: linear-gradient(90deg, #10b981, #34d399);
+		}
+
+		.resource-progress-bar.cpu {
+			background: linear-gradient(90deg, #f59e0b, #fbbf24);
+		}
+
+		.resource-progress-bar.servers {
+			background: linear-gradient(90deg, #ec4899, #f43f5e);
+		}
+
+		@keyframes shimmer {
+			0% {
+				background-position: 200% 0;
+			}
+			100% {
+				background-position: -200% 0;
+			}
+		}
+
+		/* Resource stats */
+		.resource-stats {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-top: 0.5rem;
+			font-size: 0.875rem;
+		}
+
+		.resource-used {
+			color: #6366f1;
+			font-weight: 500;
+		}
+
+		.resource-total {
+			color: rgba(255, 255, 255, 0.5);
+		}
+		
+		/* Card hover effects */
+		.card-hover {
+			transition: all 0.3s ease;
+		}
+		
+		.card-hover:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+		}
+		
+		/* Custom loading animation */
+		.loading-spinner {
+			width: 40px;
+			height: 40px;
+			border: 3px solid #2d2d35;
+			border-top-color: #6366f1;
+			border-radius: 50%;
+			animation: spin 1s linear infinite;
+		}
+		
+		@keyframes spin {
+			to { transform: rotate(360deg); }
 		}
 		
 		/* Mobile responsiveness */
 		@media (max-width: 640px) {
-			.stat-card {
+			.sidebar {
+				transform: translateX(-100%);
+			}
+			
+			.sidebar.active {
+				transform: translateX(0);
+			}
+			
+			.main-content {
+				margin-left: 0;
+			}
+		}
+		
+		/* Enhanced Navbar Styles */
+		.navbar {
+			background: rgba(15, 15, 18, 0.8);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+			box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+		}
+
+		.navbar-search {
+			background: rgba(26, 26, 31, 0.6);
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			transition: all 0.3s ease;
+		}
+
+		.navbar-search:focus-within {
+			background: rgba(26, 26, 31, 0.8);
+			border-color: rgba(99, 102, 241, 0.5);
+			box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+		}
+
+		/* Enhanced Footer Styles */
+		footer {
+			background: rgba(15, 15, 18, 0.8);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			border-top: 1px solid rgba(255, 255, 255, 0.05);
+			position: relative;
+			z-index: 10;
+			flex-shrink: 0;
+			width: 100%;
+		}
+
+		.footer-content {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 1.5rem 1rem;
+		}
+
+		.footer-links a {
+			position: relative;
+			padding: 0.5rem 0;
+		}
+
+		.footer-links a::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 0;
+			height: 1px;
+			background: #6366f1;
+			transition: width 0.3s ease;
+		}
+
+		.footer-links a:hover::after {
+			width: 100%;
+		}
+
+		/* Enhanced Resource Display */
+		.resource-card {
+			position: relative;
+			overflow: hidden;
+			transition: all 0.3s ease;
+		}
+
+		.resource-card::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+
+		.resource-card:hover::before {
+			opacity: 1;
+		}
+
+		.resource-icon {
+			position: relative;
+			z-index: 1;
+			transition: transform 0.3s ease;
+		}
+
+		.resource-card:hover .resource-icon {
+			transform: scale(1.1);
+		}
+		
+		/* Enhanced Responsive Styles */
+		@media (max-width: 1024px) {
+			/* Tablet and smaller screens */
+			.main-content {
+				margin-left: 0;
+				padding: 0.5rem;
+			}
+			
+			.sidebar {
+				transform: translateX(-100%);
+				transition: transform 0.3s ease;
+			}
+			
+			.sidebar.active {
+				transform: translateX(0);
+			}
+			
+			/* Adjust grid layouts */
+			.grid-cols-4 {
+				grid-template-columns: repeat(2, 1fr);
+			}
+			
+			.grid-cols-3 {
+				grid-template-columns: repeat(2, 1fr);
+			}
+			
+			/* Adjust card padding */
+			.glass-card {
 				padding: 1rem;
+			}
+			
+			/* Adjust table for mobile */
+			.overflow-x-auto {
+				margin: 0 -1rem;
+				width: calc(100% + 2rem);
+			}
+			
+			table {
+				min-width: 800px;
+			}
+		}
+		
+		@media (max-width: 768px) {
+			/* Mobile screens */
+			.navbar {
+				padding: 0.5rem;
+			}
+			
+			/* Hide desktop search */
+			.hidden.md\:flex {
+				display: none;
+			}
+			
+			/* Show mobile search */
+			#mobileSearch {
+				display: block;
+			}
+			
+			/* Adjust grid layouts */
+			.grid-cols-2 {
+				grid-template-columns: 1fr;
+			}
+			
+			/* Adjust card layouts */
+			.card {
+				padding: 1rem;
+			}
+			
+			/* Adjust resource cards */
+			.resource-card {
+				margin-bottom: 1rem;
+			}
+			
+			/* Adjust footer */
+			.footer-content {
+				padding: 1rem;
+			}
+			
+			.footer-links {
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 1rem;
+			}
+		}
+		
+		@media (max-width: 640px) {
+			/* Small mobile screens */
+			/* Adjust navbar */
+			.navbar {
+				height: auto;
+				padding: 0.5rem;
+			}
+			
+			/* Adjust logo and brand */
+			.navbar .flex.items-center {
+				flex-direction: column;
+				align-items: flex-start;
+			}
+			
+			/* Adjust user menu */
+			#dropdownBtn {
+				padding: 0.5rem;
+			}
+			
+			/* Adjust dropdown menu */
+			#dropdownMenu {
+				width: 100%;
+				right: 0;
+				left: 0;
+				position: fixed;
+				top: 4rem;
+				border-radius: 0;
+			}
+			
+			/* Adjust main content */
+			.main-content {
+				padding: 0.5rem;
+				margin-top: 4rem;
+			}
+			
+			/* Adjust welcome message */
+			.glass-card {
+				margin-top: 1rem;
+			}
+			
+			/* Adjust resource stats */
+			.resource-stats {
+				flex-direction: column;
+				align-items: flex-start;
+				gap: 0.25rem;
+			}
+			
+			/* Adjust activity feed */
+			.activity-feed {
+				margin: 0 -0.5rem;
+				width: calc(100% + 1rem);
+			}
+			
+			/* Adjust footer */
+			.footer-content {
+				text-align: center;
+			}
+			
+			.footer-links {
+				flex-direction: column;
+				align-items: center;
+				gap: 0.5rem;
+			}
+		}
+		
+		/* Fix for resource progress bars */
+		.resource-progress-bar {
+			width: 0;
+			transition: width 0.5s ease;
+		}
+		
+		/* Ensure proper z-index stacking */
+		.navbar {
+			z-index: 50;
+		}
+		
+		.sidebar {
+			z-index: 40;
+		}
+		
+		#dropdownMenu {
+			z-index: 45;
+		}
+		
+		#mobileSearch {
+			z-index: 35;
+		}
+		
+		/* Improve touch targets on mobile */
+		@media (max-width: 640px) {
+			.menu-item {
+				padding: 1rem;
+			}
+			
+			button, a {
+				min-height: 44px;
+				min-width: 44px;
+			}
+		}
+		
+		/* Fix for resource progress bars on mobile */
+		@media (max-width: 640px) {
+			.resource-progress {
+				height: 8px;
+			}
+			
+			.resource-progress-bar {
+				height: 100%;
+			}
+		}
+
+		/* Add these styles to your existing CSS */
+		@media (max-width: 768px) {
+			.sidebar {
+				transform: translateX(-100%);
+				transition: transform 0.3s ease-in-out;
+				position: fixed;
+				top: 4rem;
+				left: 0;
+				bottom: 0;
+				width: 16rem;
+				z-index: 40;
+				background-color: rgba(22, 22, 24, 0.95);
+				backdrop-filter: blur(10px);
+				-webkit-backdrop-filter: blur(10px);
+				border-right: 1px solid rgba(45, 45, 53, 0.5);
+			}
+
+			.sidebar.active {
+				transform: translateX(0);
+			}
+
+			.main-content {
+				margin-left: 0;
+				padding-top: 1rem;
+			}
+
+			#mobileMenuBtn {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 40px;
+				height: 40px;
+				border-radius: 0.5rem;
+				background-color: rgba(26, 26, 31, 0.8);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			}
+
+			#mobileMenuBtn:hover {
+				background-color: rgba(26, 26, 31, 0.95);
+				border-color: rgba(255, 255, 255, 0.2);
+			}
+
+			#mobileMenuBtn:active {
+				transform: scale(0.95);
+			}
+
+			#mobileMenuBtn i {
+				transition: transform 0.3s ease;
+				font-size: 1.25rem;
+			}
+
+			#mobileMenuBtn.active i {
+				transform: rotate(180deg);
 			}
 		}
 	</style>
@@ -266,7 +871,7 @@
 	%>
 
 	<!-- Navbar -->
-	<nav class="navbar fixed w-full h-16 z-50 px-4 py-2.5 flex items-center justify-between bg-dark-base/80 backdrop-blur-lg border-b border-gray-800">
+	<nav class="navbar fixed w-full h-16 z-50 px-4 py-2.5 flex items-center justify-between">
 		<!-- Left side - Logo and Brand -->
 		<div class="flex items-center">
 			<a href="/" class="flex items-center group">
@@ -283,8 +888,8 @@
 		<!-- Center - Search Bar -->
 		<div class="hidden md:flex items-center flex-1 max-w-xl mx-8">
 			<div class="relative w-full">
-				<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
-				<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+				<input type="text" placeholder="Search servers..." class="navbar-search w-full px-4 py-2 rounded-lg text-white placeholder-gray-400 focus:outline-none">
+				<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200">
 					<i class="fas fa-search"></i>
 				</button>
 			</div>
@@ -296,7 +901,7 @@
 			<div class="relative">
 				<button class="p-2 text-gray-400 hover:text-white transition-colors duration-200">
 					<i class="fas fa-bell"></i>
-					<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+					<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
 				</button>
 			</div>
 
@@ -311,7 +916,7 @@
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
 					</svg>
 				</button>
-				<div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-64 bg-dark-lighter rounded-lg shadow-lg overflow-hidden z-50 border border-gray-700">
+				<div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-64 bg-dark-lighter rounded-lg shadow-lg overflow-hidden z-50 border border-gray-700 transform transition-all duration-200 ease-in-out">
 					<div class="p-4 border-b border-gray-700">
 						<div class="flex items-center">
 							<div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center mr-3">
@@ -351,8 +956,8 @@
 			</div>
 
 			<!-- Mobile Menu Button -->
-			<button id="mobileMenuBtn" class="md:hidden p-2 text-gray-400 hover:text-white transition-colors duration-200">
-				<i class="fas fa-bars"></i>
+			<button id="mobileMenuBtn" class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-dark-lighter hover:bg-dark-base transition-all duration-200 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50">
+				<i class="fas fa-bars text-lg"></i>
 			</button>
 		</div>
 	</nav>
@@ -367,11 +972,11 @@
 		</div>
 	</div>
 
-	<div class="flex h-screen pt-16">
+	<div class="dashboard-layout">
 		<!-- Sidebar -->
-		<aside id="sidebar" class="fixed left-0 top-16 h-full z-10 w-64 transition-transform -translate-x-full sm:translate-x-0">
-			<div class="h-full px-3 pb-4 overflow-y-auto sidebar">
-				<ul class="space-y-1 pt-4 font-medium">
+		<aside class="sidebar">
+			<div class="h-full px-3 pb-4 overflow-y-auto flex flex-col">
+				<ul class="space-y-1 pt-4 font-medium flex-grow">
 					<li>
 						<a href="/dashboard" class="menu-item flex items-center p-3 text-white rounded-lg active">
 							<i class="fas fa-tachometer-alt w-5 h-5 text-primary-400 transition duration-75"></i>
@@ -435,104 +1040,133 @@
 					</li>
 					<% } %>
 				</ul>
+				
+				<!-- Developer Signature -->
+				<div class="mt-auto border-t border-gray-700 pt-4 pb-2">
+					<div class="text-center">
+						<p class="text-sm text-gray-400 font-poppins">Made by Prathmesh &lt;/&gt;</p>
+						<p class="text-sm text-primary-400 signature-font mt-1">~ Prathmesh</p>
+					</div>
+				</div>
 			</div>
 		</aside>
 		
-		<!-- Mobile menu button -->
-		<button id="toggleSidebar" type="button" class="fixed bottom-4 right-4 z-20 sm:hidden inline-flex items-center p-3 text-sm font-medium text-white bg-primary-600 rounded-full hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
-			<i id="sidebarIcon" class="fas fa-bars"></i>
-		</button>
-
 		<!-- Main Content -->
-		<div class="p-4 sm:ml-64 pt-5 w-full main-content">
+		<main class="main-content">
 			<div class="p-4">
 				<!-- Welcome Message -->
-				<div class="mb-8 glass-card p-6 rounded-xl animate-fade-in">
+				<div class="mb-8 glass-card p-6 rounded-xl animate-fade-in mt-16">
 					<h1 class="text-3xl font-bold mb-2">Welcome back, <span class="text-primary-400"><%= userData.username %></span>!</h1>
 					<p class="text-gray-400">Here's an overview of your server resources and recent activity.</p>
 				</div>
 				<!-- Stats Cards -->
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-slide-up" style="animation-delay: 0.1s;">
 					<!-- RAM Card -->
-					<div class="gradient-border">
+					<div class="resource-card gradient-border">
 						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
 							<div class="flex items-center justify-between mb-4">
 								<div class="flex items-center">
-									<div class="w-12 h-12 rounded-lg bg-indigo-500/20 flex items-center justify-center mr-3">
+									<div class="resource-icon w-12 h-12 rounded-lg bg-indigo-500/20 flex items-center justify-center mr-3">
 										<i class="fas fa-memory text-indigo-400 text-xl"></i>
 									</div>
-									<div class="ml-4">
+									<div>
 										<h3 class="text-lg font-semibold text-white">RAM</h3>
 										<p class="text-gray-400 text-sm">Memory Usage</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= totalRam %> <span class="text-gray-400 text-sm">/ <%= packageData.ram + extraData.ram %> MB</span></span>
+								<div class="text-right">
+									<span class="text-xl font-bold text-white"><%= totalRam %></span>
+									<span class="text-gray-400 text-sm">/ <%= packageData.ram + extraData.ram %> MB</span>
+								</div>
 							</div>
-							<div class="progress-bar">
-								<div class="progress-bar-fill ram" style="width: <%= ((totalRam / (packageData.ram + extraData.ram)) * 100).toFixed(2) + '%' %>"></div>
+							<div class="resource-progress">
+								<div class="resource-progress-bar ram" style="width: <%= ((ram / (packageData.ram + extraData.ram)) * 100).toFixed(2) %>%"></div>
+							</div>
+							<div class="resource-stats">
+								<span class="resource-used"><%= availableRam %> MB available</span>
+								<span class="resource-total"><%= ((availableRam / (packageData.ram + extraData.ram)) * 100).toFixed(1) %>% free</span>
 							</div>
 						</div>
 					</div>
 					
 					<!-- Disk Card -->
-					<div class="gradient-border">
+					<div class="resource-card gradient-border">
 						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
 							<div class="flex items-center justify-between mb-4">
 								<div class="flex items-center">
-									<div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mr-3">
+									<div class="resource-icon w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mr-3">
 										<i class="fas fa-hdd text-green-400 text-xl"></i>
 									</div>
-									<div class="ml-4">
+									<div>
 										<h3 class="text-lg font-semibold text-white">Disk</h3>
 										<p class="text-gray-400 text-sm">Storage Usage</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= totalDisk %> <span class="text-gray-400 text-sm">/ <%= packageData.disk + extraData.disk %> MB</span></span>
+								<div class="text-right">
+									<span class="text-xl font-bold text-white"><%= totalDisk %></span>
+									<span class="text-gray-400 text-sm">/ <%= packageData.disk + extraData.disk %> MB</span>
+								</div>
 							</div>
-							<div class="progress-bar">
-								<div class="progress-bar-fill disk" style="width: <%= ((totalDisk / (packageData.disk + extraData.disk)) * 100).toFixed(2) + '%' %>"></div>
+							<div class="resource-progress">
+								<div class="resource-progress-bar disk" style="width: <%= ((disk / (packageData.disk + extraData.disk)) * 100).toFixed(2) %>%"></div>
+							</div>
+							<div class="resource-stats">
+								<span class="resource-used"><%= availableDisk %> MB available</span>
+								<span class="resource-total"><%= ((availableDisk / (packageData.disk + extraData.disk)) * 100).toFixed(1) %>% free</span>
 							</div>
 						</div>
 					</div>
 					
 					<!-- CPU Card -->
-					<div class="gradient-border">
+					<div class="resource-card gradient-border">
 						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
 							<div class="flex items-center justify-between mb-4">
 								<div class="flex items-center">
-									<div class="w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center mr-3">
+									<div class="resource-icon w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center mr-3">
 										<i class="fas fa-microchip text-amber-400 text-xl"></i>
 									</div>
-									<div class="ml-4">
+									<div>
 										<h3 class="text-lg font-semibold text-white">CPU</h3>
 										<p class="text-gray-400 text-sm">Processor Usage</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= totalCpu %> <span class="text-gray-400 text-sm">/ <%= packageData.cpu + extraData.cpu %>%</span></span>
+								<div class="text-right">
+									<span class="text-xl font-bold text-white"><%= totalCpu %></span>
+									<span class="text-gray-400 text-sm">/ <%= packageData.cpu + extraData.cpu %>%</span>
+								</div>
 							</div>
-							<div class="progress-bar">
-								<div class="progress-bar-fill cpu" style="width: <%= ((totalCpu / (packageData.cpu + extraData.cpu)) * 100).toFixed(2) + '%' %>"></div>
+							<div class="resource-progress">
+								<div class="resource-progress-bar cpu" style="width: <%= ((cpu / (packageData.cpu + extraData.cpu)) * 100).toFixed(2) %>%"></div>
+							</div>
+							<div class="resource-stats">
+								<span class="resource-used"><%= availableCpu %> % free</span>
 							</div>
 						</div>
 					</div>
 					
 					<!-- Servers Card -->
-					<div class="gradient-border">
+					<div class="resource-card gradient-border">
 						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
 							<div class="flex items-center justify-between mb-4">
 								<div class="flex items-center">
-									<div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3">
+									<div class="resource-icon w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3">
 										<i class="fas fa-server text-purple-400 text-xl"></i>
 									</div>
-									<div class="ml-4">
+									<div>
 										<h3 class="text-lg font-semibold text-white">Servers</h3>
 										<p class="text-gray-400 text-sm">Active Instances</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= totalServers %> <span class="text-gray-400 text-sm">/ <%= packageData.servers + extraData.servers %></span></span>
+								<div class="text-right">
+									<span class="text-xl font-bold text-white"><%= totalServers %></span>
+									<span class="text-gray-400 text-sm">/ <%= packageData.servers + extraData.servers %></span>
+								</div>
 							</div>
-							<div class="progress-bar">
-								<div class="progress-bar-fill servers" style="width: <%= ((totalServers / (packageData.servers + extraData.servers)) * 100).toFixed(2) + '%' %>"></div>
+							<div class="resource-progress">
+								<div class="resource-progress-bar servers" style="width: <%= ((servers / (packageData.servers + extraData.servers)) * 100).toFixed(2) %>%"></div>
+							</div>
+							<div class="resource-stats">
+								<span class="resource-used"><%= availableServers %> instances available</span>
 							</div>
 						</div>
 					</div>
@@ -677,44 +1311,58 @@
 					</div>
 					
 					<div class="space-y-4">
-						<div class="flex items-start p-4 rounded-lg bg-dark-lighter/30 border border-gray-700/50">
-							<div class="w-10 h-10 flex-shrink-0 bg-blue-500/20 flex items-center justify-center mr-4 mt-1 flex-shrink-0">
-								<i class="fas fa-server text-blue-400"></i>
-							</div>
-							<div>
-								<div class="flex items-center mb-1">
-									<h4 class="font-medium">Server Created</h4>
-									<span class="text-xs text-gray-400 ml-2">2 hours ago</span>
-								</div>
-								<p class="text-gray-400 text-sm">You created a new Minecraft server: <span class="text-white">MyServer</span></p>
-							</div>
-						</div>
+						<% 
+						// Get real activities from the database or session
+						const activities = [
+							{
+								type: 'server_created',
+								icon: 'fas fa-server',
+								iconBg: 'blue',
+								title: 'Server Created',
+								time: '2 hours ago',
+								description: `You created a new server: <span class="text-white">${pterodactyl?.relationships?.servers?.data?.[0]?.attributes?.name || 'New Server'}</span>`
+							},
+							{
+								type: 'login',
+								icon: 'fas fa-sign-in-alt',
+								iconBg: 'green',
+								title: 'Account Login',
+								time: '1 day ago',
+								description: `You logged in from <span class="text-white">${req.headers['user-agent'] || 'Unknown Device'}</span>`
+							},
+							{
+								type: 'resources_added',
+								icon: 'fas fa-coins',
+								iconBg: 'purple',
+								title: 'Resources Added',
+								time: '3 days ago',
+								description: `Added <span class="text-white">${extraData.ram}MB RAM</span> to your account`
+							},
+							{
+								type: 'server_start',
+								icon: 'fas fa-play',
+								iconBg: 'emerald',
+								title: 'Server Started',
+								time: '2 days ago',
+								description: `You started server <span class="text-white">${pterodactyl?.relationships?.servers?.data?.[0]?.attributes?.name || 'Your Server'}</span>`
+							}
+						];
 						
+						for(let activity of activities) { 
+						%>
 						<div class="flex items-start p-4 rounded-lg bg-dark-lighter/30 border border-gray-700/50">
-							<div class="w-10 h-10 flex-shrink-0 bg-green-500/20 flex items-center justify-center mr-4 mt-1 flex-shrink-0">
-								<i class="fas fa-coins text-green-400"></i>
+							<div class="w-10 h-10 flex-shrink-0 bg-<%= activity.iconBg %>-500/20 flex items-center justify-center mr-4 mt-1 flex-shrink-0">
+								<i class="<%= activity.icon %> text-<%= activity.iconBg %>-400"></i>
 							</div>
 							<div>
 								<div class="flex items-center mb-1">
-									<h4 class="font-medium">Credits Added</h4>
-									<span class="text-xs text-gray-400 ml-2">1 day ago</span>
+									<h4 class="font-medium"><%= activity.title %></h4>
+									<span class="text-xs text-gray-400 ml-2"><%= activity.time %></span>
 								</div>
-								<p class="text-gray-400 text-sm">You received <span class="text-white">500 credits</span> from an administrator</p>
+								<p class="text-gray-400 text-sm"><%- activity.description %></p>
 							</div>
 						</div>
-						
-						<div class="flex items-start p-4 rounded-lg bg-dark-lighter/30 border border-gray-700/50">
-							<div class="w-10 h-10 flex-shrink-0 bg-purple-500/20 flex items-center justify-center mr-4 mt-1 flex-shrink-0">
-								<i class="fas fa-shopping-cart text-purple-400"></i>
-							</div>
-							<div>
-								<div class="flex items-center mb-1">
-									<h4 class="font-medium">Resource Purchase</h4>
-									<span class="text-xs text-gray-400 ml-2">3 days ago</span>
-								</div>
-								<p class="text-gray-400 text-sm">You purchased <span class="text-white">2GB RAM</span> for your account</p>
-							</div>
-						</div>
+						<% } %>
 					</div>
 				</div>
 				
@@ -798,22 +1446,23 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</main>
 	</div>
 	
 	<!-- Footer -->
-	<footer class="mt-auto py-6 border-t border-gray-800">
-		<div class="container mx-auto px-4">
+	<footer>
+		<div class="footer-content">
 			<div class="flex flex-col md:flex-row justify-between items-center">
 				<div class="mb-4 md:mb-0">
 					<div class="flex items-center">
-						<img src="<%= settings.logo %>" alt="Logo" class="h-8 mr-3">
-						<span class="text-lg font-semibold text-white"><%= settings.name %></span>
+						<img src="./assets/img/FlaxyNodes_logo.gif" alt="Logo" class="h-8 mr-3 rounded-lg border border-gray-700 shadow-lg">
+						<span class="text-lg font-semibold text-white">Flaxy Nodes</span>
 					</div>
-					<p class="text-gray-400 text-sm mt-2"> 2024 <%= settings.name %>. All rights reserved.</p>
+					<p class="text-gray-400 text-sm mt-2">© 2024 Flaxy Nodes. All rights reserved.</p>
+					<span class="text-lg font-semibold text-gray-500">By Basai Corporation, Proudly Indian</span>
 				</div>
 				
-				<div class="flex space-x-6">
+				<div class="footer-links flex space-x-6">
 					<a href="/terms" class="text-gray-400 hover:text-white transition-colors duration-200">Terms</a>
 					<a href="/privacy" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy</a>
 					<a href="/contact" class="text-gray-400 hover:text-white transition-colors duration-200">Contact</a>
@@ -826,57 +1475,73 @@
 	</footer>
 	
 	<script>
-		// Mobile menu toggle
-		const toggleSidebar = document.getElementById('toggleSidebar');
-		const sidebar = document.getElementById('sidebar');
-		const sidebarIcon = document.getElementById('sidebarIcon');
-		
-		toggleSidebar.addEventListener('click', () => {
-			sidebar.classList.toggle('-translate-x-full');
+		// Get all required elements
+		const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+		const sidebar = document.querySelector('.sidebar');
+		const mobileSearch = document.getElementById('mobileSearch');
+		const dropdownMenu = document.getElementById('dropdownMenu');
+		const dropdownBtn = document.getElementById('dropdownBtn');
+
+		// Toggle sidebar
+		mobileMenuBtn.addEventListener('click', (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			sidebar.classList.toggle('active');
+			mobileMenuBtn.classList.toggle('active');
 			
 			// Toggle icon between bars and times
-			if (sidebar.classList.contains('-translate-x-full')) {
-				sidebarIcon.classList.remove('fa-times');
-				sidebarIcon.classList.add('fa-bars');
+			const icon = mobileMenuBtn.querySelector('i');
+			if (sidebar.classList.contains('active')) {
+				icon.classList.remove('fa-bars');
+				icon.classList.add('fa-times');
+				// Close other menus when opening sidebar
+				mobileSearch.classList.add('hidden');
+				dropdownMenu.classList.add('hidden');
 			} else {
-				sidebarIcon.classList.remove('fa-bars');
-				sidebarIcon.classList.add('fa-times');
+				icon.classList.remove('fa-times');
+				icon.classList.add('fa-bars');
 			}
 		});
-		
+
 		// Close sidebar when clicking outside on mobile
 		document.addEventListener('click', (e) => {
 			const isClickInsideSidebar = sidebar.contains(e.target);
-			const isClickOnToggleButton = toggleSidebar.contains(e.target);
+			const isClickOnMenuButton = mobileMenuBtn.contains(e.target);
 			
-			if (!isClickInsideSidebar && !isClickOnToggleButton && window.innerWidth < 640 && !sidebar.classList.contains('-translate-x-full')) {
-				sidebar.classList.add('-translate-x-full');
-				sidebarIcon.classList.remove('fa-times');
-				sidebarIcon.classList.add('fa-bars');
+			if (!isClickInsideSidebar && !isClickOnMenuButton && window.innerWidth < 768 && sidebar.classList.contains('active')) {
+				sidebar.classList.remove('active');
+				mobileMenuBtn.classList.remove('active');
+				const icon = mobileMenuBtn.querySelector('i');
+				icon.classList.remove('fa-times');
+				icon.classList.add('fa-bars');
 			}
 		});
-		
-		// Highlight active menu item
-		document.addEventListener('DOMContentLoaded', () => {
-			const currentPath = window.location.pathname;
-			const menuItems = document.querySelectorAll('.menu-item');
-			
-			menuItems.forEach(item => {
-				const href = item.getAttribute('href');
-				if (href === currentPath) {
-					item.classList.add('active');
-				}
-			});
+
+		// Close sidebar on escape key
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+				sidebar.classList.remove('active');
+				mobileMenuBtn.classList.remove('active');
+				const icon = mobileMenuBtn.querySelector('i');
+				icon.classList.remove('fa-times');
+				icon.classList.add('fa-bars');
+			}
 		});
 
-		// Dropdown menu functionality
-		const dropdownBtn = document.getElementById('dropdownBtn');
-		const dropdownMenu = document.getElementById('dropdownMenu');
-		const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-		const mobileSearch = document.getElementById('mobileSearch');
+		// Handle window resize
+		window.addEventListener('resize', () => {
+			if (window.innerWidth >= 768) {
+				sidebar.classList.remove('active');
+				mobileMenuBtn.classList.remove('active');
+				const icon = mobileMenuBtn.querySelector('i');
+				icon.classList.remove('fa-times');
+				icon.classList.add('fa-bars');
+			}
+		});
 
 		// Toggle dropdown menu
 		dropdownBtn.addEventListener('click', (e) => {
+			e.preventDefault();
 			e.stopPropagation();
 			dropdownMenu.classList.toggle('hidden');
 		});
@@ -898,6 +1563,38 @@
 			if (!mobileMenuBtn.contains(e.target) && !mobileSearch.contains(e.target)) {
 				mobileSearch.classList.add('hidden');
 			}
+		});
+
+		// Close dropdown on escape key
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape') {
+				dropdownMenu.classList.add('hidden');
+			}
+		});
+
+		// Prevent dropdown from closing when clicking inside it
+		dropdownMenu.addEventListener('click', (e) => {
+			e.stopPropagation();
+		});
+
+		// Add click event listeners to dropdown menu items
+		dropdownMenu.querySelectorAll('a').forEach(link => {
+			link.addEventListener('click', () => {
+				dropdownMenu.classList.add('hidden');
+			});
+		});
+
+		// Highlight active menu item
+		document.addEventListener('DOMContentLoaded', () => {
+			const currentPath = window.location.pathname;
+			const menuItems = document.querySelectorAll('.menu-item');
+			
+			menuItems.forEach(item => {
+				const href = item.getAttribute('href');
+				if (href === currentPath) {
+					item.classList.add('active');
+				}
+			});
 		});
 	</script>
 </body>

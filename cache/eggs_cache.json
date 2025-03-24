@@ -120,7 +120,7 @@
         "file_denylist": [],
         "extends": null
       },
-      "startup": "java --add-modules=jdk.incubator.vector -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+      "startup": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
       "script": {
         "privileged": true,
         "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=purpur\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds.all | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r '.builds.latest'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION}/${BUILD_NUMBER}/download\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
@@ -129,7 +129,7 @@
         "extends": null
       },
       "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-24T07:32:28+00:00",
+      "updated_at": "2025-03-24T10:31:29+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -694,6 +694,139 @@
                 "rules": "required|string|max:20",
                 "created_at": "2025-03-20T08:37:04.000000Z",
                 "updated_at": "2025-03-20T08:37:04.000000Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 26,
+      "uuid": "eda1edb7-e40b-48b3-aeb3-a259b24a9221",
+      "name": "Optimized Paper",
+      "nest": 1,
+      "author": "flaxeneel2@gmail.com",
+      "description": "Optimized paper being developed by flaxeneel2. Fork of the original paper egg by parkervcp",
+      "docker_image": "ghcr.io/pterodactyl/yolks:java_8",
+      "docker_images": {
+        "ghcr.io/pterodactyl/yolks:java_8": "ghcr.io/pterodactyl/yolks:java_8",
+        "ghcr.io/pterodactyl/yolks:java_11": "ghcr.io/pterodactyl/yolks:java_11",
+        "ghcr.io/pterodactyl/yolks:java_16": "ghcr.io/pterodactyl/yolks:java_16",
+        "ghcr.io/pterodactyl/yolks:java_17": "ghcr.io/pterodactyl/yolks:java_17"
+      },
+      "config": {
+        "files": {
+          "server.properties": {
+            "parser": "properties",
+            "find": {
+              "server-ip": "0.0.0.0",
+              "server-port": "{{server.build.default.port}}"
+            }
+          }
+        },
+        "startup": {
+          "done": ")! For help, type ",
+          "userInteraction": [
+            "Go to eula.txt for more info."
+          ]
+        },
+        "stop": "stop",
+        "logs": [],
+        "file_denylist": [],
+        "extends": null
+      },
+      "startup": "java -Xms256M -Xmx$(({{SERVER_MEMORY}} - ({{SERVER_MEMORY}}/10)))M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -jar {{SERVER_JARFILE}}",
+      "script": {
+        "privileged": true,
+        "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=paper\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/server.properties\r\nfi\r\n\r\nif [ ! -f paper.yml ]; then\r\n    echo -e \"Downloading MC paper.yml\"\r\n    curl -o paper.yml https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/paper.yml\r\nfi\r\n\r\nif [ ! -f spigot.yml ]; then\r\n    echo -e \"Downloading MC spigot.yml\"\r\n    curl -o spigot.yml https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/spigot.yml\r\nfi\r\n\r\nif [ ! -f bukkit.yml ]; then\r\n    echo -e \"Downloading MC bukkit.yml\"\r\n    curl -o bukkit.yml https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/bukkit.yml\r\nfi",
+        "entry": "ash",
+        "container": "ghcr.io/pterodactyl/installers:alpine",
+        "extends": null
+      },
+      "created_at": "2025-03-24T13:30:38+00:00",
+      "updated_at": "2025-03-24T13:30:38+00:00",
+      "relationships": {
+        "variables": {
+          "object": "list",
+          "data": [
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 138,
+                "egg_id": 26,
+                "name": "Minecraft Version",
+                "description": "The version of minecraft to download. \r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
+                "env_variable": "MINECRAFT_VERSION",
+                "default_value": "1.8.8",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string|max:20",
+                "created_at": "2025-03-24T13:30:38.000000Z",
+                "updated_at": "2025-03-24T13:30:38.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 139,
+                "egg_id": 26,
+                "name": "Server Jar File",
+                "description": "The name of the server jarfile to run the server with.",
+                "env_variable": "SERVER_JARFILE",
+                "default_value": "server.jar",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|string|max:20",
+                "created_at": "2025-03-24T13:30:38.000000Z",
+                "updated_at": "2025-03-24T13:30:38.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 140,
+                "egg_id": 26,
+                "name": "Download Path",
+                "description": "A URL to use to download a server.jar rather than the ones in the install script. This is not user viewable.",
+                "env_variable": "DL_PATH",
+                "default_value": "",
+                "user_viewable": false,
+                "user_editable": false,
+                "rules": "nullable|string",
+                "created_at": "2025-03-24T13:30:38.000000Z",
+                "updated_at": "2025-03-24T13:30:38.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 141,
+                "egg_id": 26,
+                "name": "Build Number",
+                "description": "The build number for the paper release.\r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
+                "env_variable": "BUILD_NUMBER",
+                "default_value": "latest",
+                "user_viewable": true,
+                "user_editable": false,
+                "rules": "required|string|max:20",
+                "created_at": "2025-03-24T13:30:38.000000Z",
+                "updated_at": "2025-03-24T13:30:38.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 142,
+                "egg_id": 26,
+                "name": "Smart startup",
+                "description": "Compensate for jvm overhead",
+                "env_variable": "SMART_STARTUP",
+                "default_value": "true",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|string|max:20",
+                "created_at": "2025-03-24T13:30:38.000000Z",
+                "updated_at": "2025-03-24T13:30:38.000000Z"
               }
             }
           ]
@@ -2662,6 +2795,177 @@
                 "rules": "nullable|string|max:64",
                 "created_at": "2025-03-20T09:00:13.000000Z",
                 "updated_at": "2025-03-20T09:00:13.000000Z"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "8": [
+    {
+      "id": 25,
+      "uuid": "05b74331-dab4-4276-8e09-671cc9f01b8d",
+      "name": "LumenWEB (BETA)",
+      "nest": 8,
+      "author": "david@david1117.dev",
+      "description": "Easily set up websites using LumenWEB.",
+      "docker_image": "ghcr.io/david1117dev/lumenweb:1.0-beta",
+      "docker_images": {
+        "V1.0": "ghcr.io/david1117dev/lumenweb:1.0-beta"
+      },
+      "config": {
+        "files": {},
+        "startup": {
+          "done": [
+            "Starting LumenWEB"
+          ]
+        },
+        "stop": "^C^C",
+        "logs": [],
+        "file_denylist": [],
+        "extends": null
+      },
+      "startup": "# Powered by LumenWEB",
+      "script": {
+        "privileged": true,
+        "install": null,
+        "entry": "ash",
+        "container": "alpine:3.4",
+        "extends": null
+      },
+      "created_at": "2025-03-24T11:35:26+00:00",
+      "updated_at": "2025-03-24T11:35:26+00:00",
+      "relationships": {
+        "variables": {
+          "object": "list",
+          "data": [
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 130,
+                "egg_id": 25,
+                "name": "Website Domain",
+                "description": "Your website's domain name. Ensure a CNAME record points to web.lumenvm.cloud. You can put multiple domains separated by a comma. Make sure you enable this in the domain mode variable.",
+                "env_variable": "DOMAIN",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-24T11:35:26.000000Z",
+                "updated_at": "2025-03-24T11:35:26.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 131,
+                "egg_id": 25,
+                "name": "Website root",
+                "description": "The webroot directory for your website. This must be in /home/container/.",
+                "env_variable": "WEBROOT",
+                "default_value": "/home/container",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|string|starts_with:/home/container",
+                "created_at": "2025-03-24T11:35:26.000000Z",
+                "updated_at": "2025-03-24T11:35:26.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 132,
+                "egg_id": 25,
+                "name": "Webserver Software",
+                "description": "Select the software to run your web server.",
+                "env_variable": "SOFTWARE",
+                "default_value": "php 8.4",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|in:php 8.4,php 8.3,php 8.2,php 8.1,php 8.0,php 7.4,python,vercel/serve,dotnet 7,dotnet 8,WordPress,Astro,NextJS,custom",
+                "created_at": "2025-03-24T11:35:26.000000Z",
+                "updated_at": "2025-03-24T11:35:26.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 133,
+                "egg_id": 25,
+                "name": "Domain mode",
+                "description": "Select the mode of domain to use. If you select 'normal', all domains will be pointing to one index file. Instead, 'multi' will create separate directories for each domain.",
+                "env_variable": "DOMAIN_MODE",
+                "default_value": "disabled",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|in:disabled,normal,multi",
+                "created_at": "2025-03-24T11:35:26.000000Z",
+                "updated_at": "2025-03-24T11:35:26.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 134,
+                "egg_id": 25,
+                "name": "Custom command",
+                "description": "Enter the custom command to run. This only works if the software is set to \"custom\"",
+                "env_variable": "CUSTOM_COMMAND",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-24T11:35:26.000000Z",
+                "updated_at": "2025-03-24T11:35:26.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 135,
+                "egg_id": 25,
+                "name": "Dotnet .dll file",
+                "description": "Specify the path to the .NET DLL to run your application.",
+                "env_variable": "DOTNET_DLL",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-24T11:35:26.000000Z",
+                "updated_at": "2025-03-24T11:35:26.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 136,
+                "egg_id": 25,
+                "name": "(ADMIN) Public IP Address",
+                "description": "Overwrite the public IP address, edit only IF YOU KNOW WHAT ARE YOU DOING.",
+                "env_variable": "PUBLIC_IP",
+                "default_value": "",
+                "user_viewable": false,
+                "user_editable": false,
+                "rules": "nullable|ipv4",
+                "created_at": "2025-03-24T11:35:26.000000Z",
+                "updated_at": "2025-03-24T11:35:26.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 137,
+                "egg_id": 25,
+                "name": "(ADMIN) Debug",
+                "description": "Debug some of the softwares. There is no need to enable this unless you are hunting errors.",
+                "env_variable": "DEBUG",
+                "default_value": "0",
+                "user_viewable": false,
+                "user_editable": false,
+                "rules": "required|boolean",
+                "created_at": "2025-03-24T11:35:26.000000Z",
+                "updated_at": "2025-03-24T11:35:26.000000Z"
               }
             }
           ]
