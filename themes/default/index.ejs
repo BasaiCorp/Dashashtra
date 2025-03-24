@@ -118,6 +118,10 @@
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       grid-gap: 1.5rem;
     }
+
+    .n-img {
+      border-radius: 50%;
+    }
     
     /* Image loading */
     .lazy-load {
@@ -141,7 +145,7 @@
       <nav class="flex items-center justify-between h-16 md:h-20">
         <!-- Logo -->
         <a href="/" class="flex items-center gap-2">
-          <img src="./assets/img/FlaxyNodes_logo.gif" alt="Flaxy Nodes Logo" class="h-10 w-10">
+          <img src="./assets/img/FlaxyNodes_logo.gif" alt="Flaxy Nodes Logo" class="h-10 w-10 n-img">
           <span class="text-xl font-bold">Flaxy<span class="text-primary-500">Nodes</span></span>
         </a>
         
@@ -150,7 +154,7 @@
           <a href="#features" class="text-gray-300 hover:text-white transition-colors">Features</a>
           <a href="#pricing" class="text-gray-300 hover:text-white transition-colors">Pricing</a>
           <a href="#status" class="text-gray-300 hover:text-white transition-colors">Status</a>
-          <a href="#faq" class="text-gray-300 hover:text-white transition-colors">FAQ</a>
+          <a href="#resources" class="text-gray-300 hover:text-white transition-colors">FAQ</a>
           <a href="#community" class="text-gray-300 hover:text-white transition-colors">Community</a>
           <div class="relative group">
             <button class="text-gray-300 hover:text-white transition-colors flex items-center gap-1">
@@ -854,29 +858,146 @@
               </div>
               
               <!-- Performance Graph -->
-              <div class="h-64 w-full">
-                <!-- Mock Graph Bars -->
-                <div class="flex h-full items-end space-x-2">
-                  <% for(let i = 1; i <= 30; i++) { 
-                    const height = 70 + Math.floor(Math.random() * 25); 
-                    const responseHeight = 60 + Math.floor(Math.random() * 30);
-                    const trafficHeight = 50 + Math.floor(Math.random() * 40);
-                  %>
-                    <div class="flex-1 flex flex-col space-y-1">
-                      <div class="group relative">
-                        <div class="h-<%= height %>% bg-gradient-to-t from-primary-600 to-primary-400 rounded-t opacity-80 group-hover:opacity-100 transition-opacity"></div>
-                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                          <span class="text-xs font-medium"><%= height %>%</span>
-                        </div>
+              <div class="h-64 w-full relative">
+                <!-- Grid lines -->
+                <div class="absolute inset-0">
+                  <div class="h-1/4 border-t border-gray-800 w-full"></div>
+                  <div class="h-1/4 border-t border-gray-800 w-full"></div>
+                  <div class="h-1/4 border-t border-gray-800 w-full"></div>
+                  <div class="h-1/4 border-t border-gray-800 w-full"></div>
+                </div>
+                
+                <!-- Y-Axis Labels -->
+                <div class="absolute left-0 inset-y-0 flex flex-col justify-between text-xs text-gray-500 py-2">
+                  <span>100%</span>
+                  <span>75%</span>
+                  <span>50%</span>
+                  <span>25%</span>
+                  <span>0%</span>
+                </div>
+                
+                <!-- Line Graph SVG -->
+                <svg class="absolute inset-0 h-full w-full pl-8" viewBox="0 0 1000 300" preserveAspectRatio="none">
+                  <!-- Uptime Line -->
+                  <path 
+                    d="M0,30 C20,25 40,32 60,28 C80,24 100,30 120,32 C140,34 160,30 180,25 C200,20 220,15 240,18 C260,21 280,30 300,35 C320,40 340,38 360,35 C380,32 400,30 420,35 C440,40 460,45 480,42 C500,39 520,30 540,28 C560,26 580,30 600,35 C620,40 640,45 660,40 C680,35 700,25 720,30 C740,35 760,45 780,40 C800,35 820,25 840,20 C860,15 880,25 900,30 C920,35 940,38 960,35 C980,32 1000,25 1000,25" 
+                    fill="none" 
+                    stroke="#6366f1" 
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  
+                  <!-- Response Time Line -->
+                  <path 
+                    d="M0,60 C20,65 40,70 60,65 C80,60 100,50 120,55 C140,60 160,70 180,75 C200,80 220,85 240,80 C260,75 280,65 300,60 C320,55 340,60 360,65 C380,70 400,75 420,70 C440,65 460,55 480,60 C500,65 520,75 540,80 C560,85 580,80 600,75 C620,70 640,60 660,65 C680,70 700,80 720,75 C740,70 760,60 780,65 C800,70 820,80 840,85 C860,90 880,85 900,80 C920,75 940,65 960,70 C980,75 1000,80 1000,80" 
+                    fill="none" 
+                    stroke="#a855f7" 
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  
+                  <!-- Traffic Line -->
+                  <path 
+                    d="M0,100 C20,105 40,95 60,100 C80,105 100,115 120,110 C140,105 160,95 180,90 C200,85 220,90 240,95 C260,100 280,110 300,105 C320,100 340,90 360,95 C380,100 400,110 420,105 C440,100 460,90 480,95 C500,100 520,110 540,105 C560,100 580,90 600,95 C620,100 640,110 660,105 C680,100 700,90 720,95 C740,100 760,110 780,105 C800,100 820,90 840,85 C860,80 880,90 900,95 C920,100 940,110 960,105 C980,100 1000,95 1000,95" 
+                    fill="none" 
+                    stroke="#14b8a6" 
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  
+                  <!-- Data Points - Uptime -->
+                  <g class="data-points uptime-points">
+                    <circle cx="0" cy="30" r="4" fill="#6366f1" />
+                    <circle cx="60" cy="28" r="4" fill="#6366f1" />
+                    <circle cx="120" cy="32" r="4" fill="#6366f1" />
+                    <circle cx="180" cy="25" r="4" fill="#6366f1" />
+                    <circle cx="240" cy="18" r="4" fill="#6366f1" />
+                    <circle cx="300" cy="35" r="4" fill="#6366f1" />
+                    <circle cx="360" cy="35" r="4" fill="#6366f1" />
+                    <circle cx="420" cy="35" r="4" fill="#6366f1" />
+                    <circle cx="480" cy="42" r="4" fill="#6366f1" />
+                    <circle cx="540" cy="28" r="4" fill="#6366f1" />
+                    <circle cx="600" cy="35" r="4" fill="#6366f1" />
+                    <circle cx="660" cy="40" r="4" fill="#6366f1" />
+                    <circle cx="720" cy="30" r="4" fill="#6366f1" />
+                    <circle cx="780" cy="40" r="4" fill="#6366f1" />
+                    <circle cx="840" cy="20" r="4" fill="#6366f1" />
+                    <circle cx="900" cy="30" r="4" fill="#6366f1" />
+                    <circle cx="960" cy="35" r="4" fill="#6366f1" />
+                    <circle cx="1000" cy="25" r="4" fill="#6366f1" />
+                  </g>
+                  
+                  <!-- Data Points - Response -->
+                  <g class="data-points response-points">
+                    <circle cx="0" cy="60" r="4" fill="#a855f7" />
+                    <circle cx="60" cy="65" r="4" fill="#a855f7" />
+                    <circle cx="120" cy="55" r="4" fill="#a855f7" />
+                    <circle cx="180" cy="75" r="4" fill="#a855f7" />
+                    <circle cx="240" cy="80" r="4" fill="#a855f7" />
+                    <circle cx="300" cy="60" r="4" fill="#a855f7" />
+                    <circle cx="360" cy="65" r="4" fill="#a855f7" />
+                    <circle cx="420" cy="70" r="4" fill="#a855f7" />
+                    <circle cx="480" cy="60" r="4" fill="#a855f7" />
+                    <circle cx="540" cy="80" r="4" fill="#a855f7" />
+                    <circle cx="600" cy="75" r="4" fill="#a855f7" />
+                    <circle cx="660" cy="65" r="4" fill="#a855f7" />
+                    <circle cx="720" cy="75" r="4" fill="#a855f7" />
+                    <circle cx="780" cy="65" r="4" fill="#a855f7" />
+                    <circle cx="840" cy="85" r="4" fill="#a855f7" />
+                    <circle cx="900" cy="80" r="4" fill="#a855f7" />
+                    <circle cx="960" cy="70" r="4" fill="#a855f7" />
+                    <circle cx="1000" cy="80" r="4" fill="#a855f7" />
+                  </g>
+                  
+                  <!-- Data Points - Traffic -->
+                  <g class="data-points traffic-points">
+                    <circle cx="0" cy="100" r="4" fill="#14b8a6" />
+                    <circle cx="60" cy="100" r="4" fill="#14b8a6" />
+                    <circle cx="120" cy="110" r="4" fill="#14b8a6" />
+                    <circle cx="180" cy="90" r="4" fill="#14b8a6" />
+                    <circle cx="240" cy="95" r="4" fill="#14b8a6" />
+                    <circle cx="300" cy="105" r="4" fill="#14b8a6" />
+                    <circle cx="360" cy="95" r="4" fill="#14b8a6" />
+                    <circle cx="420" cy="105" r="4" fill="#14b8a6" />
+                    <circle cx="480" cy="95" r="4" fill="#14b8a6" />
+                    <circle cx="540" cy="105" r="4" fill="#14b8a6" />
+                    <circle cx="600" cy="95" r="4" fill="#14b8a6" />
+                    <circle cx="660" cy="105" r="4" fill="#14b8a6" />
+                    <circle cx="720" cy="95" r="4" fill="#14b8a6" />
+                    <circle cx="780" cy="105" r="4" fill="#14b8a6" />
+                    <circle cx="840" cy="85" r="4" fill="#14b8a6" />
+                    <circle cx="900" cy="95" r="4" fill="#14b8a6" />
+                    <circle cx="960" cy="105" r="4" fill="#14b8a6" />
+                    <circle cx="1000" cy="95" r="4" fill="#14b8a6" />
+                  </g>
+                </svg>
+                
+                <!-- Hover Tooltip Container -->
+                <div class="absolute inset-0 pointer-events-none z-10" id="graph-tooltip">
+                  <div class="hidden absolute bg-dark-base border border-dark-lighter rounded-md shadow-lg p-2 transform -translate-x-1/2 -translate-y-full">
+                    <div class="text-xs">
+                      <div class="font-semibold mb-1">April 15, 2023</div>
+                      <div class="flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-primary-400 mr-1"></span>
+                        <span>Uptime: 99.8%</span>
                       </div>
-                      <div class="h-<%= responseHeight %>% bg-gradient-to-t from-purple-600 to-purple-400 rounded-t opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                      <div class="h-<%= trafficHeight %>% bg-gradient-to-t from-teal-600 to-teal-400 rounded-t opacity-60 group-hover:opacity-80 transition-opacity"></div>
+                      <div class="flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-purple-400 mr-1"></span>
+                        <span>Response: 22ms</span>
+                      </div>
+                      <div class="flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-teal-400 mr-1"></span>
+                        <span>Traffic: 1.2TB</span>
+                      </div>
                     </div>
-                  <% } %>
+                  </div>
                 </div>
                 
                 <!-- X-Axis Labels -->
-                <div class="flex justify-between mt-4 text-xs text-gray-500">
+                <div class="flex justify-between text-xs text-gray-500 mt-2 pl-8">
                   <span>Apr 1</span>
                   <span>Apr 10</span>
                   <span>Apr 20</span>
@@ -1118,6 +1239,18 @@
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                     </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
                   </div>
                   <p class="text-gray-300 italic">"Flaxy Nodes has been a game-changer for our business. The performance is outstanding, and the customer support team is always responsive and helpful. We've never experienced any significant downtime."</p>
                 </div>
@@ -1161,6 +1294,15 @@
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                     </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
                   </div>
                   <p class="text-gray-300 italic">"We migrated from another provider, and the difference is night and day. The servers are lightning fast, and the control panel is intuitive. Best hosting decision we've made."</p>
                 </div>
@@ -1189,6 +1331,15 @@
               <div class="relative z-10">
                 <div class="mb-6">
                   <div class="flex text-yellow-400 mb-3">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                     </svg>
@@ -1630,7 +1781,7 @@
           <!-- Company Info -->
           <div>
             <a href="/" class="flex items-center mb-6">
-              <img src="/img/logo-white.svg" alt="Flaxy Nodes" class="h-8">
+              <img src="./assets/img/FlaxyNodes_logo.gif" alt="Flaxy Nodes" class="h-8">
             </a>
             <p class="text-gray-400 mb-6">High-performance cloud hosting optimized for Indian developers. Lightning-fast servers in Mumbai, Delhi, and Bangalore.</p>
             <div class="flex space-x-4">
@@ -1691,7 +1842,7 @@
         
         <div class="pt-8 border-t border-gray-800">
           <div class="flex flex-col md:flex-row md:justify-between items-center">
-            <p class="text-gray-500 text-sm order-2 md:order-1 mt-4 md:mt-0">© 2023 Flaxy Nodes. All rights reserved.</p>
+            <p class="text-gray-500 text-sm order-2 md:order-1 mt-4 md:mt-0">© 2024-2025 Flaxy Nodes. All rights reserved.</p>
             <div class="flex items-center space-x-6 order-1 md:order-2">
               <a href="/legal/privacy" class="text-gray-500 hover:text-gray-400 text-sm">Privacy Policy</a>
               <a href="/legal/terms" class="text-gray-500 hover:text-gray-400 text-sm">Terms of Service</a>
