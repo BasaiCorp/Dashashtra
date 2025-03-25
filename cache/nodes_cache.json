@@ -23,8 +23,8 @@
       "created_at": "2025-03-20T07:56:56+00:00",
       "updated_at": "2025-03-24T14:30:57+00:00",
       "allocated_resources": {
-        "memory": 154490,
-        "disk": 591308
+        "memory": 138106,
+        "disk": 488908
       },
       "relationships": {
         "allocations": {
@@ -214,7 +214,7 @@
                 "alias": "fn-1.flaxynodes.fun",
                 "port": 25580,
                 "notes": null,
-                "assigned": true
+                "assigned": false
               }
             },
             {
@@ -464,7 +464,7 @@
                   "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "MINECRAFT_VERSION": "1.21.3",
+                    "MINECRAFT_VERSION": "1.20.1",
                     "SERVER_JARFILE": "server.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
@@ -473,7 +473,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-24T12:25:40+00:00",
+                "updated_at": "2025-03-24T15:53:07+00:00",
                 "created_at": "2025-03-20T09:30:00+00:00"
               }
             },
@@ -679,54 +679,6 @@
             {
               "object": "server",
               "attributes": {
-                "id": 31,
-                "external_id": null,
-                "uuid": "9b4ef330-bf73-4689-9233-93038cca0f8a",
-                "identifier": "9b4ef330",
-                "name": "PAid Shehe [EXP - 17 May]",
-                "description": "HyperMC",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 16384,
-                  "swap": 0,
-                  "disk": 102400,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": "0",
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 2,
-                  "backups": 2
-                },
-                "user": 10,
-                "node": 1,
-                "allocation": 15,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.21.4",
-                    "SERVER_JARFILE": "server.jar",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "9b4ef330-bf73-4689-9233-93038cca0f8a",
-                    "P_SERVER_ALLOCATION_LIMIT": 2
-                  }
-                },
-                "updated_at": "2025-03-24T09:05:58+00:00",
-                "created_at": "2025-03-20T16:27:50+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
                 "id": 66,
                 "external_id": null,
                 "uuid": "444e3390-741d-4731-8544-1da42b106670",
@@ -855,7 +807,7 @@
                   "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "MINECRAFT_VERSION": "1.21",
+                    "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
@@ -864,7 +816,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-24T14:10:49+00:00",
+                "updated_at": "2025-03-24T17:32:24+00:00",
                 "created_at": "2025-03-23T11:50:04+00:00"
               }
             },
@@ -1153,7 +1105,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-24T14:14:00+00:00",
+                "updated_at": "2025-03-25T03:08:25+00:00",
                 "created_at": "2025-03-23T17:11:50+00:00"
               }
             },
@@ -1383,10 +1335,10 @@
                 "egg": 26,
                 "container": {
                   "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                  "image": "ghcr.io/pterodactyl/yolks:java_8",
+                  "image": "ghcr.io/pterodactyl/yolks:java_17",
                   "installed": 1,
                   "environment": {
-                    "MINECRAFT_VERSION": "1.8.8",
+                    "MINECRAFT_VERSION": "latest",
                     "SERVER_JARFILE": "server.jar",
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
@@ -1397,7 +1349,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-24T14:38:04+00:00",
+                "updated_at": "2025-03-24T16:14:58+00:00",
                 "created_at": "2025-03-24T14:06:45+00:00"
               }
             }
@@ -1430,8 +1382,8 @@
       "created_at": "2025-03-20T08:52:06+00:00",
       "updated_at": "2025-03-20T10:01:58+00:00",
       "allocated_resources": {
-        "memory": 123080,
-        "disk": 467048
+        "memory": 156488,
+        "disk": 633448
       },
       "relationships": {
         "allocations": {
@@ -1709,7 +1661,7 @@
                 "alias": "in.flaxynodes.fun",
                 "port": 3024,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -1731,7 +1683,7 @@
                 "alias": "in.flaxynodes.fun",
                 "port": 3026,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -1742,7 +1694,7 @@
                 "alias": "in.flaxynodes.fun",
                 "port": 3027,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -1885,7 +1837,7 @@
                 "alias": "in.flaxynodes.fun",
                 "port": 3040,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -2849,7 +2801,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-24T14:15:31+00:00",
+                "updated_at": "2025-03-25T03:58:56+00:00",
                 "created_at": "2025-03-20T12:05:28+00:00"
               }
             },
@@ -2947,6 +2899,54 @@
                 },
                 "updated_at": "2025-03-23T07:55:00+00:00",
                 "created_at": "2025-03-20T15:44:31+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 31,
+                "external_id": null,
+                "uuid": "9b4ef330-bf73-4689-9233-93038cca0f8a",
+                "identifier": "9b4ef330",
+                "name": "PAid Shehe [EXP - 17 May]",
+                "description": "HyperMC",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 16384,
+                  "swap": 0,
+                  "disk": 102400,
+                  "io": 500,
+                  "cpu": 0,
+                  "threads": "0",
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 2,
+                  "backups": 2
+                },
+                "user": 10,
+                "node": 2,
+                "allocation": 52,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "1.21",
+                    "SERVER_JARFILE": "server.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "9b4ef330-bf73-4689-9233-93038cca0f8a",
+                    "P_SERVER_ALLOCATION_LIMIT": 2
+                  }
+                },
+                "updated_at": "2025-03-25T03:17:21+00:00",
+                "created_at": "2025-03-20T16:27:50+00:00"
               }
             },
             {
@@ -3507,7 +3507,7 @@
                 "egg": 2,
                 "container": {
                   "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                  "image": "ghcr.io/pterodactyl/yolks:java_8",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
@@ -3519,7 +3519,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-24T11:51:27+00:00",
+                "updated_at": "2025-03-24T15:28:27+00:00",
                 "created_at": "2025-03-24T11:50:48+00:00"
               }
             },
@@ -3552,25 +3552,167 @@
                 "node": 2,
                 "allocation": 48,
                 "nest": 1,
-                "egg": 26,
+                "egg": 2,
                 "container": {
-                  "startup_command": "java -Xms256M -Xmx$(({{SERVER_MEMORY}} - ({{SERVER_MEMORY}}/10)))M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_8",
+                  "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "MINECRAFT_VERSION": "1.8.8",
+                    "MINECRAFT_VERSION": "1.21.3",
                     "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
-                    "SMART_STARTUP": "true",
-                    "STARTUP": "java -Xms256M -Xmx$(({{SERVER_MEMORY}} - ({{SERVER_MEMORY}}/10)))M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -jar {{SERVER_JARFILE}}",
+                    "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
                     "P_SERVER_LOCATION": "India",
                     "P_SERVER_UUID": "f1b46a44-922c-48bb-a8e9-26a3b399cfc7",
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-24T14:00:37+00:00",
+                "updated_at": "2025-03-24T16:28:51+00:00",
                 "created_at": "2025-03-24T13:59:57+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 108,
+                "external_id": null,
+                "uuid": "6888cc67-ad50-483c-b66c-99f6192000a2",
+                "identifier": "6888cc67",
+                "name": "Tonight gamerz exp: 24 april",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 8024,
+                  "swap": 0,
+                  "disk": 24000,
+                  "io": 500,
+                  "cpu": 200,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 0
+                },
+                "user": 7,
+                "node": 2,
+                "allocation": 50,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+                  "image": "ghcr.io/pterodactyl/yolks:java_17",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "1.20.1",
+                    "SERVER_JARFILE": "server.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "6888cc67-ad50-483c-b66c-99f6192000a2",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-24T15:53:22+00:00",
+                "created_at": "2025-03-24T15:38:27+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 109,
+                "external_id": null,
+                "uuid": "0ef757fb-3529-4ea8-8e71-7c9251d567bb",
+                "identifier": "0ef757fb",
+                "name": "MonekyFam's BOOSTER SERVER",
+                "description": "[KEEP BOOSTING THE SERVER TO RENEW PLAN!]",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 6000,
+                  "swap": 0,
+                  "disk": 30000,
+                  "io": 500,
+                  "cpu": 200,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
+                },
+                "user": 74,
+                "node": 2,
+                "allocation": 66,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "1.21.1",
+                    "SERVER_JARFILE": "server.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "0ef757fb-3529-4ea8-8e71-7c9251d567bb",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
+                  }
+                },
+                "updated_at": "2025-03-24T18:11:57+00:00",
+                "created_at": "2025-03-24T16:46:05+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 110,
+                "external_id": null,
+                "uuid": "80121c53-65dc-49ac-bd25-266cbe414d3f",
+                "identifier": "80121c53",
+                "name": "snackop's INVITER SERVER [EXPIRE ON 24 APRIL, 3 INVITES]",
+                "description": "[EXPIRE ON 24 APRIL, 3 INVITES]",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 3000,
+                  "swap": 0,
+                  "disk": 10000,
+                  "io": 500,
+                  "cpu": 100,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
+                },
+                "user": 75,
+                "node": 2,
+                "allocation": 53,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "1.20.1",
+                    "SERVER_JARFILE": "server.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+                    "P_SERVER_LOCATION": "India",
+                    "P_SERVER_UUID": "80121c53-65dc-49ac-bd25-266cbe414d3f",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
+                  }
+                },
+                "updated_at": "2025-03-24T17:44:04+00:00",
+                "created_at": "2025-03-24T17:02:33+00:00"
               }
             }
           ]
@@ -4009,14 +4151,63 @@
                 "alias": "in-2.flaxynodes.fun",
                 "port": 19132,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             }
           ]
         },
         "servers": {
           "object": "list",
-          "data": []
+          "data": [
+            {
+              "object": "server",
+              "attributes": {
+                "id": 107,
+                "external_id": null,
+                "uuid": "1811403c-5421-4c30-9576-38aed456c607",
+                "identifier": "1811403c",
+                "name": "Ninja69",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 0,
+                  "swap": 0,
+                  "disk": 0,
+                  "io": 500,
+                  "cpu": 0,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 0
+                },
+                "user": 66,
+                "node": 7,
+                "allocation": 310,
+                "nest": 1,
+                "egg": 2,
+                "container": {
+                  "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+                    "P_SERVER_LOCATION": "India 2",
+                    "P_SERVER_UUID": "1811403c-5421-4c30-9576-38aed456c607",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-03-24T15:05:32+00:00",
+                "created_at": "2025-03-24T15:03:25+00:00"
+              }
+            }
+          ]
         }
       }
     }

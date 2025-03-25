@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "deploy-commands": "node bot/deploy-commands.js"
+    "deploy-commands": "node bot/deploy-commands.js",
+    "build:css": "tailwindcss -i ./assets/css/tailwind.css -o ./assets/css/styles.css --watch",
+    "build:css:prod": "tailwindcss -i ./assets/css/tailwind.css -o ./assets/css/styles.css --minify",
+    "build": "npm run build:css:prod && node index.js"
   },
   "author": "PrathmeshPro",
   "license": "MIT",
@@ -81,6 +84,9 @@
     "ws": "^8.16.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.3"
+    "autoprefixer": "^10.4.14",
+    "nodemon": "^3.0.3",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.0"
   }
 }

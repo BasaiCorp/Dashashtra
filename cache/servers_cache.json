@@ -307,7 +307,7 @@
         "image": "ghcr.io/pterodactyl/yolks:java_21",
         "installed": 1,
         "environment": {
-          "MINECRAFT_VERSION": "1.21.3",
+          "MINECRAFT_VERSION": "1.20.1",
           "SERVER_JARFILE": "server.jar",
           "BUILD_NUMBER": "latest",
           "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
@@ -316,7 +316,7 @@
           "P_SERVER_ALLOCATION_LIMIT": 0
         }
       },
-      "updated_at": "2025-03-24T12:25:40+00:00",
+      "updated_at": "2025-03-24T15:53:07+00:00",
       "created_at": "2025-03-20T09:30:00+00:00",
       "relationships": {
         "allocations": {
@@ -1350,7 +1350,7 @@
             "root_admin": false,
             "2fa": false,
             "created_at": "2025-03-20T10:55:11+00:00",
-            "updated_at": "2025-03-20T10:55:11+00:00"
+            "updated_at": "2025-03-25T02:47:30+00:00"
           }
         },
         "nest": {
@@ -1493,7 +1493,7 @@
             "root_admin": false,
             "2fa": false,
             "created_at": "2025-03-20T10:55:11+00:00",
-            "updated_at": "2025-03-20T10:55:11+00:00"
+            "updated_at": "2025-03-25T02:47:30+00:00"
           }
         },
         "nest": {
@@ -2180,7 +2180,7 @@
           "P_SERVER_ALLOCATION_LIMIT": 5
         }
       },
-      "updated_at": "2025-03-24T14:15:31+00:00",
+      "updated_at": "2025-03-25T03:58:56+00:00",
       "created_at": "2025-03-20T12:05:28+00:00",
       "relationships": {
         "allocations": {
@@ -2591,8 +2591,8 @@
         "backups": 2
       },
       "user": 10,
-      "node": 1,
-      "allocation": 15,
+      "node": 2,
+      "allocation": 52,
       "nest": 1,
       "egg": 2,
       "container": {
@@ -2600,16 +2600,16 @@
         "image": "ghcr.io/pterodactyl/yolks:java_21",
         "installed": 1,
         "environment": {
-          "MINECRAFT_VERSION": "1.21.4",
+          "MINECRAFT_VERSION": "1.21",
           "SERVER_JARFILE": "server.jar",
           "BUILD_NUMBER": "latest",
           "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-          "P_SERVER_LOCATION": "Germany",
+          "P_SERVER_LOCATION": "India",
           "P_SERVER_UUID": "9b4ef330-bf73-4689-9233-93038cca0f8a",
           "P_SERVER_ALLOCATION_LIMIT": 2
         }
       },
-      "updated_at": "2025-03-24T09:05:58+00:00",
+      "updated_at": "2025-03-25T03:17:21+00:00",
       "created_at": "2025-03-20T16:27:50+00:00",
       "relationships": {
         "allocations": {
@@ -2618,10 +2618,10 @@
             {
               "object": "allocation",
               "attributes": {
-                "id": 15,
-                "ip": "5.231.230.39",
-                "alias": "fn-1.flaxynodes.fun",
-                "port": 25580,
+                "id": 52,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3026,
                 "notes": null,
                 "assigned": true
               }
@@ -3358,7 +3358,7 @@
             "root_admin": false,
             "2fa": false,
             "created_at": "2025-03-20T11:45:48+00:00",
-            "updated_at": "2025-03-24T09:52:33+00:00"
+            "updated_at": "2025-03-24T17:29:50+00:00"
           }
         },
         "nest": {
@@ -3745,7 +3745,7 @@
         "image": "ghcr.io/pterodactyl/yolks:java_21",
         "installed": 1,
         "environment": {
-          "MINECRAFT_VERSION": "1.21",
+          "MINECRAFT_VERSION": "latest",
           "SERVER_JARFILE": "server.jar",
           "BUILD_NUMBER": "latest",
           "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
@@ -3754,7 +3754,7 @@
           "P_SERVER_ALLOCATION_LIMIT": 5
         }
       },
-      "updated_at": "2025-03-24T14:10:49+00:00",
+      "updated_at": "2025-03-24T17:32:24+00:00",
       "created_at": "2025-03-23T11:50:04+00:00",
       "relationships": {
         "allocations": {
@@ -4809,7 +4809,7 @@
           "P_SERVER_ALLOCATION_LIMIT": 5
         }
       },
-      "updated_at": "2025-03-24T14:14:00+00:00",
+      "updated_at": "2025-03-25T03:08:25+00:00",
       "created_at": "2025-03-23T17:11:50+00:00",
       "relationships": {
         "allocations": {
@@ -6244,7 +6244,7 @@
       "egg": 2,
       "container": {
         "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-        "image": "ghcr.io/pterodactyl/yolks:java_8",
+        "image": "ghcr.io/pterodactyl/yolks:java_21",
         "installed": 1,
         "environment": {
           "MINECRAFT_VERSION": "latest",
@@ -6256,7 +6256,7 @@
           "P_SERVER_ALLOCATION_LIMIT": 5
         }
       },
-      "updated_at": "2025-03-24T11:51:27+00:00",
+      "updated_at": "2025-03-24T15:28:27+00:00",
       "created_at": "2025-03-24T11:50:48+00:00",
       "relationships": {
         "allocations": {
@@ -6384,24 +6384,22 @@
       "node": 2,
       "allocation": 48,
       "nest": 1,
-      "egg": 26,
+      "egg": 2,
       "container": {
-        "startup_command": "java -Xms256M -Xmx$(({{SERVER_MEMORY}} - ({{SERVER_MEMORY}}/10)))M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -jar {{SERVER_JARFILE}}",
-        "image": "ghcr.io/pterodactyl/yolks:java_8",
+        "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+        "image": "ghcr.io/pterodactyl/yolks:java_21",
         "installed": 1,
         "environment": {
-          "MINECRAFT_VERSION": "1.8.8",
+          "MINECRAFT_VERSION": "1.21.3",
           "SERVER_JARFILE": "server.jar",
-          "DL_PATH": "",
           "BUILD_NUMBER": "latest",
-          "SMART_STARTUP": "true",
-          "STARTUP": "java -Xms256M -Xmx$(({{SERVER_MEMORY}} - ({{SERVER_MEMORY}}/10)))M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -jar {{SERVER_JARFILE}}",
+          "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
           "P_SERVER_LOCATION": "India",
           "P_SERVER_UUID": "f1b46a44-922c-48bb-a8e9-26a3b399cfc7",
           "P_SERVER_ALLOCATION_LIMIT": 0
         }
       },
-      "updated_at": "2025-03-24T14:00:37+00:00",
+      "updated_at": "2025-03-24T16:28:51+00:00",
       "created_at": "2025-03-24T13:59:57+00:00",
       "relationships": {
         "allocations": {
@@ -6427,14 +6425,14 @@
             "external_id": null,
             "uuid": "ff301055-b557-4993-846f-6eafce872534",
             "username": "rhdhdh",
-            "email": "rocksky1yt69@gmail.com",
+            "email": "rex005852@gmail.com",
             "first_name": "Hdhdhd",
             "last_name": "Premium",
             "language": "en",
             "root_admin": false,
             "2fa": false,
             "created_at": "2025-03-23T13:06:10+00:00",
-            "updated_at": "2025-03-23T13:06:10+00:00"
+            "updated_at": "2025-03-24T16:35:01+00:00"
           }
         },
         "nest": {
@@ -6452,18 +6450,20 @@
         "egg": {
           "object": "egg",
           "attributes": {
-            "id": 26,
-            "uuid": "eda1edb7-e40b-48b3-aeb3-a259b24a9221",
-            "name": "Optimized Paper",
+            "id": 2,
+            "uuid": "f1f12e5b-db29-47e5-958a-e9a87948cd57",
+            "name": "Purpur",
             "nest": 1,
-            "author": "flaxeneel2@gmail.com",
-            "description": "Optimized paper being developed by flaxeneel2. Fork of the original paper egg by parkervcp",
+            "author": "parker@pterodactyl.io",
+            "description": "A drop-in replacement for Paper servers designed for configurability, and new fun and exciting gameplay features.",
             "docker_image": "ghcr.io/pterodactyl/yolks:java_8",
             "docker_images": {
-              "ghcr.io/pterodactyl/yolks:java_8": "ghcr.io/pterodactyl/yolks:java_8",
-              "ghcr.io/pterodactyl/yolks:java_11": "ghcr.io/pterodactyl/yolks:java_11",
-              "ghcr.io/pterodactyl/yolks:java_16": "ghcr.io/pterodactyl/yolks:java_16",
-              "ghcr.io/pterodactyl/yolks:java_17": "ghcr.io/pterodactyl/yolks:java_17"
+              "Java 8": "ghcr.io/pterodactyl/yolks:java_8",
+              "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
+              "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+              "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
+              "Java 18": "ghcr.io/pterodactyl/yolks:java_18",
+              "Java 21": "ghcr.io/pterodactyl/yolks:java_21"
             },
             "config": {
               "files": {
@@ -6476,26 +6476,23 @@
                 }
               },
               "startup": {
-                "done": ")! For help, type ",
-                "userInteraction": [
-                  "Go to eula.txt for more info."
-                ]
+                "done": ")! For help, type "
               },
               "stop": "stop",
               "logs": [],
               "file_denylist": [],
               "extends": null
             },
-            "startup": "java -Xms256M -Xmx$(({{SERVER_MEMORY}} - ({{SERVER_MEMORY}}/10)))M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -jar {{SERVER_JARFILE}}",
+            "startup": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
             "script": {
               "privileged": true,
-              "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=paper\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/server.properties\r\nfi\r\n\r\nif [ ! -f paper.yml ]; then\r\n    echo -e \"Downloading MC paper.yml\"\r\n    curl -o paper.yml https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/paper.yml\r\nfi\r\n\r\nif [ ! -f spigot.yml ]; then\r\n    echo -e \"Downloading MC spigot.yml\"\r\n    curl -o spigot.yml https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/spigot.yml\r\nfi\r\n\r\nif [ ! -f bukkit.yml ]; then\r\n    echo -e \"Downloading MC bukkit.yml\"\r\n    curl -o bukkit.yml https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/bukkit.yml\r\nfi",
+              "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=purpur\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds.all | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r '.builds.latest'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION}/${BUILD_NUMBER}/download\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
               "entry": "ash",
-              "container": "ghcr.io/pterodactyl/installers:alpine",
+              "container": "ghcr.io/parkervcp/installers:alpine",
               "extends": null
             },
-            "created_at": "2025-03-24T13:30:38+00:00",
-            "updated_at": "2025-03-24T13:30:38+00:00"
+            "created_at": "2025-03-20T07:43:02+00:00",
+            "updated_at": "2025-03-24T10:31:29+00:00"
           }
         }
       }
@@ -6533,10 +6530,10 @@
       "egg": 26,
       "container": {
         "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-        "image": "ghcr.io/pterodactyl/yolks:java_8",
+        "image": "ghcr.io/pterodactyl/yolks:java_17",
         "installed": 1,
         "environment": {
-          "MINECRAFT_VERSION": "1.8.8",
+          "MINECRAFT_VERSION": "latest",
           "SERVER_JARFILE": "server.jar",
           "DL_PATH": "",
           "BUILD_NUMBER": "latest",
@@ -6547,7 +6544,7 @@
           "P_SERVER_ALLOCATION_LIMIT": 0
         }
       },
-      "updated_at": "2025-03-24T14:38:04+00:00",
+      "updated_at": "2025-03-24T16:14:58+00:00",
       "created_at": "2025-03-24T14:06:45+00:00",
       "relationships": {
         "allocations": {
@@ -6642,6 +6639,578 @@
             },
             "created_at": "2025-03-24T13:30:38+00:00",
             "updated_at": "2025-03-24T13:30:38+00:00"
+          }
+        }
+      }
+    }
+  },
+  {
+    "object": "server",
+    "attributes": {
+      "id": 107,
+      "external_id": null,
+      "uuid": "1811403c-5421-4c30-9576-38aed456c607",
+      "identifier": "1811403c",
+      "name": "Ninja69",
+      "description": "",
+      "status": null,
+      "suspended": false,
+      "limits": {
+        "memory": 0,
+        "swap": 0,
+        "disk": 0,
+        "io": 500,
+        "cpu": 0,
+        "threads": null,
+        "oom_disabled": true
+      },
+      "feature_limits": {
+        "databases": 0,
+        "allocations": 0,
+        "backups": 0
+      },
+      "user": 66,
+      "node": 7,
+      "allocation": 310,
+      "nest": 1,
+      "egg": 2,
+      "container": {
+        "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+        "image": "ghcr.io/pterodactyl/yolks:java_21",
+        "installed": 1,
+        "environment": {
+          "MINECRAFT_VERSION": "latest",
+          "SERVER_JARFILE": "server.jar",
+          "BUILD_NUMBER": "latest",
+          "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+          "P_SERVER_LOCATION": "India 2",
+          "P_SERVER_UUID": "1811403c-5421-4c30-9576-38aed456c607",
+          "P_SERVER_ALLOCATION_LIMIT": 0
+        }
+      },
+      "updated_at": "2025-03-24T15:05:32+00:00",
+      "created_at": "2025-03-24T15:03:25+00:00",
+      "relationships": {
+        "allocations": {
+          "object": "list",
+          "data": [
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 310,
+                "ip": "5.254.5.13",
+                "alias": "in-2.flaxynodes.fun",
+                "port": 19132,
+                "notes": null,
+                "assigned": true
+              }
+            }
+          ]
+        },
+        "user": {
+          "object": "user",
+          "attributes": {
+            "id": 66,
+            "external_id": null,
+            "uuid": "42585f9a-60c6-4120-a104-1e65e29234f2",
+            "username": "dnp.adil",
+            "email": "dnp.adil999@gmail.com",
+            "first_name": "dnp.adil",
+            "last_name": "dnp.adil",
+            "language": "en",
+            "root_admin": false,
+            "2fa": false,
+            "created_at": "2025-03-24T09:39:12+00:00",
+            "updated_at": "2025-03-24T09:39:12+00:00"
+          }
+        },
+        "nest": {
+          "object": "nest",
+          "attributes": {
+            "id": 1,
+            "uuid": "07f95a0d-9bde-4b24-8f71-113f610d7c02",
+            "author": "support@pterodactyl.io",
+            "name": "Minecraft",
+            "description": "Minecraft - the classic game from Mojang. With support for Vanilla MC, Spigot, and many others!",
+            "created_at": "2025-03-20T07:43:02+00:00",
+            "updated_at": "2025-03-20T07:43:02+00:00"
+          }
+        },
+        "egg": {
+          "object": "egg",
+          "attributes": {
+            "id": 2,
+            "uuid": "f1f12e5b-db29-47e5-958a-e9a87948cd57",
+            "name": "Purpur",
+            "nest": 1,
+            "author": "parker@pterodactyl.io",
+            "description": "A drop-in replacement for Paper servers designed for configurability, and new fun and exciting gameplay features.",
+            "docker_image": "ghcr.io/pterodactyl/yolks:java_8",
+            "docker_images": {
+              "Java 8": "ghcr.io/pterodactyl/yolks:java_8",
+              "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
+              "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+              "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
+              "Java 18": "ghcr.io/pterodactyl/yolks:java_18",
+              "Java 21": "ghcr.io/pterodactyl/yolks:java_21"
+            },
+            "config": {
+              "files": {
+                "server.properties": {
+                  "parser": "properties",
+                  "find": {
+                    "server-ip": "0.0.0.0",
+                    "server-port": "{{server.build.default.port}}"
+                  }
+                }
+              },
+              "startup": {
+                "done": ")! For help, type "
+              },
+              "stop": "stop",
+              "logs": [],
+              "file_denylist": [],
+              "extends": null
+            },
+            "startup": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+            "script": {
+              "privileged": true,
+              "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=purpur\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds.all | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r '.builds.latest'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION}/${BUILD_NUMBER}/download\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
+              "entry": "ash",
+              "container": "ghcr.io/parkervcp/installers:alpine",
+              "extends": null
+            },
+            "created_at": "2025-03-20T07:43:02+00:00",
+            "updated_at": "2025-03-24T10:31:29+00:00"
+          }
+        }
+      }
+    }
+  },
+  {
+    "object": "server",
+    "attributes": {
+      "id": 108,
+      "external_id": null,
+      "uuid": "6888cc67-ad50-483c-b66c-99f6192000a2",
+      "identifier": "6888cc67",
+      "name": "Tonight gamerz exp: 24 april",
+      "description": "",
+      "status": null,
+      "suspended": false,
+      "limits": {
+        "memory": 8024,
+        "swap": 0,
+        "disk": 24000,
+        "io": 500,
+        "cpu": 200,
+        "threads": null,
+        "oom_disabled": true
+      },
+      "feature_limits": {
+        "databases": 0,
+        "allocations": 0,
+        "backups": 0
+      },
+      "user": 7,
+      "node": 2,
+      "allocation": 50,
+      "nest": 1,
+      "egg": 2,
+      "container": {
+        "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+        "image": "ghcr.io/pterodactyl/yolks:java_17",
+        "installed": 1,
+        "environment": {
+          "MINECRAFT_VERSION": "1.20.1",
+          "SERVER_JARFILE": "server.jar",
+          "BUILD_NUMBER": "latest",
+          "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+          "P_SERVER_LOCATION": "India",
+          "P_SERVER_UUID": "6888cc67-ad50-483c-b66c-99f6192000a2",
+          "P_SERVER_ALLOCATION_LIMIT": 0
+        }
+      },
+      "updated_at": "2025-03-24T15:53:22+00:00",
+      "created_at": "2025-03-24T15:38:27+00:00",
+      "relationships": {
+        "allocations": {
+          "object": "list",
+          "data": [
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 50,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3024,
+                "notes": null,
+                "assigned": true
+              }
+            }
+          ]
+        },
+        "user": {
+          "object": "user",
+          "attributes": {
+            "id": 7,
+            "external_id": null,
+            "uuid": "54f5f6f2-8f59-4e10-828c-6f337eda4cdd",
+            "username": "tonightgamerz",
+            "email": "server.backup2134@gmail.com",
+            "first_name": "PREMIUM",
+            "last_name": "Tonight",
+            "language": "en",
+            "root_admin": false,
+            "2fa": false,
+            "created_at": "2025-03-20T09:21:02+00:00",
+            "updated_at": "2025-03-20T10:29:36+00:00"
+          }
+        },
+        "nest": {
+          "object": "nest",
+          "attributes": {
+            "id": 1,
+            "uuid": "07f95a0d-9bde-4b24-8f71-113f610d7c02",
+            "author": "support@pterodactyl.io",
+            "name": "Minecraft",
+            "description": "Minecraft - the classic game from Mojang. With support for Vanilla MC, Spigot, and many others!",
+            "created_at": "2025-03-20T07:43:02+00:00",
+            "updated_at": "2025-03-20T07:43:02+00:00"
+          }
+        },
+        "egg": {
+          "object": "egg",
+          "attributes": {
+            "id": 2,
+            "uuid": "f1f12e5b-db29-47e5-958a-e9a87948cd57",
+            "name": "Purpur",
+            "nest": 1,
+            "author": "parker@pterodactyl.io",
+            "description": "A drop-in replacement for Paper servers designed for configurability, and new fun and exciting gameplay features.",
+            "docker_image": "ghcr.io/pterodactyl/yolks:java_8",
+            "docker_images": {
+              "Java 8": "ghcr.io/pterodactyl/yolks:java_8",
+              "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
+              "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+              "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
+              "Java 18": "ghcr.io/pterodactyl/yolks:java_18",
+              "Java 21": "ghcr.io/pterodactyl/yolks:java_21"
+            },
+            "config": {
+              "files": {
+                "server.properties": {
+                  "parser": "properties",
+                  "find": {
+                    "server-ip": "0.0.0.0",
+                    "server-port": "{{server.build.default.port}}"
+                  }
+                }
+              },
+              "startup": {
+                "done": ")! For help, type "
+              },
+              "stop": "stop",
+              "logs": [],
+              "file_denylist": [],
+              "extends": null
+            },
+            "startup": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+            "script": {
+              "privileged": true,
+              "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=purpur\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds.all | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r '.builds.latest'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION}/${BUILD_NUMBER}/download\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
+              "entry": "ash",
+              "container": "ghcr.io/parkervcp/installers:alpine",
+              "extends": null
+            },
+            "created_at": "2025-03-20T07:43:02+00:00",
+            "updated_at": "2025-03-24T10:31:29+00:00"
+          }
+        }
+      }
+    }
+  },
+  {
+    "object": "server",
+    "attributes": {
+      "id": 109,
+      "external_id": null,
+      "uuid": "0ef757fb-3529-4ea8-8e71-7c9251d567bb",
+      "identifier": "0ef757fb",
+      "name": "MonekyFam's BOOSTER SERVER",
+      "description": "[KEEP BOOSTING THE SERVER TO RENEW PLAN!]",
+      "status": null,
+      "suspended": false,
+      "limits": {
+        "memory": 6000,
+        "swap": 0,
+        "disk": 30000,
+        "io": 500,
+        "cpu": 200,
+        "threads": null,
+        "oom_disabled": true
+      },
+      "feature_limits": {
+        "databases": 5,
+        "allocations": 5,
+        "backups": 5
+      },
+      "user": 74,
+      "node": 2,
+      "allocation": 66,
+      "nest": 1,
+      "egg": 2,
+      "container": {
+        "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+        "image": "ghcr.io/pterodactyl/yolks:java_21",
+        "installed": 1,
+        "environment": {
+          "MINECRAFT_VERSION": "1.21.1",
+          "SERVER_JARFILE": "server.jar",
+          "BUILD_NUMBER": "latest",
+          "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+          "P_SERVER_LOCATION": "India",
+          "P_SERVER_UUID": "0ef757fb-3529-4ea8-8e71-7c9251d567bb",
+          "P_SERVER_ALLOCATION_LIMIT": 5
+        }
+      },
+      "updated_at": "2025-03-24T18:11:57+00:00",
+      "created_at": "2025-03-24T16:46:05+00:00",
+      "relationships": {
+        "allocations": {
+          "object": "list",
+          "data": [
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 66,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3040,
+                "notes": null,
+                "assigned": true
+              }
+            }
+          ]
+        },
+        "user": {
+          "object": "user",
+          "attributes": {
+            "id": 74,
+            "external_id": null,
+            "uuid": "243984f2-3aad-48b6-b7dc-60451259c1c8",
+            "username": "monkeyfam",
+            "email": "damnyt88@gmail.com",
+            "first_name": "BOOSTER",
+            "last_name": "MonkeyFam",
+            "language": "en",
+            "root_admin": false,
+            "2fa": false,
+            "created_at": "2025-03-24T16:44:20+00:00",
+            "updated_at": "2025-03-24T16:44:20+00:00"
+          }
+        },
+        "nest": {
+          "object": "nest",
+          "attributes": {
+            "id": 1,
+            "uuid": "07f95a0d-9bde-4b24-8f71-113f610d7c02",
+            "author": "support@pterodactyl.io",
+            "name": "Minecraft",
+            "description": "Minecraft - the classic game from Mojang. With support for Vanilla MC, Spigot, and many others!",
+            "created_at": "2025-03-20T07:43:02+00:00",
+            "updated_at": "2025-03-20T07:43:02+00:00"
+          }
+        },
+        "egg": {
+          "object": "egg",
+          "attributes": {
+            "id": 2,
+            "uuid": "f1f12e5b-db29-47e5-958a-e9a87948cd57",
+            "name": "Purpur",
+            "nest": 1,
+            "author": "parker@pterodactyl.io",
+            "description": "A drop-in replacement for Paper servers designed for configurability, and new fun and exciting gameplay features.",
+            "docker_image": "ghcr.io/pterodactyl/yolks:java_8",
+            "docker_images": {
+              "Java 8": "ghcr.io/pterodactyl/yolks:java_8",
+              "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
+              "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+              "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
+              "Java 18": "ghcr.io/pterodactyl/yolks:java_18",
+              "Java 21": "ghcr.io/pterodactyl/yolks:java_21"
+            },
+            "config": {
+              "files": {
+                "server.properties": {
+                  "parser": "properties",
+                  "find": {
+                    "server-ip": "0.0.0.0",
+                    "server-port": "{{server.build.default.port}}"
+                  }
+                }
+              },
+              "startup": {
+                "done": ")! For help, type "
+              },
+              "stop": "stop",
+              "logs": [],
+              "file_denylist": [],
+              "extends": null
+            },
+            "startup": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+            "script": {
+              "privileged": true,
+              "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=purpur\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds.all | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r '.builds.latest'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION}/${BUILD_NUMBER}/download\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
+              "entry": "ash",
+              "container": "ghcr.io/parkervcp/installers:alpine",
+              "extends": null
+            },
+            "created_at": "2025-03-20T07:43:02+00:00",
+            "updated_at": "2025-03-24T10:31:29+00:00"
+          }
+        }
+      }
+    }
+  },
+  {
+    "object": "server",
+    "attributes": {
+      "id": 110,
+      "external_id": null,
+      "uuid": "80121c53-65dc-49ac-bd25-266cbe414d3f",
+      "identifier": "80121c53",
+      "name": "snackop's INVITER SERVER [EXPIRE ON 24 APRIL, 3 INVITES]",
+      "description": "[EXPIRE ON 24 APRIL, 3 INVITES]",
+      "status": null,
+      "suspended": false,
+      "limits": {
+        "memory": 3000,
+        "swap": 0,
+        "disk": 10000,
+        "io": 500,
+        "cpu": 100,
+        "threads": null,
+        "oom_disabled": true
+      },
+      "feature_limits": {
+        "databases": 5,
+        "allocations": 5,
+        "backups": 5
+      },
+      "user": 75,
+      "node": 2,
+      "allocation": 53,
+      "nest": 1,
+      "egg": 2,
+      "container": {
+        "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+        "image": "ghcr.io/pterodactyl/yolks:java_21",
+        "installed": 1,
+        "environment": {
+          "MINECRAFT_VERSION": "1.20.1",
+          "SERVER_JARFILE": "server.jar",
+          "BUILD_NUMBER": "latest",
+          "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+          "P_SERVER_LOCATION": "India",
+          "P_SERVER_UUID": "80121c53-65dc-49ac-bd25-266cbe414d3f",
+          "P_SERVER_ALLOCATION_LIMIT": 5
+        }
+      },
+      "updated_at": "2025-03-24T17:44:04+00:00",
+      "created_at": "2025-03-24T17:02:33+00:00",
+      "relationships": {
+        "allocations": {
+          "object": "list",
+          "data": [
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 53,
+                "ip": "130.250.191.111",
+                "alias": "in.flaxynodes.fun",
+                "port": 3027,
+                "notes": null,
+                "assigned": true
+              }
+            }
+          ]
+        },
+        "user": {
+          "object": "user",
+          "attributes": {
+            "id": 75,
+            "external_id": null,
+            "uuid": "56030581-5029-46c6-b7b2-0c4f1ff3cbd8",
+            "username": "snackop",
+            "email": "snack@subs.fun",
+            "first_name": "INVITER",
+            "last_name": "snackop",
+            "language": "en",
+            "root_admin": false,
+            "2fa": false,
+            "created_at": "2025-03-24T17:01:25+00:00",
+            "updated_at": "2025-03-24T17:13:43+00:00"
+          }
+        },
+        "nest": {
+          "object": "nest",
+          "attributes": {
+            "id": 1,
+            "uuid": "07f95a0d-9bde-4b24-8f71-113f610d7c02",
+            "author": "support@pterodactyl.io",
+            "name": "Minecraft",
+            "description": "Minecraft - the classic game from Mojang. With support for Vanilla MC, Spigot, and many others!",
+            "created_at": "2025-03-20T07:43:02+00:00",
+            "updated_at": "2025-03-20T07:43:02+00:00"
+          }
+        },
+        "egg": {
+          "object": "egg",
+          "attributes": {
+            "id": 2,
+            "uuid": "f1f12e5b-db29-47e5-958a-e9a87948cd57",
+            "name": "Purpur",
+            "nest": 1,
+            "author": "parker@pterodactyl.io",
+            "description": "A drop-in replacement for Paper servers designed for configurability, and new fun and exciting gameplay features.",
+            "docker_image": "ghcr.io/pterodactyl/yolks:java_8",
+            "docker_images": {
+              "Java 8": "ghcr.io/pterodactyl/yolks:java_8",
+              "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
+              "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+              "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
+              "Java 18": "ghcr.io/pterodactyl/yolks:java_18",
+              "Java 21": "ghcr.io/pterodactyl/yolks:java_21"
+            },
+            "config": {
+              "files": {
+                "server.properties": {
+                  "parser": "properties",
+                  "find": {
+                    "server-ip": "0.0.0.0",
+                    "server-port": "{{server.build.default.port}}"
+                  }
+                }
+              },
+              "startup": {
+                "done": ")! For help, type "
+              },
+              "stop": "stop",
+              "logs": [],
+              "file_denylist": [],
+              "extends": null
+            },
+            "startup": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+            "script": {
+              "privileged": true,
+              "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=purpur\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds.all | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r '.builds.latest'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION}/${BUILD_NUMBER}/download\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
+              "entry": "ash",
+              "container": "ghcr.io/parkervcp/installers:alpine",
+              "extends": null
+            },
+            "created_at": "2025-03-20T07:43:02+00:00",
+            "updated_at": "2025-03-24T10:31:29+00:00"
           }
         }
       }
