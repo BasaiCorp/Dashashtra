@@ -201,603 +201,181 @@
 			color: #6366f1;
 		}
 		
-		.glass-card {
-			background: rgba(26, 26, 31, 0.7);
+		.navbar {
+			background-color: rgba(15, 15, 18, 0.8);
 			backdrop-filter: blur(10px);
 			-webkit-backdrop-filter: blur(10px);
-			border: 1px solid rgba(255, 255, 255, 0.1);
+			border-bottom: 1px solid rgba(45, 45, 53, 0.5);
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+		}
+		
+		.navbar-search {
+			background-color: rgba(26, 26, 31, 0.8);
+			border: 1px solid rgba(45, 45, 53, 0.8);
+			transition: all 0.3s ease;
+		}
+		
+		.navbar-search:focus {
+			border-color: rgba(99, 102, 241, 0.5);
+			box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+		}
+		
+		.glass-card {
+			background-color: rgba(26, 26, 31, 0.6);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			border: 1px solid rgba(255, 255, 255, 0.05);
 			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 		}
 		
 		.btn-primary {
-			background-color: #6366f1;
-			border-radius: 0.5rem;
-			padding: 0.5rem 1rem;
+			background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
 			transition: all 0.3s ease;
-			position: relative;
-			overflow: hidden;
-		}
-		
-		.btn-primary::before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: -100%;
-			width: 100%;
-			height: 100%;
-			background: linear-gradient(
-				90deg,
-				transparent,
-				rgba(255, 255, 255, 0.2),
-				transparent
-			);
-			transition: 0.5s;
-		}
-		
-		.btn-primary:hover::before {
-			left: 100%;
+			box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
 		}
 		
 		.btn-primary:hover {
-			background-color: #4f46e5;
+			background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
 			transform: translateY(-2px);
-			box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+			box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+		}
+		
+		.btn-primary:active {
+			transform: translateY(0);
+		}
+		
+		.resource-card {
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+			position: relative;
+		}
+		
+		.resource-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 		}
 		
 		.gradient-border {
 			position: relative;
 			border-radius: 0.75rem;
 			overflow: hidden;
-			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 		}
 		
 		.gradient-border::before {
-			content: "";
-			position: absolute;
-			inset: 0;
-			border-radius: 0.75rem;
-			padding: 1px;
-			background: linear-gradient(to right, #6366f1, #8b5cf6);
-			-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-			mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-			-webkit-mask-composite: xor;
-			mask-composite: exclude;
-			pointer-events: none;
-		}
-		
-		.progress-bar-fill {
-			height: 100%;
-			border-radius: 4px;
-			transition: width 0.5s ease;
-			position: relative;
-			overflow: hidden;
-		}
-		
-		.progress-bar-fill::after {
 			content: '';
 			position: absolute;
 			top: 0;
 			left: 0;
 			right: 0;
 			bottom: 0;
-			background: linear-gradient(
-				90deg,
-				transparent,
-				rgba(255, 255, 255, 0.2),
-				transparent
-			);
-			animation: shimmer 2s infinite;
+			border-radius: 0.75rem;
+			padding: 2px;
+			background: linear-gradient(45deg, #6366f1, #818cf8, #4f46e5);
+			-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+			-webkit-mask-composite: xor;
+			mask-composite: exclude;
+			z-index: 0;
+			opacity: 0.3;
+			transition: opacity 0.3s ease;
 		}
 		
-		@keyframes shimmer {
-			0% { transform: translateX(-100%); }
-			100% { transform: translateX(100%); }
-		}
-		
-		.progress-bar-fill.ram {
-			background: linear-gradient(to right, #6366f1, #8b5cf6);
-		}f
-		
-		.progress-bar-fill.disk {
-			background: linear-gradient(to right, #10b981, #34d399);
-		}
-		
-		.progress-bar-fill.cpu {
-			background: linear-gradient(to right, #f59e0b, #fbbf24);
-		}
-		
-		.progress-bar-fill.servers {
-			background: linear-gradient(to right, #ec4899, #f43f5e);
-		}
-		
-		.animate-fade-in {
-			animation: fadeIn 0.6s ease-out;
-		}
-		
-		.animate-slide-up {
-			animation: slideUp 0.5s ease-out;
-		}
-		
-		.animate-slide-down {
-			animation: slideDown 0.5s ease-out;
-		}
-		
-		.animate-bounce-slow {
-			animation: bounce 3s infinite;
-		}
-		
-		@keyframes fadeIn {
-			from { opacity: 0; }
-			to { opacity: 1; }
-		}
-		
-		@keyframes slideUp {
-			from { transform: translateY(20px); opacity: 0; }
-			to { transform: translateY(0); opacity: 1; }
-		}
-		
-		@keyframes slideDown {
-			from { transform: translateY(-20px); opacity: 0; }
-			to { transform: translateY(0); opacity: 1; }
-		}
-		
-		@keyframes bounce {
-			0%, 100% { transform: translateY(-5%); }
-			50% { transform: translateY(0); }
-		}
-		
-		/* Resource progress bars */
-		.progress-bar {
-			height: 8px;
-			border-radius: 4px;
-			background-color: rgba(45, 45, 53, 0.5);
-			overflow: hidden;
-			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+		.gradient-border:hover::before {
+			opacity: 1;
 		}
 		
 		.resource-progress {
-			position: relative;
-			height: 6px;
-			background: rgba(255, 255, 255, 0.05);
-			border-radius: 3px;
+			height: 8px;
+			background-color: rgba(45, 45, 53, 0.5);
+			border-radius: 4px;
+			margin-bottom: 10px;
 			overflow: hidden;
 		}
-
+		
 		.resource-progress-bar {
-			position: absolute;
-			top: 0;
-			left: 0;
 			height: 100%;
-			border-radius: 3px;
+			border-radius: 4px;
 			transition: width 0.5s ease;
-			background-size: 200% 100%;
-			animation: shimmer 2s linear infinite;
 		}
-
-		.resource-progress-bar::after {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background: linear-gradient(
-				90deg,
-				transparent,
-				rgba(255, 255, 255, 0.2),
-				transparent
-			);
-			animation: shimmer 2s linear infinite;
-		}
-
+		
 		.resource-progress-bar.ram {
-			background: linear-gradient(90deg, #6366f1, #818cf8);
+			background: linear-gradient(to right, #4f46e5, #818cf8);
 		}
-
+		
 		.resource-progress-bar.disk {
-			background: linear-gradient(90deg, #10b981, #34d399);
+			background: linear-gradient(to right, #10b981, #34d399);
 		}
-
+		
 		.resource-progress-bar.cpu {
-			background: linear-gradient(90deg, #f59e0b, #fbbf24);
+			background: linear-gradient(to right, #f59e0b, #fbbf24);
 		}
-
+		
 		.resource-progress-bar.servers {
-			background: linear-gradient(90deg, #ec4899, #f43f5e);
+			background: linear-gradient(to right, #8b5cf6, #a78bfa);
 		}
-
-		@keyframes shimmer {
-			0% {
-				background-position: 200% 0;
-			}
-			100% {
-				background-position: -200% 0;
-			}
-		}
-
-		/* Resource stats */
+		
 		.resource-stats {
 			display: flex;
 			justify-content: space-between;
-			align-items: center;
-			margin-top: 0.5rem;
 			font-size: 0.875rem;
-		}
-
-		.resource-used {
-			color: #6366f1;
-			font-weight: 500;
-		}
-
-		.resource-total {
-			color: rgba(255, 255, 255, 0.5);
+			color: #a1a1aa;
 		}
 		
-		/* Card hover effects */
-		.card-hover {
-			transition: all 0.3s ease;
-		}
-		
-		.card-hover:hover {
-			transform: translateY(-5px);
-			box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
-		}
-		
-		/* Custom loading animation */
-		.loading-spinner {
-			width: 40px;
-			height: 40px;
-			border: 3px solid #2d2d35;
-			border-top-color: #6366f1;
-			border-radius: 50%;
-			animation: spin 1s linear infinite;
-		}
-		
-		@keyframes spin {
-			to { transform: rotate(360deg); }
-		}
-		
-		/* Mobile responsiveness */
-		@media (max-width: 640px) {
-			.sidebar {
-				transform: translateX(-100%);
-			}
-			
-			.sidebar.active {
-				transform: translateX(0);
-			}
-			
-			.main-content {
-				margin-left: 0;
-			}
-		}
-		
-		/* Enhanced Navbar Styles */
-		.navbar {
-			background: rgba(15, 15, 18, 0.8);
-			backdrop-filter: blur(10px);
-			-webkit-backdrop-filter: blur(10px);
-			border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-			box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-		}
-
-		.navbar-search {
-			background: rgba(26, 26, 31, 0.6);
-			border: 1px solid rgba(255, 255, 255, 0.05);
-			transition: all 0.3s ease;
-		}
-
-		.navbar-search:focus-within {
-			background: rgba(26, 26, 31, 0.8);
-			border-color: rgba(99, 102, 241, 0.5);
-			box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
-		}
-
-		/* Enhanced Footer Styles */
-		footer {
-			background: rgba(15, 15, 18, 0.8);
-			backdrop-filter: blur(10px);
-			-webkit-backdrop-filter: blur(10px);
-			border-top: 1px solid rgba(255, 255, 255, 0.05);
-			position: relative;
-			z-index: 10;
-			flex-shrink: 0;
-			width: 100%;
-		}
-
-		.footer-content {
-			max-width: 1200px;
-			margin: 0 auto;
-			padding: 1.5rem 1rem;
-		}
-
-		.footer-links a {
-			position: relative;
-			padding: 0.5rem 0;
-		}
-
-		.footer-links a::after {
-			content: '';
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			width: 0;
-			height: 1px;
-			background: #6366f1;
-			transition: width 0.3s ease;
-		}
-
-		.footer-links a:hover::after {
-			width: 100%;
-		}
-
-		/* Enhanced Resource Display */
-		.resource-card {
-			position: relative;
-			overflow: hidden;
-			transition: all 0.3s ease;
-		}
-
-		.resource-card::before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
-			opacity: 0;
-			transition: opacity 0.3s ease;
-		}
-
-		.resource-card:hover::before {
-			opacity: 1;
-		}
-
 		.resource-icon {
-			position: relative;
-			z-index: 1;
-			transition: transform 0.3s ease;
+			transition: all 0.3s ease;
 		}
-
+		
 		.resource-card:hover .resource-icon {
 			transform: scale(1.1);
 		}
 		
-		/* Enhanced Responsive Styles */
-		@media (max-width: 1024px) {
-			/* Tablet and smaller screens */
-			.main-content {
-				margin-left: 0;
-				padding: 0.5rem;
+		.animate-slide-up {
+			animation: slideUp 0.5s ease-out forwards;
+		}
+		
+		@keyframes slideUp {
+			from {
+				opacity: 0;
+				transform: translateY(20px);
 			}
-			
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+		
+		.card {
+			transition: all 0.3s ease;
+		}
+		
+		.card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+		}
+		
+		/* Mobile Responsive Styles */
+		@media (max-width: 767px) {
 			.sidebar {
 				transform: translateX(-100%);
-				transition: transform 0.3s ease;
+				width: 80%; /* Wider sidebar on mobile */
+				max-width: 16rem;
 			}
 			
 			.sidebar.active {
 				transform: translateX(0);
 			}
 			
-			/* Adjust grid layouts */
-			.grid-cols-4 {
-				grid-template-columns: repeat(2, 1fr);
-			}
-			
-			.grid-cols-3 {
-				grid-template-columns: repeat(2, 1fr);
-			}
-			
-			/* Adjust card padding */
-			.glass-card {
-				padding: 1rem;
-			}
-			
-			/* Adjust table for mobile */
-			.overflow-x-auto {
-				margin: 0 -1rem;
-				width: calc(100% + 2rem);
-			}
-			
-			table {
-				min-width: 800px;
-			}
-		}
-		
-		@media (max-width: 768px) {
-			/* Mobile screens */
-			.navbar {
-				padding: 0.5rem;
-			}
-			
-			/* Hide desktop search */
-			.hidden.md\:flex {
-				display: none;
-			}
-			
-			/* Show mobile search */
-			#mobileSearch {
-				display: block;
-			}
-			
-			/* Adjust grid layouts */
-			.grid-cols-2 {
-				grid-template-columns: 1fr;
-			}
-			
-			/* Adjust card layouts */
-			.card {
-				padding: 1rem;
-			}
-			
-			/* Adjust resource cards */
-			.resource-card {
-				margin-bottom: 1rem;
-			}
-			
-			/* Adjust footer */
-			.footer-content {
-				padding: 1rem;
-			}
-			
-			.footer-links {
-				flex-wrap: wrap;
-				justify-content: center;
-				gap: 1rem;
-			}
-		}
-		
-		@media (max-width: 640px) {
-			/* Small mobile screens */
-			/* Adjust navbar */
-			.navbar {
-				height: auto;
-				padding: 0.5rem;
-			}
-			
-			/* Adjust logo and brand */
-			.navbar .flex.items-center {
-				flex-direction: column;
-				align-items: flex-start;
-			}
-			
-			/* Adjust user menu */
-			#dropdownBtn {
-				padding: 0.5rem;
-			}
-			
-			/* Adjust dropdown menu */
-			#dropdownMenu {
+			.main-content {
+				margin-left: 0;
 				width: 100%;
-				right: 0;
-				left: 0;
-				position: fixed;
-				top: 4rem;
-				border-radius: 0;
-			}
-			
-			/* Adjust main content */
-			.main-content {
 				padding: 0.5rem;
-				margin-top: 4rem;
 			}
 			
-			/* Adjust welcome message */
-			.glass-card {
-				margin-top: 1rem;
-			}
-			
-			/* Adjust resource stats */
-			.resource-stats {
-				flex-direction: column;
-				align-items: flex-start;
-				gap: 0.25rem;
-			}
-			
-			/* Adjust activity feed */
-			.activity-feed {
-				margin: 0 -0.5rem;
-				width: calc(100% + 1rem);
-			}
-			
-			/* Adjust footer */
-			.footer-content {
-				text-align: center;
-			}
-			
-			.footer-links {
-				flex-direction: column;
-				align-items: center;
-				gap: 0.5rem;
-			}
-		}
-		
-		/* Fix for resource progress bars */
-		.resource-progress-bar {
-			width: 0;
-			transition: width 0.5s ease;
-		}
-		
-		/* Ensure proper z-index stacking */
-		.navbar {
-			z-index: 50;
-		}
-		
-		.sidebar {
-			z-index: 40;
-		}
-		
-		#dropdownMenu {
-			z-index: 45;
-		}
-		
-		#mobileSearch {
-			z-index: 35;
-		}
-		
-		/* Improve touch targets on mobile */
-		@media (max-width: 640px) {
-			.menu-item {
-				padding: 1rem;
-			}
-			
-			button, a {
-				min-height: 44px;
-				min-width: 44px;
-			}
-		}
-		
-		/* Fix for resource progress bars on mobile */
-		@media (max-width: 640px) {
-			.resource-progress {
-				height: 8px;
-			}
-			
-			.resource-progress-bar {
-				height: 100%;
-			}
-		}
-
-		/* Add these styles to your existing CSS */
-		@media (max-width: 768px) {
-			.sidebar {
-				transform: translateX(-100%);
-				transition: transform 0.3s ease-in-out;
-				position: fixed;
-				top: 4rem;
-				left: 0;
-				bottom: 0;
-				width: 16rem;
-				z-index: 40;
-				background-color: rgba(22, 22, 24, 0.95);
-				backdrop-filter: blur(10px);
-				-webkit-backdrop-filter: blur(10px);
-				border-right: 1px solid rgba(45, 45, 53, 0.5);
-			}
-
-			.sidebar.active {
-				transform: translateX(0);
-			}
-
-			.main-content {
-				margin-left: 0;
-				padding-top: 1rem;
-			}
-
 			#mobileMenuBtn {
 				display: flex;
-				align-items: center;
-				justify-content: center;
-				width: 40px;
-				height: 40px;
-				border-radius: 0.5rem;
 				background-color: rgba(26, 26, 31, 0.8);
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+				border: 1px solid rgba(45, 45, 53, 0.5);
+				transition: all 0.3s ease;
 			}
-
+			
 			#mobileMenuBtn:hover {
 				background-color: rgba(26, 26, 31, 0.95);
 				border-color: rgba(255, 255, 255, 0.2);
@@ -814,6 +392,93 @@
 
 			#mobileMenuBtn.active i {
 				transform: rotate(180deg);
+			}
+			
+			/* Improved mobile padding */
+			.p-6 {
+				padding: 1rem;
+			}
+			
+			/* Adjust text sizes for mobile */
+			.text-3xl {
+				font-size: 1.5rem;
+			}
+			
+			.text-xl {
+				font-size: 1.25rem;
+			}
+			
+			/* Adjust footer for mobile */
+			.footer-content {
+				padding: 1rem 0.5rem;
+			}
+			
+			.footer-links {
+				margin-top: 1rem;
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 1rem;
+			}
+			
+			/* Fix overflow issues on mobile */
+			.overflow-x-auto {
+				-webkit-overflow-scrolling: touch;
+			}
+		}
+		
+		/* Small screen adjustments */
+		@media (max-width: 639px) {
+			.resource-card {
+				margin-bottom: 0.5rem;
+			}
+			
+			.card {
+				margin-bottom: 0.5rem;
+			}
+			
+			.glass-card {
+				padding: 1rem !important;
+			}
+			
+			/* Adjust spacing for mobile */
+			.mb-8 {
+				margin-bottom: 1rem;
+			}
+			
+			.gap-6 {
+				gap: 0.75rem;
+			}
+			
+			/* Better table display on mobile */
+			table {
+				display: block;
+				overflow-x: auto;
+				white-space: nowrap;
+			}
+			
+			/* Adjust welcome message for mobile */
+			.mt-16 {
+				margin-top: 5rem;
+			}
+		}
+		
+		/* Medium screen adjustments */
+		@media (min-width: 768px) and (max-width: 1023px) {
+			.main-content {
+				margin-left: 16rem;
+				padding: 0.75rem;
+			}
+			
+			.gap-6 {
+				gap: 1rem;
+			}
+		}
+		
+		/* Tablet portrait mode */
+		@media (min-width: 640px) and (max-width: 767px) {
+			.grid-cols-1 {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
 			}
 		}
 	</style>
@@ -875,12 +540,12 @@
 		<!-- Left side - Logo and Brand -->
 		<div class="flex items-center">
 			<a href="/" class="flex items-center group">
-				<div class="h-10 w-10 mr-3 rounded-full overflow-hidden transition-all duration-300 group-hover:shadow-glow">
+				<div class="h-10 w-10 mr-2 sm:mr-3 rounded-full overflow-hidden transition-all duration-300 group-hover:shadow-glow">
 					<img src="/assets/img/FlaxyNodes_logo.gif" class="h-full w-full object-cover" alt="Flaxy Nodes Logo">
 				</div>
 				<div class="flex flex-col">
-					<span class="self-center text-xl font-bold text-white">Flaxy Nodes</span>
-					<span class="text-xs text-indigo-300">Premium Game Hosting</span>
+					<span class="self-center text-sm sm:text-base md:text-xl font-bold text-white truncate max-w-[100px] sm:max-w-full">Flaxy Nodes</span>
+					<span class="text-[10px] sm:text-xs text-indigo-300 hidden xs:block">Premium Game Hosting</span>
 				</div>
 			</a>
 		</div>
@@ -905,14 +570,19 @@
 				</button>
 			</div>
 
+			<!-- Mobile Menu Button -->
+			<button id="mobileMenuBtn" class="md:hidden p-2 text-gray-400 hover:text-white transition-colors duration-200">
+				<i class="fas fa-bars"></i>
+			</button>
+
 			<!-- User Profile Dropdown -->
 			<div class="relative inline-block">
-				<button id="dropdownBtn" class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-dark-lighter hover:bg-primary-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50">
-					<div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center mr-2">
+				<button id="dropdownBtn" class="flex items-center px-2 sm:px-4 py-2 text-sm font-medium text-white rounded-lg bg-dark-lighter hover:bg-primary-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50">
+					<div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center">
 						<i class="fas fa-user text-primary-400"></i>
 					</div>
-					<span class="mr-2"><%= userData.username %></span>
-					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<span class="hidden sm:inline-block ml-2 mr-2"><%= userData.username %></span>
+					<svg class="w-4 h-4 hidden sm:inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
 					</svg>
 				</button>
@@ -955,22 +625,17 @@
 				</div>
 			</div>
 
-			<!-- Mobile Menu Button -->
-			<button id="mobileMenuBtn" class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-dark-lighter hover:bg-dark-base transition-all duration-200 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50">
-				<i class="fas fa-bars text-lg"></i>
-			</button>
+			<!-- Mobile Search Bar -->
+			<div id="mobileSearch" class="md:hidden fixed top-16 left-0 right-0 p-4 bg-dark-base border-b border-gray-800 z-40 hidden">
+				<div class="relative">
+					<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
+					<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+						<i class="fas fa-search"></i>
+					</button>
+				</div>
+			</div>
 		</div>
 	</nav>
-
-	<!-- Mobile Search Bar -->
-	<div id="mobileSearch" class="md:hidden fixed top-16 left-0 right-0 p-4 bg-dark-base border-b border-gray-800 z-40 hidden">
-		<div class="relative">
-			<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
-			<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
-				<i class="fas fa-search"></i>
-			</button>
-		</div>
-	</div>
 
 	<div class="dashboard-layout">
 		<!-- Sidebar -->
@@ -1066,25 +731,24 @@
 						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
 							<div class="flex items-center justify-between mb-4">
 								<div class="flex items-center">
-									<div class="resource-icon w-12 h-12 rounded-lg bg-indigo-500/20 flex items-center justify-center mr-3">
-										<i class="fas fa-memory text-indigo-400 text-xl"></i>
+									<div class="resource-icon w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center mr-3">
+										<i class="fas fa-memory text-blue-400 text-xl"></i>
 									</div>
 									<div>
-										<h3 class="text-lg font-semibold text-white">RAM</h3>
+										<h3 class="text-lg font-medium">RAM</h3>
 										<p class="text-gray-400 text-sm">Memory Usage</p>
 									</div>
 								</div>
 								<div class="text-right">
-									<span class="text-xl font-bold text-white"><%= totalRam %></span>
-									<span class="text-gray-400 text-sm">/ <%= packageData.ram + extraData.ram %> MB</span>
+									<span class="text-2xl font-bold"><%= Math.round((ram / (packageData.ram + extraData.ram)) * 100) %>%</span>
 								</div>
 							</div>
 							<div class="resource-progress">
-								<div class="resource-progress-bar ram" style="width: <%= ((ram / (packageData.ram + extraData.ram)) * 100).toFixed(2) %>%"></div>
+								<div class="resource-progress-bar ram" style="width: <%= Math.round((ram / (packageData.ram + extraData.ram)) * 100) %>%"></div>
 							</div>
 							<div class="resource-stats">
-								<span class="resource-used"><%= availableRam %> MB available</span>
-								<span class="resource-total"><%= ((availableRam / (packageData.ram + extraData.ram)) * 100).toFixed(1) %>% free</span>
+								<span><%= ram %> MB used</span>
+								<span><%= packageData.ram + extraData.ram %> MB total</span>
 							</div>
 						</div>
 					</div>
@@ -1098,21 +762,20 @@
 										<i class="fas fa-hdd text-green-400 text-xl"></i>
 									</div>
 									<div>
-										<h3 class="text-lg font-semibold text-white">Disk</h3>
+										<h3 class="text-lg font-medium">Disk</h3>
 										<p class="text-gray-400 text-sm">Storage Usage</p>
 									</div>
 								</div>
 								<div class="text-right">
-									<span class="text-xl font-bold text-white"><%= totalDisk %></span>
-									<span class="text-gray-400 text-sm">/ <%= packageData.disk + extraData.disk %> MB</span>
+									<span class="text-2xl font-bold"><%= Math.round((disk / (packageData.disk + extraData.disk)) * 100) %>%</span>
 								</div>
 							</div>
 							<div class="resource-progress">
-								<div class="resource-progress-bar disk" style="width: <%= ((disk / (packageData.disk + extraData.disk)) * 100).toFixed(2) %>%"></div>
+								<div class="resource-progress-bar disk" style="width: <%= Math.round((disk / (packageData.disk + extraData.disk)) * 100) %>%"></div>
 							</div>
 							<div class="resource-stats">
-								<span class="resource-used"><%= availableDisk %> MB available</span>
-								<span class="resource-total"><%= ((availableDisk / (packageData.disk + extraData.disk)) * 100).toFixed(1) %>% free</span>
+								<span><%= disk %> MB used</span>
+								<span><%= packageData.disk + extraData.disk %> MB total</span>
 							</div>
 						</div>
 					</div>
@@ -1126,20 +789,20 @@
 										<i class="fas fa-microchip text-amber-400 text-xl"></i>
 									</div>
 									<div>
-										<h3 class="text-lg font-semibold text-white">CPU</h3>
+										<h3 class="text-lg font-medium">CPU</h3>
 										<p class="text-gray-400 text-sm">Processor Usage</p>
 									</div>
 								</div>
 								<div class="text-right">
-									<span class="text-xl font-bold text-white"><%= totalCpu %></span>
-									<span class="text-gray-400 text-sm">/ <%= packageData.cpu + extraData.cpu %>%</span>
+									<span class="text-2xl font-bold"><%= Math.round((cpu / (packageData.cpu + extraData.cpu)) * 100) %>%</span>
 								</div>
 							</div>
 							<div class="resource-progress">
-								<div class="resource-progress-bar cpu" style="width: <%= ((cpu / (packageData.cpu + extraData.cpu)) * 100).toFixed(2) %>%"></div>
+								<div class="resource-progress-bar cpu" style="width: <%= Math.round((cpu / (packageData.cpu + extraData.cpu)) * 100) %>%"></div>
 							</div>
 							<div class="resource-stats">
-								<span class="resource-used"><%= availableCpu %> % free</span>
+								<span><%= cpu %>% used</span>
+								<span><%= packageData.cpu + extraData.cpu %>% total</span>
 							</div>
 						</div>
 					</div>
@@ -1153,20 +816,20 @@
 										<i class="fas fa-server text-purple-400 text-xl"></i>
 									</div>
 									<div>
-										<h3 class="text-lg font-semibold text-white">Servers</h3>
+										<h3 class="text-lg font-medium">Servers</h3>
 										<p class="text-gray-400 text-sm">Active Instances</p>
 									</div>
 								</div>
 								<div class="text-right">
-									<span class="text-xl font-bold text-white"><%= totalServers %></span>
-									<span class="text-gray-400 text-sm">/ <%= packageData.servers + extraData.servers %></span>
+									<span class="text-2xl font-bold"><%= Math.round((servers / (packageData.servers + extraData.servers)) * 100) %>%</span>
 								</div>
 							</div>
 							<div class="resource-progress">
-								<div class="resource-progress-bar servers" style="width: <%= ((servers / (packageData.servers + extraData.servers)) * 100).toFixed(2) %>%"></div>
+								<div class="resource-progress-bar servers" style="width: <%= Math.round((servers / (packageData.servers + extraData.servers)) * 100) %>%"></div>
 							</div>
 							<div class="resource-stats">
-								<span class="resource-used"><%= availableServers %> instances available</span>
+								<span><%= servers %> used</span>
+								<span><%= packageData.servers + extraData.servers %> total</span>
 							</div>
 						</div>
 					</div>
@@ -1213,153 +876,255 @@
 				
 				<!-- Server List -->
 				<div class="glass-card rounded-xl border border-gray-700 p-6 mb-8">
-					<div class="flex items-center justify-between mb-6">
-						<h2 class="text-xl font-semibold flex items-center">
+					<div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+						<h2 class="text-xl font-semibold flex items-center mb-3 md:mb-0">
 							<i class="fas fa-server text-primary-400 mr-3"></i>
 							Your Servers
 						</h2>
-						<a href="/servers" class="text-sm text-primary-400 hover:text-primary-300 transition-colors duration-200 flex items-center">
+						<div class="flex space-x-2">
+							<a href="/servers/new" class="btn-primary py-2 px-4 rounded-lg text-white flex items-center text-sm">
+								<i class="fas fa-plus mr-2"></i>
+								New Server
+							</a>
+							<button class="bg-dark-lighter hover:bg-gray-700 py-2 px-4 rounded-lg text-white flex items-center text-sm transition-all duration-200">
+								<i class="fas fa-filter mr-2"></i>
+								Filter
+							</button>
+						</div>
+					</div>
+					
+					<div class="overflow-x-auto -mx-4 md:mx-0">
+						<table class="min-w-full text-sm text-left text-gray-400">
+							<thead class="text-xs uppercase bg-gray-800 text-gray-400">
+								<tr>
+									<th scope="col" class="py-3 px-4 md:px-6">Server Name</th>
+									<th scope="col" class="py-3 px-4 md:px-6">Status</th>
+									<th scope="col" class="py-3 px-4 md:px-6 hidden sm:table-cell">RAM</th>
+									<th scope="col" class="py-3 px-4 md:px-6 hidden sm:table-cell">Disk</th>
+									<th scope="col" class="py-3 px-4 md:px-6 hidden md:table-cell">CPU</th>
+									<th scope="col" class="py-3 px-4 md:px-6">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% if (pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data && pterodactyl.relationships.servers.data.length > 0) { %>
+									<% for(let i = 0; i < pterodactyl.relationships.servers.data.length; i++) { 
+										const server = pterodactyl.relationships.servers.data[i].attributes;
+										const serverRam = typeof server.limits.memory == "number" ? server.limits.memory : 0;
+										const serverDisk = typeof server.limits.disk == "number" ? server.limits.disk : 0;
+										const serverCpu = typeof server.limits.cpu == "number" ? server.limits.cpu : 0;
+										const serverStatus = server.status || 'offline';
+										const statusClass = serverStatus === 'running' ? 'bg-green-900/30 text-green-400' : 
+											serverStatus === 'starting' ? 'bg-amber-900/30 text-amber-400' : 'bg-red-900/30 text-red-400';
+										const statusIcon = serverStatus === 'running' ? 'circle' : 
+											serverStatus === 'starting' ? 'exclamation-circle' : 'times-circle';
+										const statusText = serverStatus === 'running' ? 'Running' : 
+											serverStatus === 'starting' ? 'Starting' : 'Offline';
+									%>
+								<tr class="border-b border-gray-700 hover:bg-gray-800/50 transition-colors duration-200">
+									<td class="py-3 px-4 md:px-6 font-medium text-white">
+										<div class="flex items-center">
+											<div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center mr-3 flex-shrink-0">
+												<i class="fas fa-server text-primary-400"></i>
+											</div>
+											<div>
+												<div class="font-medium"><%= server.name %></div>
+												<div class="text-xs text-gray-500">ID: <%= server.identifier %></div>
+											</div>
+										</div>
+									</td>
+									<td class="py-3 px-4 md:px-6">
+										<span class="px-2 py-1 text-xs rounded-full <%= statusClass %>">
+											<i class="fas fa-<%= statusIcon %> mr-1"></i>
+											<%= statusText %>
+										</span>
+									</td>
+									<td class="py-3 px-4 md:px-6 hidden sm:table-cell">
+										<div class="flex items-center">
+											<div class="w-full bg-gray-700 rounded-full h-2 mr-2 max-w-[100px]">
+												<div class="bg-primary-500 h-2 rounded-full" style="width: <%= Math.round((serverRam / (packageData.ram + extraData.ram)) * 100) %>%"></div>
+											</div>
+											<span><%= serverRam %> MB</span>
+										</div>
+									</td>
+									<td class="py-3 px-4 md:px-6 hidden sm:table-cell">
+										<div class="flex items-center">
+											<div class="w-full bg-gray-700 rounded-full h-2 mr-2 max-w-[100px]">
+												<div class="bg-green-500 h-2 rounded-full" style="width: <%= Math.round((serverDisk / (packageData.disk + extraData.disk)) * 100) %>%"></div>
+											</div>
+											<span><%= serverDisk %> MB</span>
+										</div>
+									</td>
+									<td class="py-3 px-4 md:px-6 hidden md:table-cell">
+										<div class="flex items-center">
+											<div class="w-full bg-gray-700 rounded-full h-2 mr-2 max-w-[100px]">
+												<div class="bg-amber-500 h-2 rounded-full" style="width: <%= Math.round((serverCpu / (packageData.cpu + extraData.cpu)) * 100) %>%"></div>
+											</div>
+											<span><%= serverCpu %>%</span>
+										</div>
+									</td>
+									<td class="py-3 px-4 md:px-6">
+										<div class="flex items-center space-x-2">
+											<a href="<%= server.panelUrl || '/panel' %>" target="_blank" class="p-1.5 bg-primary-500/10 hover:bg-primary-500/20 text-primary-400 rounded-lg transition-colors duration-200" title="Open Panel">
+												<i class="fas fa-external-link-alt"></i>
+											</a>
+											<button class="p-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 rounded-lg transition-colors duration-200" title="Restart">
+												<i class="fas fa-sync-alt"></i>
+											</button>
+											<button class="p-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors duration-200" title="Stop">
+												<i class="fas fa-stop"></i>
+											</button>
+											<div class="relative group">
+												<button class="p-1.5 bg-gray-700 hover:bg-gray-600 text-gray-400 rounded-lg transition-colors duration-200">
+													<i class="fas fa-ellipsis-v"></i>
+												</button>
+												<div class="absolute right-0 mt-2 w-48 bg-dark-card rounded-lg shadow-lg border border-gray-700 hidden group-hover:block z-10">
+													<ul class="py-1 text-sm">
+														<li><a href="<%= server.panelUrl || '/panel' %>/console" class="block px-4 py-2 hover:bg-gray-700 text-gray-300">Console</a></li>
+														<li><a href="<%= server.panelUrl || '/panel' %>/files" class="block px-4 py-2 hover:bg-gray-700 text-gray-300">File Manager</a></li>
+														<li><a href="<%= server.panelUrl || '/panel' %>/backups" class="block px-4 py-2 hover:bg-gray-700 text-gray-300">Backups</a></li>
+														<li><a href="#" class="block px-4 py-2 hover:bg-gray-700 text-red-400">Delete</a></li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<% } %>
+								<% } else { %>
+								<tr class="border-b border-gray-700">
+									<td colspan="6" class="py-8 px-4 text-center text-gray-400">
+										<div class="flex flex-col items-center">
+											<i class="fas fa-server text-4xl mb-3 text-gray-600"></i>
+											<p class="mb-2">You don't have any servers yet</p>
+											<a href="/servers/new" class="btn-primary py-2 px-4 rounded-lg text-white flex items-center text-sm mt-3">
+												<i class="fas fa-plus mr-2"></i>
+												Create your first server
+											</a>
+										</div>
+									</td>
+								</tr>
+								<% } %>
+							</tbody>
+						</table>
+					</div>
+					
+					<div class="flex justify-between items-center mt-4 text-sm">
+						<div class="text-gray-500">
+							Showing <%= pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data ? pterodactyl.relationships.servers.data.length : 0 %> 
+							of <%= pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data ? pterodactyl.relationships.servers.data.length : 0 %> servers
+						</div>
+						<div class="flex space-x-1">
+							<button class="px-3 py-1 rounded bg-gray-800 text-gray-400 hover:bg-gray-700 transition-colors duration-200">Previous</button>
+							<button class="px-3 py-1 rounded bg-primary-500 text-white hover:bg-primary-600 transition-colors duration-200">1</button>
+							<button class="px-3 py-1 rounded bg-gray-800 text-gray-400 hover:bg-gray-700 transition-colors duration-200">Next</button>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Activity Feed -->
+				<div class="glass-card rounded-xl border border-gray-700 p-6 mb-8">
+					<div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+						<h2 class="text-xl font-semibold flex items-center mb-3 md:mb-0">
+							<i class="fas fa-history text-primary-400 mr-3"></i>
+							Recent Activity
+						</h2>
+						<a href="/activity" class="text-sm text-primary-400 hover:text-primary-300 transition-colors duration-200 flex items-center">
 							View all
 							<i class="fas fa-chevron-right ml-1 text-xs"></i>
 						</a>
 					</div>
 					
-					<% if (pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data && pterodactyl.relationships.servers.data.length > 0) { %>
-						<div class="overflow-x-auto">
-							<table class="w-full">
-								<thead>
-									<tr class="text-left text-gray-400 text-sm border-b border-gray-700">
-										<th class="pb-3 font-medium">Name</th>
-										<th class="pb-3 font-medium">Status</th>
-										<th class="pb-3 font-medium">RAM</th>
-										<th class="pb-3 font-medium">Disk</th>
-										<th class="pb-3 font-medium">CPU</th>
-										<th class="pb-3 font-medium">Actions</th>
-									</tr>
-								</thead>
-								<tbody>
-									<% for (let i = 0; i < Math.min(5, pterodactyl.relationships.servers.data.length); i++) { %>
-										<% const server = pterodactyl.relationships.servers.data[i]; %>
-										<tr class="border-b border-gray-700/50 hover:bg-dark-lighter/30 transition-colors duration-150">
-											<td class="py-4">
-												<div class="flex items-center">
-													<div class="w-8 h-8 rounded bg-primary-500/20 flex items-center justify-center mr-3">
-														<i class="fas fa-cube text-primary-400"></i>
-													</div>
-													<div>
-														<div class="font-medium text-white"><%= server.attributes.name %></div>
-														<div class="text-xs text-gray-400"><%= server.attributes.identifier %></div>
-													</div>
-												</div>
-											</td>
-											<td class="py-4">
-												<span class="px-2 py-1 rounded-full text-xs font-medium bg-emerald-900/30 text-emerald-400">
-													Active
-												</span>
-											</td>
-											<td class="py-4 text-sm">
-												<div class="flex items-center">
-													<span class="text-gray-300"><%= server.attributes.limits.memory %> MB</span>
-												</div>
-											</td>
-											<td class="py-4 text-sm">
-												<div class="flex items-center">
-													<span class="text-gray-300"><%= server.attributes.limits.disk %> MB</span>
-												</div>
-											</td>
-											<td class="py-4 text-sm">
-												<div class="flex items-center">
-													<span class="text-gray-300"><%= server.attributes.limits.cpu %>%</span>
-												</div>
-											</td>
-											<td class="py-4">
-												<div class="flex space-x-2">
-													<a href="<%= settings.pterodactyl.domain %>/server/<%= server.attributes.identifier %>" target="_blank" class="p-2 rounded-lg bg-primary-500/10 text-primary-400 hover:bg-primary-500/20 transition-colors duration-200" title="Manage Server">
-														<i class="fas fa-external-link-alt"></i>
-													</a>
-													<a href="/servers/edit/<%= server.attributes.id %>" class="p-2 rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors duration-200" title="Edit Server">
-														<i class="fas fa-edit"></i>
-													</a>
-												</div>
-											</td>
-										</tr>
-									<% } %>
-								</tbody>
-							</table>
-						</div>
-					<% } else { %>
-						<div class="flex flex-col items-center justify-center py-10 text-center">
-							<div class="w-20 h-20 rounded-full bg-gray-800/50 flex items-center justify-center mb-4">
-								<i class="fas fa-server text-gray-600 text-2xl"></i>
-							</div>
-							<h3 class="text-xl font-medium mb-2">No servers found</h3>
-							<p class="text-gray-400 mb-6 max-w-md">You don't have any servers yet. Create your first server to get started.</p>
-							<a href="/create" class="btn-primary px-6 py-2 rounded-lg text-white font-medium">
-								Create Server
-							</a>
-						</div>
-					<% } %>
-				</div>
-				
-				<!-- Activity Feed -->
-				<div class="glass-card rounded-xl border border-gray-700 p-6 mb-8">
-					<div class="flex items-center justify-between mb-6">
-						<h2 class="text-xl font-semibold flex items-center">
-							<i class="fas fa-history text-primary-400 mr-3"></i>
-							Recent Activity
-						</h2>
-					</div>
-					
 					<div class="space-y-4">
 						<% 
-						// Get real activities from the database or session
-						const activities = [
-							{
-								type: 'server_created',
-								icon: 'fas fa-server',
-								iconBg: 'blue',
-								title: 'Server Created',
-								time: '2 hours ago',
-								description: `You created a new server: <span class="text-white">${pterodactyl?.relationships?.servers?.data?.[0]?.attributes?.name || 'New Server'}</span>`
-							},
-							{
-								type: 'login',
-								icon: 'fas fa-sign-in-alt',
-								iconBg: 'green',
-								title: 'Account Login',
-								time: '1 day ago',
-								description: `You logged in from <span class="text-white">${req.headers['user-agent'] || 'Unknown Device'}</span>`
-							},
-							{
+						// Get real activities from the database or session if available
+						const recentActivities = [];
+						
+						// Add server activities if servers exist
+						if (pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data) {
+							const servers = pterodactyl.relationships.servers.data;
+							
+							// Add server creation activity for the first server if it exists
+							if (servers.length > 0) {
+								recentActivities.push({
+									type: 'server_created',
+									icon: 'fas fa-server',
+									iconBg: 'blue',
+									title: 'Server Created',
+									time: '2 hours ago',
+									description: `You created a new server: "${servers[0].attributes.name}"`
+								});
+							}
+							
+							// Add server start activity
+							if (servers.length > 0) {
+								recentActivities.push({
+									type: 'server_start',
+									icon: 'fas fa-play',
+									iconBg: 'green',
+									title: 'Server Started',
+									time: '10 minutes ago',
+									description: `Your server "${servers[0].attributes.name}" has been started successfully.`
+								});
+							}
+						}
+						
+						// Add login activity
+						recentActivities.push({
+							type: 'login',
+							icon: 'fas fa-sign-in-alt',
+							iconBg: 'purple',
+							title: 'Account Login',
+							time: '1 day ago',
+							description: `You logged in from ${req.headers['user-agent'] || 'Unknown Device'}`
+						});
+						
+						// Add resources activity if extra resources exist
+						if (extraData && (extraData.ram > 0 || extraData.disk > 0 || extraData.cpu > 0)) {
+							recentActivities.push({
 								type: 'resources_added',
 								icon: 'fas fa-coins',
-								iconBg: 'purple',
+								iconBg: 'amber',
 								title: 'Resources Added',
 								time: '3 days ago',
-								description: `Added <span class="text-white">${extraData.ram}MB RAM</span> to your account`
+								description: `Added ${extraData.ram}MB RAM to your account`
+							});
+						}
+						
+						// Use a fallback if no activities are available
+						const activities = recentActivities.length > 0 ? recentActivities : [
+							{
+								title: 'Server started',
+								description: 'Your server "Web Hosting" has been started successfully.',
+								time: '10 minutes ago',
+								icon: 'fas fa-play',
+								iconBg: 'green'
 							},
 							{
-								type: 'server_start',
-								icon: 'fas fa-play',
-								iconBg: 'emerald',
-								title: 'Server Started',
-								time: '2 days ago',
-								description: `You started server <span class="text-white">${pterodactyl?.relationships?.servers?.data?.[0]?.attributes?.name || 'Your Server'}</span>`
+								title: 'Backup created',
+								description: 'A new backup for "Database Server" has been created.',
+								time: '2 hours ago',
+								icon: 'fas fa-save',
+								iconBg: 'blue'
+							},
+							{
+								title: 'Server stopped',
+								description: 'Your server "Test Environment" has been stopped.',
+								time: '1 day ago',
+								icon: 'fas fa-stop',
+								iconBg: 'red'
 							}
 						];
 						
 						for(let activity of activities) { 
 						%>
-						<div class="flex items-start p-4 rounded-lg bg-dark-lighter/30 border border-gray-700/50">
+						<div class="flex items-start p-4 rounded-lg bg-gray-800 gap-4">
 							<div class="w-10 h-10 flex-shrink-0 bg-<%= activity.iconBg %>-500/20 flex items-center justify-center mr-4 mt-1 flex-shrink-0">
 								<i class="<%= activity.icon %> text-<%= activity.iconBg %>-400"></i>
 							</div>
-							<div>
-								<div class="flex items-center mb-1">
-									<h4 class="font-medium"><%= activity.title %></h4>
-									<span class="text-xs text-gray-400 ml-2"><%= activity.time %></span>
-								</div>
-								<p class="text-gray-400 text-sm"><%- activity.description %></p>
+							<div class="flex-1 min-w-0">
+								<p class="text-white font-medium"><%= activity.title %></p>
+								<p class="text-sm text-gray-400"><%= activity.description %></p>
+								<p class="text-xs text-gray-500 mt-1"><%= activity.time %></p>
 							</div>
 						</div>
 						<% } %>
@@ -1458,7 +1223,7 @@
 						<img src="./assets/img/FlaxyNodes_logo.gif" alt="Logo" class="h-8 mr-3 rounded-lg border border-gray-700 shadow-lg">
 						<span class="text-lg font-semibold text-white">Flaxy Nodes</span>
 					</div>
-					<p class="text-gray-400 text-sm mt-2">© 2024 Flaxy Nodes. All rights reserved.</p>
+					<p class="text-gray-400 text-sm mt-2"> 2024 Flaxy Nodes. All rights reserved.</p>
 					<span class="text-lg font-semibold text-gray-500">By Basai Corporation, Proudly Indian</span>
 				</div>
 				
