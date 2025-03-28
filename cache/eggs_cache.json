@@ -2,7 +2,7 @@
   "1": [
     {
       "id": 1,
-      "uuid": "d16acaac-139f-44c5-ac99-bd086a1e070f",
+      "uuid": "c42e4a6e-ea63-4822-830b-25551890608b",
       "name": "Bungeecord",
       "nest": 1,
       "author": "support@pterodactyl.io",
@@ -44,8 +44,8 @@
         "container": "ghcr.io/pterodactyl/installers:alpine",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-20T07:43:02+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -62,8 +62,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|alpha_num|between:1,6",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -78,8 +78,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -88,19 +88,18 @@
     },
     {
       "id": 2,
-      "uuid": "f1f12e5b-db29-47e5-958a-e9a87948cd57",
-      "name": "Purpur",
+      "uuid": "8786df23-c2bf-4c6a-b437-b877cd30893f",
+      "name": "Paper",
       "nest": 1,
       "author": "parker@pterodactyl.io",
-      "description": "A drop-in replacement for Paper servers designed for configurability, and new fun and exciting gameplay features.",
-      "docker_image": "ghcr.io/pterodactyl/yolks:java_8",
+      "description": "High performance Spigot fork that aims to fix gameplay and mechanics inconsistencies.",
+      "docker_image": "ghcr.io/pterodactyl/yolks:java_21",
       "docker_images": {
-        "Java 8": "ghcr.io/pterodactyl/yolks:java_8",
-        "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
-        "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+        "Java 21": "ghcr.io/pterodactyl/yolks:java_21",
         "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
-        "Java 18": "ghcr.io/pterodactyl/yolks:java_18",
-        "Java 21": "ghcr.io/pterodactyl/yolks:java_21"
+        "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+        "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
+        "Java 8": "ghcr.io/pterodactyl/yolks:java_8"
       },
       "config": {
         "files": {
@@ -108,7 +107,8 @@
             "parser": "properties",
             "find": {
               "server-ip": "0.0.0.0",
-              "server-port": "{{server.build.default.port}}"
+              "server-port": "{{server.build.default.port}}",
+              "query.port": "{{server.build.default.port}}"
             }
           }
         },
@@ -120,16 +120,16 @@
         "file_denylist": [],
         "extends": null
       },
-      "startup": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+      "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
       "script": {
         "privileged": true,
-        "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=purpur\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds.all | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r '.builds.latest'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION}/${BUILD_NUMBER}/download\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
+        "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=paper\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.papermc.io/v2/projects/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep -m1 true`\r\n\tLATEST_VERSION=`curl -s https://api.papermc.io/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Specified version not found. Defaulting to the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\r\n\tBUILD_EXISTS=`curl -s https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep -m1 true`\r\n\tLATEST_BUILD=`curl -s https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
         "entry": "ash",
-        "container": "ghcr.io/parkervcp/installers:alpine",
+        "container": "ghcr.io/pterodactyl/installers:alpine",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-24T10:31:29+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -140,14 +140,14 @@
                 "id": 3,
                 "egg_id": 2,
                 "name": "Minecraft Version",
-                "description": "The version of Minecraft to download. \r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
+                "description": "The version of minecraft to download. \r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
                 "env_variable": "MINECRAFT_VERSION",
                 "default_value": "latest",
                 "user_viewable": true,
                 "user_editable": true,
-                "rules": "required|string|max:20",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-24T07:32:28.000000Z"
+                "rules": "nullable|string|max:20",
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -156,14 +156,30 @@
                 "id": 4,
                 "egg_id": 2,
                 "name": "Server Jar File",
-                "description": "The name of the .jar file to run the server with.",
+                "description": "The name of the server jarfile to run the server with.",
                 "env_variable": "SERVER_JARFILE",
                 "default_value": "server.jar",
                 "user_viewable": true,
                 "user_editable": true,
-                "rules": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/|max:80",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-24T07:32:28.000000Z"
+                "rules": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/",
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 5,
+                "egg_id": 2,
+                "name": "Download Path",
+                "description": "A URL to use to download a server.jar rather than the ones in the install script. This is not user viewable.",
+                "env_variable": "DL_PATH",
+                "default_value": "",
+                "user_viewable": false,
+                "user_editable": false,
+                "rules": "nullable|string",
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -172,14 +188,14 @@
                 "id": 6,
                 "egg_id": 2,
                 "name": "Build Number",
-                "description": "The build number for the Purpur release.\r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
+                "description": "The build number for the paper release.\r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
                 "env_variable": "BUILD_NUMBER",
                 "default_value": "latest",
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|max:20",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-24T07:32:28.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -188,7 +204,7 @@
     },
     {
       "id": 3,
-      "uuid": "fff62d17-9e3b-4f14-a46c-732a4164cda2",
+      "uuid": "6ca5e61b-b1b1-4d12-8811-84bd3e3555d9",
       "name": "Vanilla Minecraft",
       "nest": 1,
       "author": "support@pterodactyl.io",
@@ -228,8 +244,8 @@
         "container": "ghcr.io/pterodactyl/installers:alpine",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-20T07:43:02+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -246,8 +262,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -262,8 +278,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|between:3,15",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -272,7 +288,7 @@
     },
     {
       "id": 4,
-      "uuid": "1019b0b0-9a38-494c-b20a-822f9f862e8d",
+      "uuid": "897c9826-ac41-447e-955a-f427e0a8d519",
       "name": "Forge Minecraft",
       "nest": 1,
       "author": "support@pterodactyl.io",
@@ -312,8 +328,8 @@
         "container": "openjdk:8-jdk-slim",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-20T07:43:02+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -330,8 +346,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -346,8 +362,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|max:9",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -362,8 +378,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|in:recommended,latest",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -378,8 +394,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|regex:/^[0-9\\.\\-]+$/",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -388,7 +404,7 @@
     },
     {
       "id": 5,
-      "uuid": "7eeeac12-59e5-49c4-bb5a-bb801fb0cb88",
+      "uuid": "bdb182ef-417d-4d7f-8ea1-3b420274a796",
       "name": "Sponge (SpongeVanilla)",
       "nest": 1,
       "author": "support@pterodactyl.io",
@@ -427,8 +443,8 @@
         "container": "ghcr.io/pterodactyl/installers:alpine",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-20T07:43:02+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -445,8 +461,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|regex:/^([a-zA-Z0-9.\\-_]+)$/",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -461,677 +477,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": 15,
-      "uuid": "96a316cb-dd42-4fa6-8e93-8339794e5ead",
-      "name": "Velocity",
-      "nest": 1,
-      "author": "parker@parkervcp.com",
-      "description": "Velocity is a Minecraft server proxy with unparalleled server support, scalability, and flexibility.",
-      "docker_image": "ghcr.io/pterodactyl/yolks:java_21",
-      "docker_images": {
-        "Java 21": "ghcr.io/pterodactyl/yolks:java_21",
-        "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
-        "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
-        "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
-        "Java 8": "ghcr.io/pterodactyl/yolks:java_8"
-      },
-      "config": {
-        "files": {
-          "velocity.toml": {
-            "parser": "file",
-            "find": {
-              "bind = ": "bind = \"0.0.0.0:{{server.build.default.port}}\""
-            }
-          }
-        },
-        "startup": {
-          "done": "Done ("
-        },
-        "stop": "end",
-        "logs": [],
-        "file_denylist": [],
-        "extends": null
-      },
-      "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar {{SERVER_JARFILE}}",
-      "script": {
-        "privileged": true,
-        "install": "#!/bin/ash\r\n# Velocity Proxy Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=velocity\r\n\r\nif [[ -z ${VELOCITY_VERSION} ]] || [[ ${VELOCITY_VERSION} == \"latest\" ]]; then\r\n    VELOCITY_VERSION=\"latest\"\r\nfi\r\n\r\nif [[ -n \"${DOWNLOAD_LINK}\" ]]; then\r\n    echo -e \"Using supplied download url: ${DOWNLOAD_LINK}\"\r\n    DOWNLOAD_URL=$(eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g'))\r\nelse\r\n    VER_EXISTS=$(curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r --arg VERSION $VELOCITY_VERSION '.versions[] | contains($VERSION)' | grep true)\r\n    LATEST_VERSION=$(curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]')\r\n\r\nif [[ \"${VER_EXISTS}\" == \"true\" ]]; then\r\n    echo -e \"Version is valid. Using version ${VELOCITY_VERSION}\"\r\nelse\r\n    echo -e \"Using the latest ${PROJECT} version\"\r\n    VELOCITY_VERSION=${LATEST_VERSION}\r\nfi\r\n\r\nBUILD_EXISTS=$(curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${VELOCITY_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep true)\r\nLATEST_BUILD=$(curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${VELOCITY_VERSION} | jq -r '.builds' | jq -r '.[-1]')\r\n\r\nif [[ \"${BUILD_EXISTS}\" == \"true\" ]]; then\r\n    echo -e \"Build is valid for version ${VELOCITY_VERSION}. Using build ${BUILD_NUMBER}\"\r\nelse\r\n    echo -e \"Using the latest ${PROJECT} build for version ${VELOCITY_VERSION}\"\r\n    BUILD_NUMBER=${LATEST_BUILD}\r\nfi\r\n\r\nJAR_NAME=${PROJECT}-${VELOCITY_VERSION}-${BUILD_NUMBER}.jar\r\necho \"Version being downloaded\"\r\necho -e \"Velocity Version: ${VELOCITY_VERSION}\"\r\necho -e \"Build: ${BUILD_NUMBER}\"\r\necho -e \"JAR Name of Build: ${JAR_NAME}\"\r\nDOWNLOAD_URL=https://papermc.io/api/v2/projects/${PROJECT}/versions/${VELOCITY_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\n\r\nfi\r\ncd /mnt/server\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [[ -f ${SERVER_JARFILE} ]]; then\r\nmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [[ -f velocity.toml ]]; then\r\n    echo -e \"velocity config file exists\"\r\nelse\r\n    echo -e \"downloading velocity config file.\"\r\n    curl https://raw.githubusercontent.com/parkervcp/eggs/master/game_eggs/minecraft/proxy/java/velocity/velocity.toml -o velocity.toml\r\nfi\r\n\r\nif [[ -f forwarding.secret ]]; then\r\n    echo -e \"velocity forwarding secret file already exists\"\r\nelse\r\n    echo -e \"creating forwarding secret file\"\r\n    touch forwarding.secret\r\n    date +%s | sha256sum | base64 | head -c 12 > forwarding.secret\r\nfi\r\n\r\necho -e \"install complete\"",
-        "entry": "ash",
-        "container": "ghcr.io/parkervcp/installers:alpine",
-        "extends": null
-      },
-      "created_at": "2025-03-20T08:36:50+00:00",
-      "updated_at": "2025-03-20T08:36:50+00:00",
-      "relationships": {
-        "variables": {
-          "object": "list",
-          "data": [
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 71,
-                "egg_id": 15,
-                "name": "Velocity Version",
-                "description": "The Velocity Proxy version to download.\r\n\r\nSet to 'latest ' the download the last stable build.",
-                "env_variable": "VELOCITY_VERSION",
-                "default_value": "latest",
-                "user_viewable": true,
-                "user_editable": false,
-                "rules": "required|string|max:20",
-                "created_at": "2025-03-20T08:36:50.000000Z",
-                "updated_at": "2025-03-20T08:36:50.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 72,
-                "egg_id": 15,
-                "name": "Server Jar File",
-                "description": "Server Jarfile, by default this is set to 'velocity.jar'.\r\nSet it to otherwise if you wish to have a different jarfile name.",
-                "env_variable": "SERVER_JARFILE",
-                "default_value": "velocity.jar",
-                "user_viewable": true,
-                "user_editable": false,
-                "rules": "required|string|max:32|regex:/^([\\w\\d._-]+)(\\.jar)$/",
-                "created_at": "2025-03-20T08:36:50.000000Z",
-                "updated_at": "2025-03-20T08:36:50.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 73,
-                "egg_id": 15,
-                "name": "Download Path",
-                "description": "A URL to use to download a server.jar rather than the ones in the install script. This is not user viewable.",
-                "env_variable": "DL_PATH",
-                "default_value": "",
-                "user_viewable": false,
-                "user_editable": false,
-                "rules": "nullable|string",
-                "created_at": "2025-03-20T08:36:50.000000Z",
-                "updated_at": "2025-03-20T08:36:50.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 74,
-                "egg_id": 15,
-                "name": "Build Number",
-                "description": "The build number for the velocity release.\r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
-                "env_variable": "BUILD_NUMBER",
-                "default_value": "latest",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|string|max:20",
-                "created_at": "2025-03-20T08:36:50.000000Z",
-                "updated_at": "2025-03-20T08:36:50.000000Z"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": 16,
-      "uuid": "cc19791f-e98c-4f7e-b2fd-558bacbe6dcc",
-      "name": "Waterfall",
-      "nest": 1,
-      "author": "hostmaster@waterfallgaming.net",
-      "description": "Waterfall is a fork of the well-known BungeeCord server teleportation suite.",
-      "docker_image": "ghcr.io/pterodactyl/yolks:java_17",
-      "docker_images": {
-        "ghcr.io/pterodactyl/yolks:java_17": "ghcr.io/pterodactyl/yolks:java_17",
-        "ghcr.io/pterodactyl/yolks:java_16": "ghcr.io/pterodactyl/yolks:java_16",
-        "ghcr.io/pterodactyl/yolks:java_11": "ghcr.io/pterodactyl/yolks:java_11",
-        "ghcr.io/pterodactyl/yolks:java_8": "ghcr.io/pterodactyl/yolks:java_8"
-      },
-      "config": {
-        "files": {
-          "config.yml": {
-            "parser": "yaml",
-            "find": {
-              "listeners[0].host": "0.0.0.0:{{server.build.default.port}}",
-              "servers.*.address": {
-                "127.0.0.1": "{{config.docker.interface}}",
-                "localhost": "{{config.docker.interface}}"
-              }
-            }
-          }
-        },
-        "startup": {
-          "done": "Listening on "
-        },
-        "stop": "end",
-        "logs": [],
-        "file_denylist": [],
-        "extends": null
-      },
-      "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-      "script": {
-        "privileged": true,
-        "install": "#!/bin/bash\r\n# Waterfall Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=waterfall\r\n\r\napt update\r\napt install -y curl jq\r\n\r\nif [ -n \"${DL_LINK}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_LINK}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_LINK} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f config.yml ]; then\r\n\techo -e \"Downloading ${PROJECT} config.yml\"\r\n\tcurl -o config.yml https://raw.githubusercontent.com/parkervcp/eggs/master/game_eggs/minecraft/proxy/java/waterfall/config.yml\r\nelse\r\n\techo -e \"${PROJECT} config.yml exists. Will not pull a new file\"\r\nfi",
-        "entry": "bash",
-        "container": "ghcr.io/parkervcp/installers:debian",
-        "extends": null
-      },
-      "created_at": "2025-03-20T08:37:04+00:00",
-      "updated_at": "2025-03-20T08:37:04+00:00",
-      "relationships": {
-        "variables": {
-          "object": "list",
-          "data": [
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 75,
-                "egg_id": 16,
-                "name": "Minecraft Version",
-                "description": "The version of Minecraft that Waterfall was built to support.",
-                "env_variable": "MINECRAFT_VERSION",
-                "default_value": "latest",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|alpha_num|between:1,6",
-                "created_at": "2025-03-20T08:37:04.000000Z",
-                "updated_at": "2025-03-20T08:37:04.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 76,
-                "egg_id": 16,
-                "name": "Waterfall Jar File",
-                "description": "The name of the jar file to use when running Waterfall.",
-                "env_variable": "SERVER_JARFILE",
-                "default_value": "waterfall.jar",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/",
-                "created_at": "2025-03-20T08:37:04.000000Z",
-                "updated_at": "2025-03-20T08:37:04.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 77,
-                "egg_id": 16,
-                "name": "Download Link",
-                "description": "A link to the server jar to download the Waterfall jar.",
-                "env_variable": "DL_LINK",
-                "default_value": "",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "nullable|string",
-                "created_at": "2025-03-20T08:37:04.000000Z",
-                "updated_at": "2025-03-20T08:37:04.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 78,
-                "egg_id": 16,
-                "name": "Waterfall build number",
-                "description": "Default is latest.\r\n\r\nif set to latest or an invalid version will grab the latest build number.",
-                "env_variable": "BUILD_NUMBER",
-                "default_value": "latest",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|string|max:20",
-                "created_at": "2025-03-20T08:37:04.000000Z",
-                "updated_at": "2025-03-20T08:37:04.000000Z"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": 26,
-      "uuid": "eda1edb7-e40b-48b3-aeb3-a259b24a9221",
-      "name": "Optimized Paper",
-      "nest": 1,
-      "author": "flaxeneel2@gmail.com",
-      "description": "Optimized paper being developed by flaxeneel2. Fork of the original paper egg by parkervcp",
-      "docker_image": "ghcr.io/pterodactyl/yolks:java_8",
-      "docker_images": {
-        "ghcr.io/pterodactyl/yolks:java_8": "ghcr.io/pterodactyl/yolks:java_8",
-        "ghcr.io/pterodactyl/yolks:java_11": "ghcr.io/pterodactyl/yolks:java_11",
-        "ghcr.io/pterodactyl/yolks:java_16": "ghcr.io/pterodactyl/yolks:java_16",
-        "ghcr.io/pterodactyl/yolks:java_17": "ghcr.io/pterodactyl/yolks:java_17"
-      },
-      "config": {
-        "files": {
-          "server.properties": {
-            "parser": "properties",
-            "find": {
-              "server-ip": "0.0.0.0",
-              "server-port": "{{server.build.default.port}}"
-            }
-          }
-        },
-        "startup": {
-          "done": ")! For help, type ",
-          "userInteraction": [
-            "Go to eula.txt for more info."
-          ]
-        },
-        "stop": "stop",
-        "logs": [],
-        "file_denylist": [],
-        "extends": null
-      },
-      "startup": "java -Xms256M -Xmx$(({{SERVER_MEMORY}} - ({{SERVER_MEMORY}}/10)))M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -jar {{SERVER_JARFILE}}",
-      "script": {
-        "privileged": true,
-        "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=paper\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/server.properties\r\nfi\r\n\r\nif [ ! -f paper.yml ]; then\r\n    echo -e \"Downloading MC paper.yml\"\r\n    curl -o paper.yml https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/paper.yml\r\nfi\r\n\r\nif [ ! -f spigot.yml ]; then\r\n    echo -e \"Downloading MC spigot.yml\"\r\n    curl -o spigot.yml https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/spigot.yml\r\nfi\r\n\r\nif [ ! -f bukkit.yml ]; then\r\n    echo -e \"Downloading MC bukkit.yml\"\r\n    curl -o bukkit.yml https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/bukkit.yml\r\nfi",
-        "entry": "ash",
-        "container": "ghcr.io/pterodactyl/installers:alpine",
-        "extends": null
-      },
-      "created_at": "2025-03-24T13:30:38+00:00",
-      "updated_at": "2025-03-24T13:30:38+00:00",
-      "relationships": {
-        "variables": {
-          "object": "list",
-          "data": [
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 138,
-                "egg_id": 26,
-                "name": "Minecraft Version",
-                "description": "The version of minecraft to download. \r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
-                "env_variable": "MINECRAFT_VERSION",
-                "default_value": "1.8.8",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "nullable|string|max:20",
-                "created_at": "2025-03-24T13:30:38.000000Z",
-                "updated_at": "2025-03-24T13:30:38.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 139,
-                "egg_id": 26,
-                "name": "Server Jar File",
-                "description": "The name of the server jarfile to run the server with.",
-                "env_variable": "SERVER_JARFILE",
-                "default_value": "server.jar",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|string|max:20",
-                "created_at": "2025-03-24T13:30:38.000000Z",
-                "updated_at": "2025-03-24T13:30:38.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 140,
-                "egg_id": 26,
-                "name": "Download Path",
-                "description": "A URL to use to download a server.jar rather than the ones in the install script. This is not user viewable.",
-                "env_variable": "DL_PATH",
-                "default_value": "",
-                "user_viewable": false,
-                "user_editable": false,
-                "rules": "nullable|string",
-                "created_at": "2025-03-24T13:30:38.000000Z",
-                "updated_at": "2025-03-24T13:30:38.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 141,
-                "egg_id": 26,
-                "name": "Build Number",
-                "description": "The build number for the paper release.\r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
-                "env_variable": "BUILD_NUMBER",
-                "default_value": "latest",
-                "user_viewable": true,
-                "user_editable": false,
-                "rules": "required|string|max:20",
-                "created_at": "2025-03-24T13:30:38.000000Z",
-                "updated_at": "2025-03-24T13:30:38.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 142,
-                "egg_id": 26,
-                "name": "Smart startup",
-                "description": "Compensate for jvm overhead",
-                "env_variable": "SMART_STARTUP",
-                "default_value": "true",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|string|max:20",
-                "created_at": "2025-03-24T13:30:38.000000Z",
-                "updated_at": "2025-03-24T13:30:38.000000Z"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": 27,
-      "uuid": "7cbbf932-6ed6-4440-9c46-b18f7defe785",
-      "name": "paper",
-      "nest": 1,
-      "author": "parker@pterodactyl.io",
-      "description": "High performance Spigot fork that aims to fix gameplay and mechanics inconsistencies.",
-      "docker_image": "ghcr.io/pterodactyl/yolks:java_21",
-      "docker_images": {
-        "Java 21": "ghcr.io/pterodactyl/yolks:java_21",
-        "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
-        "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
-        "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
-        "Java 8": "ghcr.io/pterodactyl/yolks:java_8"
-      },
-      "config": {
-        "files": {
-          "server.properties": {
-            "parser": "properties",
-            "find": {
-              "server-ip": "0.0.0.0",
-              "server-port": "{{server.build.default.port}}",
-              "query.port": "{{server.build.default.port}}"
-            }
-          }
-        },
-        "startup": {
-          "done": ")! For help, type "
-        },
-        "stop": "stop",
-        "logs": [],
-        "file_denylist": [],
-        "extends": null
-      },
-      "startup": "java -Xms4G -Xmx4G -jar server.jar --nogui",
-      "script": {
-        "privileged": true,
-        "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=paper\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.papermc.io/v2/projects/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep -m1 true`\r\n\tLATEST_VERSION=`curl -s https://api.papermc.io/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Specified version not found. Defaulting to the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\r\n\tBUILD_EXISTS=`curl -s https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep -m1 true`\r\n\tLATEST_BUILD=`curl -s https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
-        "entry": "ash",
-        "container": "ghcr.io/parkervcp/installers:alpine",
-        "extends": null
-      },
-      "created_at": "2025-03-25T11:39:45+00:00",
-      "updated_at": "2025-03-26T14:48:54+00:00",
-      "relationships": {
-        "variables": {
-          "object": "list",
-          "data": [
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 143,
-                "egg_id": 27,
-                "name": "Minecraft Version",
-                "description": "The version of minecraft to download. \r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
-                "env_variable": "MINECRAFT_VERSION",
-                "default_value": "latest",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "nullable|string|max:20",
-                "created_at": "2025-03-25T11:39:45.000000Z",
-                "updated_at": "2025-03-25T11:39:45.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 144,
-                "egg_id": 27,
-                "name": "Server Jar File",
-                "description": "The name of the server jarfile to run the server with.",
-                "env_variable": "SERVER_JARFILE",
-                "default_value": "server.jar",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/",
-                "created_at": "2025-03-25T11:39:45.000000Z",
-                "updated_at": "2025-03-25T11:39:45.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 145,
-                "egg_id": 27,
-                "name": "Download Path",
-                "description": "A URL to use to download a server.jar rather than the ones in the install script. This is not user viewable.",
-                "env_variable": "DL_PATH",
-                "default_value": "",
-                "user_viewable": false,
-                "user_editable": false,
-                "rules": "nullable|string",
-                "created_at": "2025-03-25T11:39:45.000000Z",
-                "updated_at": "2025-03-25T11:39:45.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 146,
-                "egg_id": 27,
-                "name": "Build Number",
-                "description": "The build number for the paper release.\r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
-                "env_variable": "BUILD_NUMBER",
-                "default_value": "latest",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|string|max:20",
-                "created_at": "2025-03-25T11:39:45.000000Z",
-                "updated_at": "2025-03-25T11:39:45.000000Z"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": 28,
-      "uuid": "6ce5d6bf-69de-402b-867d-4a0ce15fae3b",
-      "name": "python generic",
-      "nest": 1,
-      "author": "parker@parkervcp.com",
-      "description": "A Generic Python Egg for Pterodactyl\r\n\r\nTested with: https://github.com/Ispira/pixel-bot",
-      "docker_image": "ghcr.io/parkervcp/yolks:python_3.12",
-      "docker_images": {
-        "Python 3.12": "ghcr.io/parkervcp/yolks:python_3.12",
-        "Python 3.11": "ghcr.io/parkervcp/yolks:python_3.11",
-        "Python 3.10": "ghcr.io/parkervcp/yolks:python_3.10",
-        "Python 3.9": "ghcr.io/parkervcp/yolks:python_3.9",
-        "Python 3.8": "ghcr.io/parkervcp/yolks:python_3.8",
-        "Python 3.7": "ghcr.io/parkervcp/yolks:python_3.7",
-        "Python 2.7": "ghcr.io/parkervcp/yolks:python_2.7"
-      },
-      "config": {
-        "files": {},
-        "startup": {
-          "done": "change this part"
-        },
-        "stop": "^C",
-        "logs": [],
-        "file_denylist": [],
-        "extends": null
-      },
-      "startup": "if [[ -d .git ]] && [[ \"{{AUTO_UPDATE}}\" == \"1\" ]]; then git pull; fi; if [[ ! -z \"{{PY_PACKAGES}}\" ]]; then pip install -U --prefix .local {{PY_PACKAGES}}; fi; if [[ -f /home/container/${REQUIREMENTS_FILE} ]]; then pip install -U --prefix .local -r ${REQUIREMENTS_FILE}; fi; /usr/local/bin/python /home/container/{{PY_FILE}}",
-      "script": {
-        "privileged": true,
-        "install": "#!/bin/bash\r\n# Python App Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napt update\r\napt install -y git curl jq file unzip make gcc g++ libtool\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\nif [ \"${USER_UPLOAD}\" == \"true\" ] || [ \"${USER_UPLOAD}\" == \"1\" ]; then\r\n    echo -e \"assuming user knows what they are doing have a good day.\"\r\n    exit 0\r\nfi\r\n\r\n## add git ending if it's not on the address\r\nif [[ ${GIT_ADDRESS} != *.git ]]; then\r\n    GIT_ADDRESS=${GIT_ADDRESS}.git\r\nfi\r\n\r\nif [ -z \"${USERNAME}\" ] && [ -z \"${ACCESS_TOKEN}\" ]; then\r\n    echo -e \"using anon api call\"\r\nelse\r\n    GIT_ADDRESS=\"https://${USERNAME}:${ACCESS_TOKEN}@$(echo -e ${GIT_ADDRESS} | cut -d/ -f3-)\"\r\nfi\r\n\r\n## pull git python repo\r\nif [ \"$(ls -A /mnt/server)\" ]; then\r\n    echo -e \"/mnt/server directory is not empty.\"\r\n    if [ -d .git ]; then\r\n        echo -e \".git directory exists\"\r\n        if [ -f .git/config ]; then\r\n            echo -e \"loading info from git config\"\r\n            ORIGIN=$(git config --get remote.origin.url)\r\n        else\r\n            echo -e \"files found with no git config\"\r\n            echo -e \"closing out without touching things to not break anything\"\r\n            exit 10\r\n        fi\r\n    fi\r\n\r\n    if [ \"${ORIGIN}\" == \"${GIT_ADDRESS}\" ]; then\r\n        echo \"pulling latest from github\"\r\n        git pull\r\n    fi\r\nelse\r\n    echo -e \"/mnt/server is empty.\\ncloning files into repo\"\r\n    if [ -z ${BRANCH} ]; then\r\n        echo -e \"cloning default branch\"\r\n        git clone ${GIT_ADDRESS} .\r\n    else\r\n        echo -e \"cloning ${BRANCH}'\"\r\n        git clone --single-branch --branch ${BRANCH} ${GIT_ADDRESS} .\r\n    fi\r\n\r\nfi\r\n\r\nexport HOME=/mnt/server\r\n\r\necho \"Installing python requirements into folder\"\r\nif [[ ! -z ${PY_PACKAGES} ]]; then\r\n    pip install -U --prefix .local ${PY_PACKAGES}\r\nfi\r\n\r\nif [ -f /mnt/server/requirements.txt ]; then\r\n    pip install -U --prefix .local -r ${REQUIREMENTS_FILE}\r\nfi\r\n\r\necho -e \"install complete\"\r\nexit 0",
-        "entry": "bash",
-        "container": "python:3.8-slim-bookworm",
-        "extends": null
-      },
-      "created_at": "2025-03-25T12:56:33+00:00",
-      "updated_at": "2025-03-25T12:56:33+00:00",
-      "relationships": {
-        "variables": {
-          "object": "list",
-          "data": [
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 147,
-                "egg_id": 28,
-                "name": "Git Repo Address",
-                "description": "Git repo to clone\r\n\r\nI.E. https://github.com/parkervcp/repo_name",
-                "env_variable": "GIT_ADDRESS",
-                "default_value": "",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "nullable|string",
-                "created_at": "2025-03-25T12:56:33.000000Z",
-                "updated_at": "2025-03-25T12:56:33.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 148,
-                "egg_id": 28,
-                "name": "Git Branch",
-                "description": "What branch to pull from github.\r\n\r\nDefault is blank to pull the repo default branch",
-                "env_variable": "BRANCH",
-                "default_value": "",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "nullable|string",
-                "created_at": "2025-03-25T12:56:33.000000Z",
-                "updated_at": "2025-03-25T12:56:33.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 149,
-                "egg_id": 28,
-                "name": "User Uploaded Files",
-                "description": "Skip all the install stuff if you are letting a user upload files.\r\n\r\n0 = false (default)\r\n1 = true",
-                "env_variable": "USER_UPLOAD",
-                "default_value": "0",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|boolean",
-                "created_at": "2025-03-25T12:56:33.000000Z",
-                "updated_at": "2025-03-25T12:56:33.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 150,
-                "egg_id": 28,
-                "name": "Auto Update",
-                "description": "Pull the latest files on startup when using a GitHub repo.",
-                "env_variable": "AUTO_UPDATE",
-                "default_value": "0",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|boolean",
-                "created_at": "2025-03-25T12:56:33.000000Z",
-                "updated_at": "2025-03-25T12:56:33.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 151,
-                "egg_id": 28,
-                "name": "App py file",
-                "description": "The file that starts the App.",
-                "env_variable": "PY_FILE",
-                "default_value": "app.py",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|string",
-                "created_at": "2025-03-25T12:56:33.000000Z",
-                "updated_at": "2025-03-25T12:56:33.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 152,
-                "egg_id": 28,
-                "name": "Additional Python packages",
-                "description": "Install additional python packages.\r\n\r\nUse spaces to separate",
-                "env_variable": "PY_PACKAGES",
-                "default_value": "",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "nullable|string",
-                "created_at": "2025-03-25T12:56:33.000000Z",
-                "updated_at": "2025-03-25T12:56:33.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 153,
-                "egg_id": 28,
-                "name": "Git Username",
-                "description": "Username to auth with git.",
-                "env_variable": "USERNAME",
-                "default_value": "",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "nullable|string",
-                "created_at": "2025-03-25T12:56:33.000000Z",
-                "updated_at": "2025-03-25T12:56:33.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 154,
-                "egg_id": 28,
-                "name": "Git Access Token",
-                "description": "Password to use with git.\r\n\r\nIt's best practice to use a Personal Access Token.\r\nhttps://github.com/settings/tokens\r\nhttps://gitlab.com/-/profile/personal_access_tokens",
-                "env_variable": "ACCESS_TOKEN",
-                "default_value": "",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "nullable|string",
-                "created_at": "2025-03-25T12:56:33.000000Z",
-                "updated_at": "2025-03-25T12:56:33.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 155,
-                "egg_id": 28,
-                "name": "Requirements file",
-                "description": "if there are other requirements files to choose from.",
-                "env_variable": "REQUIREMENTS_FILE",
-                "default_value": "requirements.txt",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|string",
-                "created_at": "2025-03-25T12:56:33.000000Z",
-                "updated_at": "2025-03-25T12:56:33.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -1142,7 +489,7 @@
   "2": [
     {
       "id": 6,
-      "uuid": "601b8128-7ac4-45ca-b535-270102bcc321",
+      "uuid": "adb18ddc-6306-4cec-a459-19688a8e226a",
       "name": "Insurgency",
       "nest": 2,
       "author": "support@pterodactyl.io",
@@ -1169,8 +516,8 @@
         "container": "ghcr.io/pterodactyl/installers:debian",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-20T07:43:02+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -1187,8 +534,8 @@
                 "user_viewable": true,
                 "user_editable": false,
                 "rules": "required|regex:/^(237410)$/",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1203,8 +550,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|regex:/^(\\w{1,20})$/",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -1213,7 +560,7 @@
     },
     {
       "id": 7,
-      "uuid": "74bb529a-2c85-488a-afe8-f40dc09d66de",
+      "uuid": "8368deae-3af3-4245-9986-7725f8844afa",
       "name": "Ark: Survival Evolved",
       "nest": 2,
       "author": "dev@shepper.fr",
@@ -1240,8 +587,8 @@
         "container": "ghcr.io/pterodactyl/installers:debian",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-20T07:43:02+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -1258,8 +605,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|alpha_dash|between:1,100",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1274,8 +621,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|alpha_dash|between:1,100",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1290,8 +637,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|max:20",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1306,8 +653,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|max:128",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1322,8 +669,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|numeric",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1338,8 +685,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|numeric",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1354,8 +701,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|boolean",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1370,8 +717,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|boolean",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1386,8 +733,8 @@
                 "user_viewable": true,
                 "user_editable": false,
                 "rules": "nullable|numeric",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1402,8 +749,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -1412,7 +759,7 @@
     },
     {
       "id": 8,
-      "uuid": "de874ce6-54c0-4d7f-8240-5621b726395f",
+      "uuid": "392978b7-e86b-4a1b-80dd-db167c212c14",
       "name": "Custom Source Engine Game",
       "nest": 2,
       "author": "support@pterodactyl.io",
@@ -1439,8 +786,8 @@
         "container": "ghcr.io/pterodactyl/installers:debian",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-20T07:43:02+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -1457,8 +804,8 @@
                 "user_viewable": true,
                 "user_editable": false,
                 "rules": "required|numeric|digits_between:1,6",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1473,8 +820,8 @@
                 "user_viewable": true,
                 "user_editable": false,
                 "rules": "required|alpha_dash|between:1,100",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1489,8 +836,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|alpha_dash",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1505,8 +852,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1521,8 +868,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1537,8 +884,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -1547,7 +894,7 @@
     },
     {
       "id": 9,
-      "uuid": "e9be02be-e78c-439e-9262-f049c6bd8c7d",
+      "uuid": "aa6751cd-01fe-4770-9dcf-a025415abe29",
       "name": "Counter-Strike: Global Offensive",
       "nest": 2,
       "author": "support@pterodactyl.io",
@@ -1574,8 +921,8 @@
         "container": "ghcr.io/pterodactyl/installers:debian",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-20T07:43:02+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -1592,8 +939,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|alpha_dash",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1608,8 +955,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|alpha_num|size:32",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1624,8 +971,8 @@
                 "user_viewable": false,
                 "user_editable": false,
                 "rules": "required|string|max:20",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -1634,7 +981,7 @@
     },
     {
       "id": 10,
-      "uuid": "cb4e5752-65f6-4efd-88cb-f74ee1bea715",
+      "uuid": "91f99011-a790-40a5-9f28-cc1e699bf8fb",
       "name": "Garrys Mod",
       "nest": 2,
       "author": "support@pterodactyl.io",
@@ -1661,8 +1008,8 @@
         "container": "ghcr.io/pterodactyl/installers:debian",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-20T07:43:02+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -1679,8 +1026,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|alpha_dash",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1695,8 +1042,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string|alpha_num|size:32",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1711,8 +1058,8 @@
                 "user_viewable": false,
                 "user_editable": false,
                 "rules": "required|string|max:20",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1727,8 +1074,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|integer",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1743,8 +1090,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1759,8 +1106,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|integer|max:128",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1775,8 +1122,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|integer|max:100",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1791,8 +1138,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|boolean",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -1801,7 +1148,7 @@
     },
     {
       "id": 11,
-      "uuid": "432af826-aa94-496e-a269-7ea8f8b10739",
+      "uuid": "15f5a783-0c23-4991-839c-e2d2938fa913",
       "name": "Team Fortress 2",
       "nest": 2,
       "author": "support@pterodactyl.io",
@@ -1828,8 +1175,8 @@
         "container": "ghcr.io/pterodactyl/installers:debian",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-20T07:43:02+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -1846,8 +1193,8 @@
                 "user_viewable": true,
                 "user_editable": false,
                 "rules": "required|regex:/^(232250)$/",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1862,8 +1209,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|regex:/^(\\w{1,20})$/",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -1878,8 +1225,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|alpha_num|size:32",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -1890,7 +1237,7 @@
   "3": [
     {
       "id": 12,
-      "uuid": "3f85cb6c-e638-4829-8da4-84771d6a1326",
+      "uuid": "742f63b7-95f9-4d94-815d-76ae6efd1da6",
       "name": "Mumble Server",
       "nest": 3,
       "author": "support@pterodactyl.io",
@@ -1928,8 +1275,8 @@
         "container": "ghcr.io/pterodactyl/installers:alpine",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-20T07:43:02+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -1946,8 +1293,8 @@
                 "user_viewable": true,
                 "user_editable": false,
                 "rules": "required|numeric|digits_between:1,5",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -1956,7 +1303,7 @@
     },
     {
       "id": 13,
-      "uuid": "a913d5b4-c126-49da-ad48-242f1773bd24",
+      "uuid": "50ae9223-24e7-485d-b7df-3ef5f69bb72a",
       "name": "Teamspeak3 Server",
       "nest": 3,
       "author": "support@pterodactyl.io",
@@ -1986,8 +1333,8 @@
         "container": "ghcr.io/pterodactyl/installers:alpine",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-20T07:43:02+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -2004,8 +1351,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|max:6",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2020,8 +1367,8 @@
                 "user_viewable": true,
                 "user_editable": false,
                 "rules": "required|integer|between:1025,65535",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2036,8 +1383,8 @@
                 "user_viewable": true,
                 "user_editable": false,
                 "rules": "required|integer|between:1025,65535",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2052,8 +1399,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|max:12",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2068,8 +1415,8 @@
                 "user_viewable": true,
                 "user_editable": false,
                 "rules": "required|integer|between:1025,65535",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2084,8 +1431,8 @@
                 "user_viewable": true,
                 "user_editable": false,
                 "rules": "required|integer|between:1025,65535",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -2096,7 +1443,7 @@
   "4": [
     {
       "id": 14,
-      "uuid": "58b8a16b-3087-4b8f-bf43-a9565fb33c4e",
+      "uuid": "0db742b9-9cc3-4fc4-901c-0fabaae738d6",
       "name": "Rust",
       "nest": 4,
       "author": "support@pterodactyl.io",
@@ -2123,8 +1470,8 @@
         "container": "ghcr.io/pterodactyl/installers:debian",
         "extends": null
       },
-      "created_at": "2025-03-20T07:43:02+00:00",
-      "updated_at": "2025-03-20T07:43:02+00:00",
+      "created_at": "2025-03-27T07:41:46+00:00",
+      "updated_at": "2025-03-27T07:41:46+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -2141,8 +1488,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|max:60",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2157,8 +1504,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|in:vanilla,oxide,carbon",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2173,8 +1520,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|max:20",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2189,8 +1536,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2205,8 +1552,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|url",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2221,8 +1568,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|integer",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2237,8 +1584,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2253,8 +1600,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|integer",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2269,8 +1616,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|url",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2285,8 +1632,8 @@
                 "user_viewable": true,
                 "user_editable": false,
                 "rules": "required|integer",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2301,8 +1648,8 @@
                 "user_viewable": true,
                 "user_editable": false,
                 "rules": "required|integer",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2317,8 +1664,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|regex:/^[\\w.-]*$/|max:64",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2333,8 +1680,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|integer",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2349,8 +1696,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2365,8 +1712,8 @@
                 "user_viewable": true,
                 "user_editable": false,
                 "rules": "required|integer",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2381,8 +1728,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|url",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             },
             {
@@ -2397,97 +1744,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|url",
-                "created_at": "2025-03-20T07:43:02.000000Z",
-                "updated_at": "2025-03-20T07:43:02.000000Z"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
-  "5": [
-    {
-      "id": 19,
-      "uuid": "7ef50ca6-d94b-4383-a8ab-4e7ec1118e2a",
-      "name": "Uptime Kuma",
-      "nest": 5,
-      "author": "eggs@goover.dev",
-      "description": "Uptime Kuma is an easy-to-use self-hosted monitoring tool.",
-      "docker_image": "ghcr.io/parkervcp/apps:uptimekuma",
-      "docker_images": {
-        "ghcr.io/parkervcp/apps:uptimekuma": "ghcr.io/parkervcp/apps:uptimekuma"
-      },
-      "config": {
-        "files": {},
-        "startup": {
-          "done": "[SERVER] INFO: Listening on "
-        },
-        "stop": "^^C",
-        "logs": [],
-        "file_denylist": [],
-        "extends": null
-      },
-      "startup": "if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == \"1\" ]]; then npm run setup; fi; /usr/local/bin/node /home/container/server/server.js --port={{SERVER_PORT}}",
-      "script": {
-        "privileged": true,
-        "install": "#!/bin/ash\r\n# Uptime Kuma App Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napk update\r\napk add --no-cache git curl jq file unzip make gcc g++ python3 python3-dev libtool\r\napk add --no-cache git-lfs --repository=https://dl-cdn.alpinelinux.org/alpine/latest-stable/community\r\n\r\n## npm update to latest\r\necho -e \"Updating npm to latest....\\n\"\r\nif [ -d \"/mnt/server/node_modules\" ]; then\r\n    rm -fR /mnt/server/node_modules\r\n    npm cache verify\r\nfi\r\nnpm install -g npm@latest\r\n\r\n## Uptime Kuma install & update\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\ngit config --global --add safe.directory /mnt/server\r\n\r\nif [ -d .git ]; then\r\n    echo -e \"Updating Uptime Kuma....\\n \"\r\n    npm run setup\r\nelse\r\n    echo -e \"Download and installing Uptime Kuma...\\n\"   \r\n    git clone https://github.com/louislam/uptime-kuma.git .\r\n    npm run setup\r\nfi\r\n\r\n## only create dir, when .git is present to prevent errors\r\nif [ -d .git ]; then\r\n    mkdir -p /mnt/server/data\r\nfi\r\n\r\nif [ ! -f \"/mnt/server/data/kuma.db\" ]; then\r\n    cp /mnt/server/db/kuma.db /mnt/server/data/kuma.db\r\nfi\r\n\r\n## install end\r\necho -e \"-----------------------------------------\"\r\necho -e \"Installation completed...\"\r\necho -e \"-----------------------------------------\"\r\nexit 0",
-        "entry": "ash",
-        "container": "node:18-alpine",
-        "extends": null
-      },
-      "created_at": "2025-03-20T08:38:28+00:00",
-      "updated_at": "2025-03-20T08:38:28+00:00",
-      "relationships": {
-        "variables": {
-          "object": "list",
-          "data": [
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 89,
-                "egg_id": 19,
-                "name": "Git Repo Address",
-                "description": "GitHub Repo to clone\r\n\r\nI.E. https://github.com/parkervcp/repo_name",
-                "env_variable": "GIT_ADDRESS",
-                "default_value": "https://github.com/louislam/uptime-kuma",
-                "user_viewable": false,
-                "user_editable": false,
-                "rules": "nullable|string",
-                "created_at": "2025-03-20T08:38:28.000000Z",
-                "updated_at": "2025-03-20T08:38:28.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 90,
-                "egg_id": 19,
-                "name": "JS file",
-                "description": "The file that starts the app",
-                "env_variable": "JS_FILE",
-                "default_value": "server/server.js",
-                "user_viewable": false,
-                "user_editable": false,
-                "rules": "required|string",
-                "created_at": "2025-03-20T08:38:28.000000Z",
-                "updated_at": "2025-03-20T08:38:28.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 91,
-                "egg_id": 19,
-                "name": "Auto Update",
-                "description": "",
-                "env_variable": "AUTO_UPDATE",
-                "default_value": "1",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|boolean",
-                "created_at": "2025-03-20T08:38:28.000000Z",
-                "updated_at": "2025-03-20T08:38:28.000000Z"
+                "created_at": "2025-03-27T07:41:46.000000Z",
+                "updated_at": "2025-03-27T07:41:46.000000Z"
               }
             }
           ]
@@ -2495,10 +1753,219 @@
       }
     },
     {
-      "id": 23,
-      "uuid": "ab8608f3-784c-428f-894c-ed9f46c932ce",
+      "id": 15,
+      "uuid": "0af1a3a0-0391-44b4-8025-7394394bfe0c",
+      "name": "node.js generic",
+      "nest": 4,
+      "author": "parker@parkervcp.com",
+      "description": "a generic node.js egg\r\n\r\nThis will clone a git repo. it defaults to master if no branch is specified.\r\n\r\nInstalls the node_modules on install. If you set user_upload then I assume you know what you are doing.",
+      "docker_image": "ghcr.io/parkervcp/yolks:nodejs_21",
+      "docker_images": {
+        "Nodejs 21": "ghcr.io/parkervcp/yolks:nodejs_21",
+        "Nodejs 20": "ghcr.io/parkervcp/yolks:nodejs_20",
+        "Nodejs 19": "ghcr.io/parkervcp/yolks:nodejs_19",
+        "Nodejs 18": "ghcr.io/parkervcp/yolks:nodejs_18",
+        "Nodejs 17": "ghcr.io/parkervcp/yolks:nodejs_17",
+        "Nodejs 16": "ghcr.io/parkervcp/yolks:nodejs_16",
+        "Nodejs 14": "ghcr.io/parkervcp/yolks:nodejs_14",
+        "Nodejs 12": "ghcr.io/parkervcp/yolks:nodejs_12"
+      },
+      "config": {
+        "files": {},
+        "startup": {
+          "done": [
+            "change this text 1",
+            "change this text 2"
+          ]
+        },
+        "stop": "^C",
+        "logs": [],
+        "file_denylist": [],
+        "extends": null
+      },
+      "startup": "if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == \"1\" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ \"${MAIN_FILE}\" == \"*.js\" ]]; then /usr/local/bin/node \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; else /usr/local/bin/ts-node --esm \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; fi",
+      "script": {
+        "privileged": true,
+        "install": "#!/bin/bash\r\n# NodeJS App Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napt update\r\napt install -y git curl jq file unzip make gcc g++ python3 python3-dev python3-pip libtool\r\n\r\necho -e \"updating npm. please wait...\"\r\nnpm install npm@latest --location=global\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\nif [ \"${USER_UPLOAD}\" == \"true\" ] || [ \"${USER_UPLOAD}\" == \"1\" ]; then\r\n    echo -e \"assuming user knows what they are doing have a good day.\"\r\n    exit 0\r\nfi\r\n\r\n## add git ending if it's not on the address\r\nif [[ ${GIT_ADDRESS} != *.git ]]; then\r\n    GIT_ADDRESS=${GIT_ADDRESS}.git\r\nfi\r\n\r\nif [ -z \"${USERNAME}\" ] && [ -z \"${ACCESS_TOKEN}\" ]; then\r\n    echo -e \"using anon api call\"\r\nelse\r\n    GIT_ADDRESS=\"https://${USERNAME}:${ACCESS_TOKEN}@$(echo -e ${GIT_ADDRESS} | cut -d/ -f3-)\"\r\nfi\r\n\r\n## pull git js repo\r\nif [ \"$(ls -A /mnt/server)\" ]; then\r\n    echo -e \"/mnt/server directory is not empty.\"\r\n    if [ -d .git ]; then\r\n        echo -e \".git directory exists\"\r\n        if [ -f .git/config ]; then\r\n            echo -e \"loading info from git config\"\r\n            ORIGIN=$(git config --get remote.origin.url)\r\n        else\r\n            echo -e \"files found with no git config\"\r\n            echo -e \"closing out without touching things to not break anything\"\r\n            exit 10\r\n        fi\r\n    fi\r\n\r\n    if [ \"${ORIGIN}\" == \"${GIT_ADDRESS}\" ]; then\r\n        echo \"pulling latest from github\"\r\n        git pull\r\n    fi\r\nelse\r\n    echo -e \"/mnt/server is empty.\\ncloning files into repo\"\r\n    if [ -z ${BRANCH} ]; then\r\n        echo -e \"cloning default branch\"\r\n        git clone ${GIT_ADDRESS} .\r\n    else\r\n        echo -e \"cloning ${BRANCH}'\"\r\n        git clone --single-branch --branch ${BRANCH} ${GIT_ADDRESS} .\r\n    fi\r\n\r\nfi\r\n\r\necho \"Installing nodejs packages\"\r\nif [[ ! -z ${NODE_PACKAGES} ]]; then\r\n    /usr/local/bin/npm install ${NODE_PACKAGES}\r\nfi\r\n\r\nif [ -f /mnt/server/package.json ]; then\r\n    /usr/local/bin/npm install --production\r\nfi\r\n\r\necho -e \"install complete\"\r\nexit 0",
+        "entry": "bash",
+        "container": "node:18-bookworm-slim",
+        "extends": null
+      },
+      "created_at": "2025-03-27T07:47:43+00:00",
+      "updated_at": "2025-03-27T07:47:43+00:00",
+      "relationships": {
+        "variables": {
+          "object": "list",
+          "data": [
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 71,
+                "egg_id": 15,
+                "name": "Git Repo Address",
+                "description": "GitHub Repo to clone\r\n\r\nI.E. https://github.com/parkervcp/repo_name",
+                "env_variable": "GIT_ADDRESS",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-27T07:47:43.000000Z",
+                "updated_at": "2025-03-27T07:47:43.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 72,
+                "egg_id": 15,
+                "name": "Install Branch",
+                "description": "The branch to install.",
+                "env_variable": "BRANCH",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-27T07:47:43.000000Z",
+                "updated_at": "2025-03-27T07:47:43.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 73,
+                "egg_id": 15,
+                "name": "User Uploaded Files",
+                "description": "Skip all the install stuff if you are letting a user upload files.\r\n\r\n0 = false (default)\r\n1 = true",
+                "env_variable": "USER_UPLOAD",
+                "default_value": "0",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|boolean",
+                "created_at": "2025-03-27T07:47:43.000000Z",
+                "updated_at": "2025-03-27T07:47:43.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 74,
+                "egg_id": 15,
+                "name": "Auto Update",
+                "description": "Pull the latest files on startup when using a GitHub repo.",
+                "env_variable": "AUTO_UPDATE",
+                "default_value": "0",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|boolean",
+                "created_at": "2025-03-27T07:47:43.000000Z",
+                "updated_at": "2025-03-27T07:47:43.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 75,
+                "egg_id": 15,
+                "name": "Additional Node packages",
+                "description": "Install additional node packages.\r\n\r\nUse spaces to separate.",
+                "env_variable": "NODE_PACKAGES",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-27T07:47:43.000000Z",
+                "updated_at": "2025-03-27T07:47:43.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 76,
+                "egg_id": 15,
+                "name": "Git Username",
+                "description": "Username to auth with git.",
+                "env_variable": "USERNAME",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-27T07:47:43.000000Z",
+                "updated_at": "2025-03-27T07:47:43.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 77,
+                "egg_id": 15,
+                "name": "Git Access Token",
+                "description": "Password to use with git.\r\n\r\nIt's best practice to use a Personal Access Token.\r\nhttps://github.com/settings/tokens\r\nhttps://gitlab.com/-/profile/personal_access_tokens",
+                "env_variable": "ACCESS_TOKEN",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-27T07:47:43.000000Z",
+                "updated_at": "2025-03-27T07:47:43.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 78,
+                "egg_id": 15,
+                "name": "Uninstall Node packages",
+                "description": "Uninstall node packages.\r\n\r\nUse spaces to separate.",
+                "env_variable": "UNNODE_PACKAGES",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-27T07:47:43.000000Z",
+                "updated_at": "2025-03-27T07:47:43.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 79,
+                "egg_id": 15,
+                "name": "Main file",
+                "description": "The file that starts the app.\r\nCan be .js and .ts",
+                "env_variable": "MAIN_FILE",
+                "default_value": "index.js",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|string|max:16",
+                "created_at": "2025-03-27T07:47:43.000000Z",
+                "updated_at": "2025-03-27T07:47:43.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 80,
+                "egg_id": 15,
+                "name": "Additional Arguments.",
+                "description": "Any extra arguments for nodejs or ts-node",
+                "env_variable": "NODE_ARGS",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string|max:64",
+                "created_at": "2025-03-27T07:47:43.000000Z",
+                "updated_at": "2025-03-27T07:47:43.000000Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 16,
+      "uuid": "1bd371be-ebab-437e-8cbd-441a6b146899",
       "name": "MongoDB 7",
-      "nest": 5,
+      "nest": 4,
       "author": "parker@parkervcp.com",
       "description": "MongoDB is a general purpose, document-based, distributed database built for modern application developers and for my butt era.",
       "docker_image": "ghcr.io/parkervcp/yolks:mongodb_7",
@@ -2530,234 +1997,8 @@
         "container": "mongo:7-jammy",
         "extends": null
       },
-      "created_at": "2025-03-21T10:43:07+00:00",
-      "updated_at": "2025-03-21T10:43:07+00:00",
-      "relationships": {
-        "variables": {
-          "object": "list",
-          "data": [
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 127,
-                "egg_id": 23,
-                "name": "Mongo Admin Username",
-                "description": "The MongoDB Admin user",
-                "env_variable": "MONGO_USER",
-                "default_value": "admin",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|string",
-                "created_at": "2025-03-21T10:43:07.000000Z",
-                "updated_at": "2025-03-21T10:43:07.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 128,
-                "egg_id": 23,
-                "name": "Mongo Admin Password",
-                "description": "",
-                "env_variable": "MONGO_USER_PASS",
-                "default_value": "",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|string",
-                "created_at": "2025-03-21T10:43:07.000000Z",
-                "updated_at": "2025-03-21T10:43:07.000000Z"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": 24,
-      "uuid": "b4564c5c-3ca6-44a0-8986-6720cb801a23",
-      "name": "PteroStats",
-      "nest": 5,
-      "author": "hello@lezetho.co.uk",
-      "description": "a generic node.js egg\r\n\r\nThis will clone a git repo. it defaults to master if no branch is specified.\r\n\r\nInstalls the node_modules on install. If you set user_upload then I assume you know what you are doing.",
-      "docker_image": "ghcr.io/parkervcp/yolks:nodejs_21",
-      "docker_images": {
-        "NodeJS 21": "ghcr.io/parkervcp/yolks:nodejs_21",
-        "NodeJS 20": "ghcr.io/parkervcp/yolks:nodejs_20",
-        "NodeJS 19": "ghcr.io/parkervcp/yolks:nodejs_19",
-        "NodeJS 18": "ghcr.io/parkervcp/yolks:nodejs_18"
-      },
-      "config": {
-        "files": {},
-        "startup": {
-          "done": [
-            "PteroStats installed."
-          ]
-        },
-        "stop": "^C",
-        "logs": [],
-        "file_denylist": [],
-        "extends": null
-      },
-      "startup": "npm install && /usr/local/bin/node \"/home/container/index.js\" ${NODE_ARGS}",
-      "script": {
-        "privileged": true,
-        "install": "#!/bin/bash\r\n# PteroStats Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napt update\r\napt install -y git curl jq file unzip make gcc g++ python3 python3-dev python3-pip libtool\r\n\r\necho -e \"Updating npm. please wait...\"\r\nnpm install npm@latest --location=global\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\ngit clone https://github.com/HirziDevs/PteroStats.git ./\r\n\r\necho \"Installing nodejs packages\"\r\nif [[ ! -z ${NODE_PACKAGES} ]]; then\r\n    /usr/local/bin/npm install ${NODE_PACKAGES}\r\nfi\r\n\r\nif [ -f /mnt/server/package.json ]; then\r\n    /usr/local/bin/npm install --production\r\nfi\r\n\r\necho -e \"Install completed\"\r\nexit 0",
-        "entry": "bash",
-        "container": "node:18-bookworm-slim",
-        "extends": null
-      },
-      "created_at": "2025-03-24T07:04:12+00:00",
-      "updated_at": "2025-03-24T07:04:12+00:00",
-      "relationships": {
-        "variables": {
-          "object": "list",
-          "data": [
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 129,
-                "egg_id": 24,
-                "name": "Additional Arguments.",
-                "description": "Any extra arguments to execute.",
-                "env_variable": "NODE_ARGS",
-                "default_value": "",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "nullable|string|max:64",
-                "created_at": "2025-03-24T07:04:12.000000Z",
-                "updated_at": "2025-03-24T07:04:12.000000Z"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
-  "6": [
-    {
-      "id": 17,
-      "uuid": "e8e02a88-88cb-431c-bc96-7f181135c06e",
-      "name": "Rage.MP",
-      "nest": 6,
-      "author": "noreply.waypointhosting@gmail.com",
-      "description": "https://rage.mp/\r\n\r\nModified to work with the latest version of RAGE:MP\r\nWill automatically install linux bridge.\r\n**This server requires 2 ports to be added for the server. the main port and the next (port+1) as ports for the server.",
-      "docker_image": "ghcr.io/parkervcp/yolks:debian",
-      "docker_images": {
-        "ghcr.io/parkervcp/yolks:debian": "ghcr.io/parkervcp/yolks:debian"
-      },
-      "config": {
-        "files": {
-          "conf.json": {
-            "parser": "json",
-            "find": {
-              "port": "{{server.build.default.port}}",
-              "bind": "0.0.0.0",
-              "name": "{{server.build.env.SERVER_NAME}}",
-              "maxplayers": "{{server.build.env.MAX_PLAYERS}}"
-            }
-          }
-        },
-        "startup": {
-          "done": "The server is ready to accept connections"
-        },
-        "stop": "^X",
-        "logs": [],
-        "file_denylist": [],
-        "extends": null
-      },
-      "startup": "./ragemp-server",
-      "script": {
-        "privileged": true,
-        "install": "#!/bin/bash\r\n\r\nmkdir -p /mnt/server/tmp\r\ncd /mnt/server\r\n\r\nrm -rf bin/\r\nrm -rf dotnet/\r\nrm ragemp-server\r\n\r\ncd /mnt/server/tmp\r\necho \"Downloading rage.mp\"\r\ncurl -sSL -o linux_x64.tar.gz https://cdn.rage.mp/updater/prerelease/server-files/linux_x64.tar.gz\r\ntar -xzvf linux_x64.tar.gz\r\nrm linux_x64.tar.gz\r\ncd /mnt/server/tmp/ragemp-srv/\r\nmv * /mnt/server\r\n\r\ncd /mnt/server\r\nchmod +x ./ragemp-server\r\nrm -rf /mnt/server/tmp\r\n\r\nif [ -e conf.json ]; then\r\n    echo \"server config file exists\"\r\nelse\r\n    echo \"Downloading default rage.mp config\"\r\n    curl https://raw.githubusercontent.com/parkervcp/eggs/master/game_eggs/gta/ragemp/conf.json >> conf.json\r\nfi\r\n\r\necho \"install complete\"\r\n\r\nexit 0",
-        "entry": "bash",
-        "container": "ghcr.io/parkervcp/installers:debian",
-        "extends": null
-      },
-      "created_at": "2025-03-20T08:37:50+00:00",
-      "updated_at": "2025-03-20T08:37:50+00:00",
-      "relationships": {
-        "variables": {
-          "object": "list",
-          "data": [
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 79,
-                "egg_id": 17,
-                "name": "Server Name",
-                "description": "Server name that will be displayed to the master server.  (64 Char max)",
-                "env_variable": "SERVER_NAME",
-                "default_value": "RAGE:MP Unofficial server",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|string|max:64",
-                "created_at": "2025-03-20T08:37:50.000000Z",
-                "updated_at": "2025-03-20T08:37:50.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 80,
-                "egg_id": 17,
-                "name": "Max Players",
-                "description": "Maximum number of players your server will hold.  (Max 100)",
-                "env_variable": "MAX_PLAYERS",
-                "default_value": "50",
-                "user_viewable": true,
-                "user_editable": false,
-                "rules": "required|integer|between:1,100",
-                "created_at": "2025-03-20T08:37:50.000000Z",
-                "updated_at": "2025-03-20T08:37:50.000000Z"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": 18,
-      "uuid": "e9b34ebc-c68b-4c7a-b2ce-f3dbeedd64a3",
-      "name": "FiveM",
-      "nest": 6,
-      "author": "parker@parkervcp.com",
-      "description": "A new FiveM egg for the latest builds due to recent changes in FiveM",
-      "docker_image": "ghcr.io/parkervcp/yolks:debian",
-      "docker_images": {
-        "ghcr.io/parkervcp/yolks:debian": "ghcr.io/parkervcp/yolks:debian"
-      },
-      "config": {
-        "files": {
-          "server.cfg": {
-            "parser": "file",
-            "find": {
-              "endpoint_add_tcp": "endpoint_add_tcp \"0.0.0.0:{{server.build.default.port}}\"",
-              "endpoint_add_udp": "endpoint_add_udp \"0.0.0.0:{{server.build.default.port}}\"",
-              "sv_hostname": "sv_hostname \"{{server.build.env.SERVER_HOSTNAME}}\"",
-              "set sv_licenseKey": "set sv_licenseKey {{server.build.env.FIVEM_LICENSE}}",
-              "set steam_webApiKey": "set steam_webApiKey {{server.build.env.STEAM_WEBAPIKEY}}",
-              "sv_maxclients": "sv_maxclients {{server.build.env.MAX_PLAYERS}}"
-            }
-          }
-        },
-        "startup": {
-          "done": "succeeded. Welcome!"
-        },
-        "stop": "quit",
-        "logs": [],
-        "file_denylist": [],
-        "extends": null
-      },
-      "startup": "$(pwd)/alpine/opt/cfx-server/ld-musl-x86_64.so.1 --library-path \"$(pwd)/alpine/usr/lib/v8/:$(pwd)/alpine/lib/:$(pwd)/alpine/usr/lib/\" -- $(pwd)/alpine/opt/cfx-server/FXServer +set citizen_dir $(pwd)/alpine/opt/cfx-server/citizen/ +set sv_licenseKey {{FIVEM_LICENSE}} +set steam_webApiKey {{STEAM_WEBAPIKEY}} +set sv_maxplayers {{MAX_PLAYERS}} +set serverProfile default +set txAdminPort {{TXADMIN_PORT}} $( [ \"$TXADMIN_ENABLE\" == \"1\" ] || printf %s '+exec server.cfg' )",
-      "script": {
-        "privileged": true,
-        "install": "#!/bin/bash\r\n# FiveM Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napt update -y\r\napt install -y tar xz-utils file jq\r\n\r\nmkdir -p /mnt/server/resources\r\n\r\ncd /mnt/server\r\n\r\necho \"updating citizenfx resource files\"\r\ngit clone https://github.com/citizenfx/cfx-server-data.git /tmp\r\ncp -Rf /tmp/resources/* resources/\r\n\r\nRELEASE_PAGE=$(curl -sSL https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/)\r\nCHANGELOGS_PAGE=$(curl -sSL https://changelogs-live.fivem.net/api/changelog/versions/linux/server)\r\n\r\nif [[ \"${FIVEM_VERSION}\" == \"recommended\" ]] || [[ -z ${FIVEM_VERSION} ]]; then\r\n  DOWNLOAD_LINK=$(echo $CHANGELOGS_PAGE | jq -r '.recommended_download')\r\nelif [[ \"${FIVEM_VERSION}\" == \"latest\" ]]; then\r\n  DOWNLOAD_LINK=$(echo $CHANGELOGS_PAGE | jq -r '.latest_download')\r\nelse\r\n  VERSION_LINK=$(echo -e \"${RELEASE_PAGE}\" | grep -Eo '\".*/*.tar.xz\"' | grep -Eo '\".*/*.tar.xz\"' | sed 's/\\\"//g'  | sed 's/\\.\\///1' | grep -i \"${FIVEM_VERSION}\" | grep -o =.* |  tr -d '=')\r\n  if [[ \"${VERSION_LINK}\" == \"\" ]]; then\r\n    echo -e \"defaulting to recommedned as the version requested was invalid.\"\r\n    DOWNLOAD_LINK=$(echo $CHANGELOGS_PAGE | jq -r '.recommended_download')\r\n  else\r\n    DOWNLOAD_LINK=$(echo https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/${VERSION_LINK})\r\n  fi\r\nfi\r\n\r\nif [ ! -z \"${DOWNLOAD_URL}\" ]; then\r\n  if curl --output /dev/null --silent --head --fail ${DOWNLOAD_URL}; then\r\n    echo -e \"link is valid. setting download link to ${DOWNLOAD_URL}\"\r\n    DOWNLOAD_LINK=${DOWNLOAD_URL}\r\n  else\r\n    echo -e \"link is invalid closing out\"\r\n    exit 2\r\n  fi\r\nfi\r\n\r\necho -e \"Running curl -sSL ${DOWNLOAD_LINK} -o ${DOWNLOAD_LINK##*/}\"\r\n\r\ncurl -sSL ${DOWNLOAD_LINK} -o ${DOWNLOAD_LINK##*/}\r\n\r\necho \"Extracting fivem files\"\r\n\r\nFILETYPE=$(file -F ',' ${DOWNLOAD_LINK##*/} | cut -d',' -f2 | cut -d' ' -f2)\r\nif [ \"$FILETYPE\" == \"gzip\" ]; then\r\n  tar xzvf ${DOWNLOAD_LINK##*/}\r\nelif [ \"$FILETYPE\" == \"Zip\" ]; then\r\n  unzip ${DOWNLOAD_LINK##*/}\r\nelif [ \"$FILETYPE\" == \"XZ\" ]; then\r\n  tar xvf ${DOWNLOAD_LINK##*/}\r\nelse\r\n  echo -e \"unknown filetype. Exiting\"\r\n  exit 2\r\nfi\r\n\r\nrm -rf ${DOWNLOAD_LINK##*/} run.sh\r\n\r\nif [ -e server.cfg ]; then\r\n  echo \"Skipping downloading default server config file as one already exists\"\r\nelse\r\n  echo \"Downloading default fivem config\"\r\n  curl https://raw.githubusercontent.com/parkervcp/eggs/master/game_eggs/gta/fivem/server.cfg >>server.cfg\r\nfi\r\n\r\nmkdir -p logs/\r\n\r\necho \"install complete\"",
-        "entry": "bash",
-        "container": "ghcr.io/parkervcp/installers:debian",
-        "extends": null
-      },
-      "created_at": "2025-03-20T08:38:12+00:00",
-      "updated_at": "2025-03-20T08:38:12+00:00",
+      "created_at": "2025-03-27T08:15:33+00:00",
+      "updated_at": "2025-03-27T08:15:33+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -2766,128 +2007,32 @@
               "object": "egg_variable",
               "attributes": {
                 "id": 81,
-                "egg_id": 18,
-                "name": "fivem license",
-                "description": "Required to start the service. Get your keys at https://keymaster.fivem.net/",
-                "env_variable": "FIVEM_LICENSE",
-                "default_value": "",
+                "egg_id": 16,
+                "name": "Mongo Admin Username",
+                "description": "The MongoDB Admin user",
+                "env_variable": "MONGO_USER",
+                "default_value": "admin",
                 "user_viewable": true,
                 "user_editable": true,
-                "rules": "required|string|max:33",
-                "created_at": "2025-03-20T08:38:12.000000Z",
-                "updated_at": "2025-03-20T08:38:12.000000Z"
+                "rules": "required|string",
+                "created_at": "2025-03-27T08:15:33.000000Z",
+                "updated_at": "2025-03-27T08:15:33.000000Z"
               }
             },
             {
               "object": "egg_variable",
               "attributes": {
                 "id": 82,
-                "egg_id": 18,
-                "name": "Max Players",
-                "description": "Set the fivem max play count",
-                "env_variable": "MAX_PLAYERS",
-                "default_value": "48",
-                "user_viewable": true,
-                "user_editable": false,
-                "rules": "required|integer|between:1,48",
-                "created_at": "2025-03-20T08:38:12.000000Z",
-                "updated_at": "2025-03-20T08:38:12.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 83,
-                "egg_id": 18,
-                "name": "Server Hostname",
-                "description": "The name that shows up in the server browser",
-                "env_variable": "SERVER_HOSTNAME",
-                "default_value": "My new FXServer!",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|string",
-                "created_at": "2025-03-20T08:38:12.000000Z",
-                "updated_at": "2025-03-20T08:38:12.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 84,
-                "egg_id": 18,
-                "name": "fivem version",
-                "description": "The fivem version that is to be installed. Invalid versions will default to recommended.\r\n\r\nAn example is `6013-d8ae399d15680da569022f57ab7f2474d307c821`\r\n\r\nYou can get the latest version from here - https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/",
-                "env_variable": "FIVEM_VERSION",
-                "default_value": "recommended",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|string|max:50",
-                "created_at": "2025-03-20T08:38:12.000000Z",
-                "updated_at": "2025-03-20T08:38:12.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 85,
-                "egg_id": 18,
-                "name": "Download Link",
-                "description": "This is the link to download fivem from. This is only used in the install script.\r\n\r\nThe file you link to needs to be an fx.tar.zx file.\r\n\r\nExample:\r\nhttps://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/6013-d8ae399d15680da569022f57ab7f2474d307c821/fx.tar.xz",
-                "env_variable": "DOWNLOAD_URL",
+                "egg_id": 16,
+                "name": "Mongo Admin Password",
+                "description": "",
+                "env_variable": "MONGO_USER_PASS",
                 "default_value": "",
-                "user_viewable": false,
-                "user_editable": false,
-                "rules": "string|nullable",
-                "created_at": "2025-03-20T08:38:12.000000Z",
-                "updated_at": "2025-03-20T08:38:12.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 86,
-                "egg_id": 18,
-                "name": "Steam Web Api Key",
-                "description": "Use your Steam WebApiKey or set to 'none'. Get your key at https://steamcommunity.com/dev/apikey/",
-                "env_variable": "STEAM_WEBAPIKEY",
-                "default_value": "none",
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string",
-                "created_at": "2025-03-20T08:38:12.000000Z",
-                "updated_at": "2025-03-20T08:38:12.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 87,
-                "egg_id": 18,
-                "name": "txAdmin Port",
-                "description": "The port for the txAdmin panel",
-                "env_variable": "TXADMIN_PORT",
-                "default_value": "40120",
-                "user_viewable": true,
-                "user_editable": false,
-                "rules": "required|string|max:20",
-                "created_at": "2025-03-20T08:38:12.000000Z",
-                "updated_at": "2025-03-20T08:38:12.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 88,
-                "egg_id": 18,
-                "name": "Enable txadmin",
-                "description": "Enables txadmin.\r\n\r\nset to 1 to enable. (default is 0 for false)",
-                "env_variable": "TXADMIN_ENABLE",
-                "default_value": "0",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|boolean",
-                "created_at": "2025-03-20T08:38:12.000000Z",
-                "updated_at": "2025-03-20T08:38:12.000000Z"
+                "created_at": "2025-03-27T08:15:33.000000Z",
+                "updated_at": "2025-03-27T08:15:33.000000Z"
               }
             }
           ]
@@ -2895,12 +2040,12 @@
       }
     }
   ],
-  "7": [
+  "5": [
     {
-      "id": 21,
-      "uuid": "6ae2ebd9-f2b7-41bc-889b-522dee0ef746",
+      "id": 17,
+      "uuid": "0e3dfd0b-be5f-44ed-bb4e-9999ee9fbbc3",
       "name": "node.js generic",
-      "nest": 7,
+      "nest": 5,
       "author": "parker@parkervcp.com",
       "description": "a generic node.js egg\r\n\r\nThis will clone a git repo. it defaults to master if no branch is specified.\r\n\r\nInstalls the node_modules on install. If you set user_upload then I assume you know what you are doing.",
       "docker_image": "ghcr.io/parkervcp/yolks:nodejs_22",
@@ -2936,8 +2081,8 @@
         "container": "node:18-bookworm-slim",
         "extends": null
       },
-      "created_at": "2025-03-20T09:00:13+00:00",
-      "updated_at": "2025-03-20T09:00:46+00:00",
+      "created_at": "2025-03-27T10:43:38+00:00",
+      "updated_at": "2025-03-27T10:44:02+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -2945,8 +2090,8 @@
             {
               "object": "egg_variable",
               "attributes": {
-                "id": 102,
-                "egg_id": 21,
+                "id": 83,
+                "egg_id": 17,
                 "name": "Git Repo Address",
                 "description": "GitHub Repo to clone\r\n\r\nI.E. https://github.com/parkervcp/repo_name",
                 "env_variable": "GIT_ADDRESS",
@@ -2954,15 +2099,15 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string",
-                "created_at": "2025-03-20T09:00:13.000000Z",
-                "updated_at": "2025-03-20T09:00:13.000000Z"
+                "created_at": "2025-03-27T10:43:38.000000Z",
+                "updated_at": "2025-03-27T10:43:38.000000Z"
               }
             },
             {
               "object": "egg_variable",
               "attributes": {
-                "id": 103,
-                "egg_id": 21,
+                "id": 84,
+                "egg_id": 17,
                 "name": "Install Branch",
                 "description": "The branch to install.",
                 "env_variable": "BRANCH",
@@ -2970,15 +2115,15 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string",
-                "created_at": "2025-03-20T09:00:13.000000Z",
-                "updated_at": "2025-03-20T09:00:13.000000Z"
+                "created_at": "2025-03-27T10:43:38.000000Z",
+                "updated_at": "2025-03-27T10:43:38.000000Z"
               }
             },
             {
               "object": "egg_variable",
               "attributes": {
-                "id": 104,
-                "egg_id": 21,
+                "id": 85,
+                "egg_id": 17,
                 "name": "User Uploaded Files",
                 "description": "Skip all the install stuff if you are letting a user upload files.\r\n\r\n0 = false (default)\r\n1 = true",
                 "env_variable": "USER_UPLOAD",
@@ -2986,15 +2131,15 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|boolean",
-                "created_at": "2025-03-20T09:00:13.000000Z",
-                "updated_at": "2025-03-20T09:00:13.000000Z"
+                "created_at": "2025-03-27T10:43:38.000000Z",
+                "updated_at": "2025-03-27T10:43:38.000000Z"
               }
             },
             {
               "object": "egg_variable",
               "attributes": {
-                "id": 105,
-                "egg_id": 21,
+                "id": 86,
+                "egg_id": 17,
                 "name": "Auto Update",
                 "description": "Pull the latest files on startup when using a GitHub repo.",
                 "env_variable": "AUTO_UPDATE",
@@ -3002,15 +2147,15 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|boolean",
-                "created_at": "2025-03-20T09:00:13.000000Z",
-                "updated_at": "2025-03-20T09:00:13.000000Z"
+                "created_at": "2025-03-27T10:43:38.000000Z",
+                "updated_at": "2025-03-27T10:43:38.000000Z"
               }
             },
             {
               "object": "egg_variable",
               "attributes": {
-                "id": 106,
-                "egg_id": 21,
+                "id": 87,
+                "egg_id": 17,
                 "name": "Additional Node packages",
                 "description": "Install additional node packages.\r\n\r\nUse spaces to separate.",
                 "env_variable": "NODE_PACKAGES",
@@ -3018,15 +2163,15 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string",
-                "created_at": "2025-03-20T09:00:13.000000Z",
-                "updated_at": "2025-03-20T09:00:13.000000Z"
+                "created_at": "2025-03-27T10:43:38.000000Z",
+                "updated_at": "2025-03-27T10:43:38.000000Z"
               }
             },
             {
               "object": "egg_variable",
               "attributes": {
-                "id": 107,
-                "egg_id": 21,
+                "id": 88,
+                "egg_id": 17,
                 "name": "Git Username",
                 "description": "Username to auth with git.",
                 "env_variable": "USERNAME",
@@ -3034,15 +2179,15 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string",
-                "created_at": "2025-03-20T09:00:13.000000Z",
-                "updated_at": "2025-03-20T09:00:13.000000Z"
+                "created_at": "2025-03-27T10:43:38.000000Z",
+                "updated_at": "2025-03-27T10:43:38.000000Z"
               }
             },
             {
               "object": "egg_variable",
               "attributes": {
-                "id": 108,
-                "egg_id": 21,
+                "id": 89,
+                "egg_id": 17,
                 "name": "Git Access Token",
                 "description": "Password to use with git.\r\n\r\nIt's best practice to use a Personal Access Token.\r\nhttps://github.com/settings/tokens\r\nhttps://gitlab.com/-/profile/personal_access_tokens",
                 "env_variable": "ACCESS_TOKEN",
@@ -3050,15 +2195,15 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string",
-                "created_at": "2025-03-20T09:00:13.000000Z",
-                "updated_at": "2025-03-20T09:00:13.000000Z"
+                "created_at": "2025-03-27T10:43:38.000000Z",
+                "updated_at": "2025-03-27T10:43:38.000000Z"
               }
             },
             {
               "object": "egg_variable",
               "attributes": {
-                "id": 109,
-                "egg_id": 21,
+                "id": 90,
+                "egg_id": 17,
                 "name": "Uninstall Node packages",
                 "description": "Uninstall node packages.\r\n\r\nUse spaces to separate.",
                 "env_variable": "UNNODE_PACKAGES",
@@ -3066,15 +2211,15 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string",
-                "created_at": "2025-03-20T09:00:13.000000Z",
-                "updated_at": "2025-03-20T09:00:13.000000Z"
+                "created_at": "2025-03-27T10:43:38.000000Z",
+                "updated_at": "2025-03-27T10:43:38.000000Z"
               }
             },
             {
               "object": "egg_variable",
               "attributes": {
-                "id": 110,
-                "egg_id": 21,
+                "id": 91,
+                "egg_id": 17,
                 "name": "Main file",
                 "description": "The file that starts the app.\r\nCan be .js and .ts",
                 "env_variable": "MAIN_FILE",
@@ -3082,15 +2227,15 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "required|string|max:16",
-                "created_at": "2025-03-20T09:00:13.000000Z",
-                "updated_at": "2025-03-20T09:00:13.000000Z"
+                "created_at": "2025-03-27T10:43:38.000000Z",
+                "updated_at": "2025-03-27T10:43:38.000000Z"
               }
             },
             {
               "object": "egg_variable",
               "attributes": {
-                "id": 111,
-                "egg_id": 21,
+                "id": 92,
+                "egg_id": 17,
                 "name": "Additional Arguments.",
                 "description": "Any extra arguments for nodejs or ts-node",
                 "env_variable": "NODE_ARGS",
@@ -3098,8 +2243,8 @@
                 "user_viewable": true,
                 "user_editable": true,
                 "rules": "nullable|string|max:64",
-                "created_at": "2025-03-20T09:00:13.000000Z",
-                "updated_at": "2025-03-20T09:00:13.000000Z"
+                "created_at": "2025-03-27T10:43:38.000000Z",
+                "updated_at": "2025-03-27T10:43:38.000000Z"
               }
             }
           ]
@@ -3107,40 +2252,49 @@
       }
     }
   ],
-  "8": [
+  "6": [
     {
-      "id": 25,
-      "uuid": "05b74331-dab4-4276-8e09-671cc9f01b8d",
-      "name": "LumenWEB (BETA)",
-      "nest": 8,
-      "author": "david@david1117.dev",
-      "description": "Easily set up websites using LumenWEB.",
-      "docker_image": "ghcr.io/david1117dev/lumenweb:1.0-beta",
+      "id": 18,
+      "uuid": "f456a60f-8725-4bfd-936d-99a3bdb4775e",
+      "name": "Golang Discord Bot",
+      "nest": 6,
+      "author": "loyalhoodro@gmail.com",
+      "description": "self made egg by Prathmesh </>",
+      "docker_image": "golang:1.24",
       "docker_images": {
-        "V1.0": "ghcr.io/david1117dev/lumenweb:1.0-beta"
+        "golang:1.24": "golang:1.24"
       },
       "config": {
-        "files": {},
-        "startup": {
-          "done": [
-            "Starting LumenWEB"
-          ]
+        "files": {
+          "config.json": {
+            "parser": "json",
+            "find": {
+              "BOT_TOKEN": "YOUR_BOT_TOKEN"
+            }
+          }
         },
-        "stop": "^C^C",
-        "logs": [],
-        "file_denylist": [],
+        "startup": {
+          "done": "Bot is running.",
+          "userInteraction": false
+        },
+        "stop": "^C",
+        "logs": {
+          "done": "Bot is running.",
+          "log": "logs/latest.log"
+        },
+        "file_denylist": null,
         "extends": null
       },
-      "startup": "# Powered by LumenWEB",
+      "startup": "go run {{STARTUP_FILE}}",
       "script": {
         "privileged": true,
-        "install": null,
+        "install": "#!/bin/bash\r\n# Install Go dependencies\r\ngo mod tidy\r\ngo build -o bot",
         "entry": "ash",
         "container": "alpine:3.4",
         "extends": null
       },
-      "created_at": "2025-03-24T11:35:26+00:00",
-      "updated_at": "2025-03-24T11:35:26+00:00",
+      "created_at": "2025-03-28T03:12:40+00:00",
+      "updated_at": "2025-03-28T03:20:55+00:00",
       "relationships": {
         "variables": {
           "object": "list",
@@ -3148,129 +2302,33 @@
             {
               "object": "egg_variable",
               "attributes": {
-                "id": 130,
-                "egg_id": 25,
-                "name": "Website Domain",
-                "description": "Your website's domain name. Ensure a CNAME record points to web.lumenvm.cloud. You can put multiple domains separated by a comma. Make sure you enable this in the domain mode variable.",
-                "env_variable": "DOMAIN",
-                "default_value": "",
+                "id": 93,
+                "egg_id": 18,
+                "name": "BOT_TOKEN",
+                "description": "The token used to authenticate your Discord bot.",
+                "env_variable": "BOT_TOKEN",
+                "default_value": "YOUR_DISCORD_BOT_TOKEN",
                 "user_viewable": true,
                 "user_editable": true,
-                "rules": "nullable|string",
-                "created_at": "2025-03-24T11:35:26.000000Z",
-                "updated_at": "2025-03-24T11:35:26.000000Z"
+                "rules": "required|string|max:60",
+                "created_at": "2025-03-28T03:16:41.000000Z",
+                "updated_at": "2025-03-28T03:16:41.000000Z"
               }
             },
             {
               "object": "egg_variable",
               "attributes": {
-                "id": 131,
-                "egg_id": 25,
-                "name": "Website root",
-                "description": "The webroot directory for your website. This must be in /home/container/.",
-                "env_variable": "WEBROOT",
-                "default_value": "/home/container",
+                "id": 94,
+                "egg_id": 18,
+                "name": "STARTUP_FILE",
+                "description": "The Go bot startup file (e.g., main.go or bot.go).",
+                "env_variable": "STARTUP_FILE",
+                "default_value": "main.go",
                 "user_viewable": true,
                 "user_editable": true,
-                "rules": "required|string|starts_with:/home/container",
-                "created_at": "2025-03-24T11:35:26.000000Z",
-                "updated_at": "2025-03-24T11:35:26.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 132,
-                "egg_id": 25,
-                "name": "Webserver Software",
-                "description": "Select the software to run your web server.",
-                "env_variable": "SOFTWARE",
-                "default_value": "php 8.4",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|in:php 8.4,php 8.3,php 8.2,php 8.1,php 8.0,php 7.4,python,vercel/serve,dotnet 7,dotnet 8,WordPress,Astro,NextJS,custom",
-                "created_at": "2025-03-24T11:35:26.000000Z",
-                "updated_at": "2025-03-24T11:35:26.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 133,
-                "egg_id": 25,
-                "name": "Domain mode",
-                "description": "Select the mode of domain to use. If you select 'normal', all domains will be pointing to one index file. Instead, 'multi' will create separate directories for each domain.",
-                "env_variable": "DOMAIN_MODE",
-                "default_value": "disabled",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "required|in:disabled,normal,multi",
-                "created_at": "2025-03-24T11:35:26.000000Z",
-                "updated_at": "2025-03-24T11:35:26.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 134,
-                "egg_id": 25,
-                "name": "Custom command",
-                "description": "Enter the custom command to run. This only works if the software is set to \"custom\"",
-                "env_variable": "CUSTOM_COMMAND",
-                "default_value": "",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "nullable|string",
-                "created_at": "2025-03-24T11:35:26.000000Z",
-                "updated_at": "2025-03-24T11:35:26.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 135,
-                "egg_id": 25,
-                "name": "Dotnet .dll file",
-                "description": "Specify the path to the .NET DLL to run your application.",
-                "env_variable": "DOTNET_DLL",
-                "default_value": "",
-                "user_viewable": true,
-                "user_editable": true,
-                "rules": "nullable|string",
-                "created_at": "2025-03-24T11:35:26.000000Z",
-                "updated_at": "2025-03-24T11:35:26.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 136,
-                "egg_id": 25,
-                "name": "(ADMIN) Public IP Address",
-                "description": "Overwrite the public IP address, edit only IF YOU KNOW WHAT ARE YOU DOING.",
-                "env_variable": "PUBLIC_IP",
-                "default_value": "",
-                "user_viewable": false,
-                "user_editable": false,
-                "rules": "nullable|ipv4",
-                "created_at": "2025-03-24T11:35:26.000000Z",
-                "updated_at": "2025-03-24T11:35:26.000000Z"
-              }
-            },
-            {
-              "object": "egg_variable",
-              "attributes": {
-                "id": 137,
-                "egg_id": 25,
-                "name": "(ADMIN) Debug",
-                "description": "Debug some of the softwares. There is no need to enable this unless you are hunting errors.",
-                "env_variable": "DEBUG",
-                "default_value": "0",
-                "user_viewable": false,
-                "user_editable": false,
-                "rules": "required|boolean",
-                "created_at": "2025-03-24T11:35:26.000000Z",
-                "updated_at": "2025-03-24T11:35:26.000000Z"
+                "rules": "required|string|max:20",
+                "created_at": "2025-03-28T03:20:32.000000Z",
+                "updated_at": "2025-03-28T03:20:32.000000Z"
               }
             }
           ]

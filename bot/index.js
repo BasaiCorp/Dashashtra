@@ -39,19 +39,71 @@ if (!fs.existsSync(eventsPath)) {
     console.log(`Created events directory at ${eventsPath}`);
 }
 
-// Load commands
-try {
-    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+// Set up data directory if it doesn't exist
+const dataPath = path.join(__dirname, '../data');
+if (!fs.existsSync(dataPath)) {
+    fs.mkdirSync(dataPath, { recursive: true });
+    console.log(`Created data directory at ${dataPath}`);
+}
 
-    for (const file of commandFiles) {
-        const filePath = path.join(commandsPath, file);
-        const command = require(filePath);
-        if ('data' in command && 'execute' in command) {
-            client.commands.set(command.data.name, command);
-        } else {
-            console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+// Function to recursively load commands from directories
+function loadCommandsRecursively(dir) {
+    const items = fs.readdirSync(dir, { withFileTypes: true });
+    
+    // Files to ignore (utility files, not commands)
+    const ignoreFiles = ['utils.js', 'events.js'];
+    
+    for (const item of items) {
+        const itemPath = path.join(dir, item.name);
+        
+        if (item.isDirectory()) {
+            // Check if this directory has an index.js file that exports commands
+            const indexPath = path.join(itemPath, 'index.js');
+            if (fs.existsSync(indexPath)) {
+                try {
+                    const module = require(indexPath);
+                    
+                    // If the module exports commands, register them
+                    if (module.commands) {
+                        for (const [name, command] of Object.entries(module.commands)) {
+                            if ('data' in command && 'execute' in command) {
+                                client.commands.set(command.data.name, command);
+                                console.log(`Registered command from module: ${command.data.name}`);
+                            }
+                        }
+                    }
+                    
+                    // If the module has an init function, call it
+                    if (typeof module.initAntiNuke === 'function') {
+                        module.initAntiNuke(client);
+                    }
+                } catch (error) {
+                    console.error(`Error loading module from ${indexPath}:`, error);
+                }
+            } else {
+                // If no index.js, recursively check for command files
+                loadCommandsRecursively(itemPath);
+            }
+        } else if (item.name.endsWith('.js') && !ignoreFiles.includes(item.name)) {
+            // Load individual command files (skip utility files)
+            try {
+                const command = require(itemPath);
+                if ('data' in command && 'execute' in command) {
+                    client.commands.set(command.data.name, command);
+                    console.log(`Registered command: ${command.data.name}`);
+                } else {
+                    console.log(`[WARNING] The command at ${itemPath} is missing a required "data" or "execute" property.`);
+                }
+            } catch (error) {
+                console.error(`Error loading command from ${itemPath}:`, error);
+            }
         }
     }
+}
+
+// Load commands
+try {
+    loadCommandsRecursively(commandsPath);
 } catch (error) {
     console.error('Error loading commands:', error);
 }
@@ -73,6 +125,41 @@ try {
     console.error('Error loading events:', error);
 }
 
+// Handle prefix commands
+client.on('messageCreate', async message => {
+    // Ignore messages from bots
+    if (message.author.bot) return;
+    
+    // Check if message starts with the prefix
+    const prefix = settings.api.client.bot.prefix;
+    if (!message.content.startsWith(prefix)) return;
+    
+    // Extract command name and arguments
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const commandName = args.shift().toLowerCase();
+    
+    // Find the command
+    const command = client.commands.find(cmd => {
+        // Check if the command has a prefix property that matches
+        if (cmd.prefix && cmd.prefix.split(' ')[0] === prefix + commandName) {
+            return true;
+        }
+        return false;
+    });
+    
+    if (!command) return;
+    
+    // Execute the prefix command handler if it exists
+    if (typeof command.handlePrefix === 'function') {
+        try {
+            await command.handlePrefix(message, args);
+        } catch (error) {
+            console.error(`Error executing prefix command ${commandName}:`, error);
+            message.reply('There was an error executing that command.').catch(console.error);
+        }
+    }
+});
+
 // Error handling
 client.on('error', error => {
     console.error('Discord client error:', error);
@@ -91,4 +178,4 @@ client.login(settings.api.client.bot.token)
         console.error('Failed to log in to Discord:', error);
     });
 
-module.exports = client; 
+module.exports = client;

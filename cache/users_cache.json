@@ -4,7 +4,7 @@
     "attributes": {
       "id": 1,
       "external_id": null,
-      "uuid": "193002ee-c67e-4886-b127-d591cf23c534",
+      "uuid": "e9367c74-11a5-4ead-ac44-3688c5cd7f54",
       "username": "exo1tap",
       "email": "exo1tap@loyalhood.xyz",
       "first_name": "exo1tap",
@@ -12,8 +12,8 @@
       "language": "en",
       "root_admin": true,
       "2fa": false,
-      "created_at": "2025-03-20T07:43:03+00:00",
-      "updated_at": "2025-03-20T07:43:03+00:00",
+      "created_at": "2025-03-27T07:41:47+00:00",
+      "updated_at": "2025-03-27T07:41:47+00:00",
       "relationships": {
         "servers": {
           "object": "list",
@@ -21,11 +21,11 @@
             {
               "object": "server",
               "attributes": {
-                "id": 144,
+                "id": 1,
                 "external_id": null,
-                "uuid": "032f546b-37a4-4b23-8282-4fd93e09eabf",
-                "identifier": "032f546b",
-                "name": "FlaxyNodes | Bot",
+                "uuid": "785fdc0c-7e60-4791-9db7-11066bf6aba0",
+                "identifier": "785fdc0c",
+                "name": "FlaxyNodes Bot",
                 "description": "",
                 "status": null,
                 "suspended": false,
@@ -39,25 +39,25 @@
                   "oom_disabled": true
                 },
                 "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
+                  "databases": 0,
+                  "allocations": 0,
+                  "backups": 0
                 },
                 "user": 1,
                 "node": 1,
-                "allocation": 5,
-                "nest": 7,
-                "egg": 21,
+                "allocation": 1,
+                "nest": 4,
+                "egg": 15,
                 "container": {
                   "startup_command": "if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == \"1\" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ \"${MAIN_FILE}\" == \"*.js\" ]]; then /usr/local/bin/node \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; else /usr/local/bin/ts-node --esm \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; fi",
-                  "image": "ghcr.io/parkervcp/yolks:nodejs_22",
+                  "image": "ghcr.io/parkervcp/yolks:nodejs_21",
                   "installed": 1,
                   "environment": {
                     "GIT_ADDRESS": "",
                     "BRANCH": "",
                     "USER_UPLOAD": "0",
                     "AUTO_UPDATE": "0",
-                    "NODE_PACKAGES": "libjpeg8",
+                    "NODE_PACKAGES": "",
                     "USERNAME": "",
                     "ACCESS_TOKEN": "",
                     "UNNODE_PACKAGES": "",
@@ -65,27 +65,27 @@
                     "NODE_ARGS": "",
                     "STARTUP": "if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == \"1\" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ \"${MAIN_FILE}\" == \"*.js\" ]]; then /usr/local/bin/node \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; else /usr/local/bin/ts-node --esm \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; fi",
                     "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "032f546b-37a4-4b23-8282-4fd93e09eabf",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
+                    "P_SERVER_UUID": "785fdc0c-7e60-4791-9db7-11066bf6aba0",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-26T12:07:25+00:00",
-                "created_at": "2025-03-26T12:06:45+00:00"
+                "updated_at": "2025-03-27T07:50:30+00:00",
+                "created_at": "2025-03-27T07:49:50+00:00"
               }
             },
             {
               "object": "server",
               "attributes": {
-                "id": 145,
+                "id": 2,
                 "external_id": null,
-                "uuid": "abffce04-c501-43be-a0de-44555c30484a",
-                "identifier": "abffce04",
-                "name": "MongoDB",
+                "uuid": "dae94778-c195-464b-8295-3cabd0a08814",
+                "identifier": "dae94778",
+                "name": "MongoDB (Bot)",
                 "description": "",
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 512,
+                  "memory": 1024,
                   "swap": 0,
                   "disk": 2048,
                   "io": 500,
@@ -94,15 +94,15 @@
                   "oom_disabled": true
                 },
                 "feature_limits": {
-                  "databases": 55,
-                  "allocations": 55,
+                  "databases": 0,
+                  "allocations": 5,
                   "backups": 5
                 },
                 "user": 1,
                 "node": 1,
-                "allocation": 6,
-                "nest": 5,
-                "egg": 23,
+                "allocation": 2,
+                "nest": 4,
+                "egg": 16,
                 "container": {
                   "startup_command": "mongod --fork --dbpath /home/container/mongodb/ --port ${SERVER_PORT} --bind_ip 0.0.0.0 --logpath /home/container/logs/mongo.log -f /home/container/mongod.conf; until nc -z -v -w5 127.0.0.1 ${SERVER_PORT}; do echo 'Waiting for mongodb connection...'; sleep 5; done; mongosh --username ${MONGO_USER} --password ${MONGO_USER_PASS} --host 127.0.0.1:${SERVER_PORT} && mongosh --eval \"db.getSiblingDB('admin').shutdownServer()\" 127.0.0.1:${SERVER_PORT}",
                   "image": "ghcr.io/parkervcp/yolks:mongodb_7",
@@ -112,12 +112,12 @@
                     "MONGO_USER_PASS": "admin",
                     "STARTUP": "mongod --fork --dbpath /home/container/mongodb/ --port ${SERVER_PORT} --bind_ip 0.0.0.0 --logpath /home/container/logs/mongo.log -f /home/container/mongod.conf; until nc -z -v -w5 127.0.0.1 ${SERVER_PORT}; do echo 'Waiting for mongodb connection...'; sleep 5; done; mongosh --username ${MONGO_USER} --password ${MONGO_USER_PASS} --host 127.0.0.1:${SERVER_PORT} && mongosh --eval \"db.getSiblingDB('admin').shutdownServer()\" 127.0.0.1:${SERVER_PORT}",
                     "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "abffce04-c501-43be-a0de-44555c30484a",
-                    "P_SERVER_ALLOCATION_LIMIT": 55
+                    "P_SERVER_UUID": "dae94778-c195-464b-8295-3cabd0a08814",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-26T12:19:45+00:00",
-                "created_at": "2025-03-26T12:16:55+00:00"
+                "updated_at": "2025-03-27T08:18:35+00:00",
+                "created_at": "2025-03-27T08:18:30+00:00"
               }
             }
           ]
@@ -130,7 +130,7 @@
     "attributes": {
       "id": 2,
       "external_id": null,
-      "uuid": "72e7464d-47d2-49bd-abf0-ea53121d89e0",
+      "uuid": "06b9b669-ccab-4d81-9285-22ea15eee4f0",
       "username": "thunder",
       "email": "thunder@flaxynodes.fun",
       "first_name": "Thunder",
@@ -138,8 +138,8 @@
       "language": "en",
       "root_admin": true,
       "2fa": false,
-      "created_at": "2025-03-20T07:52:34+00:00",
-      "updated_at": "2025-03-20T07:52:34+00:00",
+      "created_at": "2025-03-27T08:35:20+00:00",
+      "updated_at": "2025-03-27T08:35:20+00:00",
       "relationships": {
         "servers": {
           "object": "list",
@@ -153,16 +153,16 @@
     "attributes": {
       "id": 3,
       "external_id": null,
-      "uuid": "fc84a360-6cb9-40f5-9dc1-c91107da8bdf",
-      "username": "prathmesh",
-      "email": "prathmeshbarot2009@gmail.com",
-      "first_name": "Prathmesh",
-      "last_name": "Prathmesh",
+      "uuid": "9e98d355-0d59-4a45-9dee-28f85520f4f9",
+      "username": "prath",
+      "email": "prathmesh@flaxynodes.fun",
+      "first_name": "prath",
+      "last_name": "prath",
       "language": "en",
       "root_admin": true,
       "2fa": false,
-      "created_at": "2025-03-20T07:54:50+00:00",
-      "updated_at": "2025-03-20T07:54:50+00:00",
+      "created_at": "2025-03-27T10:28:34+00:00",
+      "updated_at": "2025-03-27T10:28:34+00:00",
       "relationships": {
         "servers": {
           "object": "list",
@@ -170,12 +170,12 @@
             {
               "object": "server",
               "attributes": {
-                "id": 130,
+                "id": 3,
                 "external_id": null,
-                "uuid": "e8ee76cd-ea7b-4950-b928-8be464bf2b87",
-                "identifier": "e8ee76cd",
-                "name": "Prathmesh Dash bina puche Reset mat karna samje",
-                "description": "Dash he delete mat marna",
+                "uuid": "3440d34e-c531-4099-bc11-11ace7f4a8b1",
+                "identifier": "3440d34e",
+                "name": "Prathmesh's Portfolio",
+                "description": "POrtfolio",
                 "status": null,
                 "suspended": false,
                 "limits": {
@@ -188,85 +188,85 @@
                   "oom_disabled": true
                 },
                 "feature_limits": {
-                  "databases": 10,
-                  "allocations": 10,
-                  "backups": 10
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
                 },
                 "user": 3,
                 "node": 1,
-                "allocation": 4,
-                "nest": 7,
-                "egg": 21,
+                "allocation": 95,
+                "nest": 5,
+                "egg": 17,
                 "container": {
                   "startup_command": "if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == \"1\" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ \"${MAIN_FILE}\" == \"*.js\" ]]; then /usr/local/bin/node \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; else /usr/local/bin/ts-node --esm \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; fi",
                   "image": "ghcr.io/parkervcp/yolks:nodejs_22",
                   "installed": 1,
                   "environment": {
-                    "GIT_ADDRESS": "https://github.com/BasaiCorp/FlaxyNodes-Dashboard",
-                    "BRANCH": "main",
+                    "GIT_ADDRESS": "",
+                    "BRANCH": "",
                     "USER_UPLOAD": "0",
-                    "AUTO_UPDATE": "1",
+                    "AUTO_UPDATE": "0",
                     "NODE_PACKAGES": "",
-                    "USERNAME": "BasaiCorp",
+                    "USERNAME": "",
                     "ACCESS_TOKEN": "",
                     "UNNODE_PACKAGES": "",
                     "MAIN_FILE": "index.js",
                     "NODE_ARGS": "",
                     "STARTUP": "if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == \"1\" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ \"${MAIN_FILE}\" == \"*.js\" ]]; then /usr/local/bin/node \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; else /usr/local/bin/ts-node --esm \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; fi",
                     "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "e8ee76cd-ea7b-4950-b928-8be464bf2b87",
-                    "P_SERVER_ALLOCATION_LIMIT": 10
+                    "P_SERVER_UUID": "3440d34e-c531-4099-bc11-11ace7f4a8b1",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-03-25T17:38:28+00:00",
-                "created_at": "2025-03-25T17:37:47+00:00"
+                "updated_at": "2025-03-27T10:48:56+00:00",
+                "created_at": "2025-03-27T10:48:16+00:00"
               }
             },
             {
               "object": "server",
               "attributes": {
-                "id": 132,
+                "id": 6,
                 "external_id": null,
-                "uuid": "24cf5e84-dd00-460d-ad7f-fe31935506c0",
-                "identifier": "24cf5e84",
-                "name": "Test",
-                "description": "",
+                "uuid": "72ac5c3b-121a-49bd-b59a-81bc2003d3ea",
+                "identifier": "72ac5c3b",
+                "name": "Flaxy Nodes Bot",
+                "description": "bot code",
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 1024,
+                  "memory": 0,
                   "swap": 0,
-                  "disk": 2048,
+                  "disk": 0,
                   "io": 500,
-                  "cpu": 100,
+                  "cpu": 0,
                   "threads": null,
                   "oom_disabled": true
                 },
                 "feature_limits": {
-                  "databases": 1,
-                  "allocations": 1,
-                  "backups": 1
+                  "databases": 2,
+                  "allocations": 2,
+                  "backups": 2
                 },
                 "user": 3,
                 "node": 1,
-                "allocation": 24,
-                "nest": 1,
-                "egg": 1,
+                "allocation": 96,
+                "nest": 6,
+                "egg": 18,
                 "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "startup_command": "go run main.go",
+                  "image": "golang:1.24",
                   "installed": 1,
                   "environment": {
-                    "BUNGEE_VERSION": "latest",
-                    "SERVER_JARFILE": "bungeecord.jar",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
+                    "BOT_TOKEN": "YOUR_DISCORD_BOT_TOKEN",
+                    "STARTUP_FILE": "main.go",
+                    "STARTUP": "go run main.go",
                     "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "24cf5e84-dd00-460d-ad7f-fe31935506c0",
-                    "P_SERVER_ALLOCATION_LIMIT": 1
+                    "P_SERVER_UUID": "72ac5c3b-121a-49bd-b59a-81bc2003d3ea",
+                    "P_SERVER_ALLOCATION_LIMIT": 2
                   }
                 },
-                "updated_at": "2025-03-26T03:20:09+00:00",
-                "created_at": "2025-03-26T03:20:06+00:00"
+                "updated_at": "2025-03-28T03:18:14+00:00",
+                "created_at": "2025-03-28T03:17:51+00:00"
               }
             }
           ]
@@ -277,18 +277,87 @@
   {
     "object": "user",
     "attributes": {
+      "id": 4,
+      "external_id": null,
+      "uuid": "fb7f381a-b86b-4d8b-b522-7ab868d6cf64",
+      "username": "f7r",
+      "email": "f7rhosting@gmail.com",
+      "first_name": "F",
+      "last_name": "R",
+      "language": "en",
+      "root_admin": true,
+      "2fa": false,
+      "created_at": "2025-03-27T10:32:33+00:00",
+      "updated_at": "2025-03-27T10:32:33+00:00",
+      "relationships": {
+        "servers": {
+          "object": "list",
+          "data": []
+        }
+      }
+    }
+  },
+  {
+    "object": "user",
+    "attributes": {
+      "id": 5,
+      "external_id": null,
+      "uuid": "535d6d05-3381-4651-bf87-21ac67796e14",
+      "username": "dnp.adil999",
+      "email": "dnp.adil999@gmail.com",
+      "first_name": "dnp.adil999",
+      "last_name": "dnp.adil999",
+      "language": "en",
+      "root_admin": true,
+      "2fa": false,
+      "created_at": "2025-03-27T14:15:51+00:00",
+      "updated_at": "2025-03-27T14:15:51+00:00",
+      "relationships": {
+        "servers": {
+          "object": "list",
+          "data": []
+        }
+      }
+    }
+  },
+  {
+    "object": "user",
+    "attributes": {
+      "id": 6,
+      "external_id": null,
+      "uuid": "33fa3234-872d-41f6-bf26-ba3e2018e428",
+      "username": "flaxyofficials",
+      "email": "rudraop@flaxynodes.fun",
+      "first_name": "Flaxy officials",
+      "last_name": "Flaxy official",
+      "language": "en",
+      "root_admin": true,
+      "2fa": false,
+      "created_at": "2025-03-27T15:19:48+00:00",
+      "updated_at": "2025-03-27T15:19:48+00:00",
+      "relationships": {
+        "servers": {
+          "object": "list",
+          "data": []
+        }
+      }
+    }
+  },
+  {
+    "object": "user",
+    "attributes": {
       "id": 7,
       "external_id": null,
-      "uuid": "54f5f6f2-8f59-4e10-828c-6f337eda4cdd",
-      "username": "tonightgamerz",
-      "email": "server.backup2134@gmail.com",
-      "first_name": "PREMIUM",
-      "last_name": "Tonight",
+      "uuid": "ecee8cdd-11bc-49cc-b46c-529eec39f13a",
+      "username": "dev",
+      "email": "exfocus44@gmail.com",
+      "first_name": "Dev",
+      "last_name": "Dev",
       "language": "en",
       "root_admin": false,
       "2fa": false,
-      "created_at": "2025-03-20T09:21:02+00:00",
-      "updated_at": "2025-03-20T10:29:36+00:00",
+      "created_at": "2025-03-27T15:20:06+00:00",
+      "updated_at": "2025-03-27T16:06:11+00:00",
       "relationships": {
         "servers": {
           "object": "list",
@@ -302,62 +371,16 @@
     "attributes": {
       "id": 8,
       "external_id": null,
-      "uuid": "a44a16a1-d496-43e5-b38f-ea45d6b3940e",
-      "username": "notsyprim",
-      "email": "notsyprim@gmail.com",
-      "first_name": "PREMIUM",
-      "last_name": "Syprim",
+      "uuid": "65105639-7620-4f93-adb1-c10545da9af7",
+      "username": "tonight",
+      "email": "tonight@flaxynodes.fun",
+      "first_name": "Tonight",
+      "last_name": "Tonight",
       "language": "en",
       "root_admin": false,
       "2fa": false,
-      "created_at": "2025-03-20T09:24:23+00:00",
-      "updated_at": "2025-03-25T11:27:43+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 9,
-      "external_id": null,
-      "uuid": "9007c8fe-d1b6-4c7e-8a13-4d23d71bfd4c",
-      "username": "mafia",
-      "email": "rajputaarrmmaan@gmail.com",
-      "first_name": "Rexy",
-      "last_name": "GG",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T09:24:36+00:00",
-      "updated_at": "2025-03-25T11:27:50+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 10,
-      "external_id": null,
-      "uuid": "51d06999-5af8-45d9-94a7-255b7b39dc02",
-      "username": "shehe_playz",
-      "email": "shehegaming377@gmail.com",
-      "first_name": "PREMIUM",
-      "last_name": "Shehe",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T09:29:20+00:00",
-      "updated_at": "2025-03-26T13:30:54+00:00",
+      "created_at": "2025-03-27T15:46:30+00:00",
+      "updated_at": "2025-03-27T15:46:30+00:00",
       "relationships": {
         "servers": {
           "object": "list",
@@ -365,2460 +388,53 @@
             {
               "object": "server",
               "attributes": {
-                "id": 127,
+                "id": 5,
                 "external_id": null,
-                "uuid": "6f617567-23d1-4fe7-bab9-5a6b894f4aba",
-                "identifier": "6f617567",
-                "name": "HyperMCPE",
-                "description": "Best Lifesteal Network [exp - 17-05-2025]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 16420,
-                  "swap": 0,
-                  "disk": 100000,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": "1",
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 2,
-                  "allocations": 2,
-                  "backups": 2
-                },
-                "user": 10,
-                "node": 6,
-                "allocation": 349,
-                "nest": 1,
-                "egg": 27,
-                "container": {
-                  "startup_command": "java -Xms4G -Xmx4G -jar server.jar nogui",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms4G -Xmx4G -jar server.jar nogui",
-                    "P_SERVER_LOCATION": "India 3",
-                    "P_SERVER_UUID": "6f617567-23d1-4fe7-bab9-5a6b894f4aba",
-                    "P_SERVER_ALLOCATION_LIMIT": 2
-                  }
-                },
-                "updated_at": "2025-03-26T13:42:20+00:00",
-                "created_at": "2025-03-25T14:06:56+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 11,
-      "external_id": null,
-      "uuid": "c6ab4804-3d42-4da6-ad54-eb058fd0eb52",
-      "username": "advit",
-      "email": "pandeyadwit0@gmail.com",
-      "first_name": "PREMIUM",
-      "last_name": "Advit",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T09:31:56+00:00",
-      "updated_at": "2025-03-25T11:28:13+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 129,
-                "external_id": null,
-                "uuid": "ec1b4b2c-6a27-43ca-8750-8b868dd867f3",
-                "identifier": "ec1b4b2c",
-                "name": "KKK SMP",
+                "uuid": "7d221b7f-1542-454e-969d-8878823dbfa1",
+                "identifier": "7d221b7f",
+                "name": "Tonight gamerz [exp - 20april]",
                 "description": "",
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 2,
-                  "backups": 5
-                },
-                "user": 11,
-                "node": 1,
-                "allocation": 9,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms4G -Xmx4G -jar server.jar nogui",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms4G -Xmx4G -jar server.jar nogui",
-                    "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "ec1b4b2c-6a27-43ca-8750-8b868dd867f3",
-                    "P_SERVER_ALLOCATION_LIMIT": 2
-                  }
-                },
-                "updated_at": "2025-03-26T16:22:06+00:00",
-                "created_at": "2025-03-25T14:18:45+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 12,
-      "external_id": null,
-      "uuid": "36bc6a7b-c113-4182-9381-c2752e8106d1",
-      "username": "ghost",
-      "email": "prabhatkumarsing12@gmail.com",
-      "first_name": "STAFF",
-      "last_name": "Ghost",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T09:35:07+00:00",
-      "updated_at": "2025-03-20T09:50:08+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 13,
-      "external_id": null,
-      "uuid": "03d1d2d2-cbb5-41fe-a479-9116a81f3fa2",
-      "username": "littleplayz",
-      "email": "litteplayz@gmail.com",
-      "first_name": "PREMIUM",
-      "last_name": "LittlePlayz",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T09:48:10+00:00",
-      "updated_at": "2025-03-25T11:28:06+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 14,
-      "external_id": null,
-      "uuid": "b2da2bf5-69dd-4e01-babe-ef81ae730002",
-      "username": "krish",
-      "email": "introvertkrish98@gmail.com",
-      "first_name": "PREMIUM",
-      "last_name": "Krish",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T09:52:02+00:00",
-      "updated_at": "2025-03-20T09:52:02+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 15,
-      "external_id": null,
-      "uuid": "3c935c92-fef1-4d49-ba36-cd1f26970a3d",
-      "username": "maxie",
-      "email": "maxiemc0@gmail.com",
-      "first_name": "PREMIUM",
-      "last_name": "Maxie",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T09:54:10+00:00",
-      "updated_at": "2025-03-22T14:23:11+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 18,
-      "external_id": null,
-      "uuid": "882e1bef-752a-4890-b88c-431bccf9f7ce",
-      "username": "argan",
-      "email": "arganhd2@gmail.com",
-      "first_name": "argan",
-      "last_name": "argan",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T10:33:29+00:00",
-      "updated_at": "2025-03-20T10:33:29+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 15,
-                "external_id": null,
-                "uuid": "38669160-978b-441c-b151-c1a414c7876b",
-                "identifier": "38669160",
-                "name": "arley permanent [ninja]",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 10240,
-                  "swap": 0,
-                  "disk": 50000,
-                  "io": 500,
-                  "cpu": 150,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 100
-                },
-                "user": 18,
-                "node": 1,
-                "allocation": 19,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "38669160-978b-441c-b151-c1a414c7876b",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-26T13:29:55+00:00",
-                "created_at": "2025-03-20T10:33:56+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 20,
-      "external_id": null,
-      "uuid": "a9aa42c9-fa75-44e3-af81-340847c49dda",
-      "username": "devgg",
-      "email": "exfocus44@gmail.com",
-      "first_name": "Server",
-      "last_name": "Dev",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T10:55:11+00:00",
-      "updated_at": "2025-03-25T02:47:30+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 17,
-                "external_id": null,
-                "uuid": "edc8f5e1-60b0-4ce9-9f4a-b9218835b35d",
-                "identifier": "edc8f5e1",
-                "name": "Developer server of flaxynodes 2 [ninja]",
-                "description": "Developer team server of flaxynodes",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
+                  "memory": 8000,
                   "swap": 0,
                   "disk": 40000,
                   "io": 500,
-                  "cpu": 0,
+                  "cpu": 200,
                   "threads": null,
                   "oom_disabled": true
                 },
                 "feature_limits": {
                   "databases": 0,
                   "allocations": 0,
-                  "backups": 0
+                  "backups": 1
                 },
-                "user": 20,
-                "node": 7,
-                "allocation": 311,
+                "user": 8,
+                "node": 2,
+                "allocation": 3,
                 "nest": 1,
                 "egg": 2,
                 "container": {
                   "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.21",
-                    "SERVER_JARFILE": "server.jar",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "India 2",
-                    "P_SERVER_UUID": "edc8f5e1-60b0-4ce9-9f4a-b9218835b35d",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-26T16:27:03+00:00",
-                "created_at": "2025-03-20T10:57:18+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 18,
-                "external_id": null,
-                "uuid": "796cfbd1-c89e-467a-a7e3-3bf56400b973",
-                "identifier": "796cfbd1",
-                "name": "FlaxyNodes Developer Team! [ninja]",
-                "description": "Developer team server of flaxynodes",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": "0",
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 20,
-                "node": 7,
-                "allocation": 316,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.21",
-                    "SERVER_JARFILE": "server.jar",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "India 2",
-                    "P_SERVER_UUID": "796cfbd1-c89e-467a-a7e3-3bf56400b973",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-26T16:26:00+00:00",
-                "created_at": "2025-03-20T11:09:16+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 21,
-      "external_id": null,
-      "uuid": "4619bcfc-0fa0-4b89-b360-69b3d0e17729",
-      "username": "bzrk",
-      "email": "devipunita654@gmail.com",
-      "first_name": "PREMIUM",
-      "last_name": "Bzrk",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T11:11:42+00:00",
-      "updated_at": "2025-03-20T11:11:42+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 22,
-      "external_id": null,
-      "uuid": "430b69ca-e3d8-471f-9acc-270179e6ba89",
-      "username": "tishansarkar",
-      "email": "tishansarkar4@gmail.com",
-      "first_name": "PREMIUM",
-      "last_name": "Tishan",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T11:16:37+00:00",
-      "updated_at": "2025-03-20T11:16:37+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 23,
-      "external_id": null,
-      "uuid": "47a31456-995a-4e04-996f-f6c8d16a2aae",
-      "username": "tony",
-      "email": "tonyplayminecraft@gmail.com",
-      "first_name": "MANAGER",
-      "last_name": "Tony",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T11:23:46+00:00",
-      "updated_at": "2025-03-20T23:32:51+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 24,
-      "external_id": null,
-      "uuid": "03153024-37ee-41b6-afd2-4613004c1acf",
-      "username": "rormafia",
-      "email": "rormafia@flaxynodes.fun",
-      "first_name": "PREMIUM",
-      "last_name": "Mafia",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T11:45:48+00:00",
-      "updated_at": "2025-03-26T06:40:54+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 122,
-                "external_id": null,
-                "uuid": "a3c64fa7-f1b7-4415-9280-b63586ea8d43",
-                "identifier": "a3c64fa7",
-                "name": "Aqua Mc (exp - 2feb 2026)",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 24,
-                "node": 7,
-                "allocation": 310,
-                "nest": 1,
-                "egg": 27,
-                "container": {
-                  "startup_command": "java -Xms4G -Xmx4G -jar server.jar --nogui",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.19.4",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "132",
-                    "STARTUP": "java -Xms4G -Xmx4G -jar server.jar --nogui",
-                    "P_SERVER_LOCATION": "India 2",
-                    "P_SERVER_UUID": "a3c64fa7-f1b7-4415-9280-b63586ea8d43",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-26T16:39:25+00:00",
-                "created_at": "2025-03-25T13:34:51+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 25,
-      "external_id": null,
-      "uuid": "6d0e9fd2-8d46-40ee-bb92-64f3bf282b75",
-      "username": "vansh",
-      "email": "vanshpadiyar28@gmail.com",
-      "first_name": "MANAGER",
-      "last_name": "Vansh",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T11:50:32+00:00",
-      "updated_at": "2025-03-26T03:58:28+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 125,
-                "external_id": null,
-                "uuid": "3a834be7-f251-401b-880f-9c59c5b1885c",
-                "identifier": "3a834be7",
-                "name": "Vansh permanent",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 16000,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 2,
-                  "backups": 2
-                },
-                "user": 25,
-                "node": 1,
-                "allocation": 1,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                    "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "3a834be7-f251-401b-880f-9c59c5b1885c",
-                    "P_SERVER_ALLOCATION_LIMIT": 2
-                  }
-                },
-                "updated_at": "2025-03-26T03:56:49+00:00",
-                "created_at": "2025-03-25T14:00:43+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 26,
-      "external_id": null,
-      "uuid": "0476f84f-bc38-4aea-ad42-52054fb3b27c",
-      "username": "rscshaurya",
-      "email": "theselfvlogger1@gmail.com",
-      "first_name": "DIRECTOR",
-      "last_name": "Shaurya",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T12:04:26+00:00",
-      "updated_at": "2025-03-26T04:12:08+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 133,
-                "external_id": null,
-                "uuid": "12c2e246-0bdc-4da3-b530-04cd07c722ae",
-                "identifier": "12c2e246",
-                "name": "Wood plan",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 4000,
-                  "swap": 0,
-                  "disk": 30000,
-                  "io": 500,
-                  "cpu": 140,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 26,
-                "node": 7,
-                "allocation": 313,
-                "nest": 1,
-                "egg": 1,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "BUNGEE_VERSION": "latest",
-                    "SERVER_JARFILE": "bungeecord.jar",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "India 2",
-                    "P_SERVER_UUID": "12c2e246-0bdc-4da3-b530-04cd07c722ae",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-26T04:22:49+00:00",
-                "created_at": "2025-03-26T04:10:08+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 134,
-                "external_id": null,
-                "uuid": "e9d8512a-b72a-4465-bf3e-14146c2be3c8",
-                "identifier": "e9d8512a",
-                "name": "Infinity plan",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 26,
-                "node": 7,
-                "allocation": 314,
-                "nest": 1,
-                "egg": 27,
-                "container": {
-                  "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                    "P_SERVER_LOCATION": "India 2",
-                    "P_SERVER_UUID": "e9d8512a-b72a-4465-bf3e-14146c2be3c8",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-26T04:26:06+00:00",
-                "created_at": "2025-03-26T04:11:02+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 27,
-      "external_id": null,
-      "uuid": "cba1f682-ac5e-4a47-9df6-cbdff394aa00",
-      "username": "teenager",
-      "email": "teenager3464@gmail.com",
-      "first_name": "Teenager",
-      "last_name": "Teenager",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T12:32:32+00:00",
-      "updated_at": "2025-03-25T11:29:19+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 28,
-      "external_id": null,
-      "uuid": "3c536aea-14a2-45f1-a728-ba803fc82db9",
-      "username": "venom",
-      "email": "erichill2015116@hotmail.com",
-      "first_name": "Venom",
-      "last_name": "Venom",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T12:37:20+00:00",
-      "updated_at": "2025-03-22T10:19:36+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 29,
-      "external_id": null,
-      "uuid": "dad0fd74-5ec1-476c-9d90-4ade06807529",
-      "username": "rudraop",
-      "email": "rudraparmar1290@gmail.com",
-      "first_name": "Rudra",
-      "last_name": "Parmar",
-      "language": "en",
-      "root_admin": true,
-      "2fa": false,
-      "created_at": "2025-03-20T12:59:51+00:00",
-      "updated_at": "2025-03-25T12:06:58+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 30,
-      "external_id": null,
-      "uuid": "866e55eb-de42-443c-967a-17dda6a6949c",
-      "username": "syprim",
-      "email": "itsnaruto0005@gmail.com",
-      "first_name": "Syprim",
-      "last_name": "Bhai",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T13:16:34+00:00",
-      "updated_at": "2025-03-20T13:16:34+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 31,
-      "external_id": null,
-      "uuid": "7b9ef284-a00b-41a3-9e7f-d3dffb4a53f0",
-      "username": "saukath",
-      "email": "saukatha26@gmail.com",
-      "first_name": "Saukath",
-      "last_name": "Ali",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T14:06:31+00:00",
-      "updated_at": "2025-03-20T14:06:31+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 32,
-      "external_id": null,
-      "uuid": "ba3c4939-4c27-43ad-8483-c8e33d226c50",
-      "username": "lenxs",
-      "email": "lenxs@flaxynodes.xyz",
-      "first_name": "PREMIUM",
-      "last_name": "Lenxs",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T15:43:43+00:00",
-      "updated_at": "2025-03-20T15:43:43+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 33,
-      "external_id": null,
-      "uuid": "8dad48f8-1506-4af2-8826-29a97b3d2237",
-      "username": "ssgameing5678",
-      "email": "samosa93377@gmail.com",
-      "first_name": "somu",
-      "last_name": "sanu",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T16:42:16+00:00",
-      "updated_at": "2025-03-23T08:09:16+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 34,
-      "external_id": null,
-      "uuid": "93472967-dce5-4de8-9420-549ad531f6c6",
-      "username": "errornetwork",
-      "email": "dancersanu5@gmail.com",
-      "first_name": "samosa",
-      "last_name": "samosa",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-20T17:26:23+00:00",
-      "updated_at": "2025-03-20T17:26:23+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 36,
-      "external_id": null,
-      "uuid": "d87cd16f-2c88-407a-9b20-fc53b35f912e",
-      "username": "rudraopop",
-      "email": "rudraop@flaxynodes.fun",
-      "first_name": "RudraOp",
-      "last_name": "Flaxy",
-      "language": "en",
-      "root_admin": true,
-      "2fa": false,
-      "created_at": "2025-03-21T01:12:14+00:00",
-      "updated_at": "2025-03-23T13:37:14+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 39,
-      "external_id": null,
-      "uuid": "03c52def-be72-400c-882b-e5f12b9ffd32",
-      "username": "darknessdevboyxah",
-      "email": "Darknessdevboy@gmail.com",
-      "first_name": "Server",
-      "last_name": "Subuser",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-21T09:11:19+00:00",
-      "updated_at": "2025-03-21T09:11:19+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 40,
-      "external_id": null,
-      "uuid": "4cda2a88-aa3a-45c2-87a6-71d9850f36d7",
-      "username": "gokuthepredatorgpi",
-      "email": "gokuthepredator@gmail.com",
-      "first_name": "Server",
-      "last_name": "Subuser",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-21T09:12:14+00:00",
-      "updated_at": "2025-03-21T09:12:14+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 41,
-      "external_id": null,
-      "uuid": "5b0c6e21-52f6-420c-ad3c-041d732c11f6",
-      "username": "devilgamerz5080lqu",
-      "email": "devilgamerz5080@gmail.com",
-      "first_name": "Server",
-      "last_name": "Subuser",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-21T10:35:19+00:00",
-      "updated_at": "2025-03-21T10:35:19+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 42,
-      "external_id": null,
-      "uuid": "5af5134c-37ff-418a-ac81-34df9aacf07e",
-      "username": "oom",
-      "email": "ommboys408@gmail.com",
-      "first_name": "PRIMUIM",
-      "last_name": "OM",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-21T11:40:35+00:00",
-      "updated_at": "2025-03-23T03:08:02+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 43,
-      "external_id": null,
-      "uuid": "943fc826-cc64-4f68-b184-e3c8d7183b9e",
-      "username": "soft",
-      "email": "softgotlost@gmail.com",
-      "first_name": "soft",
-      "last_name": "soft",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-21T13:38:33+00:00",
-      "updated_at": "2025-03-21T13:38:33+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 44,
-      "external_id": null,
-      "uuid": "c23985eb-f9bc-4da0-b628-570cd69299cc",
-      "username": "joygaming612aab",
-      "email": "joygaming612@gmail.com",
-      "first_name": "Server",
-      "last_name": "Subuser",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-21T15:19:25+00:00",
-      "updated_at": "2025-03-25T11:28:26+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 45,
-      "external_id": null,
-      "uuid": "b58dcf0b-6522-478e-8ad5-1eafd533c89e",
-      "username": "xsebecxdkxw",
-      "email": "xsebecxd@gmail.com",
-      "first_name": "Server",
-      "last_name": "Subuser",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-21T15:19:53+00:00",
-      "updated_at": "2025-03-21T15:19:53+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 46,
-      "external_id": null,
-      "uuid": "f5d6ed63-afc6-4da1-a15e-29c7eb5d500f",
-      "username": "faefa",
-      "email": "gyt681891@gmail.com",
-      "first_name": "efaef",
-      "last_name": "premium",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-21T15:24:49+00:00",
-      "updated_at": "2025-03-21T15:24:49+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 47,
-      "external_id": null,
-      "uuid": "a2b4ef11-cf3c-4817-b1ef-fc8aef3119f0",
-      "username": "jonty1650q0n",
-      "email": "jonty1650@gmail.com",
-      "first_name": "Server",
-      "last_name": "Subuser",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-21T15:35:37+00:00",
-      "updated_at": "2025-03-21T15:47:29+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 48,
-      "external_id": null,
-      "uuid": "458d6fda-67ed-41a0-bae2-e92397f56c60",
-      "username": "ds441593qfy",
-      "email": "ds441593@gmail.com",
-      "first_name": "Server",
-      "last_name": "Subuser",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-22T07:23:31+00:00",
-      "updated_at": "2025-03-22T07:23:31+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 49,
-      "external_id": null,
-      "uuid": "900edee8-b0aa-4a1d-ad79-66cf168d92cd",
-      "username": "mythic",
-      "email": "mythicstaff@gmail.com",
-      "first_name": "Staff",
-      "last_name": "Noobs",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-22T09:47:27+00:00",
-      "updated_at": "2025-03-24T03:48:39+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 50,
-      "external_id": null,
-      "uuid": "a37ac3ee-681a-4b23-baa3-2821c9a0275c",
-      "username": "thakur",
-      "email": "thakuropharsh07@gmail.com",
-      "first_name": "thakur",
-      "last_name": "thakur",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-22T13:26:48+00:00",
-      "updated_at": "2025-03-22T13:26:48+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 51,
-      "external_id": null,
-      "uuid": "3009ed76-170c-4121-a889-1ab6f44d1c4a",
-      "username": "samosakaalt5678",
-      "email": "somuandsanu@gmail.com",
-      "first_name": "somu",
-      "last_name": "sanu",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-22T14:57:22+00:00",
-      "updated_at": "2025-03-22T14:57:22+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 52,
-      "external_id": null,
-      "uuid": "5cbeab2f-ad21-4b56-9b77-1988533a0441",
-      "username": "dancersanu5",
-      "email": "dancersomu5@gmail.com",
-      "first_name": "iamsamosa",
-      "last_name": "samosaxD",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-22T15:08:08+00:00",
-      "updated_at": "2025-03-25T11:28:34+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 53,
-      "external_id": null,
-      "uuid": "a139428d-a1a5-4484-a0e6-2b6d96533add",
-      "username": "netzix",
-      "email": "bwxesports7@gmail.com",
-      "first_name": "BOOSTER",
-      "last_name": "Netzix",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-22T16:10:31+00:00",
-      "updated_at": "2025-03-22T16:10:31+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 59,
-      "external_id": null,
-      "uuid": "002f57f9-dc84-470c-909c-8a62e80bc984",
-      "username": "snackkvz",
-      "email": "snack@sub.fun",
-      "first_name": "Server",
-      "last_name": "Subuser",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-23T08:23:58+00:00",
-      "updated_at": "2025-03-23T08:23:58+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 61,
-      "external_id": null,
-      "uuid": "ff301055-b557-4993-846f-6eafce872534",
-      "username": "rhdhdh",
-      "email": "rex005852@gmail.com",
-      "first_name": "Hdhdhd",
-      "last_name": "Premium",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-23T13:06:10+00:00",
-      "updated_at": "2025-03-26T05:12:20+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 123,
-                "external_id": null,
-                "uuid": "2800e794-0a81-4333-99f0-5c48610988c8",
-                "identifier": "2800e794",
-                "name": "Sun mc",
-                "description": "This server is permanent!!!! (: (:",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 5
-                },
-                "user": 61,
-                "node": 1,
-                "allocation": 10,
-                "nest": 1,
-                "egg": 27,
-                "container": {
-                  "startup_command": "java -Xms4G -Xmx4G -jar server.jar --nogui",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "image": "ghcr.io/pterodactyl/yolks:java_17",
                   "installed": 1,
                   "environment": {
                     "MINECRAFT_VERSION": "1.20.1",
                     "SERVER_JARFILE": "server.jar",
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms4G -Xmx4G -jar server.jar --nogui",
-                    "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "2800e794-0a81-4333-99f0-5c48610988c8",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "India 1",
+                    "P_SERVER_UUID": "7d221b7f-1542-454e-969d-8878823dbfa1",
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-03-26T16:23:19+00:00",
-                "created_at": "2025-03-25T13:38:46+00:00"
+                "updated_at": "2025-03-27T15:53:17+00:00",
+                "created_at": "2025-03-27T15:47:15+00:00"
               }
             }
           ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 62,
-      "external_id": null,
-      "uuid": "d09061db-e987-4f24-9076-21c03539b4cb",
-      "username": "rvsr",
-      "email": "Muqaddasshaikh1974@gmail.com",
-      "first_name": "vsr",
-      "last_name": "premium",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-23T15:06:04+00:00",
-      "updated_at": "2025-03-23T15:06:04+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 126,
-                "external_id": null,
-                "uuid": "8acc78f6-1571-4de3-8954-7a516747600d",
-                "identifier": "8acc78f6",
-                "name": "Potato paid",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 12000,
-                  "swap": 0,
-                  "disk": 35000,
-                  "io": 500,
-                  "cpu": 250,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 5
-                },
-                "user": 62,
-                "node": 7,
-                "allocation": 312,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                    "P_SERVER_LOCATION": "India 2",
-                    "P_SERVER_UUID": "8acc78f6-1571-4de3-8954-7a516747600d",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-26T07:45:59+00:00",
-                "created_at": "2025-03-25T14:02:03+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 64,
-      "external_id": null,
-      "uuid": "56a5acf5-50d0-4047-a1aa-8aa8a256616a",
-      "username": "rocky",
-      "email": "npccraft666@gmail.com",
-      "first_name": "YOUTUBER",
-      "last_name": "Rocky",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-23T17:11:00+00:00",
-      "updated_at": "2025-03-23T17:16:53+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 65,
-      "external_id": null,
-      "uuid": "421c4181-4295-4104-944a-84258f957c1a",
-      "username": "lakshay",
-      "email": "lakshaymittaluwu@gmail.com",
-      "first_name": "lakshay",
-      "last_name": "lakshay",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-24T07:24:08+00:00",
-      "updated_at": "2025-03-24T07:24:08+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 66,
-      "external_id": null,
-      "uuid": "42585f9a-60c6-4120-a104-1e65e29234f2",
-      "username": "dnp.adil",
-      "email": "dnp.adil999@gmail.com",
-      "first_name": "dnp.adil",
-      "last_name": "dnp.adil",
-      "language": "en",
-      "root_admin": true,
-      "2fa": false,
-      "created_at": "2025-03-24T09:39:12+00:00",
-      "updated_at": "2025-03-26T13:04:44+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 100,
-                "external_id": null,
-                "uuid": "316b8c63-f756-416c-9239-75bb77088abd",
-                "identifier": "316b8c63",
-                "name": "[📸] ɴɪɴᴊᴀ ᴘʀᴏxʏ [ninja]",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 1024,
-                  "swap": 0,
-                  "disk": 1024,
-                  "io": 500,
-                  "cpu": 75,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 66,
-                "node": 6,
-                "allocation": 274,
-                "nest": 1,
-                "egg": 1,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "BUNGEE_VERSION": "latest",
-                    "SERVER_JARFILE": "bungeecord.jar",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "India 3",
-                    "P_SERVER_UUID": "316b8c63-f756-416c-9239-75bb77088abd",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-25T12:52:32+00:00",
-                "created_at": "2025-03-24T09:48:19+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 118,
-                "external_id": null,
-                "uuid": "634fc7bd-ccc6-4af6-bf36-cfe6c81bc1c6",
-                "identifier": "634fc7bd",
-                "name": "ninja bot [ninja]",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 66,
-                "node": 1,
-                "allocation": 2,
-                "nest": 1,
-                "egg": 28,
-                "container": {
-                  "startup_command": "if [[ -d .git ]] && [[ \"{{AUTO_UPDATE}}\" == \"1\" ]]; then git pull; fi; if [[ ! -z \"{{PY_PACKAGES}}\" ]]; then pip install -U --prefix .local {{PY_PACKAGES}}; fi; if [[ -f /home/container/${REQUIREMENTS_FILE} ]]; then pip install -U --prefix .local -r ${REQUIREMENTS_FILE}; fi; /usr/local/bin/python /home/container/{{PY_FILE}}",
-                  "image": "ghcr.io/parkervcp/yolks:python_3.12",
-                  "installed": 1,
-                  "environment": {
-                    "GIT_ADDRESS": "",
-                    "BRANCH": "",
-                    "USER_UPLOAD": "0",
-                    "AUTO_UPDATE": "0",
-                    "PY_FILE": "app.py",
-                    "PY_PACKAGES": "requests",
-                    "USERNAME": "",
-                    "ACCESS_TOKEN": "",
-                    "REQUIREMENTS_FILE": "requirements.txt",
-                    "STARTUP": "if [[ -d .git ]] && [[ \"{{AUTO_UPDATE}}\" == \"1\" ]]; then git pull; fi; if [[ ! -z \"{{PY_PACKAGES}}\" ]]; then pip install -U --prefix .local {{PY_PACKAGES}}; fi; if [[ -f /home/container/${REQUIREMENTS_FILE} ]]; then pip install -U --prefix .local -r ${REQUIREMENTS_FILE}; fi; /usr/local/bin/python /home/container/{{PY_FILE}}",
-                    "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "634fc7bd-ccc6-4af6-bf36-cfe6c81bc1c6",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-25T12:58:04+00:00",
-                "created_at": "2025-03-25T12:57:14+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 67,
-      "external_id": null,
-      "uuid": "6a12d8f1-a79b-458c-a2f9-9f10346a4989",
-      "username": "lolhaha",
-      "email": "lolhahanoonehihi@gmail.com",
-      "first_name": "lolhaha",
-      "last_name": "lolhaha",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-24T10:48:34+00:00",
-      "updated_at": "2025-03-24T10:48:34+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 68,
-      "external_id": null,
-      "uuid": "ad0ffaee-9a79-4a66-b322-5bc978e00141",
-      "username": "lakshayjcc",
-      "email": "lakshay@gmail.com",
-      "first_name": "Server",
-      "last_name": "Subuser",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-24T10:49:49+00:00",
-      "updated_at": "2025-03-26T13:05:58+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 119,
-                "external_id": null,
-                "uuid": "e87ec847-08d7-4f4b-8893-893ffc8d7691",
-                "identifier": "e87ec847",
-                "name": "Ninja - Hub",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 16500,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 300,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 10
-                },
-                "user": 68,
-                "node": 2,
-                "allocation": 26,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                    "P_SERVER_LOCATION": "India",
-                    "P_SERVER_UUID": "e87ec847-08d7-4f4b-8893-893ffc8d7691",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-25T13:20:33+00:00",
-                "created_at": "2025-03-25T13:12:36+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 120,
-                "external_id": null,
-                "uuid": "e1909275-8761-4b20-b48a-8d02ce3edc04",
-                "identifier": "e1909275",
-                "name": "Ninja - 16gb 1",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 16500,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 300,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 5
-                },
-                "user": 68,
-                "node": 2,
-                "allocation": 27,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.20.4",
-                    "SERVER_JARFILE": "server.jar",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                    "P_SERVER_LOCATION": "India",
-                    "P_SERVER_UUID": "e1909275-8761-4b20-b48a-8d02ce3edc04",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-26T13:20:00+00:00",
-                "created_at": "2025-03-25T13:20:11+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 121,
-                "external_id": null,
-                "uuid": "b4d293ea-dfad-4f68-9864-17e180fc9791",
-                "identifier": "b4d293ea",
-                "name": "Ninja 16gb 2",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 16500,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 300,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 5
-                },
-                "user": 68,
-                "node": 2,
-                "allocation": 28,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                    "P_SERVER_LOCATION": "India",
-                    "P_SERVER_UUID": "b4d293ea-dfad-4f68-9864-17e180fc9791",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-25T13:22:40+00:00",
-                "created_at": "2025-03-25T13:22:10+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 69,
-      "external_id": null,
-      "uuid": "54b3e376-4401-4c9c-844d-bdc258d83e53",
-      "username": "utkarsh",
-      "email": "operagxutkarsh@gmail.com",
-      "first_name": "utkarsh",
-      "last_name": "utkarsh",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-24T11:36:22+00:00",
-      "updated_at": "2025-03-24T11:36:22+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 70,
-      "external_id": null,
-      "uuid": "d632f251-6f0e-4ec6-997c-b1b9686b3758",
-      "username": "priyanshi",
-      "email": "sandhusingh8210@gmail.com",
-      "first_name": "BOOSTER",
-      "last_name": "Priyanshi",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-24T11:47:39+00:00",
-      "updated_at": "2025-03-24T11:47:39+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 71,
-      "external_id": null,
-      "uuid": "78b607f3-ea3e-4675-9857-244f65ad1dba",
-      "username": "efz",
-      "email": "lakshyabox@gmail.com",
-      "first_name": "eaf",
-      "last_name": "premium",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-24T14:05:44+00:00",
-      "updated_at": "2025-03-25T12:40:34+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 128,
-                "external_id": null,
-                "uuid": "36bdd52a-4a00-438b-bedd-a0494b642023",
-                "identifier": "36bdd52a",
-                "name": "Lucifer paid",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 10000,
-                  "swap": 0,
-                  "disk": 50000,
-                  "io": 500,
-                  "cpu": 220,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 0,
-                  "allocations": 0,
-                  "backups": 0
-                },
-                "user": 71,
-                "node": 2,
-                "allocation": 29,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                    "P_SERVER_LOCATION": "India",
-                    "P_SERVER_UUID": "36bdd52a-4a00-438b-bedd-a0494b642023",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-25T14:10:28+00:00",
-                "created_at": "2025-03-25T14:09:57+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 72,
-      "external_id": null,
-      "uuid": "93f4fd4c-a2ea-4943-b0c5-853c2f048ac1",
-      "username": "ggsjs",
-      "email": "gamerbd@gmail.com",
-      "first_name": "Bufon",
-      "last_name": "Ka",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-24T14:16:23+00:00",
-      "updated_at": "2025-03-24T14:16:23+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 73,
-      "external_id": null,
-      "uuid": "bbd92a72-7163-464b-8ee9-41d5919535c1",
-      "username": "animefactory0006ut",
-      "email": "animefactory000@gmail.comp",
-      "first_name": "Server",
-      "last_name": "Subuser",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-24T15:43:50+00:00",
-      "updated_at": "2025-03-24T15:43:50+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 74,
-      "external_id": null,
-      "uuid": "243984f2-3aad-48b6-b7dc-60451259c1c8",
-      "username": "monkeyfam",
-      "email": "damnyt88@gmail.com",
-      "first_name": "BOOSTER",
-      "last_name": "MonkeyFam",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-24T16:44:20+00:00",
-      "updated_at": "2025-03-24T16:44:20+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 75,
-      "external_id": null,
-      "uuid": "56030581-5029-46c6-b7b2-0c4f1ff3cbd8",
-      "username": "snackop",
-      "email": "snack@subs.fun",
-      "first_name": "INVITER",
-      "last_name": "snackop",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-24T17:01:25+00:00",
-      "updated_at": "2025-03-24T17:13:43+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 76,
-      "external_id": null,
-      "uuid": "da9f2ae4-005d-4982-a0e0-4205c6fb36e7",
-      "username": "rithvikgaming",
-      "email": "rithvikgamer144@gmail.com",
-      "first_name": "Rithvik",
-      "last_name": "Gaming",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-25T07:44:56+00:00",
-      "updated_at": "2025-03-25T07:44:56+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 140,
-                "external_id": null,
-                "uuid": "41374e58-ed78-48c6-9cab-4870ee9d5c70",
-                "identifier": "41374e58",
-                "name": "Rithvik gaming (25 March 2025)",
-                "description": "",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 6000,
-                  "swap": 0,
-                  "disk": 40000,
-                  "io": 500,
-                  "cpu": 150,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 1,
-                  "allocations": 0,
-                  "backups": 3
-                },
-                "user": 76,
-                "node": 7,
-                "allocation": 317,
-                "nest": 1,
-                "egg": 27,
-                "container": {
-                  "startup_command": "java -Xms4G -Xmx4G -jar server.jar --nogui",
-                  "image": "ghcr.io/pterodactyl/yolks:java_8",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms4G -Xmx4G -jar server.jar --nogui",
-                    "P_SERVER_LOCATION": "India 2",
-                    "P_SERVER_UUID": "41374e58-ed78-48c6-9cab-4870ee9d5c70",
-                    "P_SERVER_ALLOCATION_LIMIT": 0
-                  }
-                },
-                "updated_at": "2025-03-26T08:40:04+00:00",
-                "created_at": "2025-03-26T08:39:54+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 78,
-      "external_id": null,
-      "uuid": "17c03478-e823-4cd1-bbea-6b3be31b7448",
-      "username": "cosmic014",
-      "email": "gondlushankmandavi750@gmail.com",
-      "first_name": "Lushank",
-      "last_name": "Mandavi",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-25T10:14:51+00:00",
-      "updated_at": "2025-03-25T10:14:51+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 79,
-      "external_id": null,
-      "uuid": "1217f2eb-ce57-4c22-aa32-98a839bc4a65",
-      "username": "afa",
-      "email": "blazerandi@gmail.com",
-      "first_name": "gag",
-      "last_name": "agag",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-25T10:38:08+00:00",
-      "updated_at": "2025-03-25T10:38:08+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 80,
-      "external_id": null,
-      "uuid": "de64a303-9bea-4c77-8936-313dbcab8b93",
-      "username": "akshit",
-      "email": "akkuahlawat040@gmail.com",
-      "first_name": "akky",
-      "last_name": "ahlawat",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-25T11:26:53+00:00",
-      "updated_at": "2025-03-25T11:26:53+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 81,
-      "external_id": null,
-      "uuid": "c84516f4-63c7-4635-8ba3-6b5c6d3c436b",
-      "username": "admin",
-      "email": "heroku.pingr1@gmail.com",
-      "first_name": "admin",
-      "last_name": "admin",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-25T23:33:56+00:00",
-      "updated_at": "2025-03-25T23:33:56+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 82,
-      "external_id": null,
-      "uuid": "8a70e08d-c549-405f-9db2-1a57b98cf415",
-      "username": "hddhdh",
-      "email": "adminitzrajrup@flaxynodes.fun",
-      "first_name": "Dhdhdhdj",
-      "last_name": "Hdhsh",
-      "language": "en",
-      "root_admin": true,
-      "2fa": false,
-      "created_at": "2025-03-26T04:08:42+00:00",
-      "updated_at": "2025-03-26T04:08:42+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 83,
-      "external_id": null,
-      "uuid": "741ac478-aea5-42e7-93cd-131cfff0566e",
-      "username": "lauda",
-      "email": "gamerrandi@gmail.con",
-      "first_name": "lauda",
-      "last_name": "lauda",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-26T06:32:08+00:00",
-      "updated_at": "2025-03-26T06:32:08+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 84,
-      "external_id": null,
-      "uuid": "904bcafe-9f5f-4331-962a-041fdd7d4606",
-      "username": "dark",
-      "email": "darkplayzmc2@gmail.com",
-      "first_name": "dark",
-      "last_name": "dark",
-      "language": "en",
-      "root_admin": true,
-      "2fa": false,
-      "created_at": "2025-03-26T09:43:29+00:00",
-      "updated_at": "2025-03-26T09:43:29+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 85,
-      "external_id": null,
-      "uuid": "d2c892b4-3369-4653-8a32-573ba7f03470",
-      "username": "f7r",
-      "email": "f7rhosting@gmail.com",
-      "first_name": "f7r",
-      "last_name": "f7r",
-      "language": "en",
-      "root_admin": true,
-      "2fa": false,
-      "created_at": "2025-03-26T10:23:07+00:00",
-      "updated_at": "2025-03-26T10:23:07+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 86,
-      "external_id": null,
-      "uuid": "8ffb2343-8988-4a79-804c-b9422e690fe8",
-      "username": "itscozzer",
-      "email": "itscozzer80@gmail.com",
-      "first_name": "PREMIUM",
-      "last_name": "Cozzer",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-26T10:25:20+00:00",
-      "updated_at": "2025-03-26T10:25:20+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 142,
-                "external_id": null,
-                "uuid": "0745d377-ed2e-4bd9-aa29-1af779fc56bb",
-                "identifier": "0745d377",
-                "name": "Itz_Cozzer's INFINITE SERVER [LIFETIME]",
-                "description": "[LIFETIME]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 86,
-                "node": 2,
-                "allocation": 31,
-                "nest": 1,
-                "egg": 2,
-                "container": {
-                  "startup_command": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
-                    "P_SERVER_LOCATION": "India",
-                    "P_SERVER_UUID": "0745d377-ed2e-4bd9-aa29-1af779fc56bb",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
-                  }
-                },
-                "updated_at": "2025-03-26T10:31:17+00:00",
-                "created_at": "2025-03-26T10:30:36+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 87,
-      "external_id": null,
-      "uuid": "f92f322a-f5a6-442c-977e-42e188a1a2a5",
-      "username": "bluelock",
-      "email": "rocksky1yt69@gmail.com",
-      "first_name": "PREMIUM",
-      "last_name": "BlueLock",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-26T10:34:48+00:00",
-      "updated_at": "2025-03-26T10:34:48+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": [
-            {
-              "object": "server",
-              "attributes": {
-                "id": 143,
-                "external_id": null,
-                "uuid": "f789ff0a-2f07-4e76-8f86-f42e58a70f43",
-                "identifier": "f789ff0a",
-                "name": "BlueLock's INFINITE Server [PERMANENT]",
-                "description": "[PERMANENT]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 0,
-                  "swap": 0,
-                  "disk": 0,
-                  "io": 500,
-                  "cpu": 0,
-                  "threads": "1",
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 87,
-                "node": 1,
-                "allocation": 3,
-                "nest": 1,
-                "egg": 27,
-                "container": {
-                  "startup_command": "java -Xms4G -Xmx4G -jar server.jar --nogui",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "latest",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms4G -Xmx4G -jar server.jar --nogui",
-                    "P_SERVER_LOCATION": "Germany",
-                    "P_SERVER_UUID": "f789ff0a-2f07-4e76-8f86-f42e58a70f43",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
-                  }
-                },
-                "updated_at": "2025-03-26T10:41:45+00:00",
-                "created_at": "2025-03-26T10:36:20+00:00"
-              }
-            }
-          ]
-        }
-      }
-    }
-  },
-  {
-    "object": "user",
-    "attributes": {
-      "id": 88,
-      "external_id": null,
-      "uuid": "910df2dc-e582-4541-a183-e6a0a1db6123",
-      "username": "ar2636163fit",
-      "email": "ar2636163@gmail.com",
-      "first_name": "Server",
-      "last_name": "Subuser",
-      "language": "en",
-      "root_admin": false,
-      "2fa": false,
-      "created_at": "2025-03-26T14:18:53+00:00",
-      "updated_at": "2025-03-26T14:18:53+00:00",
-      "relationships": {
-        "servers": {
-          "object": "list",
-          "data": []
         }
       }
     }

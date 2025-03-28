@@ -1,12 +1,12 @@
 [
   {
     "id": 1,
-    "uuid": "07f95a0d-9bde-4b24-8f71-113f610d7c02",
+    "uuid": "c097599c-d18c-4cfb-8954-77a278917211",
     "author": "support@pterodactyl.io",
     "name": "Minecraft",
     "description": "Minecraft - the classic game from Mojang. With support for Vanilla MC, Spigot, and many others!",
-    "created_at": "2025-03-20T07:43:02+00:00",
-    "updated_at": "2025-03-20T07:43:02+00:00",
+    "created_at": "2025-03-27T07:41:46+00:00",
+    "updated_at": "2025-03-27T07:41:46+00:00",
     "relationships": {
       "eggs": {
         "object": "list",
@@ -15,7 +15,7 @@
             "object": "egg",
             "attributes": {
               "id": 1,
-              "uuid": "d16acaac-139f-44c5-ac99-bd086a1e070f",
+              "uuid": "c42e4a6e-ea63-4822-830b-25551890608b",
               "name": "Bungeecord",
               "nest": 1,
               "author": "support@pterodactyl.io",
@@ -57,27 +57,26 @@
                 "container": "ghcr.io/pterodactyl/installers:alpine",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-20T07:43:02+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           },
           {
             "object": "egg",
             "attributes": {
               "id": 2,
-              "uuid": "f1f12e5b-db29-47e5-958a-e9a87948cd57",
-              "name": "Purpur",
+              "uuid": "8786df23-c2bf-4c6a-b437-b877cd30893f",
+              "name": "Paper",
               "nest": 1,
               "author": "parker@pterodactyl.io",
-              "description": "A drop-in replacement for Paper servers designed for configurability, and new fun and exciting gameplay features.",
-              "docker_image": "ghcr.io/pterodactyl/yolks:java_8",
+              "description": "High performance Spigot fork that aims to fix gameplay and mechanics inconsistencies.",
+              "docker_image": "ghcr.io/pterodactyl/yolks:java_21",
               "docker_images": {
-                "Java 8": "ghcr.io/pterodactyl/yolks:java_8",
-                "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
-                "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+                "Java 21": "ghcr.io/pterodactyl/yolks:java_21",
                 "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
-                "Java 18": "ghcr.io/pterodactyl/yolks:java_18",
-                "Java 21": "ghcr.io/pterodactyl/yolks:java_21"
+                "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+                "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
+                "Java 8": "ghcr.io/pterodactyl/yolks:java_8"
               },
               "config": {
                 "files": {
@@ -85,7 +84,8 @@
                     "parser": "properties",
                     "find": {
                       "server-ip": "0.0.0.0",
-                      "server-port": "{{server.build.default.port}}"
+                      "server-port": "{{server.build.default.port}}",
+                      "query.port": "{{server.build.default.port}}"
                     }
                   }
                 },
@@ -97,23 +97,23 @@
                 "file_denylist": [],
                 "extends": null
               },
-              "startup": "java -Xms128M -Xmx16420M -Dterminal.jline=false -Dterminal.ansi=true -jar server.jar",
+              "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
               "script": {
                 "privileged": true,
-                "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=purpur\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://api.purpurmc.org/v2/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds.all | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION} | jq -r '.builds.latest'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.purpurmc.org/v2/${PROJECT}/${MINECRAFT_VERSION}/${BUILD_NUMBER}/download\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
+                "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=paper\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.papermc.io/v2/projects/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep -m1 true`\r\n\tLATEST_VERSION=`curl -s https://api.papermc.io/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Specified version not found. Defaulting to the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\r\n\tBUILD_EXISTS=`curl -s https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep -m1 true`\r\n\tLATEST_BUILD=`curl -s https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
                 "entry": "ash",
-                "container": "ghcr.io/parkervcp/installers:alpine",
+                "container": "ghcr.io/pterodactyl/installers:alpine",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-24T10:31:29+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           },
           {
             "object": "egg",
             "attributes": {
               "id": 3,
-              "uuid": "fff62d17-9e3b-4f14-a46c-732a4164cda2",
+              "uuid": "6ca5e61b-b1b1-4d12-8811-84bd3e3555d9",
               "name": "Vanilla Minecraft",
               "nest": 1,
               "author": "support@pterodactyl.io",
@@ -153,15 +153,15 @@
                 "container": "ghcr.io/pterodactyl/installers:alpine",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-20T07:43:02+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           },
           {
             "object": "egg",
             "attributes": {
               "id": 4,
-              "uuid": "1019b0b0-9a38-494c-b20a-822f9f862e8d",
+              "uuid": "897c9826-ac41-447e-955a-f427e0a8d519",
               "name": "Forge Minecraft",
               "nest": 1,
               "author": "support@pterodactyl.io",
@@ -201,15 +201,15 @@
                 "container": "openjdk:8-jdk-slim",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-20T07:43:02+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           },
           {
             "object": "egg",
             "attributes": {
               "id": 5,
-              "uuid": "7eeeac12-59e5-49c4-bb5a-bb801fb0cb88",
+              "uuid": "bdb182ef-417d-4d7f-8ea1-3b420274a796",
               "name": "Sponge (SpongeVanilla)",
               "nest": 1,
               "author": "support@pterodactyl.io",
@@ -248,241 +248,8 @@
                 "container": "ghcr.io/pterodactyl/installers:alpine",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-20T07:43:02+00:00"
-            }
-          },
-          {
-            "object": "egg",
-            "attributes": {
-              "id": 15,
-              "uuid": "96a316cb-dd42-4fa6-8e93-8339794e5ead",
-              "name": "Velocity",
-              "nest": 1,
-              "author": "parker@parkervcp.com",
-              "description": "Velocity is a Minecraft server proxy with unparalleled server support, scalability, and flexibility.",
-              "docker_image": "ghcr.io/pterodactyl/yolks:java_21",
-              "docker_images": {
-                "Java 21": "ghcr.io/pterodactyl/yolks:java_21",
-                "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
-                "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
-                "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
-                "Java 8": "ghcr.io/pterodactyl/yolks:java_8"
-              },
-              "config": {
-                "files": {
-                  "velocity.toml": {
-                    "parser": "file",
-                    "find": {
-                      "bind = ": "bind = \"0.0.0.0:{{server.build.default.port}}\""
-                    }
-                  }
-                },
-                "startup": {
-                  "done": "Done ("
-                },
-                "stop": "end",
-                "logs": [],
-                "file_denylist": [],
-                "extends": null
-              },
-              "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar {{SERVER_JARFILE}}",
-              "script": {
-                "privileged": true,
-                "install": "#!/bin/ash\r\n# Velocity Proxy Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=velocity\r\n\r\nif [[ -z ${VELOCITY_VERSION} ]] || [[ ${VELOCITY_VERSION} == \"latest\" ]]; then\r\n    VELOCITY_VERSION=\"latest\"\r\nfi\r\n\r\nif [[ -n \"${DOWNLOAD_LINK}\" ]]; then\r\n    echo -e \"Using supplied download url: ${DOWNLOAD_LINK}\"\r\n    DOWNLOAD_URL=$(eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g'))\r\nelse\r\n    VER_EXISTS=$(curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r --arg VERSION $VELOCITY_VERSION '.versions[] | contains($VERSION)' | grep true)\r\n    LATEST_VERSION=$(curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]')\r\n\r\nif [[ \"${VER_EXISTS}\" == \"true\" ]]; then\r\n    echo -e \"Version is valid. Using version ${VELOCITY_VERSION}\"\r\nelse\r\n    echo -e \"Using the latest ${PROJECT} version\"\r\n    VELOCITY_VERSION=${LATEST_VERSION}\r\nfi\r\n\r\nBUILD_EXISTS=$(curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${VELOCITY_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep true)\r\nLATEST_BUILD=$(curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${VELOCITY_VERSION} | jq -r '.builds' | jq -r '.[-1]')\r\n\r\nif [[ \"${BUILD_EXISTS}\" == \"true\" ]]; then\r\n    echo -e \"Build is valid for version ${VELOCITY_VERSION}. Using build ${BUILD_NUMBER}\"\r\nelse\r\n    echo -e \"Using the latest ${PROJECT} build for version ${VELOCITY_VERSION}\"\r\n    BUILD_NUMBER=${LATEST_BUILD}\r\nfi\r\n\r\nJAR_NAME=${PROJECT}-${VELOCITY_VERSION}-${BUILD_NUMBER}.jar\r\necho \"Version being downloaded\"\r\necho -e \"Velocity Version: ${VELOCITY_VERSION}\"\r\necho -e \"Build: ${BUILD_NUMBER}\"\r\necho -e \"JAR Name of Build: ${JAR_NAME}\"\r\nDOWNLOAD_URL=https://papermc.io/api/v2/projects/${PROJECT}/versions/${VELOCITY_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\n\r\nfi\r\ncd /mnt/server\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [[ -f ${SERVER_JARFILE} ]]; then\r\nmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [[ -f velocity.toml ]]; then\r\n    echo -e \"velocity config file exists\"\r\nelse\r\n    echo -e \"downloading velocity config file.\"\r\n    curl https://raw.githubusercontent.com/parkervcp/eggs/master/game_eggs/minecraft/proxy/java/velocity/velocity.toml -o velocity.toml\r\nfi\r\n\r\nif [[ -f forwarding.secret ]]; then\r\n    echo -e \"velocity forwarding secret file already exists\"\r\nelse\r\n    echo -e \"creating forwarding secret file\"\r\n    touch forwarding.secret\r\n    date +%s | sha256sum | base64 | head -c 12 > forwarding.secret\r\nfi\r\n\r\necho -e \"install complete\"",
-                "entry": "ash",
-                "container": "ghcr.io/parkervcp/installers:alpine",
-                "extends": null
-              },
-              "created_at": "2025-03-20T08:36:50+00:00",
-              "updated_at": "2025-03-20T08:36:50+00:00"
-            }
-          },
-          {
-            "object": "egg",
-            "attributes": {
-              "id": 16,
-              "uuid": "cc19791f-e98c-4f7e-b2fd-558bacbe6dcc",
-              "name": "Waterfall",
-              "nest": 1,
-              "author": "hostmaster@waterfallgaming.net",
-              "description": "Waterfall is a fork of the well-known BungeeCord server teleportation suite.",
-              "docker_image": "ghcr.io/pterodactyl/yolks:java_17",
-              "docker_images": {
-                "ghcr.io/pterodactyl/yolks:java_17": "ghcr.io/pterodactyl/yolks:java_17",
-                "ghcr.io/pterodactyl/yolks:java_16": "ghcr.io/pterodactyl/yolks:java_16",
-                "ghcr.io/pterodactyl/yolks:java_11": "ghcr.io/pterodactyl/yolks:java_11",
-                "ghcr.io/pterodactyl/yolks:java_8": "ghcr.io/pterodactyl/yolks:java_8"
-              },
-              "config": {
-                "files": {
-                  "config.yml": {
-                    "parser": "yaml",
-                    "find": {
-                      "listeners[0].host": "0.0.0.0:{{server.build.default.port}}",
-                      "servers.*.address": {
-                        "127.0.0.1": "{{config.docker.interface}}",
-                        "localhost": "{{config.docker.interface}}"
-                      }
-                    }
-                  }
-                },
-                "startup": {
-                  "done": "Listening on "
-                },
-                "stop": "end",
-                "logs": [],
-                "file_denylist": [],
-                "extends": null
-              },
-              "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-              "script": {
-                "privileged": true,
-                "install": "#!/bin/bash\r\n# Waterfall Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=waterfall\r\n\r\napt update\r\napt install -y curl jq\r\n\r\nif [ -n \"${DL_LINK}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_LINK}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_LINK} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f config.yml ]; then\r\n\techo -e \"Downloading ${PROJECT} config.yml\"\r\n\tcurl -o config.yml https://raw.githubusercontent.com/parkervcp/eggs/master/game_eggs/minecraft/proxy/java/waterfall/config.yml\r\nelse\r\n\techo -e \"${PROJECT} config.yml exists. Will not pull a new file\"\r\nfi",
-                "entry": "bash",
-                "container": "ghcr.io/parkervcp/installers:debian",
-                "extends": null
-              },
-              "created_at": "2025-03-20T08:37:04+00:00",
-              "updated_at": "2025-03-20T08:37:04+00:00"
-            }
-          },
-          {
-            "object": "egg",
-            "attributes": {
-              "id": 26,
-              "uuid": "eda1edb7-e40b-48b3-aeb3-a259b24a9221",
-              "name": "Optimized Paper",
-              "nest": 1,
-              "author": "flaxeneel2@gmail.com",
-              "description": "Optimized paper being developed by flaxeneel2. Fork of the original paper egg by parkervcp",
-              "docker_image": "ghcr.io/pterodactyl/yolks:java_8",
-              "docker_images": {
-                "ghcr.io/pterodactyl/yolks:java_8": "ghcr.io/pterodactyl/yolks:java_8",
-                "ghcr.io/pterodactyl/yolks:java_11": "ghcr.io/pterodactyl/yolks:java_11",
-                "ghcr.io/pterodactyl/yolks:java_16": "ghcr.io/pterodactyl/yolks:java_16",
-                "ghcr.io/pterodactyl/yolks:java_17": "ghcr.io/pterodactyl/yolks:java_17"
-              },
-              "config": {
-                "files": {
-                  "server.properties": {
-                    "parser": "properties",
-                    "find": {
-                      "server-ip": "0.0.0.0",
-                      "server-port": "{{server.build.default.port}}"
-                    }
-                  }
-                },
-                "startup": {
-                  "done": ")! For help, type ",
-                  "userInteraction": [
-                    "Go to eula.txt for more info."
-                  ]
-                },
-                "stop": "stop",
-                "logs": [],
-                "file_denylist": [],
-                "extends": null
-              },
-              "startup": "java -Xms256M -Xmx$(({{SERVER_MEMORY}} - ({{SERVER_MEMORY}}/10)))M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -jar {{SERVER_JARFILE}}",
-              "script": {
-                "privileged": true,
-                "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=paper\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https://papermc.io/api/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://papermc.io/api/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/server.properties\r\nfi\r\n\r\nif [ ! -f paper.yml ]; then\r\n    echo -e \"Downloading MC paper.yml\"\r\n    curl -o paper.yml https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/paper.yml\r\nfi\r\n\r\nif [ ! -f spigot.yml ]; then\r\n    echo -e \"Downloading MC spigot.yml\"\r\n    curl -o spigot.yml https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/spigot.yml\r\nfi\r\n\r\nif [ ! -f bukkit.yml ]; then\r\n    echo -e \"Downloading MC bukkit.yml\"\r\n    curl -o bukkit.yml https://raw.githubusercontent.com/flaxeneel2/pterodactyl-optimized-paper-egg/main/bukkit.yml\r\nfi",
-                "entry": "ash",
-                "container": "ghcr.io/pterodactyl/installers:alpine",
-                "extends": null
-              },
-              "created_at": "2025-03-24T13:30:38+00:00",
-              "updated_at": "2025-03-24T13:30:38+00:00"
-            }
-          },
-          {
-            "object": "egg",
-            "attributes": {
-              "id": 27,
-              "uuid": "7cbbf932-6ed6-4440-9c46-b18f7defe785",
-              "name": "paper",
-              "nest": 1,
-              "author": "parker@pterodactyl.io",
-              "description": "High performance Spigot fork that aims to fix gameplay and mechanics inconsistencies.",
-              "docker_image": "ghcr.io/pterodactyl/yolks:java_21",
-              "docker_images": {
-                "Java 21": "ghcr.io/pterodactyl/yolks:java_21",
-                "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
-                "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
-                "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
-                "Java 8": "ghcr.io/pterodactyl/yolks:java_8"
-              },
-              "config": {
-                "files": {
-                  "server.properties": {
-                    "parser": "properties",
-                    "find": {
-                      "server-ip": "0.0.0.0",
-                      "server-port": "{{server.build.default.port}}",
-                      "query.port": "{{server.build.default.port}}"
-                    }
-                  }
-                },
-                "startup": {
-                  "done": ")! For help, type "
-                },
-                "stop": "stop",
-                "logs": [],
-                "file_denylist": [],
-                "extends": null
-              },
-              "startup": "java -Xms4G -Xmx4G -jar server.jar --nogui",
-              "script": {
-                "privileged": true,
-                "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=paper\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.papermc.io/v2/projects/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep -m1 true`\r\n\tLATEST_VERSION=`curl -s https://api.papermc.io/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Specified version not found. Defaulting to the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\r\n\tBUILD_EXISTS=`curl -s https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep -m1 true`\r\n\tLATEST_BUILD=`curl -s https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
-                "entry": "ash",
-                "container": "ghcr.io/parkervcp/installers:alpine",
-                "extends": null
-              },
-              "created_at": "2025-03-25T11:39:45+00:00",
-              "updated_at": "2025-03-26T14:48:54+00:00"
-            }
-          },
-          {
-            "object": "egg",
-            "attributes": {
-              "id": 28,
-              "uuid": "6ce5d6bf-69de-402b-867d-4a0ce15fae3b",
-              "name": "python generic",
-              "nest": 1,
-              "author": "parker@parkervcp.com",
-              "description": "A Generic Python Egg for Pterodactyl\r\n\r\nTested with: https://github.com/Ispira/pixel-bot",
-              "docker_image": "ghcr.io/parkervcp/yolks:python_3.12",
-              "docker_images": {
-                "Python 3.12": "ghcr.io/parkervcp/yolks:python_3.12",
-                "Python 3.11": "ghcr.io/parkervcp/yolks:python_3.11",
-                "Python 3.10": "ghcr.io/parkervcp/yolks:python_3.10",
-                "Python 3.9": "ghcr.io/parkervcp/yolks:python_3.9",
-                "Python 3.8": "ghcr.io/parkervcp/yolks:python_3.8",
-                "Python 3.7": "ghcr.io/parkervcp/yolks:python_3.7",
-                "Python 2.7": "ghcr.io/parkervcp/yolks:python_2.7"
-              },
-              "config": {
-                "files": {},
-                "startup": {
-                  "done": "change this part"
-                },
-                "stop": "^C",
-                "logs": [],
-                "file_denylist": [],
-                "extends": null
-              },
-              "startup": "if [[ -d .git ]] && [[ \"{{AUTO_UPDATE}}\" == \"1\" ]]; then git pull; fi; if [[ ! -z \"{{PY_PACKAGES}}\" ]]; then pip install -U --prefix .local {{PY_PACKAGES}}; fi; if [[ -f /home/container/${REQUIREMENTS_FILE} ]]; then pip install -U --prefix .local -r ${REQUIREMENTS_FILE}; fi; /usr/local/bin/python /home/container/{{PY_FILE}}",
-              "script": {
-                "privileged": true,
-                "install": "#!/bin/bash\r\n# Python App Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napt update\r\napt install -y git curl jq file unzip make gcc g++ libtool\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\nif [ \"${USER_UPLOAD}\" == \"true\" ] || [ \"${USER_UPLOAD}\" == \"1\" ]; then\r\n    echo -e \"assuming user knows what they are doing have a good day.\"\r\n    exit 0\r\nfi\r\n\r\n## add git ending if it's not on the address\r\nif [[ ${GIT_ADDRESS} != *.git ]]; then\r\n    GIT_ADDRESS=${GIT_ADDRESS}.git\r\nfi\r\n\r\nif [ -z \"${USERNAME}\" ] && [ -z \"${ACCESS_TOKEN}\" ]; then\r\n    echo -e \"using anon api call\"\r\nelse\r\n    GIT_ADDRESS=\"https://${USERNAME}:${ACCESS_TOKEN}@$(echo -e ${GIT_ADDRESS} | cut -d/ -f3-)\"\r\nfi\r\n\r\n## pull git python repo\r\nif [ \"$(ls -A /mnt/server)\" ]; then\r\n    echo -e \"/mnt/server directory is not empty.\"\r\n    if [ -d .git ]; then\r\n        echo -e \".git directory exists\"\r\n        if [ -f .git/config ]; then\r\n            echo -e \"loading info from git config\"\r\n            ORIGIN=$(git config --get remote.origin.url)\r\n        else\r\n            echo -e \"files found with no git config\"\r\n            echo -e \"closing out without touching things to not break anything\"\r\n            exit 10\r\n        fi\r\n    fi\r\n\r\n    if [ \"${ORIGIN}\" == \"${GIT_ADDRESS}\" ]; then\r\n        echo \"pulling latest from github\"\r\n        git pull\r\n    fi\r\nelse\r\n    echo -e \"/mnt/server is empty.\\ncloning files into repo\"\r\n    if [ -z ${BRANCH} ]; then\r\n        echo -e \"cloning default branch\"\r\n        git clone ${GIT_ADDRESS} .\r\n    else\r\n        echo -e \"cloning ${BRANCH}'\"\r\n        git clone --single-branch --branch ${BRANCH} ${GIT_ADDRESS} .\r\n    fi\r\n\r\nfi\r\n\r\nexport HOME=/mnt/server\r\n\r\necho \"Installing python requirements into folder\"\r\nif [[ ! -z ${PY_PACKAGES} ]]; then\r\n    pip install -U --prefix .local ${PY_PACKAGES}\r\nfi\r\n\r\nif [ -f /mnt/server/requirements.txt ]; then\r\n    pip install -U --prefix .local -r ${REQUIREMENTS_FILE}\r\nfi\r\n\r\necho -e \"install complete\"\r\nexit 0",
-                "entry": "bash",
-                "container": "python:3.8-slim-bookworm",
-                "extends": null
-              },
-              "created_at": "2025-03-25T12:56:33+00:00",
-              "updated_at": "2025-03-25T12:56:33+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           }
         ]
@@ -491,12 +258,12 @@
   },
   {
     "id": 2,
-    "uuid": "6f1f4725-354a-4c9f-b48c-632d07ea8ee1",
+    "uuid": "65810012-9f94-4a28-ade3-145ca1de7d2b",
     "author": "support@pterodactyl.io",
     "name": "Source Engine",
     "description": "Includes support for most Source Dedicated Server games.",
-    "created_at": "2025-03-20T07:43:02+00:00",
-    "updated_at": "2025-03-20T07:43:02+00:00",
+    "created_at": "2025-03-27T07:41:46+00:00",
+    "updated_at": "2025-03-27T07:41:46+00:00",
     "relationships": {
       "eggs": {
         "object": "list",
@@ -505,7 +272,7 @@
             "object": "egg",
             "attributes": {
               "id": 6,
-              "uuid": "601b8128-7ac4-45ca-b535-270102bcc321",
+              "uuid": "adb18ddc-6306-4cec-a459-19688a8e226a",
               "name": "Insurgency",
               "nest": 2,
               "author": "support@pterodactyl.io",
@@ -532,15 +299,15 @@
                 "container": "ghcr.io/pterodactyl/installers:debian",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-20T07:43:02+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           },
           {
             "object": "egg",
             "attributes": {
               "id": 7,
-              "uuid": "74bb529a-2c85-488a-afe8-f40dc09d66de",
+              "uuid": "8368deae-3af3-4245-9986-7725f8844afa",
               "name": "Ark: Survival Evolved",
               "nest": 2,
               "author": "dev@shepper.fr",
@@ -567,15 +334,15 @@
                 "container": "ghcr.io/pterodactyl/installers:debian",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-20T07:43:02+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           },
           {
             "object": "egg",
             "attributes": {
               "id": 8,
-              "uuid": "de874ce6-54c0-4d7f-8240-5621b726395f",
+              "uuid": "392978b7-e86b-4a1b-80dd-db167c212c14",
               "name": "Custom Source Engine Game",
               "nest": 2,
               "author": "support@pterodactyl.io",
@@ -602,15 +369,15 @@
                 "container": "ghcr.io/pterodactyl/installers:debian",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-20T07:43:02+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           },
           {
             "object": "egg",
             "attributes": {
               "id": 9,
-              "uuid": "e9be02be-e78c-439e-9262-f049c6bd8c7d",
+              "uuid": "aa6751cd-01fe-4770-9dcf-a025415abe29",
               "name": "Counter-Strike: Global Offensive",
               "nest": 2,
               "author": "support@pterodactyl.io",
@@ -637,15 +404,15 @@
                 "container": "ghcr.io/pterodactyl/installers:debian",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-20T07:43:02+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           },
           {
             "object": "egg",
             "attributes": {
               "id": 10,
-              "uuid": "cb4e5752-65f6-4efd-88cb-f74ee1bea715",
+              "uuid": "91f99011-a790-40a5-9f28-cc1e699bf8fb",
               "name": "Garrys Mod",
               "nest": 2,
               "author": "support@pterodactyl.io",
@@ -672,15 +439,15 @@
                 "container": "ghcr.io/pterodactyl/installers:debian",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-20T07:43:02+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           },
           {
             "object": "egg",
             "attributes": {
               "id": 11,
-              "uuid": "432af826-aa94-496e-a269-7ea8f8b10739",
+              "uuid": "15f5a783-0c23-4991-839c-e2d2938fa913",
               "name": "Team Fortress 2",
               "nest": 2,
               "author": "support@pterodactyl.io",
@@ -707,8 +474,8 @@
                 "container": "ghcr.io/pterodactyl/installers:debian",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-20T07:43:02+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           }
         ]
@@ -717,12 +484,12 @@
   },
   {
     "id": 3,
-    "uuid": "6fc0f934-acb8-4300-b4a5-028a0925268f",
+    "uuid": "f3cef685-72b3-4e50-9b74-4915402c0333",
     "author": "support@pterodactyl.io",
     "name": "Voice Servers",
     "description": "Voice servers such as Mumble and Teamspeak 3.",
-    "created_at": "2025-03-20T07:43:02+00:00",
-    "updated_at": "2025-03-20T07:43:02+00:00",
+    "created_at": "2025-03-27T07:41:46+00:00",
+    "updated_at": "2025-03-27T07:41:46+00:00",
     "relationships": {
       "eggs": {
         "object": "list",
@@ -731,7 +498,7 @@
             "object": "egg",
             "attributes": {
               "id": 12,
-              "uuid": "3f85cb6c-e638-4829-8da4-84771d6a1326",
+              "uuid": "742f63b7-95f9-4d94-815d-76ae6efd1da6",
               "name": "Mumble Server",
               "nest": 3,
               "author": "support@pterodactyl.io",
@@ -769,15 +536,15 @@
                 "container": "ghcr.io/pterodactyl/installers:alpine",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-20T07:43:02+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           },
           {
             "object": "egg",
             "attributes": {
               "id": 13,
-              "uuid": "a913d5b4-c126-49da-ad48-242f1773bd24",
+              "uuid": "50ae9223-24e7-485d-b7df-3ef5f69bb72a",
               "name": "Teamspeak3 Server",
               "nest": 3,
               "author": "support@pterodactyl.io",
@@ -807,8 +574,8 @@
                 "container": "ghcr.io/pterodactyl/installers:alpine",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-20T07:43:02+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           }
         ]
@@ -817,12 +584,12 @@
   },
   {
     "id": 4,
-    "uuid": "8bc6b893-6b25-433f-9f44-b4691d3ebdd3",
+    "uuid": "785563b5-48d4-44e5-b907-998fe591585c",
     "author": "support@pterodactyl.io",
     "name": "Rust",
     "description": "Rust - A game where you must fight to survive.",
-    "created_at": "2025-03-20T07:43:02+00:00",
-    "updated_at": "2025-03-20T07:43:02+00:00",
+    "created_at": "2025-03-27T07:41:46+00:00",
+    "updated_at": "2025-03-27T07:41:46+00:00",
     "relationships": {
       "eggs": {
         "object": "list",
@@ -831,7 +598,7 @@
             "object": "egg",
             "attributes": {
               "id": 14,
-              "uuid": "58b8a16b-3087-4b8f-bf43-a9565fb33c4e",
+              "uuid": "0db742b9-9cc3-4fc4-901c-0fabaae738d6",
               "name": "Rust",
               "nest": 4,
               "author": "support@pterodactyl.io",
@@ -858,68 +625,62 @@
                 "container": "ghcr.io/pterodactyl/installers:debian",
                 "extends": null
               },
-              "created_at": "2025-03-20T07:43:02+00:00",
-              "updated_at": "2025-03-20T07:43:02+00:00"
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    "id": 5,
-    "uuid": "d136c048-602f-4858-87e4-627a05c9f265",
-    "author": "loyalhoodro@gmail.com",
-    "name": "Premade Eggs",
-    "description": null,
-    "created_at": "2025-03-20T08:26:46+00:00",
-    "updated_at": "2025-03-20T08:26:46+00:00",
-    "relationships": {
-      "eggs": {
-        "object": "list",
-        "data": [
-          {
-            "object": "egg",
-            "attributes": {
-              "id": 19,
-              "uuid": "7ef50ca6-d94b-4383-a8ab-4e7ec1118e2a",
-              "name": "Uptime Kuma",
-              "nest": 5,
-              "author": "eggs@goover.dev",
-              "description": "Uptime Kuma is an easy-to-use self-hosted monitoring tool.",
-              "docker_image": "ghcr.io/parkervcp/apps:uptimekuma",
-              "docker_images": {
-                "ghcr.io/parkervcp/apps:uptimekuma": "ghcr.io/parkervcp/apps:uptimekuma"
-              },
-              "config": {
-                "files": {},
-                "startup": {
-                  "done": "[SERVER] INFO: Listening on "
-                },
-                "stop": "^^C",
-                "logs": [],
-                "file_denylist": [],
-                "extends": null
-              },
-              "startup": "if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == \"1\" ]]; then npm run setup; fi; /usr/local/bin/node /home/container/server/server.js --port={{SERVER_PORT}}",
-              "script": {
-                "privileged": true,
-                "install": "#!/bin/ash\r\n# Uptime Kuma App Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napk update\r\napk add --no-cache git curl jq file unzip make gcc g++ python3 python3-dev libtool\r\napk add --no-cache git-lfs --repository=https://dl-cdn.alpinelinux.org/alpine/latest-stable/community\r\n\r\n## npm update to latest\r\necho -e \"Updating npm to latest....\\n\"\r\nif [ -d \"/mnt/server/node_modules\" ]; then\r\n    rm -fR /mnt/server/node_modules\r\n    npm cache verify\r\nfi\r\nnpm install -g npm@latest\r\n\r\n## Uptime Kuma install & update\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\ngit config --global --add safe.directory /mnt/server\r\n\r\nif [ -d .git ]; then\r\n    echo -e \"Updating Uptime Kuma....\\n \"\r\n    npm run setup\r\nelse\r\n    echo -e \"Download and installing Uptime Kuma...\\n\"   \r\n    git clone https://github.com/louislam/uptime-kuma.git .\r\n    npm run setup\r\nfi\r\n\r\n## only create dir, when .git is present to prevent errors\r\nif [ -d .git ]; then\r\n    mkdir -p /mnt/server/data\r\nfi\r\n\r\nif [ ! -f \"/mnt/server/data/kuma.db\" ]; then\r\n    cp /mnt/server/db/kuma.db /mnt/server/data/kuma.db\r\nfi\r\n\r\n## install end\r\necho -e \"-----------------------------------------\"\r\necho -e \"Installation completed...\"\r\necho -e \"-----------------------------------------\"\r\nexit 0",
-                "entry": "ash",
-                "container": "node:18-alpine",
-                "extends": null
-              },
-              "created_at": "2025-03-20T08:38:28+00:00",
-              "updated_at": "2025-03-20T08:38:28+00:00"
+              "created_at": "2025-03-27T07:41:46+00:00",
+              "updated_at": "2025-03-27T07:41:46+00:00"
             }
           },
           {
             "object": "egg",
             "attributes": {
-              "id": 23,
-              "uuid": "ab8608f3-784c-428f-894c-ed9f46c932ce",
+              "id": 15,
+              "uuid": "0af1a3a0-0391-44b4-8025-7394394bfe0c",
+              "name": "node.js generic",
+              "nest": 4,
+              "author": "parker@parkervcp.com",
+              "description": "a generic node.js egg\r\n\r\nThis will clone a git repo. it defaults to master if no branch is specified.\r\n\r\nInstalls the node_modules on install. If you set user_upload then I assume you know what you are doing.",
+              "docker_image": "ghcr.io/parkervcp/yolks:nodejs_21",
+              "docker_images": {
+                "Nodejs 21": "ghcr.io/parkervcp/yolks:nodejs_21",
+                "Nodejs 20": "ghcr.io/parkervcp/yolks:nodejs_20",
+                "Nodejs 19": "ghcr.io/parkervcp/yolks:nodejs_19",
+                "Nodejs 18": "ghcr.io/parkervcp/yolks:nodejs_18",
+                "Nodejs 17": "ghcr.io/parkervcp/yolks:nodejs_17",
+                "Nodejs 16": "ghcr.io/parkervcp/yolks:nodejs_16",
+                "Nodejs 14": "ghcr.io/parkervcp/yolks:nodejs_14",
+                "Nodejs 12": "ghcr.io/parkervcp/yolks:nodejs_12"
+              },
+              "config": {
+                "files": {},
+                "startup": {
+                  "done": [
+                    "change this text 1",
+                    "change this text 2"
+                  ]
+                },
+                "stop": "^C",
+                "logs": [],
+                "file_denylist": [],
+                "extends": null
+              },
+              "startup": "if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == \"1\" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ \"${MAIN_FILE}\" == \"*.js\" ]]; then /usr/local/bin/node \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; else /usr/local/bin/ts-node --esm \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; fi",
+              "script": {
+                "privileged": true,
+                "install": "#!/bin/bash\r\n# NodeJS App Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napt update\r\napt install -y git curl jq file unzip make gcc g++ python3 python3-dev python3-pip libtool\r\n\r\necho -e \"updating npm. please wait...\"\r\nnpm install npm@latest --location=global\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\nif [ \"${USER_UPLOAD}\" == \"true\" ] || [ \"${USER_UPLOAD}\" == \"1\" ]; then\r\n    echo -e \"assuming user knows what they are doing have a good day.\"\r\n    exit 0\r\nfi\r\n\r\n## add git ending if it's not on the address\r\nif [[ ${GIT_ADDRESS} != *.git ]]; then\r\n    GIT_ADDRESS=${GIT_ADDRESS}.git\r\nfi\r\n\r\nif [ -z \"${USERNAME}\" ] && [ -z \"${ACCESS_TOKEN}\" ]; then\r\n    echo -e \"using anon api call\"\r\nelse\r\n    GIT_ADDRESS=\"https://${USERNAME}:${ACCESS_TOKEN}@$(echo -e ${GIT_ADDRESS} | cut -d/ -f3-)\"\r\nfi\r\n\r\n## pull git js repo\r\nif [ \"$(ls -A /mnt/server)\" ]; then\r\n    echo -e \"/mnt/server directory is not empty.\"\r\n    if [ -d .git ]; then\r\n        echo -e \".git directory exists\"\r\n        if [ -f .git/config ]; then\r\n            echo -e \"loading info from git config\"\r\n            ORIGIN=$(git config --get remote.origin.url)\r\n        else\r\n            echo -e \"files found with no git config\"\r\n            echo -e \"closing out without touching things to not break anything\"\r\n            exit 10\r\n        fi\r\n    fi\r\n\r\n    if [ \"${ORIGIN}\" == \"${GIT_ADDRESS}\" ]; then\r\n        echo \"pulling latest from github\"\r\n        git pull\r\n    fi\r\nelse\r\n    echo -e \"/mnt/server is empty.\\ncloning files into repo\"\r\n    if [ -z ${BRANCH} ]; then\r\n        echo -e \"cloning default branch\"\r\n        git clone ${GIT_ADDRESS} .\r\n    else\r\n        echo -e \"cloning ${BRANCH}'\"\r\n        git clone --single-branch --branch ${BRANCH} ${GIT_ADDRESS} .\r\n    fi\r\n\r\nfi\r\n\r\necho \"Installing nodejs packages\"\r\nif [[ ! -z ${NODE_PACKAGES} ]]; then\r\n    /usr/local/bin/npm install ${NODE_PACKAGES}\r\nfi\r\n\r\nif [ -f /mnt/server/package.json ]; then\r\n    /usr/local/bin/npm install --production\r\nfi\r\n\r\necho -e \"install complete\"\r\nexit 0",
+                "entry": "bash",
+                "container": "node:18-bookworm-slim",
+                "extends": null
+              },
+              "created_at": "2025-03-27T07:47:43+00:00",
+              "updated_at": "2025-03-27T07:47:43+00:00"
+            }
+          },
+          {
+            "object": "egg",
+            "attributes": {
+              "id": 16,
+              "uuid": "1bd371be-ebab-437e-8cbd-441a6b146899",
               "name": "MongoDB 7",
-              "nest": 5,
+              "nest": 4,
               "author": "parker@parkervcp.com",
               "description": "MongoDB is a general purpose, document-based, distributed database built for modern application developers and for my butt era.",
               "docker_image": "ghcr.io/parkervcp/yolks:mongodb_7",
@@ -951,48 +712,8 @@
                 "container": "mongo:7-jammy",
                 "extends": null
               },
-              "created_at": "2025-03-21T10:43:07+00:00",
-              "updated_at": "2025-03-21T10:43:07+00:00"
-            }
-          },
-          {
-            "object": "egg",
-            "attributes": {
-              "id": 24,
-              "uuid": "b4564c5c-3ca6-44a0-8986-6720cb801a23",
-              "name": "PteroStats",
-              "nest": 5,
-              "author": "hello@lezetho.co.uk",
-              "description": "a generic node.js egg\r\n\r\nThis will clone a git repo. it defaults to master if no branch is specified.\r\n\r\nInstalls the node_modules on install. If you set user_upload then I assume you know what you are doing.",
-              "docker_image": "ghcr.io/parkervcp/yolks:nodejs_21",
-              "docker_images": {
-                "NodeJS 21": "ghcr.io/parkervcp/yolks:nodejs_21",
-                "NodeJS 20": "ghcr.io/parkervcp/yolks:nodejs_20",
-                "NodeJS 19": "ghcr.io/parkervcp/yolks:nodejs_19",
-                "NodeJS 18": "ghcr.io/parkervcp/yolks:nodejs_18"
-              },
-              "config": {
-                "files": {},
-                "startup": {
-                  "done": [
-                    "PteroStats installed."
-                  ]
-                },
-                "stop": "^C",
-                "logs": [],
-                "file_denylist": [],
-                "extends": null
-              },
-              "startup": "npm install && /usr/local/bin/node \"/home/container/index.js\" ${NODE_ARGS}",
-              "script": {
-                "privileged": true,
-                "install": "#!/bin/bash\r\n# PteroStats Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napt update\r\napt install -y git curl jq file unzip make gcc g++ python3 python3-dev python3-pip libtool\r\n\r\necho -e \"Updating npm. please wait...\"\r\nnpm install npm@latest --location=global\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\ngit clone https://github.com/HirziDevs/PteroStats.git ./\r\n\r\necho \"Installing nodejs packages\"\r\nif [[ ! -z ${NODE_PACKAGES} ]]; then\r\n    /usr/local/bin/npm install ${NODE_PACKAGES}\r\nfi\r\n\r\nif [ -f /mnt/server/package.json ]; then\r\n    /usr/local/bin/npm install --production\r\nfi\r\n\r\necho -e \"Install completed\"\r\nexit 0",
-                "entry": "bash",
-                "container": "node:18-bookworm-slim",
-                "extends": null
-              },
-              "created_at": "2025-03-24T07:04:12+00:00",
-              "updated_at": "2025-03-24T07:04:12+00:00"
+              "created_at": "2025-03-27T08:15:33+00:00",
+              "updated_at": "2025-03-27T08:15:33+00:00"
             }
           }
         ]
@@ -1000,13 +721,13 @@
     }
   },
   {
-    "id": 6,
-    "uuid": "129df6c1-5694-4330-a1c3-1b2f36032e86",
+    "id": 5,
+    "uuid": "538ec76c-f92f-43c6-8f33-71659f7aa5aa",
     "author": "loyalhoodro@gmail.com",
-    "name": "Grand Theft Auto V",
-    "description": null,
-    "created_at": "2025-03-20T08:37:25+00:00",
-    "updated_at": "2025-03-20T08:37:25+00:00",
+    "name": "Node Js Eggs",
+    "description": "by Prathmesh </>",
+    "created_at": "2025-03-27T10:43:00+00:00",
+    "updated_at": "2025-03-27T10:43:00+00:00",
     "relationships": {
       "eggs": {
         "object": "list",
@@ -1015,117 +736,9 @@
             "object": "egg",
             "attributes": {
               "id": 17,
-              "uuid": "e8e02a88-88cb-431c-bc96-7f181135c06e",
-              "name": "Rage.MP",
-              "nest": 6,
-              "author": "noreply.waypointhosting@gmail.com",
-              "description": "https://rage.mp/\r\n\r\nModified to work with the latest version of RAGE:MP\r\nWill automatically install linux bridge.\r\n**This server requires 2 ports to be added for the server. the main port and the next (port+1) as ports for the server.",
-              "docker_image": "ghcr.io/parkervcp/yolks:debian",
-              "docker_images": {
-                "ghcr.io/parkervcp/yolks:debian": "ghcr.io/parkervcp/yolks:debian"
-              },
-              "config": {
-                "files": {
-                  "conf.json": {
-                    "parser": "json",
-                    "find": {
-                      "port": "{{server.build.default.port}}",
-                      "bind": "0.0.0.0",
-                      "name": "{{server.build.env.SERVER_NAME}}",
-                      "maxplayers": "{{server.build.env.MAX_PLAYERS}}"
-                    }
-                  }
-                },
-                "startup": {
-                  "done": "The server is ready to accept connections"
-                },
-                "stop": "^X",
-                "logs": [],
-                "file_denylist": [],
-                "extends": null
-              },
-              "startup": "./ragemp-server",
-              "script": {
-                "privileged": true,
-                "install": "#!/bin/bash\r\n\r\nmkdir -p /mnt/server/tmp\r\ncd /mnt/server\r\n\r\nrm -rf bin/\r\nrm -rf dotnet/\r\nrm ragemp-server\r\n\r\ncd /mnt/server/tmp\r\necho \"Downloading rage.mp\"\r\ncurl -sSL -o linux_x64.tar.gz https://cdn.rage.mp/updater/prerelease/server-files/linux_x64.tar.gz\r\ntar -xzvf linux_x64.tar.gz\r\nrm linux_x64.tar.gz\r\ncd /mnt/server/tmp/ragemp-srv/\r\nmv * /mnt/server\r\n\r\ncd /mnt/server\r\nchmod +x ./ragemp-server\r\nrm -rf /mnt/server/tmp\r\n\r\nif [ -e conf.json ]; then\r\n    echo \"server config file exists\"\r\nelse\r\n    echo \"Downloading default rage.mp config\"\r\n    curl https://raw.githubusercontent.com/parkervcp/eggs/master/game_eggs/gta/ragemp/conf.json >> conf.json\r\nfi\r\n\r\necho \"install complete\"\r\n\r\nexit 0",
-                "entry": "bash",
-                "container": "ghcr.io/parkervcp/installers:debian",
-                "extends": null
-              },
-              "created_at": "2025-03-20T08:37:50+00:00",
-              "updated_at": "2025-03-20T08:37:50+00:00"
-            }
-          },
-          {
-            "object": "egg",
-            "attributes": {
-              "id": 18,
-              "uuid": "e9b34ebc-c68b-4c7a-b2ce-f3dbeedd64a3",
-              "name": "FiveM",
-              "nest": 6,
-              "author": "parker@parkervcp.com",
-              "description": "A new FiveM egg for the latest builds due to recent changes in FiveM",
-              "docker_image": "ghcr.io/parkervcp/yolks:debian",
-              "docker_images": {
-                "ghcr.io/parkervcp/yolks:debian": "ghcr.io/parkervcp/yolks:debian"
-              },
-              "config": {
-                "files": {
-                  "server.cfg": {
-                    "parser": "file",
-                    "find": {
-                      "endpoint_add_tcp": "endpoint_add_tcp \"0.0.0.0:{{server.build.default.port}}\"",
-                      "endpoint_add_udp": "endpoint_add_udp \"0.0.0.0:{{server.build.default.port}}\"",
-                      "sv_hostname": "sv_hostname \"{{server.build.env.SERVER_HOSTNAME}}\"",
-                      "set sv_licenseKey": "set sv_licenseKey {{server.build.env.FIVEM_LICENSE}}",
-                      "set steam_webApiKey": "set steam_webApiKey {{server.build.env.STEAM_WEBAPIKEY}}",
-                      "sv_maxclients": "sv_maxclients {{server.build.env.MAX_PLAYERS}}"
-                    }
-                  }
-                },
-                "startup": {
-                  "done": "succeeded. Welcome!"
-                },
-                "stop": "quit",
-                "logs": [],
-                "file_denylist": [],
-                "extends": null
-              },
-              "startup": "$(pwd)/alpine/opt/cfx-server/ld-musl-x86_64.so.1 --library-path \"$(pwd)/alpine/usr/lib/v8/:$(pwd)/alpine/lib/:$(pwd)/alpine/usr/lib/\" -- $(pwd)/alpine/opt/cfx-server/FXServer +set citizen_dir $(pwd)/alpine/opt/cfx-server/citizen/ +set sv_licenseKey {{FIVEM_LICENSE}} +set steam_webApiKey {{STEAM_WEBAPIKEY}} +set sv_maxplayers {{MAX_PLAYERS}} +set serverProfile default +set txAdminPort {{TXADMIN_PORT}} $( [ \"$TXADMIN_ENABLE\" == \"1\" ] || printf %s '+exec server.cfg' )",
-              "script": {
-                "privileged": true,
-                "install": "#!/bin/bash\r\n# FiveM Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napt update -y\r\napt install -y tar xz-utils file jq\r\n\r\nmkdir -p /mnt/server/resources\r\n\r\ncd /mnt/server\r\n\r\necho \"updating citizenfx resource files\"\r\ngit clone https://github.com/citizenfx/cfx-server-data.git /tmp\r\ncp -Rf /tmp/resources/* resources/\r\n\r\nRELEASE_PAGE=$(curl -sSL https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/)\r\nCHANGELOGS_PAGE=$(curl -sSL https://changelogs-live.fivem.net/api/changelog/versions/linux/server)\r\n\r\nif [[ \"${FIVEM_VERSION}\" == \"recommended\" ]] || [[ -z ${FIVEM_VERSION} ]]; then\r\n  DOWNLOAD_LINK=$(echo $CHANGELOGS_PAGE | jq -r '.recommended_download')\r\nelif [[ \"${FIVEM_VERSION}\" == \"latest\" ]]; then\r\n  DOWNLOAD_LINK=$(echo $CHANGELOGS_PAGE | jq -r '.latest_download')\r\nelse\r\n  VERSION_LINK=$(echo -e \"${RELEASE_PAGE}\" | grep -Eo '\".*/*.tar.xz\"' | grep -Eo '\".*/*.tar.xz\"' | sed 's/\\\"//g'  | sed 's/\\.\\///1' | grep -i \"${FIVEM_VERSION}\" | grep -o =.* |  tr -d '=')\r\n  if [[ \"${VERSION_LINK}\" == \"\" ]]; then\r\n    echo -e \"defaulting to recommedned as the version requested was invalid.\"\r\n    DOWNLOAD_LINK=$(echo $CHANGELOGS_PAGE | jq -r '.recommended_download')\r\n  else\r\n    DOWNLOAD_LINK=$(echo https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/${VERSION_LINK})\r\n  fi\r\nfi\r\n\r\nif [ ! -z \"${DOWNLOAD_URL}\" ]; then\r\n  if curl --output /dev/null --silent --head --fail ${DOWNLOAD_URL}; then\r\n    echo -e \"link is valid. setting download link to ${DOWNLOAD_URL}\"\r\n    DOWNLOAD_LINK=${DOWNLOAD_URL}\r\n  else\r\n    echo -e \"link is invalid closing out\"\r\n    exit 2\r\n  fi\r\nfi\r\n\r\necho -e \"Running curl -sSL ${DOWNLOAD_LINK} -o ${DOWNLOAD_LINK##*/}\"\r\n\r\ncurl -sSL ${DOWNLOAD_LINK} -o ${DOWNLOAD_LINK##*/}\r\n\r\necho \"Extracting fivem files\"\r\n\r\nFILETYPE=$(file -F ',' ${DOWNLOAD_LINK##*/} | cut -d',' -f2 | cut -d' ' -f2)\r\nif [ \"$FILETYPE\" == \"gzip\" ]; then\r\n  tar xzvf ${DOWNLOAD_LINK##*/}\r\nelif [ \"$FILETYPE\" == \"Zip\" ]; then\r\n  unzip ${DOWNLOAD_LINK##*/}\r\nelif [ \"$FILETYPE\" == \"XZ\" ]; then\r\n  tar xvf ${DOWNLOAD_LINK##*/}\r\nelse\r\n  echo -e \"unknown filetype. Exiting\"\r\n  exit 2\r\nfi\r\n\r\nrm -rf ${DOWNLOAD_LINK##*/} run.sh\r\n\r\nif [ -e server.cfg ]; then\r\n  echo \"Skipping downloading default server config file as one already exists\"\r\nelse\r\n  echo \"Downloading default fivem config\"\r\n  curl https://raw.githubusercontent.com/parkervcp/eggs/master/game_eggs/gta/fivem/server.cfg >>server.cfg\r\nfi\r\n\r\nmkdir -p logs/\r\n\r\necho \"install complete\"",
-                "entry": "bash",
-                "container": "ghcr.io/parkervcp/installers:debian",
-                "extends": null
-              },
-              "created_at": "2025-03-20T08:38:12+00:00",
-              "updated_at": "2025-03-20T08:38:12+00:00"
-            }
-          }
-        ]
-      }
-    }
-  },
-  {
-    "id": 7,
-    "uuid": "225d2b54-bb71-440c-8239-3dab09505b93",
-    "author": "loyalhoodro@gmail.com",
-    "name": "Dashbaord egg",
-    "description": "by prathmesh",
-    "created_at": "2025-03-20T08:59:04+00:00",
-    "updated_at": "2025-03-20T08:59:04+00:00",
-    "relationships": {
-      "eggs": {
-        "object": "list",
-        "data": [
-          {
-            "object": "egg",
-            "attributes": {
-              "id": 21,
-              "uuid": "6ae2ebd9-f2b7-41bc-889b-522dee0ef746",
+              "uuid": "0e3dfd0b-be5f-44ed-bb4e-9999ee9fbbc3",
               "name": "node.js generic",
-              "nest": 7,
+              "nest": 5,
               "author": "parker@parkervcp.com",
               "description": "a generic node.js egg\r\n\r\nThis will clone a git repo. it defaults to master if no branch is specified.\r\n\r\nInstalls the node_modules on install. If you set user_upload then I assume you know what you are doing.",
               "docker_image": "ghcr.io/parkervcp/yolks:nodejs_22",
@@ -1161,8 +774,8 @@
                 "container": "node:18-bookworm-slim",
                 "extends": null
               },
-              "created_at": "2025-03-20T09:00:13+00:00",
-              "updated_at": "2025-03-20T09:00:46+00:00"
+              "created_at": "2025-03-27T10:43:38+00:00",
+              "updated_at": "2025-03-27T10:44:02+00:00"
             }
           }
         ]
@@ -1170,13 +783,13 @@
     }
   },
   {
-    "id": 8,
-    "uuid": "ac538d4a-def2-45a1-86da-f7ee7f82591a",
+    "id": 6,
+    "uuid": "53d24954-b102-4618-904c-fd0d4a6d7e10",
     "author": "loyalhoodro@gmail.com",
-    "name": "WEBSITE",
-    "description": null,
-    "created_at": "2025-03-24T11:34:55+00:00",
-    "updated_at": "2025-03-24T11:34:55+00:00",
+    "name": "Discord Bot",
+    "description": "By Prathmesh </>",
+    "created_at": "2025-03-28T03:08:30+00:00",
+    "updated_at": "2025-03-28T03:08:30+00:00",
     "relationships": {
       "eggs": {
         "object": "list",
@@ -1184,38 +797,47 @@
           {
             "object": "egg",
             "attributes": {
-              "id": 25,
-              "uuid": "05b74331-dab4-4276-8e09-671cc9f01b8d",
-              "name": "LumenWEB (BETA)",
-              "nest": 8,
-              "author": "david@david1117.dev",
-              "description": "Easily set up websites using LumenWEB.",
-              "docker_image": "ghcr.io/david1117dev/lumenweb:1.0-beta",
+              "id": 18,
+              "uuid": "f456a60f-8725-4bfd-936d-99a3bdb4775e",
+              "name": "Golang Discord Bot",
+              "nest": 6,
+              "author": "loyalhoodro@gmail.com",
+              "description": "self made egg by Prathmesh </>",
+              "docker_image": "golang:1.24",
               "docker_images": {
-                "V1.0": "ghcr.io/david1117dev/lumenweb:1.0-beta"
+                "golang:1.24": "golang:1.24"
               },
               "config": {
-                "files": {},
-                "startup": {
-                  "done": [
-                    "Starting LumenWEB"
-                  ]
+                "files": {
+                  "config.json": {
+                    "parser": "json",
+                    "find": {
+                      "BOT_TOKEN": "YOUR_BOT_TOKEN"
+                    }
+                  }
                 },
-                "stop": "^C^C",
-                "logs": [],
-                "file_denylist": [],
+                "startup": {
+                  "done": "Bot is running.",
+                  "userInteraction": false
+                },
+                "stop": "^C",
+                "logs": {
+                  "done": "Bot is running.",
+                  "log": "logs/latest.log"
+                },
+                "file_denylist": null,
                 "extends": null
               },
-              "startup": "# Powered by LumenWEB",
+              "startup": "go run {{STARTUP_FILE}}",
               "script": {
                 "privileged": true,
-                "install": null,
+                "install": "#!/bin/bash\r\n# Install Go dependencies\r\ngo mod tidy\r\ngo build -o bot",
                 "entry": "ash",
                 "container": "alpine:3.4",
                 "extends": null
               },
-              "created_at": "2025-03-24T11:35:26+00:00",
-              "updated_at": "2025-03-24T11:35:26+00:00"
+              "created_at": "2025-03-28T03:12:40+00:00",
+              "updated_at": "2025-03-28T03:20:55+00:00"
             }
           }
         ]

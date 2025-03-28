@@ -32,24 +32,39 @@ async function deployCommands() {
             fs.mkdirSync(commandsPath, { recursive: true });
         }
         
-        const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-        console.log(chalk.blue(`[BOT] Found ${commandFiles.length} command files`));
-
-        // Load each command file
-        for (const file of commandFiles) {
-            const filePath = path.join(commandsPath, file);
-            try {
-                const command = require(filePath);
-                if ('data' in command && 'execute' in command) {
-                    commands.push(command.data.toJSON());
-                    console.log(chalk.green(`[BOT] Loaded command: ${command.data.name}`));
-                } else {
-                    console.log(chalk.yellow(`[BOT] The command at ${filePath} is missing a required "data" or "execute" property.`));
+        // Files to ignore (utility files, not commands)
+        const ignoreFiles = ['utils.js', 'events.js', 'index.js'];
+        
+        // Function to recursively load commands from directories
+        function loadCommandsRecursively(dir) {
+            const items = fs.readdirSync(dir, { withFileTypes: true });
+            
+            for (const item of items) {
+                const itemPath = path.join(dir, item.name);
+                
+                if (item.isDirectory()) {
+                    // If it's a directory, recursively load commands from it
+                    loadCommandsRecursively(itemPath);
+                } else if (item.name.endsWith('.js') && !ignoreFiles.includes(item.name)) {
+                    // If it's a JavaScript file and not in the ignore list, try to load it as a command
+                    try {
+                        const command = require(itemPath);
+                        if ('data' in command && 'execute' in command) {
+                            commands.push(command.data.toJSON());
+                            console.log(chalk.green(`[BOT] Loaded command: ${command.data.name}`));
+                        } else {
+                            console.log(chalk.yellow(`[BOT] The command at ${itemPath} is missing a required "data" or "execute" property.`));
+                        }
+                    } catch (error) {
+                        console.error(chalk.red(`[BOT] Error loading command from ${itemPath}:`), error);
+                    }
                 }
-            } catch (error) {
-                console.error(chalk.red(`[BOT] Error loading command from ${filePath}:`), error);
             }
         }
+        
+        // Load commands from the main directory and subdirectories
+        loadCommandsRecursively(commandsPath);
+        console.log(chalk.blue(`[BOT] Found ${commands.length} commands to deploy`));
 
         if (commands.length === 0) {
             console.log(chalk.yellow('[BOT] No commands found to deploy'));
@@ -114,4 +129,4 @@ if (require.main === module) {
             console.error(chalk.red('[BOT] Failed to deploy commands:'), error);
             process.exit(1);
         });
-} 
+}
