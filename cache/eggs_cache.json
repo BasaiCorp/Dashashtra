@@ -1,6 +1,91 @@
 {
   "1": [
-    null,
+    {
+      "id": 1,
+      "uuid": "d16acaac-139f-44c5-ac99-bd086a1e070f",
+      "name": "Bungeecord",
+      "nest": 1,
+      "author": "support@pterodactyl.io",
+      "description": "For a long time, Minecraft server owners have had a dream that encompasses a free, easy, and reliable way to connect multiple Minecraft servers together. BungeeCord is the answer to said dream. Whether you are a small server wishing to string multiple game-modes together, or the owner of the ShotBow Network, BungeeCord is the ideal solution for you. With the help of BungeeCord, you will be able to unlock your community's full potential.",
+      "docker_image": "ghcr.io/pterodactyl/yolks:java_21",
+      "docker_images": {
+        "Java 21": "ghcr.io/pterodactyl/yolks:java_21",
+        "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
+        "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+        "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
+        "Java 8": "ghcr.io/pterodactyl/yolks:java_8"
+      },
+      "config": {
+        "files": {
+          "config.yml": {
+            "parser": "yaml",
+            "find": {
+              "listeners[0].query_port": "{{server.build.default.port}}",
+              "listeners[0].host": "0.0.0.0:{{server.build.default.port}}",
+              "servers.*.address": {
+                "regex:^(127\\.0\\.0\\.1|localhost)(:\\d{1,5})?$": "{{config.docker.interface}}$2"
+              }
+            }
+          }
+        },
+        "startup": {
+          "done": "Listening on "
+        },
+        "stop": "end",
+        "logs": [],
+        "file_denylist": [],
+        "extends": null
+      },
+      "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
+      "script": {
+        "privileged": true,
+        "install": "#!/bin/ash\r\n# Bungeecord Installation Script\r\n#\r\n# Server Files: /mnt/server\r\n\r\ncd /mnt/server\r\n\r\nif [ -z \"${BUNGEE_VERSION}\" ] || [ \"${BUNGEE_VERSION}\" == \"latest\" ]; then\r\n    BUNGEE_VERSION=\"lastStableBuild\"\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} https://ci.md-5.net/job/BungeeCord/${BUNGEE_VERSION}/artifact/bootstrap/target/BungeeCord.jar",
+        "entry": "ash",
+        "container": "ghcr.io/pterodactyl/installers:alpine",
+        "extends": null
+      },
+      "created_at": "2025-03-20T07:43:02+00:00",
+      "updated_at": "2025-03-20T07:43:02+00:00",
+      "relationships": {
+        "variables": {
+          "object": "list",
+          "data": [
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 1,
+                "egg_id": 1,
+                "name": "Bungeecord Version",
+                "description": "The version of Bungeecord to download and use.",
+                "env_variable": "BUNGEE_VERSION",
+                "default_value": "latest",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|alpha_num|between:1,6",
+                "created_at": "2025-03-20T07:43:02.000000Z",
+                "updated_at": "2025-03-20T07:43:02.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 2,
+                "egg_id": 1,
+                "name": "Bungeecord Jar File",
+                "description": "The name of the Jarfile to use when running Bungeecord.",
+                "env_variable": "SERVER_JARFILE",
+                "default_value": "bungeecord.jar",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/",
+                "created_at": "2025-03-20T07:43:02.000000Z",
+                "updated_at": "2025-03-20T07:43:02.000000Z"
+              }
+            }
+          ]
+        }
+      }
+    },
     {
       "id": 2,
       "uuid": "f1f12e5b-db29-47e5-958a-e9a87948cd57",
@@ -742,6 +827,311 @@
                 "rules": "required|string|max:20",
                 "created_at": "2025-03-24T13:30:38.000000Z",
                 "updated_at": "2025-03-24T13:30:38.000000Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 27,
+      "uuid": "7cbbf932-6ed6-4440-9c46-b18f7defe785",
+      "name": "paper",
+      "nest": 1,
+      "author": "parker@pterodactyl.io",
+      "description": "High performance Spigot fork that aims to fix gameplay and mechanics inconsistencies.",
+      "docker_image": "ghcr.io/pterodactyl/yolks:java_21",
+      "docker_images": {
+        "Java 21": "ghcr.io/pterodactyl/yolks:java_21",
+        "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
+        "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+        "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
+        "Java 8": "ghcr.io/pterodactyl/yolks:java_8"
+      },
+      "config": {
+        "files": {
+          "server.properties": {
+            "parser": "properties",
+            "find": {
+              "server-ip": "0.0.0.0",
+              "server-port": "{{server.build.default.port}}",
+              "query.port": "{{server.build.default.port}}"
+            }
+          }
+        },
+        "startup": {
+          "done": ")! For help, type "
+        },
+        "stop": "stop",
+        "logs": [],
+        "file_denylist": [],
+        "extends": null
+      },
+      "startup": "java -Xms4G -Xmx4G -jar server.jar --nogui",
+      "script": {
+        "privileged": true,
+        "install": "#!/bin/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: /mnt/server\r\nPROJECT=paper\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's/{{/${/g' -e 's/}}/}/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https://api.papermc.io/v2/projects/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep -m1 true`\r\n\tLATEST_VERSION=`curl -s https://api.papermc.io/v2/projects/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Specified version not found. Defaulting to the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\r\n\tBUILD_EXISTS=`curl -s https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep -m1 true`\r\n\tLATEST_BUILD=`curl -s https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https://api.papermc.io/v2/projects/${PROJECT}/versions/${MINECRAFT_VERSION}/builds/${BUILD_NUMBER}/downloads/${JAR_NAME}\r\nfi\r\n\r\ncd /mnt/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https://raw.githubusercontent.com/parkervcp/eggs/master/minecraft/java/server.properties\r\nfi",
+        "entry": "ash",
+        "container": "ghcr.io/parkervcp/installers:alpine",
+        "extends": null
+      },
+      "created_at": "2025-03-25T11:39:45+00:00",
+      "updated_at": "2025-03-26T14:48:54+00:00",
+      "relationships": {
+        "variables": {
+          "object": "list",
+          "data": [
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 143,
+                "egg_id": 27,
+                "name": "Minecraft Version",
+                "description": "The version of minecraft to download. \r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
+                "env_variable": "MINECRAFT_VERSION",
+                "default_value": "latest",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string|max:20",
+                "created_at": "2025-03-25T11:39:45.000000Z",
+                "updated_at": "2025-03-25T11:39:45.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 144,
+                "egg_id": 27,
+                "name": "Server Jar File",
+                "description": "The name of the server jarfile to run the server with.",
+                "env_variable": "SERVER_JARFILE",
+                "default_value": "server.jar",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|regex:/^([\\w\\d._-]+)(\\.jar)$/",
+                "created_at": "2025-03-25T11:39:45.000000Z",
+                "updated_at": "2025-03-25T11:39:45.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 145,
+                "egg_id": 27,
+                "name": "Download Path",
+                "description": "A URL to use to download a server.jar rather than the ones in the install script. This is not user viewable.",
+                "env_variable": "DL_PATH",
+                "default_value": "",
+                "user_viewable": false,
+                "user_editable": false,
+                "rules": "nullable|string",
+                "created_at": "2025-03-25T11:39:45.000000Z",
+                "updated_at": "2025-03-25T11:39:45.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 146,
+                "egg_id": 27,
+                "name": "Build Number",
+                "description": "The build number for the paper release.\r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
+                "env_variable": "BUILD_NUMBER",
+                "default_value": "latest",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|string|max:20",
+                "created_at": "2025-03-25T11:39:45.000000Z",
+                "updated_at": "2025-03-25T11:39:45.000000Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 28,
+      "uuid": "6ce5d6bf-69de-402b-867d-4a0ce15fae3b",
+      "name": "python generic",
+      "nest": 1,
+      "author": "parker@parkervcp.com",
+      "description": "A Generic Python Egg for Pterodactyl\r\n\r\nTested with: https://github.com/Ispira/pixel-bot",
+      "docker_image": "ghcr.io/parkervcp/yolks:python_3.12",
+      "docker_images": {
+        "Python 3.12": "ghcr.io/parkervcp/yolks:python_3.12",
+        "Python 3.11": "ghcr.io/parkervcp/yolks:python_3.11",
+        "Python 3.10": "ghcr.io/parkervcp/yolks:python_3.10",
+        "Python 3.9": "ghcr.io/parkervcp/yolks:python_3.9",
+        "Python 3.8": "ghcr.io/parkervcp/yolks:python_3.8",
+        "Python 3.7": "ghcr.io/parkervcp/yolks:python_3.7",
+        "Python 2.7": "ghcr.io/parkervcp/yolks:python_2.7"
+      },
+      "config": {
+        "files": {},
+        "startup": {
+          "done": "change this part"
+        },
+        "stop": "^C",
+        "logs": [],
+        "file_denylist": [],
+        "extends": null
+      },
+      "startup": "if [[ -d .git ]] && [[ \"{{AUTO_UPDATE}}\" == \"1\" ]]; then git pull; fi; if [[ ! -z \"{{PY_PACKAGES}}\" ]]; then pip install -U --prefix .local {{PY_PACKAGES}}; fi; if [[ -f /home/container/${REQUIREMENTS_FILE} ]]; then pip install -U --prefix .local -r ${REQUIREMENTS_FILE}; fi; /usr/local/bin/python /home/container/{{PY_FILE}}",
+      "script": {
+        "privileged": true,
+        "install": "#!/bin/bash\r\n# Python App Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napt update\r\napt install -y git curl jq file unzip make gcc g++ libtool\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\nif [ \"${USER_UPLOAD}\" == \"true\" ] || [ \"${USER_UPLOAD}\" == \"1\" ]; then\r\n    echo -e \"assuming user knows what they are doing have a good day.\"\r\n    exit 0\r\nfi\r\n\r\n## add git ending if it's not on the address\r\nif [[ ${GIT_ADDRESS} != *.git ]]; then\r\n    GIT_ADDRESS=${GIT_ADDRESS}.git\r\nfi\r\n\r\nif [ -z \"${USERNAME}\" ] && [ -z \"${ACCESS_TOKEN}\" ]; then\r\n    echo -e \"using anon api call\"\r\nelse\r\n    GIT_ADDRESS=\"https://${USERNAME}:${ACCESS_TOKEN}@$(echo -e ${GIT_ADDRESS} | cut -d/ -f3-)\"\r\nfi\r\n\r\n## pull git python repo\r\nif [ \"$(ls -A /mnt/server)\" ]; then\r\n    echo -e \"/mnt/server directory is not empty.\"\r\n    if [ -d .git ]; then\r\n        echo -e \".git directory exists\"\r\n        if [ -f .git/config ]; then\r\n            echo -e \"loading info from git config\"\r\n            ORIGIN=$(git config --get remote.origin.url)\r\n        else\r\n            echo -e \"files found with no git config\"\r\n            echo -e \"closing out without touching things to not break anything\"\r\n            exit 10\r\n        fi\r\n    fi\r\n\r\n    if [ \"${ORIGIN}\" == \"${GIT_ADDRESS}\" ]; then\r\n        echo \"pulling latest from github\"\r\n        git pull\r\n    fi\r\nelse\r\n    echo -e \"/mnt/server is empty.\\ncloning files into repo\"\r\n    if [ -z ${BRANCH} ]; then\r\n        echo -e \"cloning default branch\"\r\n        git clone ${GIT_ADDRESS} .\r\n    else\r\n        echo -e \"cloning ${BRANCH}'\"\r\n        git clone --single-branch --branch ${BRANCH} ${GIT_ADDRESS} .\r\n    fi\r\n\r\nfi\r\n\r\nexport HOME=/mnt/server\r\n\r\necho \"Installing python requirements into folder\"\r\nif [[ ! -z ${PY_PACKAGES} ]]; then\r\n    pip install -U --prefix .local ${PY_PACKAGES}\r\nfi\r\n\r\nif [ -f /mnt/server/requirements.txt ]; then\r\n    pip install -U --prefix .local -r ${REQUIREMENTS_FILE}\r\nfi\r\n\r\necho -e \"install complete\"\r\nexit 0",
+        "entry": "bash",
+        "container": "python:3.8-slim-bookworm",
+        "extends": null
+      },
+      "created_at": "2025-03-25T12:56:33+00:00",
+      "updated_at": "2025-03-25T12:56:33+00:00",
+      "relationships": {
+        "variables": {
+          "object": "list",
+          "data": [
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 147,
+                "egg_id": 28,
+                "name": "Git Repo Address",
+                "description": "Git repo to clone\r\n\r\nI.E. https://github.com/parkervcp/repo_name",
+                "env_variable": "GIT_ADDRESS",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-25T12:56:33.000000Z",
+                "updated_at": "2025-03-25T12:56:33.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 148,
+                "egg_id": 28,
+                "name": "Git Branch",
+                "description": "What branch to pull from github.\r\n\r\nDefault is blank to pull the repo default branch",
+                "env_variable": "BRANCH",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-25T12:56:33.000000Z",
+                "updated_at": "2025-03-25T12:56:33.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 149,
+                "egg_id": 28,
+                "name": "User Uploaded Files",
+                "description": "Skip all the install stuff if you are letting a user upload files.\r\n\r\n0 = false (default)\r\n1 = true",
+                "env_variable": "USER_UPLOAD",
+                "default_value": "0",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|boolean",
+                "created_at": "2025-03-25T12:56:33.000000Z",
+                "updated_at": "2025-03-25T12:56:33.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 150,
+                "egg_id": 28,
+                "name": "Auto Update",
+                "description": "Pull the latest files on startup when using a GitHub repo.",
+                "env_variable": "AUTO_UPDATE",
+                "default_value": "0",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|boolean",
+                "created_at": "2025-03-25T12:56:33.000000Z",
+                "updated_at": "2025-03-25T12:56:33.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 151,
+                "egg_id": 28,
+                "name": "App py file",
+                "description": "The file that starts the App.",
+                "env_variable": "PY_FILE",
+                "default_value": "app.py",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|string",
+                "created_at": "2025-03-25T12:56:33.000000Z",
+                "updated_at": "2025-03-25T12:56:33.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 152,
+                "egg_id": 28,
+                "name": "Additional Python packages",
+                "description": "Install additional python packages.\r\n\r\nUse spaces to separate",
+                "env_variable": "PY_PACKAGES",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-25T12:56:33.000000Z",
+                "updated_at": "2025-03-25T12:56:33.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 153,
+                "egg_id": 28,
+                "name": "Git Username",
+                "description": "Username to auth with git.",
+                "env_variable": "USERNAME",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-25T12:56:33.000000Z",
+                "updated_at": "2025-03-25T12:56:33.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 154,
+                "egg_id": 28,
+                "name": "Git Access Token",
+                "description": "Password to use with git.\r\n\r\nIt's best practice to use a Personal Access Token.\r\nhttps://github.com/settings/tokens\r\nhttps://gitlab.com/-/profile/personal_access_tokens",
+                "env_variable": "ACCESS_TOKEN",
+                "default_value": "",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "nullable|string",
+                "created_at": "2025-03-25T12:56:33.000000Z",
+                "updated_at": "2025-03-25T12:56:33.000000Z"
+              }
+            },
+            {
+              "object": "egg_variable",
+              "attributes": {
+                "id": 155,
+                "egg_id": 28,
+                "name": "Requirements file",
+                "description": "if there are other requirements files to choose from.",
+                "env_variable": "REQUIREMENTS_FILE",
+                "default_value": "requirements.txt",
+                "user_viewable": true,
+                "user_editable": true,
+                "rules": "required|string",
+                "created_at": "2025-03-25T12:56:33.000000Z",
+                "updated_at": "2025-03-25T12:56:33.000000Z"
               }
             }
           ]

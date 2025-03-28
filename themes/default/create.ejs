@@ -700,15 +700,7 @@
 								<option value="">Select location</option>
 								<% if (typeof locations !== 'undefined' && locations.length > 0) { %>
 									<% locations.forEach(location => { %>
-										<% 
-											// Skip the Germany location
-											const locationName = location.short ? location.short.toLowerCase() : '';
-											const locationLong = location.long ? location.long.toLowerCase() : '';
-											const isGermany = locationName.includes('germany') || locationLong.includes('germany') || 
-												locationName.includes('german') || locationLong.includes('german');
-											
-											if (!isGermany) { 
-										%>
+										<% if (location.id === 2) { %>
 											<option value="<%= location.id %>"><%= location.short %><% if (location.long) { %> - <%= location.long %><% } %></option>
 										<% } %>
 									<% }); %>

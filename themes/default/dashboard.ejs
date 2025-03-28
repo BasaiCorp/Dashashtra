@@ -569,16 +569,16 @@
 					<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
 				</button>
 			</div>
-
-			<!-- Mobile Menu Button -->
-			<button id="mobileMenuBtn" class="md:hidden p-2 text-gray-400 hover:text-white transition-colors duration-200">
-				<i class="fas fa-bars"></i>
+			
+			<!-- Mobile Search Button -->
+			<button id="mobileSearchBtn" class="md:hidden p-2 text-gray-400 hover:text-white transition-colors duration-200">
+				<i class="fas fa-search"></i>
 			</button>
 
 			<!-- User Profile Dropdown -->
 			<div class="relative inline-block">
 				<button id="dropdownBtn" class="flex items-center px-2 sm:px-4 py-2 text-sm font-medium text-white rounded-lg bg-dark-lighter hover:bg-primary-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50">
-					<div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center">
+					<div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center mr-3">
 						<i class="fas fa-user text-primary-400"></i>
 					</div>
 					<span class="hidden sm:inline-block ml-2 mr-2"><%= userData.username %></span>
@@ -624,6 +624,11 @@
 					</ul>
 				</div>
 			</div>
+
+			<!-- Mobile Menu Button -->
+			<button id="mobileMenuBtn" class="md:hidden p-2 text-gray-400 hover:text-white transition-colors duration-200">
+				<i class="fas fa-bars"></i>
+			</button>
 
 			<!-- Mobile Search Bar -->
 			<div id="mobileSearch" class="md:hidden fixed top-16 left-0 right-0 p-4 bg-dark-base border-b border-gray-800 z-40 hidden">
@@ -882,7 +887,7 @@
 							Your Servers
 						</h2>
 						<div class="flex space-x-2">
-							<a href="/servers/new" class="btn-primary py-2 px-4 rounded-lg text-white flex items-center text-sm">
+							<a href="/create" class="btn-primary py-2 px-4 rounded-lg text-white flex items-center text-sm">
 								<i class="fas fa-plus mr-2"></i>
 								New Server
 							</a>
@@ -1242,6 +1247,7 @@
 	<script>
 		// Get all required elements
 		const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+		const mobileSearchBtn = document.getElementById('mobileSearchBtn');
 		const sidebar = document.querySelector('.sidebar');
 		const mobileSearch = document.getElementById('mobileSearch');
 		const dropdownMenu = document.getElementById('dropdownMenu');
@@ -1260,11 +1266,27 @@
 				icon.classList.remove('fa-bars');
 				icon.classList.add('fa-times');
 				// Close other menus when opening sidebar
-				mobileSearch.classList.add('hidden');
 				dropdownMenu.classList.add('hidden');
 			} else {
 				icon.classList.remove('fa-times');
 				icon.classList.add('fa-bars');
+			}
+		});
+
+		// Toggle mobile search
+		mobileSearchBtn.addEventListener('click', (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			mobileSearch.classList.toggle('hidden');
+			
+			// Close other menus when opening search
+			if (!mobileSearch.classList.contains('hidden')) {
+				sidebar.classList.remove('active');
+				mobileMenuBtn.classList.remove('active');
+				const icon = mobileMenuBtn.querySelector('i');
+				icon.classList.remove('fa-times');
+				icon.classList.add('fa-bars');
+				dropdownMenu.classList.add('hidden');
 			}
 		});
 
@@ -1282,14 +1304,28 @@
 			}
 		});
 
+		// Close mobile search when clicking outside
+		document.addEventListener('click', (e) => {
+			const isClickInsideSearch = mobileSearch.contains(e.target);
+			const isClickOnSearchButton = mobileSearchBtn.contains(e.target);
+			
+			if (!isClickInsideSearch && !isClickOnSearchButton && !mobileSearch.classList.contains('hidden')) {
+				mobileSearch.classList.add('hidden');
+			}
+		});
+
 		// Close sidebar on escape key
 		document.addEventListener('keydown', (e) => {
-			if (e.key === 'Escape' && sidebar.classList.contains('active')) {
-				sidebar.classList.remove('active');
-				mobileMenuBtn.classList.remove('active');
-				const icon = mobileMenuBtn.querySelector('i');
-				icon.classList.remove('fa-times');
-				icon.classList.add('fa-bars');
+			if (e.key === 'Escape') {
+				if (sidebar.classList.contains('active')) {
+					sidebar.classList.remove('active');
+					mobileMenuBtn.classList.remove('active');
+					const icon = mobileMenuBtn.querySelector('i');
+					icon.classList.remove('fa-times');
+					icon.classList.add('fa-bars');
+				}
+				mobileSearch.classList.add('hidden');
+				dropdownMenu.classList.add('hidden');
 			}
 		});
 
@@ -1301,6 +1337,7 @@
 				const icon = mobileMenuBtn.querySelector('i');
 				icon.classList.remove('fa-times');
 				icon.classList.add('fa-bars');
+				mobileSearch.classList.add('hidden');
 			}
 		});
 
@@ -1309,30 +1346,23 @@
 			e.preventDefault();
 			e.stopPropagation();
 			dropdownMenu.classList.toggle('hidden');
+			
+			// Close other menus when opening dropdown
+			if (!dropdownMenu.classList.contains('hidden')) {
+				mobileSearch.classList.add('hidden');
+				if (window.innerWidth < 768) {
+					sidebar.classList.remove('active');
+					mobileMenuBtn.classList.remove('active');
+					const icon = mobileMenuBtn.querySelector('i');
+					icon.classList.remove('fa-times');
+					icon.classList.add('fa-bars');
+				}
+			}
 		});
 
 		// Close dropdown when clicking outside
 		document.addEventListener('click', (e) => {
 			if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-				dropdownMenu.classList.add('hidden');
-			}
-		});
-
-		// Toggle mobile search
-		mobileMenuBtn.addEventListener('click', () => {
-			mobileSearch.classList.toggle('hidden');
-		});
-
-		// Close mobile search when clicking outside
-		document.addEventListener('click', (e) => {
-			if (!mobileMenuBtn.contains(e.target) && !mobileSearch.contains(e.target)) {
-				mobileSearch.classList.add('hidden');
-			}
-		});
-
-		// Close dropdown on escape key
-		document.addEventListener('keydown', (e) => {
-			if (e.key === 'Escape') {
 				dropdownMenu.classList.add('hidden');
 			}
 		});
