@@ -22,17 +22,17 @@
                     },
                     colors: {
                         primary: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            200: '#c7d2fe',
-                            300: '#a5b4fc',
-                            400: '#818cf8',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            800: '#3730a3',
-                            900: '#312e81',
-                            950: '#1e1b4b',
+                            50: '#fff5f5',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                            950: '#450a0a',
                         },
                         dark: {
                             base: '#0f0f12',
@@ -75,14 +75,14 @@
         }
         
         .btn-primary {
-            background-color: #6366f1;
+            background-color: #ef4444;
             border-radius: 0.5rem;
             padding: 0.5rem 1rem;
             transition: all 0.3s ease;
         }
         
         .btn-primary:hover {
-            background-color: #4f46e5;
+            background-color: #dc2626;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
         }
@@ -109,12 +109,12 @@
         /* Settings tabs styling */
         .settings-tab.active {
             background-color: rgba(99, 102, 241, 0.1);
-            border-color: #6366f1;
+            border-color: #ef4444;
             color: #fff;
         }
         
         .settings-tab.active i {
-            color: #6366f1;
+            color: #ef4444;
         }
     </style>
 </head>
@@ -233,8 +233,8 @@
                             <div>
                                 <label for="primary_color" class="block text-sm font-medium text-gray-400 mb-1">Primary Color</label>
                                 <div class="flex items-center">
-                                    <input type="color" id="primary_color" name="primary_color" class="w-12 h-10 p-1 bg-dark-lighter rounded-lg border border-gray-700 cursor-pointer" value="<%= settings.primary_color || '#6366f1' %>">
-                                    <input type="text" id="primary_color_hex" class="ml-3 w-32 py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" value="<%= settings.primary_color || '#6366f1' %>" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
+                                    <input type="color" id="primary_color" name="primary_color" class="w-12 h-10 p-1 bg-dark-lighter rounded-lg border border-gray-700 cursor-pointer" value="<%= settings.primary_color || '#ef4444' %>">
+                                    <input type="text" id="primary_color_hex" class="ml-3 w-32 py-2 px-3 bg-dark-lighter text-white rounded-lg border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none" value="<%= settings.primary_color || '#ef4444' %>" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
                                 </div>
                                 <p class="mt-1 text-xs text-gray-400">Primary accent color for your site.</p>
                             </div>
