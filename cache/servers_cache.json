@@ -6,7 +6,7 @@
       "external_id": null,
       "uuid": "785fdc0c-7e60-4791-9db7-11066bf6aba0",
       "identifier": "785fdc0c",
-      "name": "FlaxyNodes Bot",
+      "name": "sriyannodes Bot",
       "description": "",
       "status": null,
       "suspended": false,
@@ -61,7 +61,7 @@
               "attributes": {
                 "id": 1,
                 "ip": "5.231.230.39",
-                "alias": "fn-1.flaxynodes.fun",
+                "alias": "fn-1.sriyannodes.fun",
                 "port": 9999,
                 "notes": null,
                 "assigned": true
@@ -200,7 +200,7 @@
               "attributes": {
                 "id": 2,
                 "ip": "5.231.230.39",
-                "alias": "fn-1.flaxynodes.fun",
+                "alias": "fn-1.sriyannodes.fun",
                 "port": 9998,
                 "notes": null,
                 "assigned": true
@@ -344,7 +344,7 @@
               "attributes": {
                 "id": 95,
                 "ip": "5.231.230.39",
-                "alias": "fn-1.flaxynodes.fun",
+                "alias": "fn-1.sriyannodes.fun",
                 "port": 2048,
                 "notes": null,
                 "assigned": true
@@ -355,7 +355,7 @@
               "attributes": {
                 "id": 98,
                 "ip": "5.231.230.39",
-                "alias": "fn-1.flaxynodes.fun",
+                "alias": "fn-1.sriyannodes.fun",
                 "port": 10002,
                 "notes": null,
                 "assigned": true
@@ -370,7 +370,7 @@
             "external_id": null,
             "uuid": "9e98d355-0d59-4a45-9dee-28f85520f4f9",
             "username": "prath",
-            "email": "prathmesh@flaxynodes.fun",
+            "email": "prathmesh@sriyannodes.fun",
             "first_name": "prath",
             "last_name": "prath",
             "language": "en",
@@ -497,7 +497,7 @@
               "attributes": {
                 "id": 3,
                 "ip": "163.61.39.238",
-                "alias": "india01.flaxynodes.fun",
+                "alias": "india01.sriyannodes.fun",
                 "port": 6000,
                 "notes": null,
                 "assigned": true
@@ -512,7 +512,7 @@
             "external_id": null,
             "uuid": "65105639-7620-4f93-adb1-c10545da9af7",
             "username": "tonight",
-            "email": "tonight@flaxynodes.fun",
+            "email": "tonight@sriyannodes.fun",
             "first_name": "Tonight",
             "last_name": "Tonight",
             "language": "en",
@@ -592,7 +592,7 @@
       "external_id": null,
       "uuid": "72ac5c3b-121a-49bd-b59a-81bc2003d3ea",
       "identifier": "72ac5c3b",
-      "name": "Flaxy Nodes Bot",
+      "name": "Sriyan Nodes Bot",
       "description": "bot code",
       "status": null,
       "suspended": false,
@@ -639,7 +639,7 @@
               "attributes": {
                 "id": 96,
                 "ip": "5.231.230.39",
-                "alias": "fn-1.flaxynodes.fun",
+                "alias": "fn-1.sriyannodes.fun",
                 "port": 10000,
                 "notes": null,
                 "assigned": true
@@ -654,7 +654,7 @@
             "external_id": null,
             "uuid": "9e98d355-0d59-4a45-9dee-28f85520f4f9",
             "username": "prath",
-            "email": "prathmesh@flaxynodes.fun",
+            "email": "prathmesh@sriyannodes.fun",
             "first_name": "prath",
             "last_name": "prath",
             "language": "en",

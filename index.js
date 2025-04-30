@@ -20,15 +20,15 @@ const defaultthemesettings = {
   mustbeadmin: [],
   variables: {
     home: {
-      name: "Flaxy Nodes",
-      title: "Flaxy Nodes - Premium Game Server Hosting",
+      name: "Sriyan Nodes",
+      title: "Sriyan Nodes - Premium Game Server Hosting",
       description: "Premium game server hosting with unbeatable performance, reliability, and support. Start your gaming journey today."
     },
     store: {
-      title: "Store - Flaxy Nodes"
+      title: "Store - Sriyan Nodes"
     },
     error: {
-      title: "Error - Flaxy Nodes"
+      title: "Error - Sriyan Nodes"
     }
   }
 };

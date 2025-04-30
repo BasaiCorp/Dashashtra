@@ -3,14 +3,14 @@
   "defaulttheme": "default",
   "auththeme": "custom",
   "website": {
-    "name": "Flaxy Nodes",
+    "name": "Sriyan Nodes",
     "url": "http://localhost:3000",
     "port": 3000,
     "favicon": "https://cdn.discordapp.com/attachments/1234567890/1234567890/logo.png",
     "secret": "change this website session secret password, make sure to change this for your website's security"
   },
   "pterodactyl": {
-    "domain": "https://panel.flaxynodes.fun",
+    "domain": "https://panel.sriyannodes.fun",
     "key": "ptla_NE6xymjG4wKqzCqmKrIaddndHz3KGXR5qe5ZWHm6P7I"
   },
   "database": "database.sqlite",
@@ -71,7 +71,7 @@
         "_comment": "Go to https://discord.dev/ and create an application to set these up.",
         "id": "1351039579372781710",
         "secret": "pcmnRi3Edk5ZHg6xO1wP4bqdIpWvjtHE",
-        "link": "https://client.flaxynodes.fun",
+        "link": "https://client.sriyannodes.fun",
         "callbackpath": "/auth/discord/callback",
         "prompt": true,
         "ip": {
@@ -203,7 +203,7 @@
   "discord": {
     "client_id": "1351039579372781710",
     "client_secret": "pcmnRi3Edk5ZHg6xO1wP4bqdIpWvjtHE",
-    "callback_url": "https://client.flaxynodes.fun/auth/discord/callback",
+    "callback_url": "https://client.sriyannodes.fun/auth/discord/callback",
     "guild_id": "1338843953520443407"
   }
 }

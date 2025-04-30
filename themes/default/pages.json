@@ -79,8 +79,8 @@
         "footerad": true,
         "faviconlink": "https://camo.githubusercontent.com/d2e9b4ddcf7618efa123961ae270f7eaa83362f8/68747470733a2f2f6d656469612e646973636f72646170702e6e65742f6174746163686d656e74732f3730363937303631373437313330333736312f3736383630363132323134373730383936382f707465726f64616374796c2d70616e656c2e706e67",
         "home": {
-            "name": "Flaxy Nodes",
-            "title": "Flaxy Nodes - Premium Game Server Hosting",
+            "name": "Sriyan Nodes",
+            "title": "Sriyan Nodes - Premium Game Server Hosting",
             "description": "Premium game server hosting with unbeatable performance, reliability, and support. Start your gaming journey today.",
             "buttontext": {
                 "loggedin": {
@@ -95,40 +95,40 @@
             }
         },
         "dashboard": {
-            "title": "Dashboard - Flaxy Nodes"
+            "title": "Dashboard - Sriyan Nodes"
         },
         "servers": {
             "title": {
-                "list": "Servers - Flaxy Nodes",
-                "create": "Create Server - Flaxy Nodes",
-                "modify": "Modify Server - Flaxy Nodes"
+                "list": "Servers - Sriyan Nodes",
+                "create": "Create Server - Sriyan Nodes",
+                "modify": "Modify Server - Sriyan Nodes"
             }
         },
         "login": {
-            "title": "Login - Flaxy Nodes"
+            "title": "Login - Sriyan Nodes"
         },
         "register": {
-            "title": "Register - Flaxy Nodes"
+            "title": "Register - Sriyan Nodes"
         },
         "admin": {
             "title": {
-                "default": "Admin - Flaxy Nodes"
+                "default": "Admin - Sriyan Nodes"
             }
         },
         "store": {
-            "title": "Store - Flaxy Nodes"
+            "title": "Store - Sriyan Nodes"
         },
         "arcio": {
-            "title": "AFK Page - Flaxy Nodes"
+            "title": "AFK Page - Sriyan Nodes"
         },
         "redeem": {
-            "title": "Redeem - Flaxy Nodes"
+            "title": "Redeem - Sriyan Nodes"
         },
         "error": {
-            "title": "Error - Flaxy Nodes"
+            "title": "Error - Sriyan Nodes"
         },
         "maintenance": {
-            "title": "Maintenance - Flaxy Nodes"
+            "title": "Maintenance - Sriyan Nodes"
         }
     }
 }
