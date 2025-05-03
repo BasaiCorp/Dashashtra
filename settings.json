@@ -10,8 +10,8 @@
     "secret": "change this website session secret password, make sure to change this for your website's security"
   },
   "pterodactyl": {
-    "domain": "https://panel.sriyannodes.fun",
-    "key": "ptla_NE6xymjG4wKqzCqmKrIaddndHz3KGXR5qe5ZWHm6P7I"
+    "domain": "https://panel.sriyannodes.cloud",
+    "key": "ptla_c5cJRkS96OhmjcvrpemosakAVM7jPdn3mwW8UiE7zj0"
   },
   "database": "database.sqlite",
   "api": {

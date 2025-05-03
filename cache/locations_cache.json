@@ -1,12 +1,17 @@
 [
   {
     "id": 1,
-    "short": "Germany",
+    "short": "IN",
     "long": null
   },
   {
-    "id": 2,
-    "short": "India 1",
+    "id": 3,
+    "short": "SG",
+    "long": null
+  },
+  {
+    "id": 4,
+    "short": "FRANCE",
     "long": null
   }
 ]
