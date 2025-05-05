@@ -56,7 +56,9 @@
         "earn": "earn.ejs",
         "afk": "afk.ejs",
         "redeem": "redeem.ejs",
-        "settings": "settings.ejs"
+        "settings": "settings.ejs",
+        "leaderboard": "leaderboard.ejs",
+        "team": "team.ejs"
     },
     "mustbeloggedin": [
         "/dashboard",
@@ -67,7 +69,9 @@
         "/earn",
         "/afk",
         "/redeem",
-        "/settings"
+        "/settings",
+        "/leaderboard",
+        "/team"
     ],
     "mustbeadmin": [
         "/admin"
@@ -129,6 +133,12 @@
         },
         "maintenance": {
             "title": "Maintenance - Sriyan Nodes"
+        },
+        "leaderboard": {
+            "title": "Leaderboard - Sriyan Nodes"
+        },
+        "team": {
+            "title": "Team Sriyan - Sriyan Nodes"
         }
     }
 }

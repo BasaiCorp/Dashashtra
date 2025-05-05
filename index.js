@@ -447,6 +447,118 @@ app.get('/dashboard', async (req, res) => {
     }
 });
 
+// Handle leaderboard route explicitly - MUST be defined before the catch-all route handler
+app.get('/leaderboard', async (req, res) => {
+    console.log('[LEADERBOARD] Processing request for leaderboard page');
+    
+    // Check if user is logged in
+    if (!req.session.userinfo || !req.session.pterodactyl) {
+        console.log('[LEADERBOARD] User not logged in, redirecting to login');
+        return res.redirect("/login");
+    }
+    
+    // Validate user session
+    try {
+        const user = await db.users.getUserById(req.session.userinfo.id);
+        
+        // Convert both IDs to strings for consistent comparison
+        const userPteroId = String(user.pterodactyl_id);
+        const sessionPteroId = String(req.session.pterodactyl.id);
+        
+        if (!user || userPteroId !== sessionPteroId) {
+            console.log('[LEADERBOARD] Invalid user session, redirecting to login');
+            req.session.destroy((err) => {
+                if (err) console.error("Error destroying session:", err);
+                return res.redirect("/login");
+            });
+            return;
+        }
+        
+        // Get theme and render leaderboard page
+        let theme = indexjs.get(req);
+        
+        // Find the correct template for the leaderboard page
+        let leaderboardTemplate = theme.settings.pages.leaderboard || "leaderboard.ejs";
+        console.log(`[LEADERBOARD] Using template: ${leaderboardTemplate}`);
+        
+        // Get render data from indexjs
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/${leaderboardTemplate}`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[LEADERBOARD] Error rendering leaderboard page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the leaderboard page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error('[LEADERBOARD] Error processing leaderboard page:', error);
+        return res.send("An error occurred while preparing data for the leaderboard page. Please try again.");
+    }
+});
+
+// Handle team route explicitly - MUST be defined before the catch-all route handler
+app.get('/team', async (req, res) => {
+    console.log('[TEAM] Processing request for team page');
+    
+    // Check if user is logged in
+    if (!req.session.userinfo || !req.session.pterodactyl) {
+        console.log('[TEAM] User not logged in, redirecting to login');
+        return res.redirect("/login");
+    }
+    
+    // Validate user session
+    try {
+        const user = await db.users.getUserById(req.session.userinfo.id);
+        
+        // Convert both IDs to strings for consistent comparison
+        const userPteroId = String(user.pterodactyl_id);
+        const sessionPteroId = String(req.session.pterodactyl.id);
+        
+        if (!user || userPteroId !== sessionPteroId) {
+            console.log('[TEAM] Invalid user session, redirecting to login');
+            req.session.destroy((err) => {
+                if (err) console.error("Error destroying session:", err);
+                return res.redirect("/login");
+            });
+            return;
+        }
+        
+        // Get theme and render team page
+        let theme = indexjs.get(req);
+        
+        // Find the correct template for the team page
+        let teamTemplate = theme.settings.pages.team || "team.ejs";
+        console.log(`[TEAM] Using template: ${teamTemplate}`);
+        
+        // Get render data from indexjs
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/${teamTemplate}`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[TEAM] Error rendering team page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the team page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error('[TEAM] Error processing team page:', error);
+        return res.send("An error occurred while preparing data for the team page. Please try again.");
+    }
+});
+
 // Import API routes
 const serverRoutes = require('./api/servers.js');
 const { router: earnRouter } = require('./api/earn.js');

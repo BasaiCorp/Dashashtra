@@ -1,0 +1,591 @@
+<%
+// Set the current page for active menu highlighting
+const currentPage = 'leaderboard';
+
+// Set the page title
+const pageTitle = 'Leaderboard - ' + (typeof extra !== 'undefined' && extra && extra.dashboard ? extra.dashboard.title : 'Dashboard');
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title><%= pageTitle %></title>
+    <link rel="icon" type="image/png" href="/assets/img/SriyanNodes_Logo.gif"/>
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <link href="/assets/css/styles.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#fff5f5',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                            950: '#450a0a',
+                        },
+                        dark: {
+                            base: '#0f0f12',
+                            light: '#1a1a21',
+                            lighter: '#24242e',
+                            card: '#1a1a21'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 15px rgba(239, 68, 68, 0.5)',
+                        'card': '0 8px 24px rgba(0, 0, 0, 0.12)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0f0f12;
+            color: #f5f5f7;
+            font-family: 'Poppins', sans-serif;
+            background-image: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.1) 0%, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .signature-font {
+            font-family: 'Dancing Script', cursive;
+            font-size: 18px;
+        }
+        
+        /* Main layout wrapper */
+        .dashboard-layout {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 4rem); /* Subtract navbar height */
+            position: relative;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            background-color: rgba(22, 22, 24, 0.8);
+            border-right: 1px solid rgba(45, 45, 53, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            left: 0;
+            top: 4rem; /* Height of navbar */
+            bottom: 0;
+            width: 16rem; /* 64px */
+            z-index: 40;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            margin-left: 16rem; /* Same as sidebar width */
+            padding: 1rem;
+            min-height: calc(100vh - 4rem);
+            position: relative;
+            z-index: 30;
+        }
+        
+        /* Footer styles */
+        footer {
+            background: rgba(15, 15, 18, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+            z-index: 20;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e1e24;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3a3a43;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a4a55;
+        }
+        
+        /* Custom styles */
+        .bg-dark-card {
+            background-color: rgba(26, 26, 31, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .bg-dark-lighter {
+            background-color: rgba(32, 32, 38, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .menu-item {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: #ef4444;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .menu-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .menu-item.active {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #fff;
+        }
+        
+        .menu-item.active::before {
+            transform: scaleY(1);
+        }
+        
+        .menu-item.active i {
+            color: #ef4444;
+        }
+        
+        .navbar {
+            background-color: rgba(15, 15, 18, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(45, 45, 53, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-search {
+            background-color: rgba(26, 26, 31, 0.8);
+            border: 1px solid rgba(45, 45, 53, 0.8);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-search:focus {
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25);
+        }
+        
+        .glass-card {
+            background-color: rgba(26, 26, 31, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: rgba(45, 45, 53, 0.5);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-bar-fill.ram {
+            background: linear-gradient(to right, #4f46e5, #818cf8);
+        }
+        
+        .progress-bar-fill.disk {
+            background: linear-gradient(to right, #10b981, #34d399);
+        }
+        
+        .progress-bar-fill.cpu {
+            background: linear-gradient(to right, #f59e0b, #fbbf24);
+        }
+        
+        .progress-bar-fill.servers {
+            background: linear-gradient(to right, #8b5cf6, #a78bfa);
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 767px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 80%; /* Wider sidebar on mobile */
+                max-width: 16rem;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 0.5rem;
+            }
+        }
+    </style>
+    
+    <style>
+       .glass-card {
+            background-color: rgba(26, 26, 31, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(239, 68, 68, 0.1);
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(239, 68, 68, 0.2);
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.15);
+        }
+        
+        .medal {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .medal.gold {
+            background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+            color: #000;
+        }
+        
+        .medal.silver {
+            background: linear-gradient(135deg, #c0c0c0 0%, #a9a9a9 100%);
+            color: #000;
+        }
+        
+        .medal.bronze {
+            background: linear-gradient(135deg, #cd7f32 0%, #8b4513 100%);
+            color: #fff;
+        }
+        
+        .rank-number {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Calculate server resources -->
+    <%
+        let ram = 0;
+        let disk = 0;
+        let cpu = 0;
+        let servers = 0;
+        
+        if (typeof pterodactyl !== 'undefined' && pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data) {
+            servers = pterodactyl.relationships.servers.data.length;
+            
+            for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
+                ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
+                disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
+                cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
+            }
+        }
+        
+        // User data with safety checks
+        const userData = typeof userinfo !== 'undefined' && userinfo ? {
+            id: userinfo.id,
+            username: userinfo.username || (userinfo.email ? userinfo.email.split('@')[0] : 'User'),
+            email: userinfo.email || 'user@example.com',
+            isAdmin: typeof req !== 'undefined' && req && req.session ? req.session.isAdmin : false
+        } : {
+            id: 0,
+            username: 'User',
+            email: 'user@example.com',
+            isAdmin: false
+        };
+        
+        const packageData = typeof packages !== 'undefined' ? packages : {
+            ram: 0,
+            disk: 0,
+            cpu: 0,
+            servers: 0
+        };
+        
+        // Calculate total resources (package + extra)
+        const extraData = typeof extraresources !== 'undefined' ? extraresources : {
+            ram: 0,
+            disk: 0,
+            cpu: 0,
+            servers: 0
+        };
+        
+        const totalRam = packageData.ram + extraData.ram;
+        const totalDisk = packageData.disk + extraData.disk;
+        const totalCpu = packageData.cpu + extraData.cpu;
+        const totalServers = packageData.servers + extraData.servers;
+        
+        // Available resources
+        const availableRam = totalRam - ram;
+        const availableDisk = totalDisk - disk;
+        const availableCpu = totalCpu - cpu;
+        const availableServers = totalServers - servers;
+        
+        // Calculate progress percentages
+        const ramWidth = totalRam > 0 ? Math.min(100, Math.round((ram / totalRam) * 100)) : 0;
+        const diskWidth = totalDisk > 0 ? Math.min(100, Math.round((disk / totalDisk) * 100)) : 0;
+        const cpuWidth = totalCpu > 0 ? Math.min(100, Math.round((cpu / totalCpu) * 100)) : 0;
+        const serversWidth = totalServers > 0 ? Math.min(100, Math.round((servers / totalServers) * 100)) : 0;
+    %>
+
+    <div class="flex flex-col min-h-screen">
+        <!-- Include Header Component -->
+        <%- include('./components/header', { userData: userData, settings: settings, currentPage: currentPage }) %>
+
+        <div class="flex flex-1 pt-16">
+            <!-- Include Sidebar Component -->
+            <%- include('./components/sidebar', { userData: userData, settings: settings, currentPage: currentPage }) %>
+
+            <!-- Main Content -->
+            <div class="flex-1 p-6 sm:ml-64">
+                <div class="max-w-7xl mx-auto">
+                    <!-- Page Title -->
+                    <div class="glass-card rounded-xl p-6 mb-8">
+                        <div class="flex flex-col items-start justify-start text-left mb-6">
+                            <h1 class="text-3xl font-bold mb-2 text-gray-300">Leaderboard</h1>
+                            <p class="text-gray-400">Top performers and rankings</p>
+                        </div>
+                    </div>
+
+                    <!-- Leaderboard Content -->
+                    <div class="grid grid-cols-1 gap-6 mb-8">
+                        <!-- Top 3 Users -->
+                        <div class="glass-card rounded-xl p-6">
+                            <h2 class="text-xl font-semibold mb-6 text-gray-300">Top Performers</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <!-- Second Place -->
+                                <div class="flex flex-col items-center">
+                                    <div class="medal silver mb-4">
+                                        <i class="fas fa-medal"></i>
+                                    </div>
+                                    <div class="w-24 h-24 rounded-full bg-dark-lighter mb-4 overflow-hidden">
+                                        <img src="https://cdn.discordapp.com/avatars/123456789/avatar.png" alt="User Avatar" class="w-full h-full object-cover">
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-300">User2</h3>
+                                    <p class="text-primary-400">2,500 Points</p>
+                                </div>
+
+                                <!-- First Place -->
+                                <div class="flex flex-col items-center">
+                                    <div class="medal gold mb-4">
+                                        <i class="fas fa-crown"></i>
+                                    </div>
+                                    <div class="w-32 h-32 rounded-full bg-dark-lighter mb-4 overflow-hidden border-4 border-primary-500">
+                                        <img src="https://cdn.discordapp.com/avatars/123456789/avatar.png" alt="User Avatar" class="w-full h-full object-cover">
+                                    </div>
+                                    <h3 class="text-xl font-bold text-gray-300">User1</h3>
+                                    <p class="text-primary-400">3,000 Points</p>
+                                </div>
+
+                                <!-- Third Place -->
+                                <div class="flex flex-col items-center">
+                                    <div class="medal bronze mb-4">
+                                        <i class="fas fa-medal"></i>
+                                    </div>
+                                    <div class="w-24 h-24 rounded-full bg-dark-lighter mb-4 overflow-hidden">
+                                        <img src="https://cdn.discordapp.com/avatars/123456789/avatar.png" alt="User Avatar" class="w-full h-full object-cover">
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-300">User3</h3>
+                                    <p class="text-primary-400">2,000 Points</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Full Leaderboard -->
+                        <div class="glass-card rounded-xl p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-xl font-semibold text-gray-300">Full Rankings</h2>
+                                <div class="flex space-x-4">
+                                    <button class="px-4 py-2 bg-dark-lighter hover:bg-dark-base rounded-lg text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">
+                                        <i class="fas fa-sync-alt mr-2"></i>Refresh
+                                    </button>
+                                    <button class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium transition-colors duration-200">
+                                        <i class="fas fa-download mr-2"></i>Export
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Leaderboard Table -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="text-left border-b border-gray-700">
+                                            <th class="pb-4 text-gray-400 font-medium">Rank</th>
+                                            <th class="pb-4 text-gray-400 font-medium">User</th>
+                                            <th class="pb-4 text-gray-400 font-medium">Points</th>
+                                            <th class="pb-4 text-gray-400 font-medium">Servers</th>
+                                            <th class="pb-4 text-gray-400 font-medium">Resources</th>
+                                            <th class="pb-4 text-gray-400 font-medium">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-700">
+                                        <% for(let i = 4; i <= 10; i++) { %>
+                                        <tr class="hover:bg-dark-lighter/50 transition-colors duration-200">
+                                            <td class="py-4">
+                                                <div class="rank-number"><%= i %></div>
+                                            </td>
+                                            <td class="py-4">
+                                                <div class="flex items-center space-x-3">
+                                                    <div class="w-10 h-10 rounded-full bg-dark-lighter overflow-hidden">
+                                                        <img src="https://cdn.discordapp.com/avatars/123456789/avatar.png" alt="User Avatar" class="w-full h-full object-cover">
+                                                    </div>
+                                                    <div>
+                                                        <p class="font-medium text-gray-300">User<%= i %></p>
+                                                        <p class="text-sm text-gray-400">@user<%= i %></p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="py-4">
+                                                <span class="text-primary-400 font-medium"><%= 2000 - (i * 100) %> Points</span>
+                                            </td>
+                                            <td class="py-4">
+                                                <span class="text-gray-300"><%= Math.floor(Math.random() * 5) + 1 %> Servers</span>
+                                            </td>
+                                            <td class="py-4">
+                                                <div class="flex items-center space-x-2">
+                                                    <span class="text-gray-300"><%= Math.floor(Math.random() * 8) + 2 %>GB RAM</span>
+                                                    <span class="text-gray-400">|</span>
+                                                    <span class="text-gray-300"><%= Math.floor(Math.random() * 50) + 10 %>GB SSD</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-4">
+                                                <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-500/20 text-green-400">
+                                                    Active
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="flex justify-between items-center mt-6 pt-6 border-t border-gray-700">
+                                <div class="text-sm text-gray-400">
+                                    Showing 1-10 of 50 results
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="px-4 py-2 bg-dark-lighter hover:bg-dark-base rounded-lg text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200 disabled:opacity-50" disabled>
+                                        Previous
+                                    </button>
+                                    <button class="px-4 py-2 bg-dark-lighter hover:bg-dark-base rounded-lg text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">
+                                        Next
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Include Footer Component -->
+        <div class="mt-auto">
+            <%- include('./components/footer', { settings: settings }) %>
+        </div>
+    </div>
+
+    <!-- Include Scripts Component -->
+    <%- include('./components/scripts') %>
+
+    <script>
+        // Add any leaderboard-specific JavaScript here
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize any interactive features
+        });
+    </script>
+</body>
+</html> 
