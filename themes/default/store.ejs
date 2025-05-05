@@ -1,3 +1,11 @@
+<%
+// Set the current page for active menu highlighting
+const currentPage = 'store';
+
+// Set the page title
+const pageTitle = 'Resource Store - ' + (typeof settings !== 'undefined' && settings && settings.name ? settings.name : 'Dashboard');
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,180 +20,311 @@
 	<meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
 	<meta http-equiv="X-XSS-Protection" content="1; mode=block">
 	
-	<title><%= extra.store.title %></title>
-	<link rel="icon" type="image/png" href="./assets/img/SriyanNodes_Logo.gif"/>
-	
-	<!-- Fonts and Icons -->
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-	
-	<!-- Tailwind CSS -->
-	<script src="https://cdn.tailwindcss.com"></script>
-	<script>
-		tailwind.config = {
-			darkMode: 'class',
-			theme: {
-				extend: {
-					fontFamily: {
-						sans: ['Poppins', 'sans-serif'],
-					},
-					colors: {
-						primary: {
-							50: '#fff5f5',
-							100: '#fee2e2',
-							200: '#fecaca',
-							300: '#fca5a5',
-							400: '#f87171',
-							500: '#ef4444',
-							600: '#dc2626',
-							700: '#b91c1c',
-							800: '#991b1b',
-							900: '#7f1d1d',
-							950: '#450a0a',
-						},
-						dark: {
-							base: '#0f0f12',
-							light: '#1a1a21',
-							lighter: '#24242e',
-							card: '#1a1a21'
-						}
-					},
-					animation: {
-						'fade-in': 'fadeIn 0.5s ease-in-out',
-						'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-						'float': 'float 3s ease-in-out infinite',
-					},
-					keyframes: {
-						fadeIn: {
-							'0%': { opacity: '0' },
-							'100%': { opacity: '1' },
-						},
-						float: {
-							'0%, 100%': { transform: 'translateY(0)' },
-							'50%': { transform: 'translateY(-10px)' },
-						}
-					},
-					boxShadow: {
-						'glow': '0 0 15px rgba(99, 102, 241, 0.5)',
-						'card': '0 8px 24px rgba(0, 0, 0, 0.12)',
-					}
-				}
-			}
-		}
-	</script>
+	<title><%= pageTitle %></title>
+    <link rel="icon" type="image/png" href="/assets/img/SriyanNodes_Logo.gif"/>
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <link href="/assets/css/styles.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#fff5f5',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                            950: '#450a0a',
+                        },
+                        dark: {
+                            base: '#0a0a0d',
+                            light: '#141419',
+                            lighter: '#1e1e26',
+                            card: '#12121a'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 15px rgba(239, 68, 68, 0.5)',
+                        'card': '0 8px 24px rgba(0, 0, 0, 0.12)',
+                    }
+                }
+            }
+        }
+    </script>
 	
 	<style>
-		body {
-			background-color: #0f0f12;
-			color: #f5f5f7;
-			font-family: 'Poppins', sans-serif;
-		}
-		
-		/* Custom scrollbar */
-		::-webkit-scrollbar {
-			width: 8px;
-			height: 8px;
-		}
-		
-		::-webkit-scrollbar-track {
-			background: #1e1e24;
-		}
-		
-		::-webkit-scrollbar-thumb {
-			background: #3a3a43;
-			border-radius: 4px;
-		}
-		
-		::-webkit-scrollbar-thumb:hover {
-			background: #4a4a55;
-		}
-		
-		/* Custom styles */
-		.sidebar {
-			background-color: #161618;
-			border-right: 1px solid #2d2d35;
-		}
-		
-		.main-content {
-			background-color: #0f0f12;
-		}
-		
-		.bg-dark-card {
-			background-color: #1a1a1f;
-		}
-		
-		.bg-dark-lighter {
-			background-color: #202026;
-		}
-		
-		.menu-item.active {
-			background-color: rgba(99, 102, 241, 0.1);
-			color: #fff;
-		}
-		
-		.menu-item.active i {
-			color: #ef4444;
-		}
-		
-		.glass-card {
-			background: rgba(26, 26, 31, 0.7);
-			backdrop-filter: blur(10px);
-			-webkit-backdrop-filter: blur(10px);
-		}
-		
-		.btn-primary {
-			background-color: #ef4444;
-			border-radius: 0.5rem;
-			padding: 0.5rem 1rem;
-			transition: all 0.3s ease;
-		}
-		
-		.btn-primary:hover {
-			background-color: #dc2626;
-			transform: translateY(-2px);
-			box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
-		}
-		
-		.gradient-border {
-			position: relative;
-			border-radius: 0.75rem;
-			overflow: hidden;
-		}
-		
-		.gradient-border::before {
-			content: "";
-			position: absolute;
-			inset: 0;
-			border-radius: 0.75rem;
-			padding: 1px;
-			background: linear-gradient(to right, #ef4444, #8b5cf6);
-			-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-			mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-			-webkit-mask-composite: xor;
-			mask-composite: exclude;
-			pointer-events: none;
-		}
-		
-		.animate-fade-in {
-			animation: fadeIn 0.6s ease-out;
-		}
-		
-		.animate-slide-up {
-			animation: slideUp 0.5s ease-out;
-		}
-		
-		@keyframes fadeIn {
-			from { opacity: 0; }
-			to { opacity: 1; }
-		}
-		
-		@keyframes slideUp {
-			from { transform: translateY(20px); opacity: 0; }
-			to { transform: translateY(0); opacity: 1; }
-		}
-	</style>
+        body {
+            background-color: #0a0a0d;
+            color: #f5f5f7;
+            font-family: 'Poppins', sans-serif;
+            background-image: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.15) 0%, transparent 60%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .signature-font {
+            font-family: 'Dancing Script', cursive;
+            font-size: 18px;
+        }
+        
+        /* Main layout wrapper */
+        .dashboard-layout {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 4rem); /* Subtract navbar height */
+            position: relative;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            background-color: rgba(18, 18, 22, 0.95);
+            border-right: 1px solid rgba(45, 45, 53, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            position: fixed;
+            left: 0;
+            top: 4rem; /* Height of navbar */
+            bottom: 0;
+            width: 16rem; /* 64px */
+            z-index: 40;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            margin-left: 16rem; /* Same as sidebar width */
+            padding: 1rem;
+            min-height: calc(100vh - 4rem);
+            position: relative;
+            z-index: 30;
+        }
+        
+        /* Footer styles */
+        footer {
+            background: rgba(10, 10, 13, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+            z-index: 20;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e1e24;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3a3a43;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ef4444;
+        }
+        
+        /* Custom styles */
+        .bg-dark-card {
+            background-color: rgba(18, 18, 26, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .bg-dark-lighter {
+            background-color: rgba(30, 30, 38, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .menu-item {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: #ef4444;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .menu-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .menu-item.active {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fff;
+        }
+        
+        .menu-item.active::before {
+            transform: scaleY(1);
+        }
+        
+        .menu-item.active i {
+            color: #ef4444;
+        }
+        
+        .navbar {
+            background-color: rgba(10, 10, 13, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(45, 45, 53, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .navbar-search {
+            background-color: rgba(26, 26, 31, 0.8);
+            border: 1px solid rgba(45, 45, 53, 0.8);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-search:focus {
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25);
+        }
+        
+        .glass-card {
+            background-color: rgba(18, 18, 26, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(239, 68, 68, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #b91c1c 0%, #ef4444 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #991b1b 0%, #b91c1c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: rgba(30, 30, 38, 0.5);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-bar-fill.ram {
+            background: linear-gradient(to right, #b91c1c, #ef4444);
+        }
+        
+        .progress-bar-fill.disk {
+            background: linear-gradient(to right, #991b1b, #dc2626);
+        }
+        
+        .progress-bar-fill.cpu {
+            background: linear-gradient(to right, #7f1d1d, #b91c1c);
+        }
+        
+        .progress-bar-fill.servers {
+            background: linear-gradient(to right, #c92424, #f87171);
+        }
+        
+        /* Resource card hover effect */
+        .resource-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 10px rgba(239, 68, 68, 0.2);
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 767px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 80%; /* Wider sidebar on mobile */
+                max-width: 16rem;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 0.5rem;
+            }
+        }
+    </style>
+
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen bg-dark-base">
 	<!-- Notification Container -->
 	<div id="notification-container" class="fixed top-4 right-4 z-50 w-80 max-w-full space-y-4"></div>
 	
@@ -198,178 +337,12 @@
 		};
 	%>
 
-	<!-- Navbar -->
-	<nav class="navbar fixed w-full h-16 z-50 px-4 py-2.5 flex items-center justify-between bg-dark-base/80 backdrop-blur-lg border-b border-gray-800">
-		<!-- Left side - Logo and Brand -->
-		<div class="flex items-center">
-			<a href="/" class="flex items-center group">
-				<div class="h-10 w-10 mr-3 rounded-full overflow-hidden transition-all duration-300 group-hover:shadow-glow">
-					<img src="/assets/img/SriyanNodes_Logo.gif" class="h-full w-full object-cover" alt="Sriyan Nodes Logo">
-				</div>
-				<div class="flex flex-col">
-					<span class="self-center text-xl font-bold text-white">Sriyan Nodes</span>
-					<span class="text-xs text-indigo-300">Premium Game Hosting</span>
-				</div>
-			</a>
-		</div>
-
-		<!-- Center - Search Bar -->
-		<div class="hidden md:flex items-center flex-1 max-w-xl mx-8">
-			<div class="relative w-full">
-				<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
-				<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
-					<i class="fas fa-search"></i>
-				</button>
-			</div>
-		</div>
-
-		<!-- Right side - User Menu and Notifications -->
-		<div class="flex items-center gap-4">
-			<!-- Notifications -->
-			<div class="relative">
-				<button class="p-2 text-gray-400 hover:text-white transition-colors duration-200">
-					<i class="fas fa-bell"></i>
-					<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-				</button>
-			</div>
-
-			<!-- User Profile Dropdown -->
-			<div class="relative inline-block">
-				<button id="dropdownBtn" class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-dark-lighter hover:bg-primary-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50">
-					<div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center mr-2">
-						<i class="fas fa-user text-primary-400"></i>
-					</div>
-					<span class="mr-2"><%= userData.username %></span>
-					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-					</svg>
-				</button>
-				<div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-64 bg-dark-lighter rounded-lg shadow-lg overflow-hidden z-50 border border-gray-700">
-					<div class="p-4 border-b border-gray-700">
-						<div class="flex items-center">
-							<div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center mr-3">
-								<i class="fas fa-user text-primary-400"></i>
-							</div>
-							<div>
-								<p class="text-sm font-medium text-white"><%= userData.username %></p>
-								<p class="text-xs text-gray-400"><%= userData.email %></p>
-							</div>
-						</div>
-					</div>
-					<ul class="py-1 text-sm text-gray-200">
-						<li>
-							<a href="/settings" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
-								<i class="fas fa-cog mr-2"></i> Settings
-							</a>
-						</li>
-						<li>
-							<a href="/profile" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
-								<i class="fas fa-user-circle mr-2"></i> Profile
-							</a>
-						</li>
-						<% if (userData.isAdmin) { %>
-						<li>
-							<a href="/admin" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
-								<i class="fas fa-shield-alt mr-2"></i> Admin Panel
-							</a>
-						</li>
-						<% } %>
-						<li class="border-t border-gray-700 mt-1">
-							<a href="/auth/logout" class="flex items-center px-4 py-2 hover:bg-dark-base text-red-400 hover:text-red-300 transition-colors duration-200">
-								<i class="fas fa-sign-out-alt mr-2"></i> Logout
-							</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-
-			<!-- Mobile Menu Button -->
-			<button id="mobileMenuBtn" class="md:hidden p-2 text-gray-400 hover:text-white transition-colors duration-200">
-				<i class="fas fa-bars"></i>
-			</button>
-		</div>
-	</nav>
-
-	<!-- Mobile Search Bar -->
-	<div id="mobileSearch" class="md:hidden fixed top-16 left-0 right-0 p-4 bg-dark-base border-b border-gray-800 z-40 hidden">
-		<div class="relative">
-			<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
-			<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
-				<i class="fas fa-search"></i>
-			</button>
-		</div>
-	</div>
+	<!-- Include Header Component -->
+    <%- include('./components/header', { userData: userData, settings: settings, currentPage: currentPage }) %>
 
 	<div class="flex h-screen pt-16">
-		<!-- Sidebar -->
-		<aside id="sidebar" class="fixed left-0 top-16 h-full z-10 w-64 transition-transform -translate-x-full sm:translate-x-0">
-			<div class="h-full px-3 pb-4 overflow-y-auto sidebar">
-				<ul class="space-y-1 pt-4 font-medium">
-					<li>
-						<a href="/dashboard" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-tachometer-alt w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Dashboard</span>
-						</a>
-					</li>
-					<li>
-						<a href="/servers" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-server w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Servers</span>
-						</a>
-					</li>
-					<li>
-						<a href="/store" class="menu-item flex items-center p-3 text-white rounded-lg active">
-							<i class="fas fa-shopping-cart w-5 h-5 text-primary-400 transition duration-75"></i>
-							<span class="ml-3">Store</span>
-						</a>
-					</li>
-					<li>
-						<a href="/afk" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-coins w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">AFK Page</span>
-						</a>
-					</li>
-					<li>
-						<a href="/redeem" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-gift w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Redeem</span>
-						</a>
-					</li>
-					<li>
-						<a href="/earn" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-gem w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Earn</span>
-						</a>
-					</li>
-					<li>
-						<a href="/leaderboard" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-trophy w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Leaderboard</span>
-						</a>
-					</li>
-					<li>
-						<a href="/settings" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-cog w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Settings</span>
-						</a>
-					</li>
-					<li>
-						<a href="<%= settings.pterodactyl.domain %>" target="_blank" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-external-link-alt w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Panel</span>
-						</a>
-					</li>
-					<% if (userData.isAdmin) { %>
-					<li class="mt-6 pt-6 border-t border-gray-700">
-						<a href="/admin" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-shield-alt w-5 h-5 text-red-400 transition duration-75 group-hover:text-red-300"></i>
-							<span class="ml-3">Admin Panel</span>
-						</a>
-					</li>
-					<% } %>
-				</ul>
-			</div>
-		</aside>
+		<!-- Include Sidebar Component -->
+        <%- include('./components/sidebar', { userData: userData, settings: settings, currentPage: currentPage }) %>
 		
 		<!-- Mobile menu button -->
 		<button id="toggleSidebar" type="button" class="fixed bottom-4 right-4 z-20 sm:hidden inline-flex items-center p-3 text-sm font-medium text-white bg-primary-600 rounded-full hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
@@ -380,48 +353,50 @@
 		<div class="p-4 sm:ml-64 pt-5 w-full main-content">
 			<div class="container mx-auto px-4 py-8">
 				<!-- Header -->
-				<div class="flex items-center justify-between mb-8">
-					<div>
-						<h1 class="text-3xl font-bold text-white">Resource Store</h1>
-						<p class="text-gray-400 mt-2">Purchase additional resources for your servers</p>
-					</div>
-					<div class="flex items-center space-x-4">
-						<div class="bg-dark-light px-4 py-2 rounded-lg">
-							<span class="text-sm text-gray-400">Balance</span>
-							<div class="flex items-center">
-								<i class="fas fa-coins text-yellow-400 mr-2"></i>
-								<span class="text-lg font-semibold text-white user-balance store-balance"><%= userinfo?.coins || 0 %></span>
-							</div>
+				<div class="glass-card rounded-xl p-6 mb-8">
+					<div class="flex flex-col md:flex-row md:items-center justify-between">
+						<div>
+							<h1 class="text-3xl font-bold text-white">Resource Store</h1>
+							<p class="text-gray-400 mt-2">Purchase additional resources for your servers</p>
 						</div>
-						<a href="/earn" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
-							<i class="fas fa-plus mr-2"></i> Earn Coins
-						</a>
+						<div class="flex items-center space-x-4 mt-4 md:mt-0">
+							<div class="bg-dark-light px-4 py-2 rounded-lg">
+								<span class="text-sm text-gray-400">Balance</span>
+								<div class="flex items-center">
+									<i class="fas fa-coins text-primary-400 mr-2"></i>
+									<span class="text-lg font-semibold text-white user-balance store-balance"><%= userinfo?.coins || 0 %></span>
+								</div>
+							</div>
+							<a href="/earn" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
+								<i class="fas fa-plus mr-2"></i> Earn Coins
+							</a>
+						</div>
 					</div>
 				</div>
 
 				<!-- Resource Packages Grid -->
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 					<!-- RAM Package -->
-					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="ram">
+					<div class="resource-card bg-dark-card rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="ram">
 						<div class="flex items-center justify-between mb-4">
-							<div class="p-3 rounded-lg bg-primary-500/10">
-								<i class="fas fa-memory text-2xl text-blue-400"></i>
+							<div class="p-3 rounded-lg bg-primary-500/20">
+								<i class="fas fa-memory text-2xl text-primary-400"></i>
 							</div>
-							<span class="px-2 py-1 text-xs font-semibold text-blue-400 bg-primary-500/10 rounded-full">Most Popular</span>
+							<span class="px-2 py-1 text-xs font-semibold text-primary-400 bg-primary-500/20 rounded-full">Most Popular</span>
 						</div>
 						<h3 class="text-xl font-semibold text-white mb-2">RAM Package</h3>
 						<p class="text-gray-400 text-sm mb-4">Increase your server's memory capacity for better performance.</p>
 						<div class="space-y-2 mb-6">
 							<div class="flex items-center text-sm">
-								<i class="fas fa-check text-green-400 mr-2"></i>
+								<i class="fas fa-check text-primary-400 mr-2"></i>
 								<span class="text-gray-300">1024 MB RAM</span>
 							</div>
 							<div class="flex items-center text-sm">
-								<i class="fas fa-check text-green-400 mr-2"></i>
+								<i class="fas fa-check text-primary-400 mr-2"></i>
 								<span class="text-gray-300">Instant Activation</span>
 							</div>
 							<div class="flex items-center text-sm">
-								<i class="fas fa-check text-green-400 mr-2"></i>
+								<i class="fas fa-check text-primary-400 mr-2"></i>
 								<span class="text-gray-300">Permanent Upgrade</span>
 							</div>
 						</div>
@@ -429,7 +404,7 @@
 							<div>
 								<span class="text-sm text-gray-400">Price</span>
 								<div class="flex items-center">
-									<i class="fas fa-coins text-yellow-400 mr-1"></i>
+									<i class="fas fa-coins text-primary-400 mr-1"></i>
 									<span class="text-xl font-semibold text-white">100</span>
 								</div>
 							</div>
@@ -440,26 +415,26 @@
 					</div>
 
 					<!-- Disk Package -->
-					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="disk">
+					<div class="resource-card bg-dark-card rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="disk">
 						<div class="flex items-center justify-between mb-4">
-							<div class="p-3 rounded-lg bg-green-500/10">
-								<i class="fas fa-hdd text-2xl text-green-400"></i>
+							<div class="p-3 rounded-lg bg-primary-500/20">
+								<i class="fas fa-hdd text-2xl text-primary-400"></i>
 							</div>
-							<span class="px-2 py-1 text-xs font-semibold text-green-400 bg-green-500/10 rounded-full">Best Value</span>
+							<span class="px-2 py-1 text-xs font-semibold text-primary-400 bg-primary-500/20 rounded-full">Best Value</span>
 						</div>
 						<h3 class="text-xl font-semibold text-white mb-2">Disk Package</h3>
 						<p class="text-gray-400 text-sm mb-4">Expand your server's storage capacity for more files and data.</p>
 						<div class="space-y-2 mb-6">
 							<div class="flex items-center text-sm">
-								<i class="fas fa-check text-green-400 mr-2"></i>
+								<i class="fas fa-check text-primary-400 mr-2"></i>
 								<span class="text-gray-300">2048 MB Storage</span>
 							</div>
 							<div class="flex items-center text-sm">
-								<i class="fas fa-check text-green-400 mr-2"></i>
+								<i class="fas fa-check text-primary-400 mr-2"></i>
 								<span class="text-gray-300">Instant Activation</span>
 							</div>
 							<div class="flex items-center text-sm">
-								<i class="fas fa-check text-green-400 mr-2"></i>
+								<i class="fas fa-check text-primary-400 mr-2"></i>
 								<span class="text-gray-300">Permanent Upgrade</span>
 							</div>
 						</div>
@@ -467,7 +442,7 @@
 							<div>
 								<span class="text-sm text-gray-400">Price</span>
 								<div class="flex items-center">
-									<i class="fas fa-coins text-yellow-400 mr-1"></i>
+									<i class="fas fa-coins text-primary-400 mr-1"></i>
 									<span class="text-xl font-semibold text-white">125</span>
 								</div>
 							</div>
@@ -478,26 +453,26 @@
 					</div>
 
 					<!-- CPU Package -->
-					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="cpu">
+					<div class="resource-card bg-dark-card rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="cpu">
 						<div class="flex items-center justify-between mb-4">
-							<div class="p-3 rounded-lg bg-purple-500/10">
-								<i class="fas fa-microchip text-2xl text-purple-400"></i>
+							<div class="p-3 rounded-lg bg-primary-500/20">
+								<i class="fas fa-microchip text-2xl text-primary-400"></i>
 							</div>
-							<span class="px-2 py-1 text-xs font-semibold text-purple-400 bg-purple-500/10 rounded-full">High Performance</span>
+							<span class="px-2 py-1 text-xs font-semibold text-primary-400 bg-primary-500/20 rounded-full">High Performance</span>
 						</div>
 						<h3 class="text-xl font-semibold text-white mb-2">CPU Package</h3>
 						<p class="text-gray-400 text-sm mb-4">Boost your server's processing power for better performance.</p>
 						<div class="space-y-2 mb-6">
 							<div class="flex items-center text-sm">
-								<i class="fas fa-check text-green-400 mr-2"></i>
+								<i class="fas fa-check text-primary-400 mr-2"></i>
 								<span class="text-gray-300">100% CPU Power</span>
 							</div>
 							<div class="flex items-center text-sm">
-								<i class="fas fa-check text-green-400 mr-2"></i>
+								<i class="fas fa-check text-primary-400 mr-2"></i>
 								<span class="text-gray-300">Instant Activation</span>
 							</div>
 							<div class="flex items-center text-sm">
-								<i class="fas fa-check text-green-400 mr-2"></i>
+								<i class="fas fa-check text-primary-400 mr-2"></i>
 								<span class="text-gray-300">Permanent Upgrade</span>
 							</div>
 						</div>
@@ -505,7 +480,7 @@
 							<div>
 								<span class="text-sm text-gray-400">Price</span>
 								<div class="flex items-center">
-									<i class="fas fa-coins text-yellow-400 mr-1"></i>
+									<i class="fas fa-coins text-primary-400 mr-1"></i>
 									<span class="text-xl font-semibold text-white">150</span>
 								</div>
 							</div>
@@ -516,26 +491,26 @@
 					</div>
 
 					<!-- Server Slot Package -->
-					<div class="bg-dark-light rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="slot">
+					<div class="resource-card bg-dark-card rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="slot">
 						<div class="flex items-center justify-between mb-4">
-							<div class="p-3 rounded-lg bg-yellow-500/10">
-								<i class="fas fa-server text-2xl text-yellow-400"></i>
+							<div class="p-3 rounded-lg bg-primary-500/20">
+								<i class="fas fa-server text-2xl text-primary-400"></i>
 							</div>
-							<span class="px-2 py-1 text-xs font-semibold text-yellow-400 bg-yellow-500/10 rounded-full">Expansion</span>
+							<span class="px-2 py-1 text-xs font-semibold text-primary-400 bg-primary-500/20 rounded-full">Expansion</span>
 						</div>
 						<h3 class="text-xl font-semibold text-white mb-2">Server Slot Package</h3>
 						<p class="text-gray-400 text-sm mb-4">Create an additional server to host more applications.</p>
 						<div class="space-y-2 mb-6">
 							<div class="flex items-center text-sm">
-								<i class="fas fa-check text-green-400 mr-2"></i>
+								<i class="fas fa-check text-primary-400 mr-2"></i>
 								<span class="text-gray-300">1 Additional Server</span>
 							</div>
 							<div class="flex items-center text-sm">
-								<i class="fas fa-check text-green-400 mr-2"></i>
+								<i class="fas fa-check text-primary-400 mr-2"></i>
 								<span class="text-gray-300">Instant Activation</span>
 							</div>
 							<div class="flex items-center text-sm">
-								<i class="fas fa-check text-green-400 mr-2"></i>
+								<i class="fas fa-check text-primary-400 mr-2"></i>
 								<span class="text-gray-300">Permanent Upgrade</span>
 							</div>
 						</div>
@@ -543,7 +518,7 @@
 							<div>
 								<span class="text-sm text-gray-400">Price</span>
 								<div class="flex items-center">
-									<i class="fas fa-coins text-yellow-400 mr-1"></i>
+									<i class="fas fa-coins text-primary-400 mr-1"></i>
 									<span class="text-xl font-semibold text-white">200</span>
 								</div>
 							</div>
@@ -555,9 +530,9 @@
 				</div>
 
 				<!-- Help Section -->
-				<div class="bg-dark-light rounded-lg p-6">
+				<div class="glass-card rounded-xl p-6">
 					<div class="flex items-start space-x-4">
-						<div class="p-3 rounded-lg bg-primary-500/10">
+						<div class="p-3 rounded-lg bg-primary-500/20">
 							<i class="fas fa-question-circle text-2xl text-primary-400"></i>
 						</div>
 						<div>
@@ -584,57 +559,20 @@
 		</div>
 	</div>
 
+	<!-- Include Footer Component -->
+    <%- include('./components/footer', { settings: settings }) %>
+
+    <!-- Include Scripts Component -->
+    <%- include('./components/scripts') %>
+
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			// Fetch resources on page load
 			fetchResources();
 			
-			// Dropdown menu toggle
-			const dropdownBtn = document.getElementById('dropdownBtn');
-			const dropdownMenu = document.getElementById('dropdownMenu');
-			
-			if (dropdownBtn && dropdownMenu) {
-				dropdownBtn.addEventListener('click', () => {
-					dropdownMenu.classList.toggle('hidden');
-				});
-				
-				// Close dropdown when clicking outside
-				document.addEventListener('click', (e) => {
-					if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-						dropdownMenu.classList.add('hidden');
-					}
-				});
-			}
-			
-			// Mobile menu toggle
-			const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-			const mobileSearch = document.getElementById('mobileSearch');
-			const sidebar = document.getElementById('sidebar');
-			
-			if (mobileMenuBtn) {
-				mobileMenuBtn.addEventListener('click', () => {
-					if (mobileSearch) mobileSearch.classList.toggle('hidden');
-					if (sidebar) sidebar.classList.toggle('-translate-x-full');
-				});
-			}
-			
-			// Toggle sidebar on small screens
-			const toggleSidebar = document.getElementById('toggleSidebar');
-			const sidebarIcon = document.getElementById('sidebarIcon');
-			
-			if (toggleSidebar && sidebar && sidebarIcon) {
-				toggleSidebar.addEventListener('click', () => {
-					sidebar.classList.toggle('-translate-x-full');
-					const isClosed = sidebar.classList.contains('-translate-x-full');
-					sidebarIcon.classList = isClosed ? 'fas fa-bars' : 'fas fa-times';
-				});
-			}
-			
-			// Fetch user balance periodically
+			// Fetch user's current balance
 			fetchUserBalance();
-			setInterval(fetchUserBalance, 30000); // Every 30 seconds
 		});
-		
 		// Fetch user's current balance
 		async function fetchUserBalance() {
 			try {
@@ -759,7 +697,7 @@
 			}
 		}
 		
-		// Function to show notifications
+		// Function to show notifications with red theme
 		function showNotification(title, message) {
 			const notificationContainer = document.getElementById('notification-container');
 			if (!notificationContainer) {
@@ -768,9 +706,9 @@
 			}
 			
 			const notification = document.createElement('div');
-			notification.className = 'notification flex items-start p-4 mb-4 bg-dark-lighter rounded-lg border border-gray-700 shadow-lg animate-fade-in';
+			notification.className = 'notification flex items-start p-4 mb-4 bg-dark-card rounded-lg border border-primary-900/30 shadow-lg animate-fade-in';
 			
-			const iconClass = title.toLowerCase().includes('error') ? 'fa-times-circle text-red-500' : 'fa-check-circle text-green-500';
+			const iconClass = title.toLowerCase().includes('error') ? 'fa-times-circle text-red-500' : 'fa-check-circle text-primary-400';
 			
 			notification.innerHTML = `
 				<div class="flex-shrink-0 mr-3">

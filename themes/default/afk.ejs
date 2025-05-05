@@ -1,21 +1,32 @@
+<%
+// Set the current page for active menu highlighting
+const currentPage = 'afk';
+
+// Set the page title
+const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && extra.dashboard ? extra.dashboard.title : 'Dashboard');
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AFK Earnings | <%= settings.name %></title>
-    <link rel="icon" type="image/png" href="<%= settings.favicon %>"/>
+    
+    <title><%= pageTitle %></title>
+    <link rel="icon" type="image/png" href="/assets/img/SriyanNodes_Logo.gif"/>
     
     <!-- Fonts and Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <script src="https://aiharsoreersu.net/act/files/tag.min.js?z=9113464" data-cfasync="false" async></script>
     <script>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('gizokraijaw.net',9113468,document.createElement('script'))</script>
     <script>(function(d,z,s){s.src='https://'+d+'/400/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('vemtoutcheeg.com',9113501,document.createElement('script'))</script>
     <script>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('groleegni.net',9113512,document.createElement('script'))</script>
+
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="/assets/css/styles.css" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -61,7 +72,7 @@
                         }
                     },
                     boxShadow: {
-                        'glow': '0 0 15px rgba(99, 102, 241, 0.5)',
+                        'glow': '0 0 15px rgba(239, 68, 68, 0.5)',
                         'card': '0 8px 24px rgba(0, 0, 0, 0.12)',
                     }
                 }
@@ -74,6 +85,66 @@
             background-color: #0f0f12;
             color: #f5f5f7;
             font-family: 'Poppins', sans-serif;
+            background-image: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.1) 0%, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .signature-font {
+            font-family: 'Dancing Script', cursive;
+            font-size: 18px;
+        }
+        
+        /* Main layout wrapper */
+        .dashboard-layout {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 4rem); /* Subtract navbar height */
+            position: relative;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            background-color: rgba(22, 22, 24, 0.8);
+            border-right: 1px solid rgba(45, 45, 53, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            left: 0;
+            top: 4rem; /* Height of navbar */
+            bottom: 0;
+            width: 16rem; /* 64px */
+            z-index: 40;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            margin-left: 16rem; /* Same as sidebar width */
+            padding: 1rem;
+            min-height: calc(100vh - 4rem);
+            position: relative;
+            z-index: 30;
+        }
+        
+        /* Footer styles */
+        footer {
+            background: rgba(15, 15, 18, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+            z-index: 20;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
         }
         
         /* Custom scrollbar */
@@ -96,38 +167,148 @@
         }
         
         /* Custom styles */
-        .sidebar {
-            background-color: #161618;
-            border-right: 1px solid #2d2d35;
-        }
-        
-        .main-content {
-            background-color: #0f0f12;
-        }
-        
         .bg-dark-card {
-            background-color: #1a1a1f;
+            background-color: rgba(26, 26, 31, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
         .bg-dark-lighter {
-            background-color: #202026;
+            background-color: rgba(32, 32, 38, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .menu-item {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: #ef4444;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .menu-item:hover::before {
+            transform: scaleY(1);
         }
         
         .menu-item.active {
-            background-color: rgba(99, 102, 241, 0.1);
+            background-color: rgba(239, 68, 68, 0.1);
             color: #fff;
+        }
+        
+        .menu-item.active::before {
+            transform: scaleY(1);
         }
         
         .menu-item.active i {
             color: #ef4444;
         }
         
-        .glass-card {
-            background: rgba(26, 26, 31, 0.7);
+        .navbar {
+            background-color: rgba(15, 15, 18, 0.8);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(45, 45, 53, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
         
+        .navbar-search {
+            background-color: rgba(26, 26, 31, 0.8);
+            border: 1px solid rgba(45, 45, 53, 0.8);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-search:focus {
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25);
+        }
+        
+        .glass-card {
+            background-color: rgba(26, 26, 31, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: rgba(45, 45, 53, 0.5);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-bar-fill.ram {
+            background: linear-gradient(to right, #4f46e5, #818cf8);
+        }
+        
+        .progress-bar-fill.disk {
+            background: linear-gradient(to right, #10b981, #34d399);
+        }
+        
+        .progress-bar-fill.cpu {
+            background: linear-gradient(to right, #f59e0b, #fbbf24);
+        }
+        
+        .progress-bar-fill.servers {
+            background: linear-gradient(to right, #8b5cf6, #a78bfa);
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 767px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 80%; /* Wider sidebar on mobile */
+                max-width: 16rem;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 0.5rem;
+            }
+        }
+    </style>
+
+    <style>
         .progress-ring-circle {
             transition: stroke-dashoffset 0.35s;
             transform: rotate(-90deg);
@@ -136,105 +317,84 @@
     </style>
     
     <!-- JavaScript -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/e3ff8bb9d4.js" crossorigin="anonymous"></script>
     <script src="/assets/js/earn.js" defer></script>
 </head>
 <body class="min-h-screen">
+    <!-- Calculate server resources -->
+    <%
+        let ram = 0;
+        let disk = 0;
+        let cpu = 0;
+        let servers = 0;
+        
+        if (typeof pterodactyl !== 'undefined' && pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data) {
+            servers = pterodactyl.relationships.servers.data.length;
+            
+            for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
+                ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
+                disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
+                cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
+            }
+        }
+        
+        // User data with safety checks
+        const userData = typeof userinfo !== 'undefined' && userinfo ? {
+            id: userinfo.id,
+            username: userinfo.username || (userinfo.email ? userinfo.email.split('@')[0] : 'User'),
+            email: userinfo.email || 'user@example.com',
+            isAdmin: typeof req !== 'undefined' && req && req.session ? req.session.isAdmin : false
+        } : {
+            id: 0,
+            username: 'User',
+            email: 'user@example.com',
+            isAdmin: false
+        };
+        
+        const packageData = typeof packages !== 'undefined' ? packages : {
+            ram: 0,
+            disk: 0,
+            cpu: 0,
+            servers: 0
+        };
+        
+        // Calculate total resources (package + extra)
+        const extraData = typeof extraresources !== 'undefined' ? extraresources : {
+            ram: 0,
+            disk: 0,
+            cpu: 0,
+            servers: 0
+        };
+        
+        const totalRam = packageData.ram + extraData.ram;
+        const totalDisk = packageData.disk + extraData.disk;
+        const totalCpu = packageData.cpu + extraData.cpu;
+        const totalServers = packageData.servers + extraData.servers;
+        
+        // Available resources
+        const availableRam = totalRam - ram;
+        const availableDisk = totalDisk - disk;
+        const availableCpu = totalCpu - cpu;
+        const availableServers = totalServers - servers;
+        
+        // Calculate progress percentages
+        const ramWidth = totalRam > 0 ? Math.min(100, Math.round((ram / totalRam) * 100)) : 0;
+        const diskWidth = totalDisk > 0 ? Math.min(100, Math.round((disk / totalDisk) * 100)) : 0;
+        const cpuWidth = totalCpu > 0 ? Math.min(100, Math.round((cpu / totalCpu) * 100)) : 0;
+        const serversWidth = totalServers > 0 ? Math.min(100, Math.round((servers / totalServers) * 100)) : 0;
+    %>
+
     <!-- Notification Toast -->
     <div id="notification-container" class="fixed top-4 right-4 z-50 flex flex-col items-end space-y-2"></div>
     
-    <!-- Navbar -->
-	<nav class="navbar fixed w-full h-16 z-50 px-4 py-2.5 flex items-center justify-between bg-dark-base/80 backdrop-blur-lg border-b border-gray-800">
-		<!-- Left side - Logo and Brand -->
-		<div class="flex items-center">
-			<a href="/" class="flex items-center group">
-				<div class="h-10 w-10 mr-3 rounded-full overflow-hidden transition-all duration-300 group-hover:shadow-glow">
-					<img src="/assets/img/SriyanNodes_Logo.gif" class="h-full w-full object-cover" alt="Sriyan Nodes Logo">
-				</div>
-				<div class="flex flex-col">
-					<span class="self-center text-xl font-bold text-white">Sriyan Nodes</span>
-					<span class="text-xs text-indigo-300">Premium Game Hosting</span>
-				</div>
-			</a>
-		</div>
-
-		<!-- Center - Search Bar -->
-		<div class="hidden md:flex items-center flex-1 max-w-xl mx-8">
-			<div class="relative w-full">
-				<input type="text" placeholder="Search servers..." class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
-				<button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
-					<i class="fas fa-search"></i>
-				</button>
-			</div>
-		</div>
-
-		<!-- Right side - User Menu and Notifications -->
-		<div class="flex items-center gap-4">
-			<!-- Notifications -->
-			<div class="relative">
-				<button class="p-2 text-gray-400 hover:text-white transition-colors duration-200">
-					<i class="fas fa-bell"></i>
-					<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-				</button>
-			</div>
-
-			<!-- User Profile Dropdown -->
-			<div class="relative inline-block">
-				<button id="dropdownBtn" class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-dark-lighter hover:bg-primary-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50">
-					<div class="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center mr-2">
-						<i class="fas fa-user text-primary-400"></i>
-					</div>
-					<span class="mr-2"><%= userinfo?.username || 'User' %></span>
-					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-					</svg>
-				</button>
-				<div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-64 bg-dark-lighter rounded-lg shadow-lg overflow-hidden z-50 border border-gray-700">
-					<div class="p-4 border-b border-gray-700">
-						<div class="flex items-center">
-							<div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center mr-3">
-								<i class="fas fa-user text-primary-400"></i>
-							</div>
-							<div>
-								<p class="text-sm font-medium text-white"><%= userinfo?.username || 'User' %></p>
-								<p class="text-xs text-gray-400"><%= userinfo?.email || 'email@example.com' %></p>
-							</div>
-						</div>
-					</div>
-					<ul class="py-1 text-sm text-gray-200">
-						<li>
-							<a href="/settings" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
-								<i class="fas fa-cog mr-2"></i> Settings
-							</a>
-						</li>
-						<li>
-							<a href="/profile" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
-								<i class="fas fa-user-circle mr-2"></i> Profile
-							</a>
-						</li>
-						<% if (userinfo?.isAdmin) { %>
-						<li>
-							<a href="/admin" class="flex items-center px-4 py-2 hover:bg-dark-base hover:text-primary-400 transition-colors duration-200">
-								<i class="fas fa-shield-alt mr-2"></i> Admin Panel
-							</a>
-						</li>
-						<% } %>
-						<li class="border-t border-gray-700 mt-1">
-							<a href="/auth/logout" class="flex items-center px-4 py-2 hover:bg-dark-base text-red-400 hover:text-red-300 transition-colors duration-200">
-								<i class="fas fa-sign-out-alt mr-2"></i> Logout
-							</a>
-						</li>
-					</ul>
-				</div>
-			</div>
+    <!-- Include Header Component -->
+    <%- include('./components/header', { userData: userData, settings: settings, currentPage: currentPage }) %>
 
 			<!-- Mobile Menu Button -->
 			<button id="mobileMenuBtn" class="md:hidden p-2 text-gray-400 hover:text-white transition-colors duration-200">
 				<i class="fas fa-bars"></i>
 			</button>
 		</div>
-	</nav>
 
 	<!-- Mobile Search Bar -->
 	<div id="mobileSearch" class="md:hidden fixed top-16 left-0 right-0 p-4 bg-dark-base border-b border-gray-800 z-40 hidden">
@@ -247,75 +407,8 @@
 	</div>
 
 	<div class="flex h-screen pt-16">
-		<!-- Sidebar -->
-		<aside id="sidebar" class="fixed left-0 top-16 h-full z-10 w-64 transition-transform -translate-x-full sm:translate-x-0">
-			<div class="h-full px-3 pb-4 overflow-y-auto sidebar">
-				<ul class="space-y-1 pt-4 font-medium">
-					<li>
-						<a href="/dashboard" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-tachometer-alt w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Dashboard</span>
-						</a>
-					</li>
-					<li>
-						<a href="/servers" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-server w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Servers</span>
-						</a>
-					</li>
-					<li>
-						<a href="/store" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-shopping-cart w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Store</span>
-						</a>
-					</li>
-					<li>
-						<a href="/afk" class="menu-item flex items-center p-3 text-white rounded-lg active">
-							<i class="fas fa-coins w-5 h-5 text-primary-400 transition duration-75"></i>
-							<span class="ml-3">AFK Page</span>
-						</a>
-					</li>
-					<li>
-						<a href="/redeem" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-gift w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Redeem</span>
-						</a>
-					</li>
-					<li>
-						<a href="/earn" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-gem w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Earn</span>
-						</a>
-					</li>
-					<li>
-						<a href="/leaderboard" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-trophy w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Leaderboard</span>
-						</a>
-					</li>
-					<li>
-						<a href="/settings" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-cog w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Settings</span>
-						</a>
-					</li>
-					<li>
-						<a href="<%= settings.pterodactyl?.domain || '#' %>" target="_blank" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-external-link-alt w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
-							<span class="ml-3">Panel</span>
-						</a>
-					</li>
-					<% if (userinfo?.isAdmin) { %>
-					<li class="mt-6 pt-6 border-t border-gray-700">
-						<a href="/admin" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
-							<i class="fas fa-shield-alt w-5 h-5 text-red-400 transition duration-75 group-hover:text-red-300"></i>
-							<span class="ml-3">Admin Panel</span>
-						</a>
-					</li>
-					<% } %>
-				</ul>
-			</div>
-		</aside>
+		<!-- Include Sidebar Component -->
+        <%- include('./components/sidebar', { userData: userData, settings: settings, currentPage: currentPage }) %>
 		
 		<!-- Mobile menu button -->
 		<button id="toggleSidebar" type="button" class="fixed bottom-4 right-4 z-20 sm:hidden inline-flex items-center p-3 text-sm font-medium text-white bg-primary-600 rounded-full hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
@@ -396,33 +489,15 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Footer -->
-            <footer class="w-full py-6 border-t border-gray-800 bg-dark-base mt-auto">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex flex-col md:flex-row justify-between items-center">
-                        <div class="mb-4 md:mb-0">
-                            <div class="flex items-center">
-                                <img src="<%= settings.logo %>" alt="Logo" class="h-8 mr-3">
-                                <span class="text-lg font-semibold text-white"><%= settings.name %></span>
-                            </div>
-                            <p class="text-gray-400 text-sm mt-2">© 2024 <%= settings.name %>. All rights reserved.</p>
-                        </div>
-                        
-                        <div class="flex space-x-6">
-                            <a href="/terms" class="text-gray-400 hover:text-white transition-colors duration-200">Terms</a>
-                            <a href="/privacy" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy</a>
-                            <a href="/contact" class="text-gray-400 hover:text-white transition-colors duration-200">Contact</a>
-                            <a href="https://discord.gg/<%= settings.discord?.id || '' %>" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
-                                <i class="fab fa-discord mr-1"></i> Discord
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
         </div>
     </div>
     
+    <!-- Include Footer Component -->
+    <%- include('./components/footer', { settings: settings }) %>
+
+    <!-- Include Scripts Component -->
+    <%- include('./components/scripts') %>
+
     <!-- Scripts -->
     <script>
         // AFK Timer Variables
