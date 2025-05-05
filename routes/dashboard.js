@@ -4,6 +4,7 @@ const fs = require('fs');
 const ejs = require('ejs');
 const chalk = require('chalk');
 const fetch = require('node-fetch');
+const path = require('path');
 const db = require('../db.js');
 const indexjs = require('../index.js');
 const settings = require('../settings.json');

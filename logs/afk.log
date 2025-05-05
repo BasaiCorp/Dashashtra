@@ -299,3 +299,67 @@
 2025-05-05T11:39:32.386Z [checkAuth] Authentication successful for user ID: 1
 2025-05-05T11:39:32.387Z [EARN] User 1 requesting balance
 2025-05-05T11:39:32.388Z [EARN] User 1 balance check: 2
+2025-05-05T11:42:27.347Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:42:27.348Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:42:27.348Z [EARN] User 1 requesting balance
+2025-05-05T11:42:27.350Z [EARN] User 1 balance check: 3644
+2025-05-05T11:42:35.433Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:42:35.435Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:42:35.435Z [EARN] User 1 requesting balance
+2025-05-05T11:42:35.436Z [EARN] User 1 balance check: 3644
+2025-05-05T11:50:29.687Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:50:29.687Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:50:29.688Z [EARN] User 1 requesting balance
+2025-05-05T11:50:29.689Z [EARN] User 1 balance check: 3644
+2025-05-05T11:50:31.145Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:50:31.145Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:50:31.145Z [EARN] User 1 requesting balance
+2025-05-05T11:50:31.146Z [EARN] User 1 balance check: 3644
+2025-05-05T11:53:41.584Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:53:41.585Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:53:41.585Z [EARN] User 1 requesting balance
+2025-05-05T11:53:41.586Z [EARN] User 1 balance check: 3643
+2025-05-05T11:53:45.570Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:53:45.570Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:53:45.570Z [EARN] User 1 requesting balance
+2025-05-05T11:53:45.571Z [EARN] User 1 balance check: 3643
+2025-05-05T11:54:07.811Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:54:07.812Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:54:07.815Z [EARN] User 1 requesting balance
+2025-05-05T11:54:07.818Z [EARN] User 1 balance check: 3642
+2025-05-05T11:54:18.121Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:54:18.122Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:54:18.123Z [EARN] User 1 requesting balance
+2025-05-05T11:54:18.130Z [EARN] User 1 balance check: 3642
+2025-05-05T11:54:36.169Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:54:36.169Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:54:36.170Z [EARN] User 1 requesting balance
+2025-05-05T11:54:36.174Z [EARN] User 1 balance check: 3492
+2025-05-05T11:54:38.447Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:54:38.448Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:54:38.448Z [EARN] User 1 requesting balance
+2025-05-05T11:54:38.451Z [EARN] User 1 balance check: 3492
+2025-05-05T11:55:27.859Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:55:27.860Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:55:27.861Z [EARN] User 1 requesting balance
+2025-05-05T11:55:27.862Z [EARN] User 1 balance check: 3292
+2025-05-05T11:56:56.312Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:56:56.313Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:56:56.314Z [EARN] User 1 requesting balance
+2025-05-05T11:56:56.315Z [EARN] User 1 balance check: 3292
+2025-05-05T11:57:03.930Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:57:03.930Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:57:03.931Z [EARN] User 1 requesting balance
+2025-05-05T11:57:03.931Z [EARN] User 1 balance check: 3292
+2025-05-05T11:57:11.769Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:57:11.770Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:57:11.770Z [EARN] User 1 requesting balance
+2025-05-05T11:57:11.771Z [EARN] User 1 balance check: 3142
+2025-05-05T11:57:51.560Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:57:51.587Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:57:51.588Z [EARN] User 1 requesting balance
+2025-05-05T11:57:51.590Z [EARN] User 1 balance check: 3142
+2025-05-05T11:57:55.198Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:57:55.201Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:57:55.205Z [EARN] User 1 requesting balance
+2025-05-05T11:57:55.206Z [EARN] User 1 balance check: 3142

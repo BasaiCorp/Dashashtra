@@ -160,25 +160,21 @@
         }
       },
       "coins": {
-        "enabled": false,
+        "enabled": true,
         "store": {
-          "_comment": "The cost and per is not intended to used with 0. This is not intended to sell resources for coins. Make sure coins are enabled too, or else there can be errors.",
-          "enabled": false,
+          "_comment": "The cost is the price in coins for each resource unit",
+          "enabled": true,
           "ram": {
-            "cost": 1,
-            "per": 1
+            "cost": 100
           },
           "disk": {
-            "cost": 1,
-            "per": 1
+            "cost": 125
           },
           "cpu": {
-            "cost": 1,
-            "per": 1
+            "cost": 150
           },
           "servers": {
-            "cost": 1,
-            "per": 1
+            "cost": 200
           }
         }
       }

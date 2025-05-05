@@ -4,6 +4,7 @@ const router = express.Router();
 const indexjs = require("../index.js");
 const fetch = require('node-fetch');
 const fs = require('fs');
+const path = require('path');
 const ejs = require("ejs");
 const db = require("../db.js");
 

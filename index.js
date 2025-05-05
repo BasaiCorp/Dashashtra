@@ -6,6 +6,7 @@ const fs = require("fs");
 const fetch = require('node-fetch');
 const chalk = require("chalk");
 const express = require("express");
+const path = require('path');
 
 // Load settings.
 
@@ -36,7 +37,10 @@ const defaultthemesettings = {
 module.exports.renderdataeval =
   `(async () => {
     let newsettings = JSON.parse(require("fs").readFileSync("./settings.json"));
-    const userCoins = require('./api/user_coins.js');
+    
+    // Use absolute path to avoid relative path issues
+    const userCoinsPath = path.join(process.cwd(), 'api/user_coins.js');
+    const userCoins = require(userCoinsPath);
 
     // Standard data retrieval for all users
     let renderdata = {
