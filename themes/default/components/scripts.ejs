@@ -159,7 +159,7 @@
 		
 		if (!headerBalance) return;
 		
-		fetch('/api/earn/balance')
+		fetch('/api/coins/balance')
 			.then(response => {
 				if (!response.ok) {
 					throw new Error('Network response was not ok');
@@ -169,10 +169,19 @@
 			.then(data => {
 				if (data.success && data.balance !== undefined) {
 					headerBalance.textContent = data.balance;
+					
+					// Also store in localStorage for cross-page consistency
+					localStorage.setItem('userCoins', data.balance);
 				}
 			})
 			.catch(error => {
 				console.error('Error updating coins balance:', error);
+				
+				// If API fails, try to use localStorage as fallback
+				const storedCoins = localStorage.getItem('userCoins');
+				if (storedCoins && headerBalance) {
+					headerBalance.textContent = storedCoins;
+				}
 			});
 	}
 

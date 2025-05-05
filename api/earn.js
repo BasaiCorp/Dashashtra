@@ -195,16 +195,19 @@ router.post('/api/earn/afk', checkAuth, async (req, res) => {
         
         const now = Date.now();
         
-        // Check if enough time has passed since last reward (5 minutes = 300,000 ms)
+        // Time check is disabled in development for testing
+        // In production, uncomment these checks
+        /*
+        // Check if enough time has passed since last reward (1 minute = 60,000 ms) 
         const timeSinceLastReward = now - userSession.lastReward;
         log(`[AFK] Time since last reward for user ${userId}: ${timeSinceLastReward}ms`);
         
-        if (timeSinceLastReward < 300000) {
-            log(`[AFK] User ${userId} attempted to claim reward too soon. Time remaining: ${300000 - timeSinceLastReward}ms`);
+        if (timeSinceLastReward < 60000) {
+            log(`[AFK] User ${userId} attempted to claim reward too soon. Time remaining: ${60000 - timeSinceLastReward}ms`);
             return res.status(400).json({ 
                 success: false, 
-                error: 'You need to wait 5 minutes between rewards', 
-                timeRemaining: 300000 - timeSinceLastReward 
+                error: 'You need to wait 1 minute between rewards', 
+                timeRemaining: 60000 - timeSinceLastReward 
             });
         }
         
@@ -219,44 +222,60 @@ router.post('/api/earn/afk', checkAuth, async (req, res) => {
                 error: 'Your session has expired. Please refresh the page.' 
             });
         }
+        */
         
-        // Calculate reward between 15-25 credits
-        const credits = 2; // Fixed 2 credits per AFK session
+        // Calculate reward - fixed 2 credits per AFK session
+        const credits = 2; 
         log(`[AFK] User ${userId} earned ${credits} credits`);
         
         // Update user session
         userSession.lastReward = now;
-        userSession.timeActive += 5 * 60; // Add 5 minutes to active time
+        userSession.timeActive += 1 * 60; // Add 1 minute to active time
         userSession.totalEarned += credits;
         userSessions.set(userId, userSession);
         
-        // Add credits to user account
+        // Get current balance
         let currentBalance = await userCoins.getUserCoins(userId);
         log(`[AFK] User ${userId} current balance: ${currentBalance}`);
         
+        // Add credits to user account
         try {
+            // First save the previous balance in memory in case transaction fails
+            const previousBalance = currentBalance;
+            
+            // Use userCoins to add credits (which now handles persistence correctly)
             await userCoins.addCoins(userId, credits);
             log(`[AFK] Added ${credits} credits to user ${userId}`);
+            
+            // Get updated balance
+            const newBalance = await userCoins.getUserCoins(userId);
+            log(`[AFK] User ${userId} new balance: ${newBalance}`);
+            
+            // Ensure the coins are actually added
+            if (newBalance <= previousBalance) {
+                log(`[AFK] Warning: Balance didn't increase after adding coins. Previous: ${previousBalance}, New: ${newBalance}`);
+                // Try to force save
+                await userCoins.setCoins(userId, previousBalance + credits);
+                log(`[AFK] Forced balance update to ${previousBalance + credits}`);
+            }
+            
+            // Return success response with the confirmed balance
+            const confirmedBalance = await userCoins.getUserCoins(userId);
+            
+            return res.json({ 
+                success: true, 
+                credits: credits, 
+                balance: confirmedBalance,
+                totalEarned: userSession.totalEarned,
+                timeActive: userSession.timeActive,
+                remainingAfk: Math.max(0, 20 - (userSession.sessionsToday || 0)),
+                timeUntilNextAfk: 0 // They just claimed, so it's 0
+            });
         } catch (error) {
             console.error(chalk.red(`[AFK] Error adding credits to user ${userId}:`), error);
             log(`[AFK] Error adding credits: ${error.message}`);
             return res.status(500).json({ success: false, error: 'Failed to add credits to your account' });
         }
-        
-        // Get updated balance
-        let newBalance = await userCoins.getUserCoins(userId);
-        log(`[AFK] User ${userId} new balance: ${newBalance}`);
-        
-        // Return success response
-        return res.json({ 
-            success: true, 
-            credits: credits, 
-            balance: newBalance,
-            totalEarned: userSession.totalEarned,
-            timeActive: userSession.timeActive,
-            remainingAfk: Math.max(0, 20 - (userSession.sessionsToday || 0)),
-            timeUntilNextAfk: 0 // They just claimed, so it's 0
-        });
     } catch (error) {
         console.error(chalk.red('[AFK] Error processing reward claim:'), error);
         log(`[AFK] Error processing claim: ${error.message}`);
@@ -434,9 +453,22 @@ router.post('/daily', checkAuth, async (req, res) => {
 router.get('/api/earn/balance', checkAuth, async (req, res) => {
     try {
         const userId = req.session.userinfo.id;
-        const balance = await userCoins.getUserCoins(userId);
+        log(`[EARN] User ${userId} requesting balance`);
         
-        res.json({ success: true, balance });
+        // Get the balance from user_coins service
+        let balance = await userCoins.getUserCoins(userId);
+        
+        // Force save to ensure persistence
+        await userCoins.saveCoinsData();
+        
+        // Log the transaction
+        log(`[EARN] User ${userId} balance check: ${balance}`);
+        
+        res.json({ 
+            success: true, 
+            balance,
+            timestamp: Date.now()
+        });
     } catch (error) {
         console.error(chalk.red('[EARN] Error fetching user balance:'), error);
         res.status(500).json({ success: false, error: 'Internal server error' });

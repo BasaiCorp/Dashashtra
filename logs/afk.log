@@ -254,3 +254,48 @@
 2025-05-05T11:30:47.775Z [checkAuth] Authentication successful for user ID: 1
 2025-05-05T11:30:48.153Z [checkAuth] Checking auth - Session exists: true
 2025-05-05T11:30:48.154Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:32:56.183Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:32:56.184Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:33:00.635Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:33:00.635Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:33:01.501Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:33:01.501Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:33:08.534Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:33:08.535Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:33:09.151Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:33:09.152Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:33:38.535Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:33:38.536Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:34:08.529Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:34:08.530Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:34:38.530Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:34:38.531Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:35:08.530Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:35:08.530Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:35:38.533Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:35:38.536Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:37:38.554Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:37:38.556Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:37:38.556Z [EARN] User 1 requesting balance
+2025-05-05T11:37:38.557Z [EARN] User 1 balance check: 0
+2025-05-05T11:37:49.750Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:37:49.750Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:37:49.750Z [EARN] User 1 requesting balance
+2025-05-05T11:37:49.751Z [EARN] User 1 balance check: 0
+2025-05-05T11:38:24.882Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:38:24.884Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:38:53.092Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:38:53.092Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:39:17.597Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:39:17.598Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:39:17.602Z [AFK] User 1 attempting to claim AFK reward
+2025-05-05T11:39:17.602Z [AFK] User 1 earned 2 credits
+2025-05-05T11:39:17.606Z [AFK] User 1 current balance: 0
+2025-05-05T11:39:17.612Z [AFK] Added 2 credits to user 1
+2025-05-05T11:39:17.613Z [AFK] User 1 new balance: 2
+2025-05-05T11:39:23.088Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:39:23.089Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:39:32.386Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:39:32.386Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:39:32.387Z [EARN] User 1 requesting balance
+2025-05-05T11:39:32.388Z [EARN] User 1 balance check: 2

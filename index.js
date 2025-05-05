@@ -94,6 +94,14 @@ const db = require("./db.js");
 
 module.exports.db = db;
 
+// Initialize coins system
+console.log(chalk.blue("[COINS] Initializing coins system..."));
+const userCoins = require('./api/user_coins.js');
+// Force load and save to ensure coins file exists
+userCoins.loadCoinsData();
+userCoins.saveCoinsData();
+console.log(chalk.green("[COINS] Coins system initialized successfully."));
+
 // Initialize Discord bot if enabled
 if (settings.api && settings.api.client && settings.api.client.bot && settings.api.client.bot.enabled) {
   console.log(chalk.blue("[BOT] Initializing Discord bot..."));

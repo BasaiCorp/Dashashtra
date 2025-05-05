@@ -720,6 +720,13 @@ if (afkData.lastAfk) {
                     // Update balance in localStorage for cross-page consistency
                     localStorage.setItem('userCoins', data.balance);
                     
+                    // Also update via the coins service to ensure persistence
+                    try {
+                        await fetch('/api/coins/balance');
+                    } catch (coinError) {
+                        console.error('Error updating coin balance service:', coinError);
+                    }
+                    
                     // Show confirmation popup
                     const confirmed = confirm(`Congratulations! You earned 2 credits! Your new balance is ${data.balance}. Click OK to continue.`);
                     
@@ -732,7 +739,7 @@ if (afkData.lastAfk) {
                     // Start the timer again after confirmation
                     startTimer();
                 } else {
-                    showNotification(data.error, 'error');
+                    showNotification(data.error || 'Error claiming reward', 'error');
                     startTimer();
                 }
             } catch (error) {
