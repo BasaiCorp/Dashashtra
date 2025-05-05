@@ -1,0 +1,81 @@
+<%- include('./head') %>
+
+<body class="min-h-screen">
+    <!-- Calculate user data and resources -->
+    <%
+        // User data setup
+        const userData = {
+            id: userinfo.id,
+            username: userinfo.username || userinfo.email.split('@')[0],
+            email: userinfo.email,
+            isAdmin: typeof req.session !== 'undefined' ? req.session.isAdmin : false
+        };
+        
+        // Resource calculations (if available)
+        let ram = 0;
+        let disk = 0;
+        let cpu = 0;
+        let servers = 0;
+        
+        if (typeof pterodactyl !== 'undefined' && pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data) {
+            servers = pterodactyl.relationships.servers.data.length;
+            
+            for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
+                ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
+                disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
+                cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
+            }
+        }
+        
+        // Package data setup
+        const packageData = typeof packages !== 'undefined' ? packages : {
+            ram: 0,
+            disk: 0,
+            cpu: 0,
+            servers: 0
+        };
+        
+        // Extra resources setup
+        const extraData = typeof extraresources !== 'undefined' ? extraresources : {
+            ram: 0,
+            disk: 0,
+            cpu: 0,
+            servers: 0
+        };
+        
+        // Calculate totals
+        const totalRam = packageData.ram + extraData.ram;
+        const totalDisk = packageData.disk + extraData.disk;
+        const totalCpu = packageData.cpu + extraData.cpu;
+        const totalServers = packageData.servers + extraData.servers;
+        
+        // Available resources
+        const availableRam = totalRam - ram;
+        const availableDisk = totalDisk - disk;
+        const availableCpu = totalCpu - cpu;
+        const availableServers = totalServers - servers;
+    %>
+
+    <!-- Include Header -->
+    <%- include('./header') %>
+
+    <div class="dashboard-layout">
+        <!-- Include Sidebar -->
+        <%- include('./sidebar') %>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="p-4">
+                <!-- Page Content -->
+                <%- body %>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Include Footer -->
+    <%- include('./footer') %>
+    
+    <!-- Include Scripts -->
+    <%- include('./scripts') %>
+</body>
+</html>
