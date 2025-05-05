@@ -3,12 +3,305 @@
 const currentPage = 'servers';
 
 // Set the page title
-const pageTitle = 'My Servers - ' + extra.dashboard.title;
+const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && extra.dashboard ? extra.dashboard.title : 'Dashboard');
 %>
 
 <!DOCTYPE html>
 <html lang="en">
-<%- include('./components/head') %>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle %></title>
+    <link rel="icon" type="image/png" href="/assets/img/SriyanNodes_Logo.gif"/>
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <link href="/assets/css/styles.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#fff5f5',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                            950: '#450a0a',
+                        },
+                        dark: {
+                            base: '#0f0f12',
+                            light: '#1a1a21',
+                            lighter: '#24242e',
+                            card: '#1a1a21'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 15px rgba(239, 68, 68, 0.5)',
+                        'card': '0 8px 24px rgba(0, 0, 0, 0.12)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0f0f12;
+            color: #f5f5f7;
+            font-family: 'Poppins', sans-serif;
+            background-image: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.1) 0%, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .signature-font {
+            font-family: 'Dancing Script', cursive;
+            font-size: 18px;
+        }
+        
+        /* Main layout wrapper */
+        .dashboard-layout {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 4rem); /* Subtract navbar height */
+            position: relative;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            background-color: rgba(22, 22, 24, 0.8);
+            border-right: 1px solid rgba(45, 45, 53, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            left: 0;
+            top: 4rem; /* Height of navbar */
+            bottom: 0;
+            width: 16rem; /* 64px */
+            z-index: 40;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            margin-left: 16rem; /* Same as sidebar width */
+            padding: 1rem;
+            min-height: calc(100vh - 4rem);
+            position: relative;
+            z-index: 30;
+        }
+        
+        /* Footer styles */
+        footer {
+            background: rgba(15, 15, 18, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+            z-index: 20;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e1e24;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3a3a43;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a4a55;
+        }
+        
+        /* Custom styles */
+        .bg-dark-card {
+            background-color: rgba(26, 26, 31, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .bg-dark-lighter {
+            background-color: rgba(32, 32, 38, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .menu-item {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: #ef4444;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .menu-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .menu-item.active {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #fff;
+        }
+        
+        .menu-item.active::before {
+            transform: scaleY(1);
+        }
+        
+        .menu-item.active i {
+            color: #ef4444;
+        }
+        
+        .navbar {
+            background-color: rgba(15, 15, 18, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(45, 45, 53, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-search {
+            background-color: rgba(26, 26, 31, 0.8);
+            border: 1px solid rgba(45, 45, 53, 0.8);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-search:focus {
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25);
+        }
+        
+        .glass-card {
+            background-color: rgba(26, 26, 31, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: rgba(45, 45, 53, 0.5);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-bar-fill.ram {
+            background: linear-gradient(to right, #4f46e5, #818cf8);
+        }
+        
+        .progress-bar-fill.disk {
+            background: linear-gradient(to right, #10b981, #34d399);
+        }
+        
+        .progress-bar-fill.cpu {
+            background: linear-gradient(to right, #f59e0b, #fbbf24);
+        }
+        
+        .progress-bar-fill.servers {
+            background: linear-gradient(to right, #8b5cf6, #a78bfa);
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 767px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 80%; /* Wider sidebar on mobile */
+                max-width: 16rem;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
 
 <body class="min-h-screen bg-dark-base">
     <!-- Calculate server resources -->
@@ -18,7 +311,7 @@ const pageTitle = 'My Servers - ' + extra.dashboard.title;
         let cpu = 0;
         let servers = 0;
         
-        if (pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data) {
+        if (typeof pterodactyl !== 'undefined' && pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data) {
             servers = pterodactyl.relationships.servers.data.length;
             
             for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
@@ -28,12 +321,17 @@ const pageTitle = 'My Servers - ' + extra.dashboard.title;
             }
         }
         
-        // User data
-        const userData = {
+        // User data with safety checks
+        const userData = typeof userinfo !== 'undefined' && userinfo ? {
             id: userinfo.id,
-            username: userinfo.username || userinfo.email.split('@')[0],
-            email: userinfo.email,
-            isAdmin: typeof req.session !== 'undefined' ? req.session.isAdmin : false
+            username: userinfo.username || (userinfo.email ? userinfo.email.split('@')[0] : 'User'),
+            email: userinfo.email || 'user@example.com',
+            isAdmin: typeof req !== 'undefined' && req && req.session ? req.session.isAdmin : false
+        } : {
+            id: 0,
+            username: 'User',
+            email: 'user@example.com',
+            isAdmin: false
         };
         
         const packageData = typeof packages !== 'undefined' ? packages : {
@@ -61,17 +359,23 @@ const pageTitle = 'My Servers - ' + extra.dashboard.title;
         const availableDisk = totalDisk - disk;
         const availableCpu = totalCpu - cpu;
         const availableServers = totalServers - servers;
+        
+        // Calculate progress percentages
+        const ramWidth = totalRam > 0 ? Math.min(100, Math.round((ram / totalRam) * 100)) : 0;
+        const diskWidth = totalDisk > 0 ? Math.min(100, Math.round((disk / totalDisk) * 100)) : 0;
+        const cpuWidth = totalCpu > 0 ? Math.min(100, Math.round((cpu / totalCpu) * 100)) : 0;
+        const serversWidth = totalServers > 0 ? Math.min(100, Math.round((servers / totalServers) * 100)) : 0;
     %>
 
     <!-- Notification Toast Container -->
     <div id="notification-container" class="fixed top-4 right-4 z-50 flex flex-col items-end space-y-2"></div>
 
     <!-- Include Header Component -->
-    <%- include('./components/header') %>
+    <%- include('./components/header', { userData: userData, settings: settings, currentPage: currentPage }) %>
 
     <div class="flex h-screen pt-16">
         <!-- Include Sidebar Component -->
-        <%- include('./components/sidebar') %>
+        <%- include('./components/sidebar', { userData: userData, settings: settings, currentPage: currentPage }) %>
 
         <!-- Main Content -->
         <div class="p-4 sm:ml-64 pt-5 w-full main-content">
@@ -100,7 +404,7 @@ const pageTitle = 'My Servers - ' + extra.dashboard.title;
                                 <span class="text-xl font-bold text-white"><%= availableRam %> <span class="text-gray-400 text-sm">/ <%= totalRam %> MB</span></span>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress-bar-fill ram" style="width: <%= ((ram / totalRam) * 100).toFixed(2) + '%' %>"></div>
+                                <div class="progress-bar-fill ram" style="width: <%= ramWidth %>%"></div>
                             </div>
                         </div>
                     </div>
@@ -121,7 +425,7 @@ const pageTitle = 'My Servers - ' + extra.dashboard.title;
                                 <span class="text-xl font-bold text-white"><%= availableDisk %> <span class="text-gray-400 text-sm">/ <%= totalDisk %> MB</span></span>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress-bar-fill disk" style="width: <%= ((disk / totalDisk) * 100).toFixed(2) + '%' %>"></div>
+                                <div class="progress-bar-fill disk" style="width: <%= diskWidth %>%"></div>
                             </div>
                         </div>
                     </div>
@@ -142,7 +446,7 @@ const pageTitle = 'My Servers - ' + extra.dashboard.title;
                                 <span class="text-xl font-bold text-white"><%= availableCpu %> <span class="text-gray-400 text-sm">/ <%= totalCpu %>%</span></span>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress-bar-fill cpu" style="width: <%= ((cpu / totalCpu) * 100).toFixed(2) + '%' %>"></div>
+                                <div class="progress-bar-fill cpu" style="width: <%= cpuWidth %>%"></div>
                             </div>
                         </div>
                     </div>
@@ -163,7 +467,7 @@ const pageTitle = 'My Servers - ' + extra.dashboard.title;
                                 <span class="text-xl font-bold text-white"><%= availableServers %> <span class="text-gray-400 text-sm">/ <%= totalServers %></span></span>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress-bar-fill servers" style="width: <%= ((servers / totalServers) * 100).toFixed(2) + '%' %>"></div>
+                                <div class="progress-bar-fill servers" style="width: <%= serversWidth %>%"></div>
                             </div>
                         </div>
                     </div>
@@ -182,7 +486,7 @@ const pageTitle = 'My Servers - ' + extra.dashboard.title;
                         </a>
                     </div>
 
-                    <% if (pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data && pterodactyl.relationships.servers.data.length > 0) { %>
+                    <% if (typeof pterodactyl !== 'undefined' && pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data && pterodactyl.relationships.servers.data.length > 0) { %>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <% pterodactyl.relationships.servers.data.forEach(server => { %>
                                 <div class="gradient-border">
@@ -271,7 +575,7 @@ const pageTitle = 'My Servers - ' + extra.dashboard.title;
     </div>
 
     <!-- Include Footer Component -->
-    <%- include('./components/footer') %>
+    <%- include('./components/footer', { settings: settings }) %>
 
     <!-- Include Scripts Component -->
     <%- include('./components/scripts') %>

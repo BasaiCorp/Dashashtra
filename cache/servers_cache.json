@@ -3323,7 +3323,7 @@
       "uuid": "1fb9e171-764a-410a-9aaa-fe5c8e434dd2",
       "identifier": "1fb9e171",
       "name": "Obsidian Plan [ InsaneAJ ]",
-      "description": "renew date - 19 may",
+      "description": "renew date - 25 may",
       "status": null,
       "suspended": false,
       "limits": {
@@ -3360,7 +3360,7 @@
           "P_SERVER_ALLOCATION_LIMIT": 10
         }
       },
-      "updated_at": "2025-05-03T05:58:58+00:00",
+      "updated_at": "2025-05-05T05:19:06+00:00",
       "created_at": "2025-04-30T16:36:59+00:00",
       "relationships": {
         "allocations": {
