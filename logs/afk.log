@@ -152,3 +152,105 @@
 2025-05-05T09:06:36.179Z [checkAuth] Authentication successful for user ID: 1
 2025-05-05T09:24:51.826Z [checkAuth] Checking auth - Session exists: true
 2025-05-05T09:24:51.831Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:14:15.604Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:14:15.605Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:14:15.607Z [AFK] User 1 attempting to claim AFK reward
+2025-05-05T11:14:15.608Z [AFK] Time since last reward for user 1: 1746443655608ms
+2025-05-05T11:14:15.608Z [AFK] Time since last activity for user 1: 67342ms
+2025-05-05T11:14:15.609Z [AFK] User 1 session expired. Last activity: 2025-05-05T11:13:08.266Z
+2025-05-05T11:14:54.840Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:14:54.840Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:15:24.834Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:15:24.835Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:15:25.563Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:15:25.563Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:15:25.563Z [AFK] User 1 attempting to claim AFK reward
+2025-05-05T11:15:25.563Z [AFK] Time since last reward for user 1: 1746443725563ms
+2025-05-05T11:15:25.563Z [AFK] Time since last activity for user 1: 728ms
+2025-05-05T11:15:25.563Z [AFK] User 1 earned 21 credits
+2025-05-05T11:15:25.564Z [AFK] User 1 current balance: 0
+2025-05-05T11:15:25.759Z [AFK] Added 21 credits to user 1
+2025-05-05T11:15:25.759Z [AFK] User 1 new balance: 21
+2025-05-05T11:15:54.834Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:15:54.834Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:16:24.835Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:16:24.835Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:16:25.968Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:16:25.968Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:16:25.969Z [AFK] User 1 attempting to claim AFK reward
+2025-05-05T11:16:25.970Z [AFK] Time since last reward for user 1: 60407ms
+2025-05-05T11:16:25.970Z [AFK] User 1 attempted to claim reward too soon. Time remaining: 239593ms
+2025-05-05T11:16:54.874Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:16:54.875Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:16:54.875Z [AFK] Creating new session for user 1
+2025-05-05T11:17:28.369Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:17:28.370Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:17:58.366Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:17:58.367Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:18:05.868Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:18:05.869Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:18:05.874Z [AFK] User 1 attempting to claim AFK reward
+2025-05-05T11:18:05.875Z [AFK] Time since last reward for user 1: 1746443885875ms
+2025-05-05T11:18:05.876Z [AFK] Time since last activity for user 1: 7507ms
+2025-05-05T11:18:05.877Z [AFK] User 1 earned 25 credits
+2025-05-05T11:18:05.879Z [AFK] User 1 current balance: 21
+2025-05-05T11:18:06.056Z [AFK] Added 25 credits to user 1
+2025-05-05T11:18:06.057Z [AFK] User 1 new balance: 46
+2025-05-05T11:18:28.364Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:18:28.365Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:18:58.358Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:18:58.358Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:19:06.236Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:19:06.237Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:19:06.238Z [AFK] User 1 attempting to claim AFK reward
+2025-05-05T11:19:06.238Z [AFK] Time since last reward for user 1: 60363ms
+2025-05-05T11:19:06.238Z [AFK] User 1 attempted to claim reward too soon. Time remaining: 239637ms
+2025-05-05T11:19:28.356Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:19:28.356Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:19:58.363Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:19:58.364Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:20:06.450Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:20:06.450Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:20:06.451Z [AFK] User 1 attempting to claim AFK reward
+2025-05-05T11:20:06.451Z [AFK] Time since last reward for user 1: 120576ms
+2025-05-05T11:20:06.451Z [AFK] User 1 attempted to claim reward too soon. Time remaining: 179424ms
+2025-05-05T11:20:28.429Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:20:28.433Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:20:28.438Z [AFK] Creating new session for user 1
+2025-05-05T11:23:58.019Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:23:58.051Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:24:34.632Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:24:34.634Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:25:04.626Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:25:04.627Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:25:06.818Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:25:06.819Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:25:06.821Z [AFK] User 1 attempting to claim AFK reward
+2025-05-05T11:25:06.823Z [AFK] Time since last reward for user 1: 1746444306823ms
+2025-05-05T11:25:06.824Z [AFK] Time since last activity for user 1: 2196ms
+2025-05-05T11:25:06.824Z [AFK] User 1 earned 2 credits
+2025-05-05T11:25:06.826Z [AFK] User 1 current balance: 46
+2025-05-05T11:25:07.062Z [AFK] Added 2 credits to user 1
+2025-05-05T11:25:07.063Z [AFK] User 1 new balance: 48
+2025-05-05T11:26:04.643Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:26:04.643Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:26:04.644Z [AFK] Creating new session for user 1
+2025-05-05T11:26:11.290Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:26:11.290Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:26:11.291Z [AFK] User 1 attempting to claim AFK reward
+2025-05-05T11:26:11.291Z [AFK] Time since last reward for user 1: 1746444371291ms
+2025-05-05T11:26:11.291Z [AFK] Time since last activity for user 1: 6647ms
+2025-05-05T11:26:11.291Z [AFK] User 1 earned 2 credits
+2025-05-05T11:26:11.292Z [AFK] User 1 current balance: 48
+2025-05-05T11:26:11.517Z [AFK] Added 2 credits to user 1
+2025-05-05T11:26:11.517Z [AFK] User 1 new balance: 50
+2025-05-05T11:30:08.621Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:30:08.661Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:30:28.964Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:30:28.965Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:30:30.803Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:30:30.804Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:30:47.774Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:30:47.775Z [checkAuth] Authentication successful for user ID: 1
+2025-05-05T11:30:48.153Z [checkAuth] Checking auth - Session exists: true
+2025-05-05T11:30:48.154Z [checkAuth] Authentication successful for user ID: 1

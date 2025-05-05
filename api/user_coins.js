@@ -1,18 +1,49 @@
 const chalk = require('chalk');
-const db = require('../db.js');
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const router = express.Router();
-const better_sqlite3 = require('better-sqlite3');
 
-// Initialize coins database
-const coinsDb = better_sqlite3('coins.db');
+// Path to the coins data file
+const COINS_DATA_FILE = path.join(__dirname, '../data/user_coins.json');
 
-// Create coins table if it doesn't exist
-coinsDb.prepare(`CREATE TABLE IF NOT EXISTS "coins" (
-    "user_id" INTEGER PRIMARY KEY,
-    "amount" INTEGER NOT NULL DEFAULT 0,
-    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)`).run();
+// Ensure the data directory exists
+if (!fs.existsSync(path.join(__dirname, '../data'))) {
+    fs.mkdirSync(path.join(__dirname, '../data'), { recursive: true });
+}
+
+// Initialize coins data
+let coinsData = {};
+
+// Load coins data from file
+function loadCoinsData() {
+    try {
+        if (fs.existsSync(COINS_DATA_FILE)) {
+            const data = fs.readFileSync(COINS_DATA_FILE, 'utf8');
+            coinsData = JSON.parse(data);
+            console.log(chalk.green(`[COINS] Loaded coins data for ${Object.keys(coinsData).length} users`));
+        } else {
+            coinsData = {};
+            saveCoinsData(); // Create the initial file
+            console.log(chalk.yellow(`[COINS] Created new coins data file`));
+        }
+    } catch (error) {
+        console.error(chalk.red(`[COINS] Error loading coins data:`), error);
+        coinsData = {};
+    }
+}
+
+// Save coins data to file
+function saveCoinsData() {
+    try {
+        fs.writeFileSync(COINS_DATA_FILE, JSON.stringify(coinsData, null, 2));
+    } catch (error) {
+        console.error(chalk.red(`[COINS] Error saving coins data:`), error);
+    }
+}
+
+// Initialize the coins data on module load
+loadCoinsData();
 
 // Get user coins
 async function getUserCoins(userId) {
@@ -21,10 +52,10 @@ async function getUserCoins(userId) {
             return 0;
         }
         
-        const stmt = coinsDb.prepare('SELECT amount FROM coins WHERE user_id = ?');
-        const result = stmt.get(userId);
+        // Convert userId to string for consistent lookup
+        const userIdStr = String(userId);
         
-        return result ? result.amount : 0;
+        return coinsData[userIdStr] || 0;
     } catch (error) {
         console.error(chalk.red(`[COINS] Error getting coins for user ${userId}:`), error);
         return 0;
@@ -45,36 +76,27 @@ async function addCoins(userId, amount) {
             throw new Error('Amount must be a positive number');
         }
         
-        console.log(`[DEBUG][COINS] Getting current balance for user ${userId}`);
-        const currentCoins = await getUserCoins(userId);
-        console.log(`[DEBUG][COINS] Current balance for user ${userId}: ${currentCoins}`);
+        // Convert userId to string for consistent storage
+        const userIdStr = String(userId);
+        
+        // Get current balance
+        const currentCoins = await getUserCoins(userIdStr);
+        console.log(`[DEBUG][COINS] Current balance for user ${userIdStr}: ${currentCoins}`);
+        
+        // Calculate new balance
         const newBalance = currentCoins + amount;
         console.log(`[DEBUG][COINS] New balance will be: ${newBalance}`);
         
-        // Check if user exists in coins table
-        console.log(`[DEBUG][COINS] Checking if user ${userId} exists in coins table`);
-        const checkStmt = coinsDb.prepare('SELECT 1 FROM coins WHERE user_id = ?');
-        const exists = checkStmt.get(userId);
+        // Update coins data
+        coinsData[userIdStr] = newBalance;
         
-        if (exists) {
-            console.log(`[DEBUG][COINS] User ${userId} exists, updating record`);
-            // Update existing record
-            const stmt = coinsDb.prepare('UPDATE coins SET amount = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?');
-            const result = stmt.run(newBalance, userId);
-            console.log(`[DEBUG][COINS] Update result:`, result);
-        } else {
-            console.log(`[DEBUG][COINS] User ${userId} doesn't exist, creating new record`);
-            // Insert new record
-            const stmt = coinsDb.prepare('INSERT INTO coins (user_id, amount) VALUES (?, ?)');
-            const result = stmt.run(userId, newBalance);
-            console.log(`[DEBUG][COINS] Insert result:`, result);
-        }
+        // Save to file
+        saveCoinsData();
         
-        console.log(chalk.green(`[COINS] Added ${amount} coins to user ${userId}. New balance: ${newBalance}`));
+        console.log(chalk.green(`[COINS] Added ${amount} coins to user ${userIdStr}. New balance: ${newBalance}`));
         return newBalance;
     } catch (error) {
         console.error(chalk.red(`[COINS] Error adding coins to user ${userId}:`), error);
-        // Log the error stack trace
         console.error(`[DEBUG][COINS] Stack trace:`, error.stack);
         throw error;
     }
@@ -91,29 +113,26 @@ async function removeCoins(userId, amount) {
             throw new Error('Amount must be a positive number');
         }
         
-        const currentCoins = await getUserCoins(userId);
+        // Convert userId to string for consistent storage
+        const userIdStr = String(userId);
+        
+        // Get current balance
+        const currentCoins = await getUserCoins(userIdStr);
         
         if (currentCoins < amount) {
             throw new Error('Insufficient coins');
         }
         
+        // Calculate new balance
         const newBalance = currentCoins - amount;
         
-        // Check if user exists in coins table
-        const checkStmt = coinsDb.prepare('SELECT 1 FROM coins WHERE user_id = ?');
-        const exists = checkStmt.get(userId);
+        // Update coins data
+        coinsData[userIdStr] = newBalance;
         
-        if (exists) {
-            // Update existing record
-            const stmt = coinsDb.prepare('UPDATE coins SET amount = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?');
-            stmt.run(newBalance, userId);
-        } else {
-            // This shouldn't happen normally, but insert new record just in case
-            const stmt = coinsDb.prepare('INSERT INTO coins (user_id, amount) VALUES (?, ?)');
-            stmt.run(userId, newBalance);
-        }
+        // Save to file
+        saveCoinsData();
         
-        console.log(chalk.yellow(`[COINS] Removed ${amount} coins from user ${userId}. New balance: ${newBalance}`));
+        console.log(chalk.yellow(`[COINS] Removed ${amount} coins from user ${userIdStr}. New balance: ${newBalance}`));
         return newBalance;
     } catch (error) {
         console.error(chalk.red(`[COINS] Error removing coins from user ${userId}:`), error);
@@ -143,21 +162,16 @@ async function setCoins(userId, amount) {
             throw new Error('Amount must be a non-negative number');
         }
         
-        // Check if user exists in coins table
-        const checkStmt = coinsDb.prepare('SELECT 1 FROM coins WHERE user_id = ?');
-        const exists = checkStmt.get(userId);
+        // Convert userId to string for consistent storage
+        const userIdStr = String(userId);
         
-        if (exists) {
-            // Update existing record
-            const stmt = coinsDb.prepare('UPDATE coins SET amount = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?');
-            stmt.run(amount, userId);
-        } else {
-            // Insert new record
-            const stmt = coinsDb.prepare('INSERT INTO coins (user_id, amount) VALUES (?, ?)');
-            stmt.run(userId, amount);
-        }
+        // Update coins data
+        coinsData[userIdStr] = amount;
         
-        console.log(chalk.blue(`[COINS] Set coins for user ${userId} to ${amount}`));
+        // Save to file
+        saveCoinsData();
+        
+        console.log(chalk.blue(`[COINS] Set coins for user ${userIdStr} to ${amount}`));
         return amount;
     } catch (error) {
         console.error(chalk.red(`[COINS] Error setting coins for user ${userId}:`), error);
@@ -167,21 +181,7 @@ async function setCoins(userId, amount) {
 
 // Get all users' coins data
 async function getAllCoinsData() {
-    try {
-        const stmt = coinsDb.prepare('SELECT user_id, amount FROM coins');
-        const results = stmt.all();
-        
-        // Convert array to object with user_id as keys
-        const coinsData = {};
-        for (const row of results) {
-            coinsData[row.user_id] = row.amount;
-        }
-        
-        return coinsData;
-    } catch (error) {
-        console.error(chalk.red('[COINS] Error getting all coins data:'), error);
-        return {};
-    }
+    return { ...coinsData };
 }
 
 // API Endpoints
@@ -248,5 +248,7 @@ module.exports = {
     removeCoins,
     hasEnoughCoins,
     setCoins,
-    getAllCoinsData
+    getAllCoinsData,
+    loadCoinsData,
+    saveCoinsData
 };

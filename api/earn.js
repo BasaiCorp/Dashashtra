@@ -221,7 +221,7 @@ router.post('/api/earn/afk', checkAuth, async (req, res) => {
         }
         
         // Calculate reward between 15-25 credits
-        const credits = Math.floor(Math.random() * 11) + 15;
+        const credits = 2; // Fixed 2 credits per AFK session
         log(`[AFK] User ${userId} earned ${credits} credits`);
         
         // Update user session
@@ -253,7 +253,9 @@ router.post('/api/earn/afk', checkAuth, async (req, res) => {
             credits: credits, 
             balance: newBalance,
             totalEarned: userSession.totalEarned,
-            timeActive: userSession.timeActive
+            timeActive: userSession.timeActive,
+            remainingAfk: Math.max(0, 20 - (userSession.sessionsToday || 0)),
+            timeUntilNextAfk: 0 // They just claimed, so it's 0
         });
     } catch (error) {
         console.error(chalk.red('[AFK] Error processing reward claim:'), error);
@@ -311,7 +313,7 @@ router.post('/api/earn/claim', checkAuth, async (req, res) => {
         }
         
         // Calculate reward between 15-25 credits
-        const credits = Math.floor(Math.random() * 11) + 15;
+        const credits = 2; // Fixed 2 credits per AFK session
         log(`[AFK] User ${userId} earned ${credits} credits`);
         
         // Update user session
@@ -518,8 +520,77 @@ setInterval(() => {
     }
 }, 60 * 60 * 1000); // Run every hour
 
+// Add compatibility route for /api/afk/start that redirects to /api/earn/afk
+router.post('/api/afk/start', checkAuth, async (req, res) => {
+    // Forward the request to the afk endpoint
+    try {
+        const userId = req.session.userinfo.id;
+        log(`[AFK] User ${userId} attempting to claim AFK reward via /api/afk/start`);
+        
+        // Get or initialize user session
+        let userSession = userSessions.get(userId);
+        if (!userSession) {
+            log(`[AFK] Creating new session for user ${userId}`);
+            userSession = { 
+                lastReward: 0, 
+                timeActive: 0, 
+                totalEarned: 0,
+                lastActivity: Date.now(),
+                sessionsToday: 1
+            };
+            userSessions.set(userId, userSession);
+        }
+        
+        const now = Date.now();
+        
+        // No time check for now to ensure it works
+        
+        // Calculate reward - always 2 credits
+        const credits = 2;
+        log(`[AFK] User ${userId} earned ${credits} credits`);
+        
+        // Update user session
+        userSession.lastReward = now;
+        userSession.timeActive += 1 * 60; // Add 1 minute to active time
+        userSession.totalEarned += credits;
+        userSessions.set(userId, userSession);
+        
+        // Add credits to user account
+        let currentBalance = await userCoins.getUserCoins(userId);
+        log(`[AFK] User ${userId} current balance: ${currentBalance}`);
+        
+        try {
+            await userCoins.addCoins(userId, credits);
+            log(`[AFK] Added ${credits} credits to user ${userId}`);
+        } catch (error) {
+            console.error(chalk.red(`[AFK] Error adding credits to user ${userId}:`), error);
+            log(`[AFK] Error adding credits: ${error.message}`);
+            return res.status(500).json({ success: false, error: 'Failed to add credits to your account' });
+        }
+        
+        // Get updated balance
+        let newBalance = await userCoins.getUserCoins(userId);
+        log(`[AFK] User ${userId} new balance: ${newBalance}`);
+        
+        // Return success response
+        return res.json({ 
+            success: true, 
+            coins: newBalance,
+            credits: credits,
+            balance: newBalance,
+            totalEarned: userSession.totalEarned,
+            timeActive: userSession.timeActive,
+            remainingAfk: Math.max(0, 20 - (userSession.sessionsToday || 0)),
+            timeUntilNextAfk: 0
+        });
+    } catch (error) {
+        console.error(chalk.red('[AFK] Error processing reward claim via /api/afk/start:'), error);
+        log(`[AFK] Error processing claim: ${error.message}`);
+        res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+});
+
 module.exports = {
     router,
-    // Export formatTime for use in other modules if needed
     formatTime
 };

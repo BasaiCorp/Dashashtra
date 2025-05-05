@@ -4,6 +4,34 @@ const currentPage = 'afk';
 
 // Set the page title
 const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && extra.dashboard ? extra.dashboard.title : 'Dashboard');
+
+// Get AFK data from the API route
+const afkData = typeof afkStats !== 'undefined' ? afkStats : {
+    lastAfk: null,
+    dailyAfkCount: 0,
+    remainingAfk: 20,
+    timeUntilNextAfk: 0
+};
+
+// Check if we need to reset daily count
+const today = new Date().toISOString().split('T')[0];
+if (afkData.lastAfkReset !== today) {
+    afkData.dailyAfkCount = 0;
+    afkData.lastAfkReset = today;
+}
+
+// Calculate remaining AFK attempts for today
+const maxDailyAfk = 20;
+const remainingAfk = Math.max(0, maxDailyAfk - afkData.dailyAfkCount);
+
+// Calculate time until next AFK is available
+let timeUntilNextAfk = 0;
+if (afkData.lastAfk) {
+    const lastAfkTime = new Date(afkData.lastAfk);
+    const now = new Date();
+    const timeDiff = now - lastAfkTime;
+    timeUntilNextAfk = Math.max(0, 60000 - timeDiff); // 60000ms = 1 minute
+}
 %>
 
 <!DOCTYPE html>
@@ -306,6 +334,65 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
                 padding: 0.5rem;
             }
         }
+        
+        .afk-timer {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #ef4444;
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+        
+        .afk-progress {
+            height: 8px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .afk-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            transition: width 1s linear;
+        }
+        
+        .afk-stats {
+            background: rgba(26, 26, 31, 0.8);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .afk-stat-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .afk-stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(239, 68, 68, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+        
+        .afk-stat-info {
+            flex: 1;
+        }
+        
+        .afk-stat-label {
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+        
+        .afk-stat-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+        }
     </style>
 
     <style>
@@ -421,7 +508,7 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
                 <!-- Welcome Message -->
                 <div class="mb-8 glass-card p-6 rounded-xl animate-fade-in">
                     <h1 class="text-3xl font-bold mb-2">AFK Credits Earnings</h1>
-                    <p class="text-gray-400">Stay on this page to earn credits automatically. Every 5 minutes, you'll receive 15 credits. Keep the tab active to continue earning.</p>
+                    <p class="text-gray-400">Stay on this page to earn credits automatically. Every minute, you'll receive 2 credits. Keep the tab active to continue earning.</p>
                 </div>
 
                 <!-- AFK Timer -->
@@ -440,18 +527,18 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
                         
                         <!-- Timer Display -->
                         <div class="absolute">
-                            <span id="timer" class="text-3xl font-bold text-white">5:00</span>
+                            <span id="timer" class="text-3xl font-bold text-white">1:00</span>
                         </div>
                     </div>
                     
                     <!-- Instructions -->
-                    <p class="text-gray-300 text-center text-sm mt-4">Stay on this page to earn credits every 5 minutes</p>
+                    <p class="text-gray-300 text-center text-sm mt-4">Stay on this page to earn credits every minute</p>
                     
                     <!-- User's Balance -->
                     <div class="flex items-center mt-3 space-x-2">
                         <i class="fas fa-coins text-yellow-400"></i>
                         <span class="text-white">Your Balance:</span>
-                        <span id="afk-balance" class="balance-display font-bold text-yellow-400"><%= userCoinsBalance %></span>
+                        <span id="afk-balance" class="balance-display font-bold text-yellow-400"><%= typeof userCoinsBalance !== 'undefined' ? userCoinsBalance : 0 %></span>
                     </div>
                 </div>
                 
@@ -460,31 +547,22 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
                     <h3 class="text-xl font-semibold text-white mb-2">Your Stats</h3>
                     
                     <div class="grid grid-cols-1 gap-4">
-                        <!-- Time Active -->
+                        <!-- Remaining AFK Attempts -->
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
                                 <i class="fas fa-clock text-indigo-400"></i>
-                                <span class="text-gray-300">Total AFK Time:</span>
+                                <span class="text-gray-300">Remaining AFK Attempts:</span>
                             </div>
-                            <span id="total-afk-time" class="font-medium text-white">00:00:00</span>
+                            <span class="font-medium text-white" data-afk-remaining><%= afkData.remainingAfk %>/20</span>
                         </div>
                         
-                        <!-- Total Credits Earned -->
+                        <!-- Time Until Next AFK -->
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
-                                <i class="fas fa-coins text-yellow-400"></i>
-                                <span class="text-gray-300">Total Credits Earned:</span>
+                                <i class="fas fa-hourglass-half text-yellow-400"></i>
+                                <span class="text-gray-300">Time Until Next AFK:</span>
                             </div>
-                            <span id="total-credits" class="font-medium text-white"><%= afkStats?.totalEarned || 0 %></span>
-                        </div>
-                        
-                        <!-- Sessions Today -->
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-2">
-                                <i class="fas fa-calendar-check text-green-400"></i>
-                                <span class="text-gray-300">Sessions Today:</span>
-                            </div>
-                            <span id="total-sessions" class="font-medium text-white">1</span>
+                            <span id="next-afk-time" class="font-medium text-white"><%= Math.ceil(afkData.timeUntilNextAfk / 1000) %>s</span>
                         </div>
                     </div>
                 </div>
@@ -498,11 +576,11 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
     <!-- Include Scripts Component -->
     <%- include('./components/scripts') %>
 
-    <!-- Scripts -->
+    <!-- AFK Timer Script -->
     <script>
         // AFK Timer Variables
         let timerInterval = null;
-        let remainingSeconds = 300; // 5 minutes in seconds
+        let remainingSeconds = 60; // 1 minute in seconds
         let isTimerRunning = false;
         let isVisible = true;
         
@@ -511,8 +589,6 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
         let progressRingCircle;
         
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('AFK page loaded, initializing timer directly in the page');
-            
             // Find DOM elements
             timerElement = document.getElementById('timer');
             progressRingCircle = document.getElementById('progress-ring-circle');
@@ -523,7 +599,7 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
             }
             
             // Set initial timer value
-            timerElement.textContent = '5:00';
+            timerElement.textContent = '1:00';
             
             // Initialize progress ring
             if (progressRingCircle) {
@@ -537,14 +613,10 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
             
             // Start the timer with a slight delay
             setTimeout(startTimer, 500);
-            
-            console.log('Timer initialization complete');
         });
         
         // Start the timer countdown
         function startTimer() {
-            console.log('Starting AFK timer');
-            
             // Clear any existing timer
             if (timerInterval) {
                 clearInterval(timerInterval);
@@ -552,7 +624,7 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
             }
             
             // Reset timer state
-            remainingSeconds = 300; // 5 minutes
+            remainingSeconds = 60; // 1 minute
             isTimerRunning = true;
             
             // Update display initially
@@ -567,14 +639,12 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
                 
                 // Decrement the time
                 remainingSeconds--;
-                console.log(`Timer tick: ${remainingSeconds}s remaining`);
                 
                 // Update the display
                 updateTimerDisplay();
                 
                 // Check if timer has reached zero
                 if (remainingSeconds <= 0) {
-                    console.log('Timer complete, claiming reward');
                     clearInterval(timerInterval);
                     timerInterval = null;
                     isTimerRunning = false;
@@ -597,8 +667,8 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
             
             // Update progress ring if it exists
             if (progressRingCircle) {
-                const circumference = 2 * Math.PI * 40; // 2πr where r=40
-                const progress = remainingSeconds / 300; // 300 seconds = 5 minutes (full timer)
+                const circumference = 2 * Math.PI * 40;
+                const progress = remainingSeconds / 60;
                 const offset = circumference * (1 - progress);
                 
                 progressRingCircle.style.strokeDasharray = `${circumference} ${circumference}`;
@@ -609,131 +679,89 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
         // Handle visibility change
         function handleVisibilityChange() {
             isVisible = document.visibilityState === 'visible';
-            console.log(`Visibility changed - Tab is ${isVisible ? 'visible' : 'hidden'}`);
             
             // When tab becomes visible again, show notification
             if (isVisible) {
-                const notification = document.getElementById('notification-container');
-                if (notification) {
-                    const notif = document.createElement('div');
-                    notif.className = "notification p-3 rounded-lg shadow-lg flex items-center bg-blue-600 text-white max-w-xs";
-                    notif.innerHTML = `
-                        <i class="fas fa-info-circle mr-2"></i>
-                        <span>AFK timer resumed</span>
-                    `;
-                    notification.appendChild(notif);
-                    setTimeout(() => {
-                        if (notif.parentNode) {
-                            notif.parentNode.removeChild(notif);
-                        }
-                    }, 3000);
-                }
+                showNotification('AFK timer resumed', 'info');
             }
         }
         
         // Claim reward when timer reaches zero
         async function claimReward() {
-            console.log('Claiming reward...');
-            
-            // Show loading state
-            if (timerElement) {
-                timerElement.textContent = 'Claiming...';
-            }
-            
-            // Also update progress ring to show it's processing
-            if (progressRingCircle) {
-                progressRingCircle.style.stroke = '#22c55e'; // Green color
-                progressRingCircle.style.strokeDashoffset = '0'; // Full circle
-            }
-            
             try {
-                // Log that we're about to call the API
-                console.log('Sending claim request to /api/earn/claim endpoint...');
+                // Show loading state
+                if (timerElement) {
+                    timerElement.textContent = 'Claiming...';
+                }
                 
-                // Call the API to claim reward with a timeout
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-                
-                const response = await fetch('/api/earn/claim', {
+                // Call the API to claim reward
+                const response = await fetch('/api/earn/afk', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ timestamp: Date.now() }), // Add timestamp for logging
-                    signal: controller.signal
+                    }
                 });
                 
-                clearTimeout(timeoutId);
-                
-                console.log('API response received, status:', response.status);
-                
-                if (!response.ok) {
-                    const errorText = await response.text().catch(() => 'No error text available');
-                    console.error('API error response:', response.status, errorText);
-                    throw new Error(`Server responded with ${response.status}: ${errorText}`);
-                }
-                
                 const data = await response.json();
-                console.log('Reward claimed successfully, data:', data);
                 
-                // Show debug alert for troubleshooting
-                alert(`Reward claimed! Response: ${JSON.stringify(data)}`);
-                
-                // Update total credits earned
-                const totalCreditsElement = document.getElementById('total-credits');
-                if (data.amount && totalCreditsElement) {
-                    const currentCredits = parseInt(totalCreditsElement.textContent || '0');
-                    const newTotal = currentCredits + parseInt(data.amount);
-                    console.log(`Updating total credits: ${currentCredits} + ${data.amount} = ${newTotal}`);
-                    totalCreditsElement.textContent = newTotal;
+                if (data.success) {
+                    // Update balance display in this page
+                    const balanceElement = document.getElementById('afk-balance');
+                    if (balanceElement) {
+                        balanceElement.textContent = data.balance;
+                    }
+                    
+                    // Update header balance (if it exists)
+                    const headerBalance = document.getElementById('header-balance');
+                    if (headerBalance) {
+                        headerBalance.textContent = data.balance;
+                    }
+                    
+                    // Update balance in localStorage for cross-page consistency
+                    localStorage.setItem('userCoins', data.balance);
+                    
+                    // Show confirmation popup
+                    const confirmed = confirm(`Congratulations! You earned 2 credits! Your new balance is ${data.balance}. Click OK to continue.`);
+                    
+                    // Update AFK stats
+                    updateAfkStats(data);
+                    
+                    // Always show 2 credits earned regardless of actual amount
+                    showNotification(`Earned 2 credits! Balance: ${data.balance}`, 'success');
+                    
+                    // Start the timer again after confirmation
+                    startTimer();
+                } else {
+                    showNotification(data.error, 'error');
+                    startTimer();
                 }
-                
-                // Update balance
-                const balanceElement = document.getElementById('afk-balance');
-                if (data.balance && balanceElement) {
-                    console.log(`Updating balance display to: ${data.balance}`);
-                    balanceElement.textContent = data.balance;
-                }
-                
-                // Show success notification
-                showNotification(`Earned ${data.amount} credits! Balance: ${data.balance}`, 'success');
-                
-                // Start the timer again
-                startTimer();
             } catch (error) {
                 console.error('Error claiming reward:', error);
-                
-                // Show debug alert for troubleshooting
-                alert(`Error claiming reward: ${error.message}`);
-                
-                // Show more specific error notification based on error type
-                if (error.name === 'AbortError') {
-                    showNotification('Request timed out. Check your connection and try again.', 'error');
-                } else if (error.message.includes('Failed to fetch')) {
-                    showNotification('Network error. Check your connection and try again.', 'error');
-                } else {
-                    showNotification(`Error: ${error.message}. Restarting timer...`, 'error');
-                }
-                
-                // Reset progress ring to normal
-                if (progressRingCircle) {
-                    progressRingCircle.style.stroke = '#ef4444'; // Back to default indigo
-                }
-                
-                // Restart timer anyway
+                showNotification('Error claiming reward. Please try again.', 'error');
                 startTimer();
+            }
+        }
+        
+        // Function to update AFK stats display
+        function updateAfkStats(data) {
+            // Update remaining AFK attempts if element exists
+            const remainingAfkElement = document.querySelector('[data-afk-remaining]');
+            if (remainingAfkElement && data.remainingAfk !== undefined) {
+                remainingAfkElement.textContent = `${data.remainingAfk}/20`;
+            }
+            
+            // Update other stats as needed
+            const nextAfkTimeElement = document.getElementById('next-afk-time');
+            if (nextAfkTimeElement && data.timeUntilNextAfk !== undefined) {
+                nextAfkTimeElement.textContent = `${Math.ceil(data.timeUntilNextAfk / 1000)}s`;
             }
         }
         
         // Show a notification
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notification-container');
-            if (!container) {
-                console.error('Notification container not found');
-                return;
-            }
+            if (!container) return;
             
-            // Create notification element
             const notification = document.createElement('div');
             notification.className = `notification p-3 rounded-lg shadow-lg flex items-center ${
                 type === 'success' ? 'bg-green-600' : 
@@ -741,7 +769,6 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
                 'bg-blue-600'
             } text-white max-w-xs`;
             
-            // Add icon based on type
             const iconClass = 
                 type === 'success' ? 'fa-check-circle' : 
                 type === 'error' ? 'fa-exclamation-circle' : 
@@ -752,10 +779,8 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
                 <span>${message}</span>
             `;
             
-            // Add to container
             container.appendChild(notification);
             
-            // Remove after 5 seconds
             setTimeout(() => {
                 if (notification.parentNode) {
                     notification.parentNode.removeChild(notification);
@@ -768,6 +793,34 @@ const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && 
             if (timerInterval) {
                 clearInterval(timerInterval);
             }
+        });
+
+        // Set up ping/activity tracking to keep the session alive
+        function setupPing() {
+            // Send a ping every 30 seconds
+            setInterval(async function() {
+                if (!isVisible) return;
+                
+                try {
+                    const response = await fetch('/api/earn/ping', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        console.error('Error sending ping:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Failed to send ping:', error);
+                }
+            }, 30000); // 30 seconds
+        }
+        
+        // Call setup ping on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setupPing();
         });
     </script>
 </body>

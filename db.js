@@ -126,6 +126,28 @@ authDb.prepare(`CREATE TABLE IF NOT EXISTS "user_resources" (
     FOREIGN KEY (user_id) REFERENCES users(id)
 )`).run();
 
+// Create afk_data table
+authDb.prepare(`CREATE TABLE IF NOT EXISTS "afk_data" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_id" INTEGER NOT NULL,
+    "last_afk" TIMESTAMP,
+    "daily_afk_count" INTEGER DEFAULT 0,
+    "last_afk_reset" DATE,
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+)`).run();
+
+// Create coins table
+authDb.prepare(`CREATE TABLE IF NOT EXISTS "coins" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_id" INTEGER NOT NULL,
+    "amount" INTEGER DEFAULT 0,
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+)`).run();
+
 // Create user methods
 const userMethods = {
     async createUser(userData) {
@@ -356,10 +378,91 @@ const resourceMethods = {
     }
 };
 
+// Add AFK methods
+const afkMethods = {
+    async getUserAfkData(userId) {
+        const stmt = authDb.prepare('SELECT * FROM afk_data WHERE user_id = ?');
+        return stmt.get(userId);
+    },
+
+    async createUserAfkData(userId) {
+        const stmt = authDb.prepare(`
+            INSERT INTO afk_data (user_id, last_afk_reset)
+            VALUES (?, CURRENT_DATE)
+        `);
+        return stmt.run(userId);
+    },
+
+    async updateUserAfkData(userId, afkData) {
+        const stmt = authDb.prepare(`
+            UPDATE afk_data SET
+                last_afk = COALESCE(?, last_afk),
+                daily_afk_count = COALESCE(?, daily_afk_count),
+                last_afk_reset = COALESCE(?, last_afk_reset),
+                updated_at = CURRENT_TIMESTAMP
+            WHERE user_id = ?
+        `);
+        return stmt.run(
+            afkData.last_afk,
+            afkData.daily_afk_count,
+            afkData.last_afk_reset,
+            userId
+        );
+    },
+
+    async resetDailyAfkCount(userId) {
+        const stmt = authDb.prepare(`
+            UPDATE afk_data SET
+                daily_afk_count = 0,
+                last_afk_reset = CURRENT_DATE,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE user_id = ?
+        `);
+        return stmt.run(userId);
+    }
+};
+
+// Add coin methods
+const coinMethods = {
+    async getUserCoins(userId) {
+        const stmt = authDb.prepare('SELECT amount FROM coins WHERE user_id = ?');
+        const result = stmt.get(userId);
+        return result ? result.amount : 0;
+    },
+
+    async createUserCoins(userId) {
+        const stmt = authDb.prepare('INSERT INTO coins (user_id) VALUES (?)');
+        return stmt.run(userId);
+    },
+
+    async updateUserCoins(userId, amount) {
+        const stmt = authDb.prepare(`
+            UPDATE coins SET
+                amount = amount + ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE user_id = ?
+        `);
+        return stmt.run(amount, userId);
+    },
+
+    async setUserCoins(userId, amount) {
+        const stmt = authDb.prepare(`
+            UPDATE coins SET
+                amount = ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE user_id = ?
+        `);
+        return stmt.run(amount, userId);
+    }
+};
+
+// Export the methods
 module.exports = {
     users: userMethods,
     packages: packageMethods,
     servers: serverMethods,
     resources: resourceMethods,
+    afk: afkMethods,
+    coins: coinMethods,
     db: authDb
 };

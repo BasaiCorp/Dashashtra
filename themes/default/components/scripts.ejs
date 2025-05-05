@@ -146,4 +146,75 @@
 			}
 		});
 	});
+
+	// Update coins balance every 30 seconds
+	setInterval(updateCoinsBalance, 30000);
+	
+	// Initial update
+	updateCoinsBalance();
+
+	// Function to update the coins balance in the header
+	function updateCoinsBalance() {
+		const headerBalance = document.getElementById('header-balance');
+		
+		if (!headerBalance) return;
+		
+		fetch('/api/earn/balance')
+			.then(response => {
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
+				return response.json();
+			})
+			.then(data => {
+				if (data.success && data.balance !== undefined) {
+					headerBalance.textContent = data.balance;
+				}
+			})
+			.catch(error => {
+				console.error('Error updating coins balance:', error);
+			});
+	}
+
+	// Function to show notifications
+	function showNotification(message, type = 'info') {
+		// Check if notification container exists, create if not
+		let container = document.getElementById('notification-container');
+		
+		if (!container) {
+			container = document.createElement('div');
+			container.id = 'notification-container';
+			container.className = 'fixed top-4 right-4 z-50 flex flex-col items-end space-y-2';
+			document.body.appendChild(container);
+		}
+		
+		// Create notification element
+		const notification = document.createElement('div');
+		notification.className = `notification p-3 rounded-lg shadow-lg flex items-center ${
+			type === 'success' ? 'bg-green-600' : 
+			type === 'error' ? 'bg-red-600' : 
+			'bg-blue-600'
+		} text-white max-w-xs`;
+		
+		// Add icon based on type
+		const iconClass = 
+			type === 'success' ? 'fa-check-circle' : 
+			type === 'error' ? 'fa-exclamation-circle' : 
+			'fa-info-circle';
+		
+		notification.innerHTML = `
+			<i class="fas ${iconClass} mr-2"></i>
+			<span>${message}</span>
+		`;
+		
+		// Add to container
+		container.appendChild(notification);
+		
+		// Remove after timeout
+		setTimeout(() => {
+			if (notification.parentNode) {
+				notification.parentNode.removeChild(notification);
+			}
+		}, 5000);
+	}
 </script>

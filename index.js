@@ -36,6 +36,7 @@ const defaultthemesettings = {
 module.exports.renderdataeval =
   `(async () => {
     let newsettings = JSON.parse(require("fs").readFileSync("./settings.json"));
+    const userCoins = require('./api/user_coins.js');
 
     // Standard data retrieval for all users
     let renderdata = {
@@ -43,7 +44,8 @@ module.exports.renderdataeval =
       settings: newsettings,
       userinfo: req.session.userinfo,
       theme: theme.name,
-      extra: theme.settings.variables
+      extra: theme.settings.variables,
+      coins: 0 // Default coins value
     };
 
     // Add additional data if user is logged in
@@ -60,15 +62,13 @@ module.exports.renderdataeval =
         // Get extra resources from database
         renderdata.extraresources = await db.resources.getUserResources(req.session.userinfo.id);
 
-        // Get coins if enabled
-        if (newsettings.api.client.coins.enabled) {
-          try {
-            const userCoins = require('./api/user_coins.js');
-            renderdata.coins = await userCoins.getUserCoins(req.session.userinfo.id);
-          } catch (coinError) {
-            console.error('Error fetching user coins:', coinError);
-            renderdata.coins = 0;
-          }
+        // Always get the user's coins - removed condition
+        try {
+          renderdata.coins = await userCoins.getUserCoins(req.session.userinfo.id);
+          console.log(\`[RENDER] Loaded coins for user \${req.session.userinfo.id}: \${renderdata.coins}\`);
+        } catch (coinError) {
+          console.error('Error fetching user coins:', coinError);
+          renderdata.coins = 0;
         }
 
       } catch (error) {
@@ -159,6 +159,7 @@ const adminRouter = require('./api/admin.js').router;
 
 // Load routes
 const dashboardRouter = require('./routes/dashboard.js');
+const { router: afkRouter } = require('./api/afk.js');
 
 // Sets up saving session data.
 let sessionStore;
@@ -201,6 +202,7 @@ app.use(express.urlencoded({ extended: true }));
 // Register routers
 app.use('/admin', adminRouter);
 app.use('/dashboard', dashboardRouter);
+app.use('/api/afk', afkRouter);
 
 // Root route handler
 app.get('/', async (req, res) => {
@@ -563,6 +565,7 @@ app.get('/team', async (req, res) => {
 const serverRoutes = require('./api/servers.js');
 const { router: earnRouter } = require('./api/earn.js');
 const { router: storeRouter } = require('./api/store.js');
+const { router: coinsRouter } = require('./api/user_coins.js');
 
 // Register API routes - moved after body parser middleware
 app.use('/api/servers', serverRoutes.router);
@@ -572,6 +575,9 @@ app.use('/', earnRouter);
 
 // Register store routes
 app.use('/', storeRouter);
+
+// Register coins routes
+app.use('/api/coins', coinsRouter);
 
 // Load the website.
 module.exports.app = app;
