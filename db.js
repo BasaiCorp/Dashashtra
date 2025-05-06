@@ -148,6 +148,30 @@ authDb.prepare(`CREATE TABLE IF NOT EXISTS "coins" (
     FOREIGN KEY (user_id) REFERENCES users(id)
 )`).run();
 
+// Create redeem_codes table
+authDb.prepare(`CREATE TABLE IF NOT EXISTS "redeem_codes" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "code" VARCHAR(32) UNIQUE NOT NULL,
+    "credits_amount" INTEGER NOT NULL,
+    "max_uses" INTEGER NOT NULL,
+    "uses_count" INTEGER DEFAULT 0,
+    "expires_at" TIMESTAMP,
+    "created_by" INTEGER NOT NULL,
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (created_by) REFERENCES users(id)
+)`).run();
+
+// Create redeem_code_uses table to track who used which code
+authDb.prepare(`CREATE TABLE IF NOT EXISTS "redeem_code_uses" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "code_id" INTEGER NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "redeemed_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (code_id) REFERENCES redeem_codes(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+)`).run();
+
 // Create user methods
 const userMethods = {
     async createUser(userData) {
@@ -456,6 +480,83 @@ const coinMethods = {
     }
 };
 
+// Add redeem code methods
+const redeemCodeMethods = {
+    async createRedeemCode(codeData) {
+        const stmt = authDb.prepare(`
+            INSERT INTO redeem_codes (
+                code, credits_amount, max_uses, expires_at, created_by
+            ) VALUES (?, ?, ?, ?, ?)
+        `);
+        
+        return stmt.run(
+            codeData.code,
+            codeData.credits_amount,
+            codeData.max_uses,
+            codeData.expires_at,
+            codeData.created_by
+        );
+    },
+
+    async getRedeemCode(code) {
+        const stmt = authDb.prepare('SELECT * FROM redeem_codes WHERE code = ?');
+        return stmt.get(code);
+    },
+
+    async getRedeemCodeById(id) {
+        const stmt = authDb.prepare('SELECT * FROM redeem_codes WHERE id = ?');
+        return stmt.get(id);
+    },
+
+    async getAllRedeemCodes() {
+        const stmt = authDb.prepare('SELECT * FROM redeem_codes ORDER BY created_at DESC');
+        return stmt.all();
+    },
+
+    async getActiveRedeemCodes() {
+        const stmt = authDb.prepare(`
+            SELECT * FROM redeem_codes 
+            WHERE (expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP)
+            AND uses_count < max_uses
+            ORDER BY created_at DESC
+        `);
+        return stmt.all();
+    },
+
+    async incrementCodeUses(codeId) {
+        const stmt = authDb.prepare(`
+            UPDATE redeem_codes 
+            SET uses_count = uses_count + 1,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        `);
+        return stmt.run(codeId);
+    },
+
+    async recordCodeUse(codeId, userId) {
+        const stmt = authDb.prepare(`
+            INSERT INTO redeem_code_uses (code_id, user_id)
+            VALUES (?, ?)
+        `);
+        return stmt.run(codeId, userId);
+    },
+
+    async hasUserUsedCode(codeId, userId) {
+        const stmt = authDb.prepare(`
+            SELECT COUNT(*) as count 
+            FROM redeem_code_uses 
+            WHERE code_id = ? AND user_id = ?
+        `);
+        const result = stmt.get(codeId, userId);
+        return result.count > 0;
+    },
+
+    async deleteRedeemCode(id) {
+        const stmt = authDb.prepare('DELETE FROM redeem_codes WHERE id = ?');
+        return stmt.run(id);
+    }
+};
+
 // Export the methods
 module.exports = {
     users: userMethods,
@@ -464,5 +565,6 @@ module.exports = {
     resources: resourceMethods,
     afk: afkMethods,
     coins: coinMethods,
+    redeemCodes: redeemCodeMethods,
     db: authDb
 };

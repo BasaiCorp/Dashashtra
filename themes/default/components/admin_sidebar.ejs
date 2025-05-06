@@ -1,0 +1,92 @@
+<!-- Sidebar -->
+<aside class="sidebar">
+    <div class="h-full px-3 pb-4 overflow-y-auto flex flex-col">
+        <ul class="space-y-1 pt-4 font-medium flex-grow">
+            <li>
+                <a href="/admin" class="menu-item flex items-center p-3 text-white rounded-lg <%= (typeof currentPage !== 'undefined' && currentPage === 'admin') ? 'active' : '' %>">
+                    <i class="fas fa-tachometer-alt w-5 h-5 text-gray-400 transition duration-75"></i>
+                    <span class="ml-3">Overview</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/users" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white <%= (typeof currentPage !== 'undefined' && currentPage === 'admin_users') ? 'active' : '' %>">
+                    <i class="fas fa-users w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+                    <span class="ml-3">Users</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/servers" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white <%= (typeof currentPage !== 'undefined' && currentPage === 'admin_servers') ? 'active' : '' %>">
+                    <i class="fas fa-server w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+                    <span class="ml-3">Servers</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/nests" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white <%= (typeof currentPage !== 'undefined' && currentPage === 'admin_nests') ? 'active' : '' %>">
+                    <i class="fas fa-egg w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+                    <span class="ml-3">Nests</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/nodes" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white <%= (typeof currentPage !== 'undefined' && currentPage === 'admin_nodes') ? 'active' : '' %>">
+                    <i class="fas fa-microchip w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+                    <span class="ml-3">Nodes</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/mounts" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white <%= (typeof currentPage !== 'undefined' && currentPage === 'admin_mounts') ? 'active' : '' %>">
+                    <i class="fas fa-hdd w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+                    <span class="ml-3">Mounts</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/locations" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white <%= (typeof currentPage !== 'undefined' && currentPage === 'admin_locations') ? 'active' : '' %>">
+                    <i class="fas fa-map-marker-alt w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+                    <span class="ml-3">Locations</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/allocations" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white <%= (typeof currentPage !== 'undefined' && currentPage === 'admin_allocations') ? 'active' : '' %>">
+                    <i class="fas fa-network-wired w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+                    <span class="ml-3">Allocations</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/databases" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white <%= (typeof currentPage !== 'undefined' && currentPage === 'admin_databases') ? 'active' : '' %>">
+                    <i class="fas fa-database w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+                    <span class="ml-3">Databases</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/redeem" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white <%= (typeof currentPage !== 'undefined' && currentPage === 'admin_redeem') ? 'active' : '' %>">
+                    <i class="fas fa-gift w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+                    <span class="ml-3">Redeem Codes</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/settings" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white <%= (typeof currentPage !== 'undefined' && currentPage === 'admin_settings') ? 'active' : '' %>">
+                    <i class="fas fa-cog w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+                    <span class="ml-3">Settings</span>
+                </a>
+            </li>
+            <li class="mt-6 pt-6 border-t border-gray-700">
+                <a href="/dashboard" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
+                    <i class="fas fa-arrow-left w-5 h-5 text-primary-400 transition duration-75 group-hover:text-primary-300"></i>
+                    <span class="ml-3">Back to Dashboard</span>
+                </a>
+            </li>
+        </ul>
+        
+        <!-- Developer Signature -->
+        <div class="mt-auto border-t border-gray-700 pt-4 pb-2">
+            <div class="text-center">
+                <p class="text-sm text-gray-400 font-poppins">Made by Prathmesh &lt;/&gt;</p>
+                <p class="text-sm text-primary-400 signature-font mt-1">~ Prathmesh</p>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- Mobile menu button -->
+<button id="toggleSidebar" type="button" class="fixed bottom-4 right-4 z-20 sm:hidden inline-flex items-center p-3 text-sm font-medium text-white bg-primary-600 rounded-full hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
+    <i id="sidebarIcon" class="fas fa-bars"></i>
+</button> 

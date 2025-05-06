@@ -52,6 +52,7 @@
         "login": "login.ejs",
         "register": "register.ejs",
         "admin": "admin.ejs",
+        "admin/redeem": "admin/redeem_make.ejs",
         "store": "store.ejs",
         "earn": "earn.ejs",
         "afk": "afk.ejs",
@@ -75,7 +76,8 @@
         "/team"
     ],
     "mustbeadmin": [
-        "/admin"
+        "/admin",
+        "/admin/redeem"
     ],
     "generateafktoken": [
         "/afk"
@@ -117,7 +119,11 @@
         },
         "admin": {
             "title": {
-                "default": "Admin - Sriyan Nodes"
+                "default": "Admin - Sriyan Nodes",
+                "users": "Users Management - Admin",
+                "servers": "Servers Management - Admin",
+                "settings": "Admin Settings - Sriyan Nodes",
+                "redeem": "Redeem Codes - Admin"
             }
         },
         "store": {

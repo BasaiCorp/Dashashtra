@@ -173,11 +173,12 @@ const session = require("express-session");
 const indexjs = require("./index.js");
 
 // Load admin router
-const adminRouter = require('./api/admin.js').router;
+const adminRouter = require('./api/admin.js');
 
 // Load routes
 const dashboardRouter = require('./routes/dashboard.js');
 const { router: afkRouter } = require('./api/afk.js');
+const { router: redeemRouter } = require('./api/redeem.js');
 
 // Sets up saving session data.
 let sessionStore;
@@ -221,6 +222,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/admin', adminRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/api/afk', afkRouter);
+app.use('/api/redeem', redeemRouter);
 
 // Root route handler
 app.get('/', async (req, res) => {
@@ -1150,3 +1152,25 @@ module.exports.get = function(req) {
 };
 
 module.exports.defaultthemesettings = defaultthemesettings;
+
+// Admin redeem page route
+app.get('/admin/redeem', async (req, res) => {
+    if (!req.session.userinfo || !req.session.userinfo.pterodactyl_root_admin) {
+        return res.redirect('/login');
+    }
+
+    let theme = indexjs.get(req);
+    
+    ejs.renderFile(
+        `./themes/${theme.name}/${theme.settings.pages.admin}`, 
+        await eval(indexjs.renderdataeval),
+        null,
+        function(err, str) {
+            if (err) {
+                console.error(`[ADMIN] Failed to render admin redeem page:`, err);
+                return res.redirect('/');
+            }
+            res.send(str);
+        }
+    );
+});

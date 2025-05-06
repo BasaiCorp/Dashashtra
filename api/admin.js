@@ -154,7 +154,7 @@ router.get('/', checkAdmin, async (req, res) => {
 });
 
 // Users management
-router.get('/users', checkAdmin, async (req, res) => {
+router.get('/users', checkAdmin, async (req, res) => {p
     try {
         console.log(chalk.blue('[ADMIN] Users management page accessed'));
         
@@ -1304,95 +1304,47 @@ router.post('/settings/panel', checkAdmin, async (req, res) => {
     }
 });
 
-module.exports = {
-    router: router,
-    suspend: async function(discordid) {
-        let newsettings = JSON.parse(fs.readFileSync("./settings.json").toString());
-        if (newsettings.api.client.allow.overresourcessuspend !== true) return;
-
-        let canpass = await indexjs.islimited();
-        if (canpass == false) {
-            setTimeout(
-                async function() {
-                    adminjs.suspend(discordid);
-                }, 1
-            )
-            return;
+// Redeem code management
+router.get('/redeem', checkAdmin, async (req, res) => {
+    try {
+        console.log(chalk.blue('[ADMIN] Redeem code management page accessed'));
+        
+        // Get theme and render properly
+        let theme = indexjs.get(req);
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        // Add title and current page to render data
+        renderData.currentPage = 'admin_redeem';
+        renderData.title = 'Redeem Codes - Admin';
+        
+        // Add user data for the template
+        renderData.userData = {
+            id: req.session.userinfo.id,
+            username: req.session.userinfo.username || req.session.userinfo.email.split('@')[0],
+            email: req.session.userinfo.email,
+            discriminator: req.session.userinfo.discriminator,
+            avatar: req.session.userinfo.avatar,
+            isAdmin: req.session.isAdmin
         };
-
-        indexjs.ratelimits(1);
-        let pterodactylid = await db.get("users-" + discordid);
-        let userinforeq = await fetch(
-            settings.pterodactyl.domain + "/api/application/users/" + pterodactylid + "?include=servers",
-            {
-              method: "get",
-              headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/admin/redeem_make.ejs`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[ADMIN] Error rendering redeem code management page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the redeem code management page. Please contact an administrator.");
+                }
+                res.send(str);
             }
-          );
-        if (await userinforeq.statusText == "Not Found") {
-            console.log("[WEBSITE] An error has occured while attempting to check if a user's server should be suspended.");
-            console.log("- Discord ID: " + discordid);
-            console.log("- Pterodactyl Panel ID: " + pterodactylid);
-            return;
-        }
-        let userinfo = JSON.parse(await userinforeq.text());
+        );
+    } catch (error) {
+        console.error(chalk.red('[ADMIN] Error loading redeem code management:'), error);
+        res.status(500).send('An error occurred while loading the redeem code management page.');
+    }
+});
 
-        let packagename = await db.get("package-" + discordid);
-        let package = newsettings.api.client.packages.list[packagename || newsettings.api.client.packages.default];
-
-        let extra = 
-            await db.get("extra-" + discordid) ||
-            {
-                ram: 0,
-                disk: 0,
-                cpu: 0,
-                servers: 0
-            };
-
-        let plan = {
-            ram: package.ram + extra.ram,
-            disk: package.disk + extra.disk,
-            cpu: package.cpu + extra.cpu,
-            servers: package.servers + extra.servers
-        }
-
-        let current = {
-            ram: 0,
-            disk: 0,
-            cpu: 0,
-            servers: userinfo.attributes.relationships.servers.data.length
-        }
-        for (let i = 0, len = userinfo.attributes.relationships.servers.data.length; i < len; i++) {
-            current.ram = current.ram + userinfo.attributes.relationships.servers.data[i].attributes.limits.memory;
-            current.disk = current.disk + userinfo.attributes.relationships.servers.data[i].attributes.limits.disk;
-            current.cpu = current.cpu + userinfo.attributes.relationships.servers.data[i].attributes.limits.cpu;
-        };
-
-        indexjs.ratelimits(userinfo.attributes.relationships.servers.data.length);
-        if (current.ram > plan.ram || current.disk > plan.disk || current.cpu > plan.cpu || current.servers > plan.servers) {
-            for (let i = 0, len = userinfo.attributes.relationships.servers.data.length; i < len; i++) {
-                let suspendid = userinfo.attributes.relationships.servers.data[i].attributes.id;
-                await fetch(
-                    settings.pterodactyl.domain + "/api/application/servers/" + suspendid + "/suspend",
-                    {
-                      method: "post",
-                      headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
-                    }
-                  );
-            }
-        } else {
-            if (settings.api.client.allow.renewsuspendsystem.enabled == true) return;
-            for (let i = 0, len = userinfo.attributes.relationships.servers.data.length; i < len; i++) {
-                let suspendid = userinfo.attributes.relationships.servers.data[i].attributes.id;
-                await fetch(
-                    settings.pterodactyl.domain + "/api/application/servers/" + suspendid + "/unsuspend",
-                    {
-                      method: "post",
-                      headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${settings.pterodactyl.key}` }
-                    }
-                  );
-            }
-        };
-    },
-    checkAdmin: checkAdmin
-};
+// Export the router and checkAdmin middleware
+module.exports = router;
