@@ -1174,3 +1174,47 @@ app.get('/admin/redeem', async (req, res) => {
         }
     );
 });
+
+// Redeem page route
+app.get('/redeem', async (req, res) => {
+    if (!req.session.userinfo) {
+        return res.redirect('/login');
+    }
+
+    let theme = indexjs.get(req);
+    
+    ejs.renderFile(
+        `./themes/${theme.name}/redeem.ejs`, 
+        await eval(indexjs.renderdataeval),
+        null,
+        function(err, str) {
+            if (err) {
+                console.error(`Failed to render redeem page:`, err);
+                return res.redirect('/');
+            }
+            res.send(str);
+        }
+    );
+});
+
+// Admin redeem page route
+app.get('/admin/redeem', async (req, res) => {
+    if (!req.session.userinfo || !req.session.userinfo.pterodactyl_root_admin) {
+        return res.redirect('/login');
+    }
+
+    let theme = indexjs.get(req);
+    
+    ejs.renderFile(
+        `./themes/${theme.name}/admin/redeem_make.ejs`, 
+        await eval(indexjs.renderdataeval),
+        null,
+        function(err, str) {
+            if (err) {
+                console.error(`[ADMIN] Failed to render admin redeem page:`, err);
+                return res.redirect('/');
+            }
+            res.send(str);
+        }
+    );
+});

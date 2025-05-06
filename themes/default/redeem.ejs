@@ -3,7 +3,7 @@
 const currentPage = 'redeem';
 
 // Set the page title
-const pageTitle = 'Redeem Coupon - ' + (typeof extra !== 'undefined' && extra && extra.dashboard ? extra.dashboard.title : 'Dashboard');
+const pageTitle = 'Redeem Code - ' + (typeof extra !== 'undefined' && extra && extra.dashboard ? extra.dashboard.title : 'Dashboard');
 %>
 
 <!DOCTYPE html>
@@ -390,12 +390,17 @@ const pageTitle = 'Redeem Coupon - ' + (typeof extra !== 'undefined' && extra &&
 							</div>
 						</div>
 
-						<form action="/redeem" method="POST" class="space-y-4">
+						<form id="redeemForm" class="space-y-4">
 							<div>
-								<label for="coupon" class="block text-sm font-medium text-gray-300 mb-2">Coupon Code</label>
-								<input type="text" id="coupon" name="coupon" required
-									class="w-full px-4 py-2 bg-dark-lighter rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
-									placeholder="Enter your coupon code">
+								<label for="code" class="block text-sm font-medium text-gray-300 mb-2">Redeem Code</label>
+								<div class="relative">
+									<input type="text" id="code" name="code" required
+										class="form-input bg-dark-lighter border border-gray-700 rounded-lg px-4 py-3 w-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 uppercase"
+										placeholder="Enter your code here">
+									<div class="absolute inset-y-0 right-0 flex items-center pr-3">
+										<i class="fas fa-ticket text-gray-400"></i>
+									</div>
+								</div>
 							</div>
 
 							<% if (typeof error !== 'undefined' && error) { %>
@@ -417,8 +422,9 @@ const pageTitle = 'Redeem Coupon - ' + (typeof extra !== 'undefined' && extra &&
 							<% } %>
 
 							<button type="submit"
-								class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-								<i class="fas fa-gift mr-2"></i> Redeem Coupon
+								class="w-full btn-primary bg-gradient-to-r from-primary-600 to-primary-500 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:from-primary-700 hover:to-primary-600 transform hover:-translate-y-0.5 shadow-lg hover:shadow-primary-500/25 flex items-center justify-center">
+								<i class="fas fa-gift mr-2"></i>
+								Redeem Code
 							</button>
 						</form>
 					</div>
@@ -507,7 +513,189 @@ const pageTitle = 'Redeem Coupon - ' + (typeof extra !== 'undefined' && extra &&
                 window.location.href = `/servers/delete/${identifier}`;
             }
         }
+
+        // Show notification function
+        function showNotification(message, type = 'info', details = null) {
+            const container = document.getElementById('notification-container');
+            if (!container) return;
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type} transform translate-x-full`;
+            
+            const iconClass = 
+                type === 'success' ? 'fa-check-circle' : 
+                type === 'error' ? 'fa-exclamation-circle' : 
+                'fa-info-circle';
+            
+            let detailsHtml = '';
+            if (details) {
+                detailsHtml = `
+                    <div class="mt-2 text-sm opacity-80">
+                        ${typeof details === 'object' ? 
+                            Object.entries(details)
+                                .map(([key, value]) => `<div>${key}: ${value}</div>`)
+                                .join('') : 
+                            details}
+                    </div>
+                `;
+            }
+            
+            notification.innerHTML = `
+                <div class="flex items-center p-4 mb-4 text-sm rounded-lg
+                    ${type === 'success' ? 'bg-green-900/30 text-green-400 border border-green-500/20' :
+                    type === 'error' ? 'bg-red-900/30 text-red-400 border border-red-500/20' :
+                    'bg-blue-900/30 text-blue-400 border border-blue-500/20'}">
+                    <div class="flex-1">
+                        <div class="flex items-center">
+                            <i class="fas ${iconClass} mr-2"></i>
+                            <span class="font-medium">${message}</span>
+                        </div>
+                        ${detailsHtml}
+                    </div>
+                    <button onclick="this.closest('.notification').remove()" class="ml-3 text-gray-400 hover:text-gray-300">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Trigger animation
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 8000);
+        }
+
+        // Load redemption history
+        async function loadRedemptionHistory() {
+            try {
+                const response = await fetch('/api/redeem/history');
+                const data = await response.json();
+                
+                const tableBody = document.querySelector('#redemptionHistory tbody');
+                if (!tableBody) return;
+                
+                if (data.success) {
+                    if (data.history.length === 0) {
+                        tableBody.innerHTML = `
+                            <tr>
+                                <td colspan="4" class="py-8 text-center">
+                                    <div class="flex flex-col items-center justify-center space-y-4">
+                                        <div class="w-16 h-16 rounded-full bg-gray-800/50 flex items-center justify-center">
+                                            <i class="fas fa-ticket text-2xl text-gray-600"></i>
+                                        </div>
+                                        <div class="text-gray-400">No redemption history found</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        return;
+                    }
+                    
+                    tableBody.innerHTML = data.history.map(item => `
+                        <tr class="border-b border-gray-700/50 hover:bg-dark-lighter/30 transition-colors duration-150">
+                            <td class="py-4">${new Date(item.redeemed_at).toLocaleString()}</td>
+                            <td class="py-4">
+                                <span class="font-mono text-primary-400">${item.code}</span>
+                            </td>
+                            <td class="py-4">
+                                <span class="font-mono text-green-400">+${item.credits_amount.toLocaleString()}</span>
+                            </td>
+                            <td class="py-4">
+                                <span class="px-2 py-1 rounded-full text-xs bg-green-500/10 text-green-400">
+                                    Redeemed
+                                </span>
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    throw new Error(data.message || 'Failed to load redemption history');
+                }
+            } catch (error) {
+                console.error('Error loading redemption history:', error);
+                showNotification('Error loading redemption history', 'error', error.message);
+            }
+        }
+
+        // Handle redeem form submission
+        document.getElementById('redeemForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalButtonHtml = submitButton.innerHTML;
+            
+            try {
+                // Show loading state
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Redeeming...';
+                
+                const code = document.getElementById('code').value.trim();
+                
+                if (!code) {
+                    throw new Error('Please enter a redeem code');
+                }
+                
+                const response = await fetch('/api/redeem/redeem', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ code })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showNotification(data.message, 'success', data.details);
+                    e.target.reset();
+                    loadRedemptionHistory();
+                    
+                    // Show success animation
+                    const successAnimation = document.createElement('div');
+                    successAnimation.className = 'fixed inset-0 flex items-center justify-center z-50 pointer-events-none';
+                    successAnimation.innerHTML = `
+                        <div class="text-8xl text-green-500 animate-bounce">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                    `;
+                    document.body.appendChild(successAnimation);
+                    setTimeout(() => successAnimation.remove(), 2000);
+                    
+                    // Update coins display if it exists
+                    const coinsDisplay = document.getElementById('userCoins');
+                    if (coinsDisplay && data.newBalance !== undefined) {
+                        coinsDisplay.textContent = data.newBalance.toLocaleString();
+                        coinsDisplay.classList.add('animate-pulse');
+                        setTimeout(() => coinsDisplay.classList.remove('animate-pulse'), 1000);
+                    }
+                } else {
+                    throw new Error(data.message || 'Failed to redeem code');
+                }
+            } catch (error) {
+                console.error('Error redeeming code:', error);
+                showNotification(error.message || 'Error redeeming code', 'error');
+            } finally {
+                // Restore button state
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonHtml;
+            }
+        });
+
+        // Load history on page load
+        document.addEventListener('DOMContentLoaded', loadRedemptionHistory);
     </script>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
 </body>
 </html>

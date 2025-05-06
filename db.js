@@ -169,7 +169,8 @@ authDb.prepare(`CREATE TABLE IF NOT EXISTS "redeem_code_uses" (
     "user_id" INTEGER NOT NULL,
     "redeemed_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (code_id) REFERENCES redeem_codes(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    UNIQUE(code_id, user_id)
 )`).run();
 
 // Create user methods
@@ -216,7 +217,10 @@ const userMethods = {
     },
 
     async getUserByPterodactylId(pterodactylId) {
-        const stmt = authDb.prepare('SELECT * FROM users WHERE pterodactyl_id = ?');
+        const stmt = authDb.prepare(`
+            SELECT * FROM users 
+            WHERE pterodactyl_id = ?
+        `);
         return stmt.get(pterodactylId);
     },
 
@@ -485,16 +489,25 @@ const redeemCodeMethods = {
     async createRedeemCode(codeData) {
         const stmt = authDb.prepare(`
             INSERT INTO redeem_codes (
-                code, credits_amount, max_uses, expires_at, created_by
-            ) VALUES (?, ?, ?, ?, ?)
+                code, credits_amount, max_uses, expires_at, created_by, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?)
         `);
         
+        // Verify user exists before creating code
+        const userCheck = authDb.prepare('SELECT id FROM users WHERE pterodactyl_id = ?');
+        const user = userCheck.get(codeData.created_by);
+        
+        if (!user) {
+            throw new Error('Invalid user ID - User does not exist');
+        }
+
         return stmt.run(
             codeData.code,
             codeData.credits_amount,
             codeData.max_uses,
             codeData.expires_at,
-            codeData.created_by
+            user.id, // Use the internal user ID
+            codeData.created_at
         );
     },
 
@@ -509,28 +522,39 @@ const redeemCodeMethods = {
     },
 
     async getAllRedeemCodes() {
-        const stmt = authDb.prepare('SELECT * FROM redeem_codes ORDER BY created_at DESC');
+        const stmt = authDb.prepare(`
+            SELECT rc.*, 
+                   COUNT(rcu.id) as uses_count 
+            FROM redeem_codes rc 
+            LEFT JOIN redeem_code_uses rcu ON rc.id = rcu.code_id 
+            GROUP BY rc.id 
+            ORDER BY rc.created_at DESC
+        `);
         return stmt.all();
     },
 
     async getActiveRedeemCodes() {
         const stmt = authDb.prepare(`
-            SELECT * FROM redeem_codes 
-            WHERE (expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP)
-            AND uses_count < max_uses
-            ORDER BY created_at DESC
+            SELECT rc.*, 
+                   COUNT(rcu.id) as uses_count 
+            FROM redeem_codes rc 
+            LEFT JOIN redeem_code_uses rcu ON rc.id = rcu.code_id 
+            WHERE (rc.expires_at IS NULL OR rc.expires_at > CURRENT_TIMESTAMP)
+            GROUP BY rc.id 
+            HAVING uses_count < rc.max_uses
+            ORDER BY rc.created_at DESC
         `);
         return stmt.all();
     },
 
-    async incrementCodeUses(codeId) {
-        const stmt = authDb.prepare(`
-            UPDATE redeem_codes 
-            SET uses_count = uses_count + 1,
-                updated_at = CURRENT_TIMESTAMP
-            WHERE id = ?
-        `);
-        return stmt.run(codeId);
+    async deleteRedeemCode(id) {
+        // First delete all uses of this code
+        const deleteUses = authDb.prepare('DELETE FROM redeem_code_uses WHERE code_id = ?');
+        deleteUses.run(id);
+
+        // Then delete the code itself
+        const deleteCode = authDb.prepare('DELETE FROM redeem_codes WHERE id = ?');
+        return deleteCode.run(id);
     },
 
     async recordCodeUse(codeId, userId) {
@@ -551,9 +575,26 @@ const redeemCodeMethods = {
         return result.count > 0;
     },
 
-    async deleteRedeemCode(id) {
-        const stmt = authDb.prepare('DELETE FROM redeem_codes WHERE id = ?');
-        return stmt.run(id);
+    async incrementCodeUses(codeId) {
+        const stmt = authDb.prepare(`
+            UPDATE redeem_codes 
+            SET uses_count = uses_count + 1,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        `);
+        return stmt.run(codeId);
+    },
+
+    async getUserRedemptionHistory(userId) {
+        const stmt = authDb.prepare(`
+            SELECT rc.code, rc.credits_amount, rcu.redeemed_at
+            FROM redeem_code_uses rcu
+            JOIN redeem_codes rc ON rcu.code_id = rc.id
+            WHERE rcu.user_id = ?
+            ORDER BY rcu.redeemed_at DESC
+            LIMIT 10
+        `);
+        return stmt.all(userId);
     }
 };
 
