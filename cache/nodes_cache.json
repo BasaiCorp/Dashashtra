@@ -12857,8 +12857,8 @@
       "created_at": "2025-05-01T10:49:50+00:00",
       "updated_at": "2025-05-03T12:08:11+00:00",
       "allocated_resources": {
-        "memory": 127860,
-        "disk": 381764
+        "memory": 129884,
+        "disk": 386812
       },
       "relationships": {
         "allocations": {
@@ -19054,7 +19054,7 @@
                 "alias": "fr1.sriyannodes.cloud",
                 "port": 26128,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -24236,6 +24236,61 @@
                 },
                 "updated_at": "2025-05-04T13:39:15+00:00",
                 "created_at": "2025-05-04T13:37:51+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 180,
+                "external_id": null,
+                "uuid": "35aa3532-0b7b-4203-a075-3db6d1fef61f",
+                "identifier": "35aa3532",
+                "name": "second test",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 2024,
+                  "swap": 0,
+                  "disk": 5048,
+                  "io": 500,
+                  "cpu": 300,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 1,
+                  "allocations": 1,
+                  "backups": 1
+                },
+                "user": 98,
+                "node": 10,
+                "allocation": 6197,
+                "nest": 5,
+                "egg": 15,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_17",
+                  "installed": 1,
+                  "environment": {
+                    "GIT_ADDRESS": "",
+                    "BRANCH": "",
+                    "USER_UPLOAD": "0",
+                    "AUTO_UPDATE": "0",
+                    "NODE_PACKAGES": "",
+                    "USERNAME": "",
+                    "ACCESS_TOKEN": "",
+                    "UNNODE_PACKAGES": "",
+                    "MAIN_FILE": "index.js",
+                    "NODE_ARGS": "",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "FRANCE",
+                    "P_SERVER_UUID": "35aa3532-0b7b-4203-a075-3db6d1fef61f",
+                    "P_SERVER_ALLOCATION_LIMIT": 1
+                  }
+                },
+                "updated_at": "2025-05-06T08:00:09+00:00",
+                "created_at": "2025-05-06T07:59:25+00:00"
               }
             }
           ]

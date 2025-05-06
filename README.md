@@ -1,19 +1,26 @@
-# Dashactyl 0.4 archive
+# Sriyan Nodes Dashboard
 
-Dashactyl is a client area, which allows users to split resources throughout multiple servers on the Pterodactyl Panel, and uses a Discord OAuth2 as a login system.
+A powerful and modern dashboard for managing server resources and hosting services. This proprietary dashboard allows users to efficiently manage and distribute resources across multiple servers on the Pterodactyl Panel, integrated with Discord OAuth2 for secure authentication.
 
-## This is an archive!
+## Features
 
-> "I decided to make this repository public again! I'm still suprisied to see people making awesome forks of this project, even though I've stopped working on this project eons ago" - [@real2two](https://github.com/real2two)
+- Seamless resource management across multiple servers
+- Discord OAuth2 integration for secure user authentication
+- Modern and intuitive user interface
+- Real-time server statistics and monitoring
+- Advanced resource allocation system
+- User-friendly control panel
 
-# Wiki
+## Proprietary Software
 
-Need to install Dashactyl? Need API documentations? Need a place to find themes?
+This software is proprietary and confidential. All rights reserved © Sriyan Nodes.
 
-Check out the wiki! https://github.com/real2two/dashactyl/wiki
+No part of this software may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of Sriyan Nodes.
 
-# Disclaimer
+## Legal Notice
 
-We are not responsible for any damages.
+This software is protected by copyright law and international treaties. Unauthorized reproduction or distribution of this software, or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under law.
 
-You should not download anything from the develop branch! These files are not ready for production yet, and will be soon!
+## Support
+
+For support inquiries, please contact the Sriyan Nodes support team.

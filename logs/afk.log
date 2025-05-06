@@ -440,3 +440,11 @@
 2025-05-06T07:48:24.167Z [checkAuth] Authentication successful for user ID: 1
 2025-05-06T07:48:24.169Z [EARN] User 1 requesting balance
 2025-05-06T07:48:24.171Z [EARN] User 1 balance check: 3198551
+2025-05-06T08:04:10.953Z [checkAuth] Checking auth - Session exists: true
+2025-05-06T08:04:10.987Z [checkAuth] Authentication successful for user ID: 1
+2025-05-06T08:04:10.988Z [EARN] User 1 requesting balance
+2025-05-06T08:04:10.989Z [EARN] User 1 balance check: 3198649
+2025-05-06T08:04:17.398Z [checkAuth] Checking auth - Session exists: true
+2025-05-06T08:04:17.398Z [checkAuth] Authentication successful for user ID: 1
+2025-05-06T08:04:17.398Z [EARN] User 1 requesting balance
+2025-05-06T08:04:17.399Z [EARN] User 1 balance check: 3198649

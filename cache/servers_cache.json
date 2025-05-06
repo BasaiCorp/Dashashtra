@@ -8518,5 +8518,152 @@
         }
       }
     }
+  },
+  {
+    "object": "server",
+    "attributes": {
+      "id": 180,
+      "external_id": null,
+      "uuid": "35aa3532-0b7b-4203-a075-3db6d1fef61f",
+      "identifier": "35aa3532",
+      "name": "second test",
+      "description": "",
+      "status": null,
+      "suspended": false,
+      "limits": {
+        "memory": 2024,
+        "swap": 0,
+        "disk": 5048,
+        "io": 500,
+        "cpu": 300,
+        "threads": null,
+        "oom_disabled": true
+      },
+      "feature_limits": {
+        "databases": 1,
+        "allocations": 1,
+        "backups": 1
+      },
+      "user": 98,
+      "node": 10,
+      "allocation": 6197,
+      "nest": 5,
+      "egg": 15,
+      "container": {
+        "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
+        "image": "ghcr.io/pterodactyl/yolks:java_17",
+        "installed": 1,
+        "environment": {
+          "GIT_ADDRESS": "",
+          "BRANCH": "",
+          "USER_UPLOAD": "0",
+          "AUTO_UPDATE": "0",
+          "NODE_PACKAGES": "",
+          "USERNAME": "",
+          "ACCESS_TOKEN": "",
+          "UNNODE_PACKAGES": "",
+          "MAIN_FILE": "index.js",
+          "NODE_ARGS": "",
+          "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -jar {{SERVER_JARFILE}}",
+          "P_SERVER_LOCATION": "FRANCE",
+          "P_SERVER_UUID": "35aa3532-0b7b-4203-a075-3db6d1fef61f",
+          "P_SERVER_ALLOCATION_LIMIT": 1
+        }
+      },
+      "updated_at": "2025-05-06T08:00:09+00:00",
+      "created_at": "2025-05-06T07:59:25+00:00",
+      "relationships": {
+        "allocations": {
+          "object": "list",
+          "data": [
+            {
+              "object": "allocation",
+              "attributes": {
+                "id": 6197,
+                "ip": "0.0.0.0",
+                "alias": "fr1.sriyannodes.cloud",
+                "port": 26128,
+                "notes": null,
+                "assigned": true
+              }
+            }
+          ]
+        },
+        "user": {
+          "object": "user",
+          "attributes": {
+            "id": 98,
+            "external_id": null,
+            "uuid": "cd33332e-85dd-41d1-b25a-fa7ddb8869b4",
+            "username": "prathmesh",
+            "email": "prathmeshbarot2009@gmail.com",
+            "first_name": "admin",
+            "last_name": "3",
+            "language": "en",
+            "root_admin": true,
+            "2fa": false,
+            "created_at": "2025-04-29T06:50:58+00:00",
+            "updated_at": "2025-05-03T08:39:13+00:00"
+          }
+        },
+        "nest": {
+          "object": "nest",
+          "attributes": {
+            "id": 5,
+            "uuid": "922f1c32-bc6f-48f5-85c0-195b79cf2dff",
+            "author": "sayanx262@gmail.com",
+            "name": "Discord",
+            "description": null,
+            "created_at": "2025-04-11T11:02:55+00:00",
+            "updated_at": "2025-04-11T11:02:55+00:00"
+          }
+        },
+        "egg": {
+          "object": "egg",
+          "attributes": {
+            "id": 15,
+            "uuid": "ebd7f8da-ae94-4a2e-8bea-cb870ada7208",
+            "name": "node.js generic",
+            "nest": 5,
+            "author": "parker@parkervcp.com",
+            "description": "a generic node.js egg\r\n\r\nThis will clone a git repo. it defaults to master if no branch is specified.\r\n\r\nInstalls the node_modules on install. If you set user_upload then I assume you know what you are doing.",
+            "docker_image": "ghcr.io/parkervcp/yolks:nodejs_21",
+            "docker_images": {
+              "Nodejs 21": "ghcr.io/parkervcp/yolks:nodejs_21",
+              "Nodejs 20": "ghcr.io/parkervcp/yolks:nodejs_20",
+              "Nodejs 19": "ghcr.io/parkervcp/yolks:nodejs_19",
+              "Nodejs 18": "ghcr.io/parkervcp/yolks:nodejs_18",
+              "Nodejs 17": "ghcr.io/parkervcp/yolks:nodejs_17",
+              "Nodejs 16": "ghcr.io/parkervcp/yolks:nodejs_16",
+              "Nodejs 14": "ghcr.io/parkervcp/yolks:nodejs_14",
+              "Nodejs 12": "ghcr.io/parkervcp/yolks:nodejs_12"
+            },
+            "config": {
+              "files": {},
+              "startup": {
+                "done": [
+                  "change this text 1",
+                  "change this text 2"
+                ]
+              },
+              "stop": "^C",
+              "logs": [],
+              "file_denylist": [],
+              "extends": null
+            },
+            "startup": "if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == \"1\" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ \"${MAIN_FILE}\" == \"*.js\" ]]; then /usr/local/bin/node \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; else /usr/local/bin/ts-node --esm \"/home/container/${MAIN_FILE}\" ${NODE_ARGS}; fi",
+            "script": {
+              "privileged": true,
+              "install": "#!/bin/bash\r\n# NodeJS App Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napt update\r\napt install -y git curl jq file unzip make gcc g++ python3 python3-dev python3-pip libtool\r\n\r\necho -e \"updating npm. please wait...\"\r\nnpm install npm@latest --location=global\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\nif [ \"${USER_UPLOAD}\" == \"true\" ] || [ \"${USER_UPLOAD}\" == \"1\" ]; then\r\n    echo -e \"assuming user knows what they are doing have a good day.\"\r\n    exit 0\r\nfi\r\n\r\n## add git ending if it's not on the address\r\nif [[ ${GIT_ADDRESS} != *.git ]]; then\r\n    GIT_ADDRESS=${GIT_ADDRESS}.git\r\nfi\r\n\r\nif [ -z \"${USERNAME}\" ] && [ -z \"${ACCESS_TOKEN}\" ]; then\r\n    echo -e \"using anon api call\"\r\nelse\r\n    GIT_ADDRESS=\"https://${USERNAME}:${ACCESS_TOKEN}@$(echo -e ${GIT_ADDRESS} | cut -d/ -f3-)\"\r\nfi\r\n\r\n## pull git js repo\r\nif [ \"$(ls -A /mnt/server)\" ]; then\r\n    echo -e \"/mnt/server directory is not empty.\"\r\n    if [ -d .git ]; then\r\n        echo -e \".git directory exists\"\r\n        if [ -f .git/config ]; then\r\n            echo -e \"loading info from git config\"\r\n            ORIGIN=$(git config --get remote.origin.url)\r\n        else\r\n            echo -e \"files found with no git config\"\r\n            echo -e \"closing out without touching things to not break anything\"\r\n            exit 10\r\n        fi\r\n    fi\r\n\r\n    if [ \"${ORIGIN}\" == \"${GIT_ADDRESS}\" ]; then\r\n        echo \"pulling latest from github\"\r\n        git pull\r\n    fi\r\nelse\r\n    echo -e \"/mnt/server is empty.\\ncloning files into repo\"\r\n    if [ -z ${BRANCH} ]; then\r\n        echo -e \"cloning default branch\"\r\n        git clone ${GIT_ADDRESS} .\r\n    else\r\n        echo -e \"cloning ${BRANCH}'\"\r\n        git clone --single-branch --branch ${BRANCH} ${GIT_ADDRESS} .\r\n    fi\r\n\r\nfi\r\n\r\necho \"Installing nodejs packages\"\r\nif [[ ! -z ${NODE_PACKAGES} ]]; then\r\n    /usr/local/bin/npm install ${NODE_PACKAGES}\r\nfi\r\n\r\nif [ -f /mnt/server/package.json ]; then\r\n    /usr/local/bin/npm install --production\r\nfi\r\n\r\necho -e \"install complete\"\r\nexit 0",
+              "entry": "bash",
+              "container": "node:18-bookworm-slim",
+              "extends": null
+            },
+            "created_at": "2025-04-11T11:03:05+00:00",
+            "updated_at": "2025-04-11T11:03:05+00:00"
+          }
+        }
+      }
+    }
   }
 ]
