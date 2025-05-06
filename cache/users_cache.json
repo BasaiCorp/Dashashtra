@@ -5421,5 +5421,78 @@
         }
       }
     }
+  },
+  {
+    "object": "user",
+    "attributes": {
+      "id": 138,
+      "external_id": null,
+      "uuid": "db3b7c43-f5f4-467b-9b9b-065a33726873",
+      "username": "hermeet",
+      "email": "hs7878019275@gmail.com",
+      "first_name": "Cheap",
+      "last_name": "User",
+      "language": "en",
+      "root_admin": false,
+      "2fa": false,
+      "created_at": "2025-05-06T09:48:12+00:00",
+      "updated_at": "2025-05-06T09:48:12+00:00",
+      "relationships": {
+        "servers": {
+          "object": "list",
+          "data": [
+            {
+              "object": "server",
+              "attributes": {
+                "id": 181,
+                "external_id": null,
+                "uuid": "f8996c31-fc60-4897-8c2c-cfcb032a5745",
+                "identifier": "f8996c31",
+                "name": "JAYDEEP_NETWORK",
+                "description": "Renew date - 6 june",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 12000,
+                  "swap": 0,
+                  "disk": 60000,
+                  "io": 500,
+                  "cpu": 350,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
+                },
+                "user": 138,
+                "node": 11,
+                "allocation": 6573,
+                "nest": 1,
+                "egg": 1,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "IN",
+                    "P_SERVER_UUID": "f8996c31-fc60-4897-8c2c-cfcb032a5745",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
+                  }
+                },
+                "updated_at": "2025-05-06T10:02:50+00:00",
+                "created_at": "2025-05-06T09:50:27+00:00"
+              }
+            }
+          ]
+        }
+      }
+    }
   }
 ]

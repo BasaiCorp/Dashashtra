@@ -448,3 +448,22 @@
 2025-05-06T08:04:17.398Z [checkAuth] Authentication successful for user ID: 1
 2025-05-06T08:04:17.398Z [EARN] User 1 requesting balance
 2025-05-06T08:04:17.399Z [EARN] User 1 balance check: 3198649
+2025-05-06T10:07:33.003Z [checkAuth] Checking auth - Session exists: true
+2025-05-06T10:07:33.048Z [checkAuth] Authentication successful for user ID: 1
+2025-05-06T10:07:33.049Z [EARN] User 1 requesting balance
+2025-05-06T10:07:33.051Z [EARN] User 1 balance check: 3198524
+2025-05-06T10:09:13.978Z [checkAuth] Checking auth - Session exists: true
+2025-05-06T10:09:14.003Z [checkAuth] Authentication successful for user ID: 1
+2025-05-06T10:09:14.004Z [EARN] User 1 requesting balance
+2025-05-06T10:09:14.006Z [EARN] User 1 balance check: 3198524
+2025-05-06T10:09:15.354Z [checkAuth] Checking auth - Session exists: true
+2025-05-06T10:09:15.354Z [checkAuth] Authentication successful for user ID: 1
+2025-05-06T10:09:15.355Z [EARN] User 1 requesting balance
+2025-05-06T10:09:15.357Z [EARN] User 1 balance check: 3198524
+2025-05-06T10:13:47.088Z [checkAuth] Checking auth - Session exists: true
+2025-05-06T10:13:47.111Z [checkAuth] Authentication successful for user ID: 1
+2025-05-06T10:13:47.113Z [AFK] User 1 attempting to claim AFK reward
+2025-05-06T10:13:47.115Z [AFK] User 1 earned 2 credits
+2025-05-06T10:13:47.117Z [AFK] User 1 current balance: 3198274
+2025-05-06T10:13:47.126Z [AFK] Added 2 credits to user 1
+2025-05-06T10:13:47.126Z [AFK] User 1 new balance: 3198276

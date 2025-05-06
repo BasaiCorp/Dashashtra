@@ -165,16 +165,16 @@
           "_comment": "The cost is the price in coins for each resource unit",
           "enabled": true,
           "ram": {
-            "cost": 100
+            "cost": 200
           },
           "disk": {
-            "cost": 125
+            "cost": 160
           },
           "cpu": {
-            "cost": 150
+            "cost": 250
           },
           "servers": {
-            "cost": 200
+            "cost": 500
           }
         }
       }
