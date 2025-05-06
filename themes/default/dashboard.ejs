@@ -562,6 +562,12 @@
 
 		<!-- Right side - User Menu and Notifications -->
 		<div class="flex items-center gap-4">
+            <!-- Credits Display -->
+			<div class="flex items-center bg-dark-lighter px-3 py-1.5 rounded-lg">
+				<i class="fas fa-coins text-yellow-400 mr-2"></i>
+				<span id="header-balance" class="text-white font-medium"><%= typeof coins !== 'undefined' ? coins : '0' %></span>
+			</div>
+
 			<!-- Notifications -->
 			<div class="relative">
 				<button class="p-2 text-gray-400 hover:text-white transition-colors duration-200">
@@ -663,6 +669,12 @@
 						<a href="/store" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white">
 							<i class="fas fa-shopping-cart w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
 							<span class="ml-3">Store</span>
+						</a>
+					</li>
+					<li>
+						<a href="/create" class="menu-item flex items-center p-3 text-gray-300 rounded-lg hover:text-white <%= (typeof currentPage !== 'undefined' && currentPage === 'create') ? 'active' : '' %>">
+							<i class="fas fa-plus w-5 h-5 text-gray-400 transition duration-75 group-hover:text-primary-400"></i>
+							<span class="ml-3">Create</span>
 						</a>
 					</li>
 					<li>
