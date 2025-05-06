@@ -316,7 +316,7 @@
                 "external_id": null,
                 "uuid": "552cd92e-cb52-4de1-bde9-7ee12f1dbc97",
                 "identifier": "552cd92e",
-                "name": "Youtuber Plan [ yashraj ]",
+                "name": "Atris SMP",
                 "description": "",
                 "status": null,
                 "suspended": false,
@@ -354,7 +354,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 2
                   }
                 },
-                "updated_at": "2025-05-03T12:24:52+00:00",
+                "updated_at": "2025-05-05T16:14:35+00:00",
                 "created_at": "2025-05-03T11:25:08+00:00"
               }
             },
@@ -491,8 +491,8 @@
       "created_at": "2025-04-23T15:25:33+00:00",
       "updated_at": "2025-04-23T15:52:43+00:00",
       "allocated_resources": {
-        "memory": 282880,
-        "disk": 1218904
+        "memory": 276652,
+        "disk": 1177464
       },
       "relationships": {
         "allocations": {
@@ -726,7 +726,7 @@
                 "alias": "in1.sriyannodes.cloud",
                 "port": 25585,
                 "notes": null,
-                "assigned": true
+                "assigned": false
               }
             },
             {
@@ -1859,7 +1859,7 @@
                 "alias": "in1.sriyannodes.cloud",
                 "port": 25688,
                 "notes": null,
-                "assigned": true
+                "assigned": false
               }
             },
             {
@@ -12498,11 +12498,11 @@
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 6000,
+                  "memory": 12000,
                   "swap": 0,
-                  "disk": 20000,
+                  "disk": 40000,
                   "io": 500,
-                  "cpu": 200,
+                  "cpu": 300,
                   "threads": null,
                   "oom_disabled": true
                 },
@@ -12531,7 +12531,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 3
                   }
                 },
-                "updated_at": "2025-05-04T12:26:38+00:00",
+                "updated_at": "2025-05-05T13:31:19+00:00",
                 "created_at": "2025-05-01T13:28:13+00:00"
               }
             },
@@ -12582,55 +12582,6 @@
                 },
                 "updated_at": "2025-05-03T16:18:06+00:00",
                 "created_at": "2025-05-01T18:36:25+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
-                "id": 142,
-                "external_id": null,
-                "uuid": "00ad9a58-063b-4e58-9557-1f3a8248ace5",
-                "identifier": "00ad9a58",
-                "name": "diamond plan (l6ommm)",
-                "description": "renew date - 2 june 2025",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 12228,
-                  "swap": 0,
-                  "disk": 61440,
-                  "io": 500,
-                  "cpu": 350,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 115,
-                "node": 9,
-                "allocation": 3724,
-                "nest": 1,
-                "egg": 1,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.21.4",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "IN",
-                    "P_SERVER_UUID": "00ad9a58-063b-4e58-9557-1f3a8248ace5",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
-                  }
-                },
-                "updated_at": "2025-05-03T10:50:55+00:00",
-                "created_at": "2025-05-02T14:05:28+00:00"
               }
             },
             {
@@ -12906,8 +12857,8 @@
       "created_at": "2025-05-01T10:49:50+00:00",
       "updated_at": "2025-05-03T12:08:11+00:00",
       "allocated_resources": {
-        "memory": 151860,
-        "disk": 471764
+        "memory": 127860,
+        "disk": 381764
       },
       "relationships": {
         "allocations": {
@@ -13130,7 +13081,7 @@
                 "alias": "fr1.sriyannodes.cloud",
                 "port": 25585,
                 "notes": null,
-                "assigned": true
+                "assigned": false
               }
             },
             {
@@ -23353,55 +23304,6 @@
             {
               "object": "server",
               "attributes": {
-                "id": 101,
-                "external_id": null,
-                "uuid": "ff4a656e-43ca-4b37-85ad-05dcd367ed7b",
-                "identifier": "ff4a656e",
-                "name": "Boost reward 2nd tier [ not drunk ]",
-                "description": "[ renew till - boost ]",
-                "status": null,
-                "suspended": false,
-                "limits": {
-                  "memory": 24000,
-                  "swap": 4096,
-                  "disk": 90000,
-                  "io": 500,
-                  "cpu": 400,
-                  "threads": null,
-                  "oom_disabled": true
-                },
-                "feature_limits": {
-                  "databases": 5,
-                  "allocations": 5,
-                  "backups": 5
-                },
-                "user": 80,
-                "node": 10,
-                "allocation": 5654,
-                "nest": 1,
-                "egg": 1,
-                "container": {
-                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_21",
-                  "installed": 1,
-                  "environment": {
-                    "MINECRAFT_VERSION": "1.21",
-                    "SERVER_JARFILE": "server.jar",
-                    "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
-                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "FRANCE",
-                    "P_SERVER_UUID": "ff4a656e-43ca-4b37-85ad-05dcd367ed7b",
-                    "P_SERVER_ALLOCATION_LIMIT": 5
-                  }
-                },
-                "updated_at": "2025-05-04T07:05:43+00:00",
-                "created_at": "2025-04-23T11:42:21+00:00"
-              }
-            },
-            {
-              "object": "server",
-              "attributes": {
                 "id": 146,
                 "external_id": null,
                 "uuid": "8883b7f8-c91f-425c-a657-db847eadbe50",
@@ -23581,10 +23483,10 @@
                   "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "MINECRAFT_VERSION": "1.21.4",
+                    "MINECRAFT_VERSION": "1.8.8",
                     "SERVER_JARFILE": "server.jar",
                     "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
+                    "BUILD_NUMBER": "1.8.8",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "FRANCE",
                     "P_SERVER_UUID": "085dba39-dab3-4f87-9d43-fb37050e1bb0",
@@ -24365,8 +24267,8 @@
       "created_at": "2025-05-05T11:38:39+00:00",
       "updated_at": "2025-05-05T11:38:39+00:00",
       "allocated_resources": {
-        "memory": 0,
-        "disk": 0
+        "memory": 38228,
+        "disk": 161440
       },
       "relationships": {
         "allocations": {
@@ -24380,7 +24282,7 @@
                 "alias": "in2.sriyannodes.cloud",
                 "port": 25566,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -24391,7 +24293,7 @@
                 "alias": "in2.sriyannodes.cloud",
                 "port": 25567,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -24402,7 +24304,7 @@
                 "alias": "in2.sriyannodes.cloud",
                 "port": 25568,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -35376,7 +35278,155 @@
         },
         "servers": {
           "object": "list",
-          "data": []
+          "data": [
+            {
+              "object": "server",
+              "attributes": {
+                "id": 101,
+                "external_id": null,
+                "uuid": "ff4a656e-43ca-4b37-85ad-05dcd367ed7b",
+                "identifier": "ff4a656e",
+                "name": "Boost reward 2nd tier [ not drunk ]",
+                "description": "[ renew till - boost ]",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 24000,
+                  "swap": 4096,
+                  "disk": 90000,
+                  "io": 500,
+                  "cpu": 400,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
+                },
+                "user": 80,
+                "node": 11,
+                "allocation": 6572,
+                "nest": 1,
+                "egg": 1,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "1.21",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "IN",
+                    "P_SERVER_UUID": "ff4a656e-43ca-4b37-85ad-05dcd367ed7b",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
+                  }
+                },
+                "updated_at": "2025-05-05T13:19:27+00:00",
+                "created_at": "2025-04-23T11:42:21+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 142,
+                "external_id": null,
+                "uuid": "00ad9a58-063b-4e58-9557-1f3a8248ace5",
+                "identifier": "00ad9a58",
+                "name": "diamond plan (l6ommm)",
+                "description": "renew date - 2 june 2025",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 12228,
+                  "swap": 0,
+                  "disk": 61440,
+                  "io": 500,
+                  "cpu": 350,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 5,
+                  "allocations": 5,
+                  "backups": 5
+                },
+                "user": 115,
+                "node": 11,
+                "allocation": 6571,
+                "nest": 1,
+                "egg": 1,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "1.21.4",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "IN",
+                    "P_SERVER_UUID": "00ad9a58-063b-4e58-9557-1f3a8248ace5",
+                    "P_SERVER_ALLOCATION_LIMIT": 5
+                  }
+                },
+                "updated_at": "2025-05-05T12:47:07+00:00",
+                "created_at": "2025-05-02T14:05:28+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 178,
+                "external_id": null,
+                "uuid": "9c0f628b-1613-488f-9614-7cc0fa98f7b0",
+                "identifier": "9c0f628b",
+                "name": "Coal plan [ OLHUT ]",
+                "description": "[ renew date - 5 apr ]",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 2000,
+                  "swap": 0,
+                  "disk": 10000,
+                  "io": 500,
+                  "cpu": 100,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 2,
+                  "allocations": 2,
+                  "backups": 2
+                },
+                "user": 136,
+                "node": 11,
+                "allocation": 6570,
+                "nest": 1,
+                "egg": 1,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "IN",
+                    "P_SERVER_UUID": "9c0f628b-1613-488f-9614-7cc0fa98f7b0",
+                    "P_SERVER_ALLOCATION_LIMIT": 2
+                  }
+                },
+                "updated_at": "2025-05-05T12:39:26+00:00",
+                "created_at": "2025-05-05T12:38:57+00:00"
+              }
+            }
+          ]
         }
       }
     }

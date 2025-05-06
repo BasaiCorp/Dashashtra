@@ -106,6 +106,12 @@ userCoins.loadCoinsData();
 userCoins.saveCoinsData();
 console.log(chalk.green("[COINS] Coins system initialized successfully."));
 
+// Initialize required variables fetcher
+console.log(chalk.blue("[VARIABLES] Initializing egg variables fetcher..."));
+const eggVariables = require('./api/fetch_required_variables.js');
+module.exports.eggVariables = eggVariables;
+console.log(chalk.green("[VARIABLES] Egg variables fetcher initialized successfully."));
+
 // Initialize Discord bot if enabled
 if (settings.api && settings.api.client && settings.api.client.bot && settings.api.client.bot.enabled) {
   console.log(chalk.blue("[BOT] Initializing Discord bot..."));
@@ -578,9 +584,13 @@ const serverRoutes = require('./api/servers.js');
 const { router: earnRouter } = require('./api/earn.js');
 const { router: storeRouter } = require('./api/store.js');
 const { router: coinsRouter } = require('./api/user_coins.js');
+const { router: variablesRouter } = require('./api/fetch_required_variables.js');
 
 // Register API routes - moved after body parser middleware
 app.use('/api/servers', serverRoutes.router);
+
+// Register variables routes
+app.use('/api', variablesRouter);
 
 // Register earn routes correctly - this is the fix to ensure the API endpoints work properly
 app.use('/', earnRouter);

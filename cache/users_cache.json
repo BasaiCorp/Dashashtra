@@ -1576,10 +1576,10 @@
                   "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
-                    "MINECRAFT_VERSION": "1.21.4",
+                    "MINECRAFT_VERSION": "1.8.8",
                     "SERVER_JARFILE": "server.jar",
                     "DL_PATH": "",
-                    "BUILD_NUMBER": "latest",
+                    "BUILD_NUMBER": "1.8.8",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
                     "P_SERVER_LOCATION": "FRANCE",
                     "P_SERVER_UUID": "085dba39-dab3-4f87-9d43-fb37050e1bb0",
@@ -2346,8 +2346,8 @@
                   "backups": 5
                 },
                 "user": 80,
-                "node": 10,
-                "allocation": 5654,
+                "node": 11,
+                "allocation": 6572,
                 "nest": 1,
                 "egg": 1,
                 "container": {
@@ -2360,12 +2360,12 @@
                     "DL_PATH": "",
                     "BUILD_NUMBER": "latest",
                     "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                    "P_SERVER_LOCATION": "FRANCE",
+                    "P_SERVER_LOCATION": "IN",
                     "P_SERVER_UUID": "ff4a656e-43ca-4b37-85ad-05dcd367ed7b",
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-05-04T07:05:43+00:00",
+                "updated_at": "2025-05-05T13:19:27+00:00",
                 "created_at": "2025-04-23T11:42:21+00:00"
               }
             },
@@ -3662,11 +3662,11 @@
                 "status": null,
                 "suspended": false,
                 "limits": {
-                  "memory": 6000,
+                  "memory": 12000,
                   "swap": 0,
-                  "disk": 20000,
+                  "disk": 40000,
                   "io": 500,
-                  "cpu": 200,
+                  "cpu": 300,
                   "threads": null,
                   "oom_disabled": true
                 },
@@ -3695,7 +3695,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 3
                   }
                 },
-                "updated_at": "2025-05-04T12:26:38+00:00",
+                "updated_at": "2025-05-05T13:31:19+00:00",
                 "created_at": "2025-05-01T13:28:13+00:00"
               }
             }
@@ -3918,7 +3918,7 @@
                 "external_id": null,
                 "uuid": "552cd92e-cb52-4de1-bde9-7ee12f1dbc97",
                 "identifier": "552cd92e",
-                "name": "Youtuber Plan [ yashraj ]",
+                "name": "Atris SMP",
                 "description": "",
                 "status": null,
                 "suspended": false,
@@ -3956,7 +3956,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 2
                   }
                 },
-                "updated_at": "2025-05-03T12:24:52+00:00",
+                "updated_at": "2025-05-05T16:14:35+00:00",
                 "created_at": "2025-05-03T11:25:08+00:00"
               }
             }
@@ -4056,8 +4056,8 @@
                   "backups": 5
                 },
                 "user": 115,
-                "node": 9,
-                "allocation": 3724,
+                "node": 11,
+                "allocation": 6571,
                 "nest": 1,
                 "egg": 1,
                 "container": {
@@ -4075,7 +4075,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-05-03T10:50:55+00:00",
+                "updated_at": "2025-05-05T12:47:07+00:00",
                 "created_at": "2025-05-02T14:05:28+00:00"
               }
             }
@@ -5217,6 +5217,102 @@
               }
             }
           ]
+        }
+      }
+    }
+  },
+  {
+    "object": "user",
+    "attributes": {
+      "id": 136,
+      "external_id": null,
+      "uuid": "a7d0d76f-bfd7-45d7-ab36-b2c207cb33b2",
+      "username": "ohlut",
+      "email": "lalitgurjar873@gmail.com",
+      "first_name": "Lalit",
+      "last_name": "Coal",
+      "language": "en",
+      "root_admin": false,
+      "2fa": false,
+      "created_at": "2025-05-05T12:38:01+00:00",
+      "updated_at": "2025-05-05T12:38:01+00:00",
+      "relationships": {
+        "servers": {
+          "object": "list",
+          "data": [
+            {
+              "object": "server",
+              "attributes": {
+                "id": 178,
+                "external_id": null,
+                "uuid": "9c0f628b-1613-488f-9614-7cc0fa98f7b0",
+                "identifier": "9c0f628b",
+                "name": "Coal plan [ OLHUT ]",
+                "description": "[ renew date - 5 apr ]",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 2000,
+                  "swap": 0,
+                  "disk": 10000,
+                  "io": 500,
+                  "cpu": 100,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 2,
+                  "allocations": 2,
+                  "backups": 2
+                },
+                "user": 136,
+                "node": 11,
+                "allocation": 6570,
+                "nest": 1,
+                "egg": 1,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "IN",
+                    "P_SERVER_UUID": "9c0f628b-1613-488f-9614-7cc0fa98f7b0",
+                    "P_SERVER_ALLOCATION_LIMIT": 2
+                  }
+                },
+                "updated_at": "2025-05-05T12:39:26+00:00",
+                "created_at": "2025-05-05T12:38:57+00:00"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "object": "user",
+    "attributes": {
+      "id": 137,
+      "external_id": null,
+      "uuid": "fd96f98f-7612-4519-abce-d8c1f7faed5d",
+      "username": "gamerzastronmxo",
+      "email": "gamerzastron@gmail.com",
+      "first_name": "Server",
+      "last_name": "Subuser",
+      "language": "en",
+      "root_admin": false,
+      "2fa": false,
+      "created_at": "2025-05-05T18:28:02+00:00",
+      "updated_at": "2025-05-05T18:33:03+00:00",
+      "relationships": {
+        "servers": {
+          "object": "list",
+          "data": []
         }
       }
     }

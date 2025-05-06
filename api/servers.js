@@ -11,6 +11,7 @@ const path = require('path');
 const chalk = require('chalk');
 const userCoins = require('./user_coins.js');
 const eggHandler = require('./egg_handler.js');
+const eggVariables = require('./fetch_required_variables.js');
 
 // Helper function to convert hex to decimal
 function hexToDecimal(hex) {
@@ -152,6 +153,29 @@ router.post('/servers/create', async (req, res) => {
         // Get egg info
         let nest_id;
         let egg_id = egg; // Use the egg ID directly from the form
+
+        // Get required variables for this egg
+        try {
+            const requiredVariables = await eggVariables.getRequiredVariables(egg_id);
+            
+            // Check if all required variables are provided
+            if (requiredVariables.length > 0) {
+                console.log('[SERVER CREATE] Required variables for egg:', requiredVariables);
+                
+                // Check if all required variables are present in the form data
+                for (const variable of requiredVariables) {
+                    const envKey = variable.env_variable.toLowerCase();
+                    
+                    if (!req.body[envKey] && !variable.default_value) {
+                        console.log(`[SERVER CREATE] Missing required variable: ${variable.name} (${envKey})`);
+                        return res.redirect(`/create?err=MISSINGVARIABLE&missing=${envKey}`);
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('[SERVER CREATE] Error checking required variables:', error);
+            // Continue with server creation even if we couldn't check variables
+        }
 
         // Create server
         try {
