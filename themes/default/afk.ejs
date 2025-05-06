@@ -5,33 +5,41 @@ const currentPage = 'afk';
 // Set the page title
 const pageTitle = 'AFK Earnings - ' + (typeof extra !== 'undefined' && extra && extra.dashboard ? extra.dashboard.title : 'Dashboard');
 
-// Get AFK data from the API route
+// Get AFK data from the API route with proper defaults
 const afkData = typeof afkStats !== 'undefined' ? afkStats : {
     lastAfk: null,
     dailyAfkCount: 0,
     remainingAfk: 20,
-    timeUntilNextAfk: 0
+    timeUntilNextAfk: 0,
+    lastAfkReset: null
 };
 
-// Check if we need to reset daily count
+// Check if we need to reset daily count (at midnight UTC)
 const today = new Date().toISOString().split('T')[0];
-if (afkData.lastAfkReset !== today) {
+if (!afkData.lastAfkReset || afkData.lastAfkReset !== today) {
     afkData.dailyAfkCount = 0;
+    afkData.remainingAfk = 20;
     afkData.lastAfkReset = today;
 }
 
 // Calculate remaining AFK attempts for today
 const maxDailyAfk = 20;
-const remainingAfk = Math.max(0, maxDailyAfk - afkData.dailyAfkCount);
+const remainingAfk = Math.max(0, maxDailyAfk - (afkData.dailyAfkCount || 0));
 
-// Calculate time until next AFK is available
+// Calculate time until next AFK is available (in milliseconds)
 let timeUntilNextAfk = 0;
 if (afkData.lastAfk) {
     const lastAfkTime = new Date(afkData.lastAfk);
     const now = new Date();
     const timeDiff = now - lastAfkTime;
-    timeUntilNextAfk = Math.max(0, 60000 - timeDiff); // 60000ms = 1 minute
+    timeUntilNextAfk = Math.max(0, 60000 - timeDiff); // 60000ms = 1 minute cooldown
 }
+
+// Calculate time until daily reset
+const now = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
+const timeUntilReset = tomorrow - now;
 %>
 
 <!DOCTYPE html>
@@ -553,7 +561,7 @@ if (afkData.lastAfk) {
                                 <i class="fas fa-clock text-indigo-400"></i>
                                 <span class="text-gray-300">Remaining AFK Attempts:</span>
                             </div>
-                            <span class="font-medium text-white" data-afk-remaining><%= afkData.remainingAfk %>/20</span>
+                            <span class="font-medium text-white" data-afk-remaining><%= remainingAfk %>/20</span>
                         </div>
                         
                         <!-- Time Until Next AFK -->
@@ -562,7 +570,24 @@ if (afkData.lastAfk) {
                                 <i class="fas fa-hourglass-half text-yellow-400"></i>
                                 <span class="text-gray-300">Time Until Next AFK:</span>
                             </div>
-                            <span id="next-afk-time" class="font-medium text-white"><%= Math.ceil(afkData.timeUntilNextAfk / 1000) %>s</span>
+                            <span id="next-afk-time" class="font-medium text-white"><%= Math.ceil(timeUntilNextAfk / 1000) %>s</span>
+                        </div>
+
+                        <!-- Time Until Daily Reset -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-sync text-green-400"></i>
+                                <span class="text-gray-300">Daily Reset In:</span>
+                            </div>
+                            <span id="daily-reset-time" class="font-medium text-white"><%= Math.floor(timeUntilReset / 3600000) %>h <%= Math.floor((timeUntilReset % 3600000) / 60000) %>m</span>
+                        </div>
+
+                        <!-- Cooldown Status -->
+                        <div id="cooldown-status" class="<%= remainingAfk === 0 ? '' : 'hidden' %> mt-4 p-4 bg-red-500 bg-opacity-20 border border-red-600 rounded-lg">
+                            <p class="text-red-400 text-center">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                You've reached the daily limit of 20 AFK attempts. Please wait for the daily reset.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -583,23 +608,24 @@ if (afkData.lastAfk) {
         let remainingSeconds = 60; // 1 minute in seconds
         let isTimerRunning = false;
         let isVisible = true;
+        let dailyAttemptsRemaining = <%= remainingAfk %>;
+        let lastAfkTime = <%= afkData.lastAfk ? `new Date("${afkData.lastAfk}")` : 'null' %>;
         
         // DOM elements
         let timerElement;
         let progressRingCircle;
+        let cooldownStatus;
         
         document.addEventListener('DOMContentLoaded', function() {
             // Find DOM elements
             timerElement = document.getElementById('timer');
             progressRingCircle = document.getElementById('progress-ring-circle');
+            cooldownStatus = document.getElementById('cooldown-status');
             
             if (!timerElement) {
                 console.error('Timer element not found!');
                 return;
             }
-            
-            // Set initial timer value
-            timerElement.textContent = '1:00';
             
             // Initialize progress ring
             if (progressRingCircle) {
@@ -611,12 +637,91 @@ if (afkData.lastAfk) {
             // Setup visibility detection
             document.addEventListener('visibilitychange', handleVisibilityChange);
             
-            // Start the timer with a slight delay
-            setTimeout(startTimer, 500);
+            // Check if we can start the timer
+            checkAndStartTimer();
+
+            // Update daily reset timer
+            updateDailyResetTimer();
+            setInterval(updateDailyResetTimer, 60000); // Update every minute
         });
+
+        // Check if we can start the timer
+        function checkAndStartTimer() {
+            if (dailyAttemptsRemaining <= 0) {
+                showCooldownStatus();
+                return;
+            }
+
+            // Check if we need to wait for cooldown
+            if (lastAfkTime) {
+                const now = new Date();
+                const timeDiff = now - lastAfkTime;
+                if (timeDiff < 60000) { // Less than 1 minute
+                    remainingSeconds = Math.ceil((60000 - timeDiff) / 1000);
+                    updateTimerDisplay();
+                    setTimeout(() => {
+                        startTimer();
+                    }, 60000 - timeDiff);
+                    return;
+                }
+            }
+
+            // If no cooldown, start timer immediately
+            startTimer();
+        }
+
+        // Update timer display
+        function updateTimerDisplay() {
+            if (!timerElement) return;
+            
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = remainingSeconds % 60;
+            timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (progressRingCircle) {
+                const circumference = 2 * Math.PI * 40;
+                const progress = remainingSeconds / 60;
+                const offset = circumference * (1 - progress);
+                progressRingCircle.style.strokeDashoffset = offset;
+            }
+        }
+
+        // Update daily reset timer display
+        function updateDailyResetTimer() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const timeUntilReset = tomorrow - now;
+            const hours = Math.floor(timeUntilReset / 3600000);
+            const minutes = Math.floor((timeUntilReset % 3600000) / 60000);
+            
+            const resetElement = document.getElementById('daily-reset-time');
+            if (resetElement) {
+                resetElement.textContent = `${hours}h ${minutes}m`;
+            }
+        }
+
+        // Show cooldown status
+        function showCooldownStatus() {
+            if (cooldownStatus) {
+                cooldownStatus.classList.remove('hidden');
+            }
+            if (timerElement) {
+                timerElement.textContent = 'Cooldown';
+            }
+            showNotification('Daily AFK limit reached. Please wait for reset.', 'error');
+        }
         
         // Start the timer countdown
         function startTimer() {
+            // Don't start if no attempts remaining
+            if (dailyAttemptsRemaining <= 0) {
+                showCooldownStatus();
+                return;
+            }
+
             // Clear any existing timer
             if (timerInterval) {
                 clearInterval(timerInterval);
@@ -632,18 +737,13 @@ if (afkData.lastAfk) {
             
             // Set up the timer to update every second
             timerInterval = setInterval(function() {
-                // Don't update when tab is not visible
                 if (!isVisible) {
                     return;
                 }
                 
-                // Decrement the time
                 remainingSeconds--;
-                
-                // Update the display
                 updateTimerDisplay();
                 
-                // Check if timer has reached zero
                 if (remainingSeconds <= 0) {
                     clearInterval(timerInterval);
                     timerInterval = null;
@@ -653,42 +753,14 @@ if (afkData.lastAfk) {
             }, 1000);
         }
         
-        // Update the timer display and progress ring
-        function updateTimerDisplay() {
-            // Format time as M:SS
-            const minutes = Math.floor(remainingSeconds / 60);
-            const seconds = Math.floor(remainingSeconds % 60);
-            const displayText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-            
-            // Update timer text
-            if (timerElement) {
-                timerElement.textContent = displayText;
-            }
-            
-            // Update progress ring if it exists
-            if (progressRingCircle) {
-                const circumference = 2 * Math.PI * 40;
-                const progress = remainingSeconds / 60;
-                const offset = circumference * (1 - progress);
-                
-                progressRingCircle.style.strokeDasharray = `${circumference} ${circumference}`;
-                progressRingCircle.style.strokeDashoffset = offset;
-            }
-        }
-        
-        // Handle visibility change
-        function handleVisibilityChange() {
-            isVisible = document.visibilityState === 'visible';
-            
-            // When tab becomes visible again, show notification
-            if (isVisible) {
-                showNotification('AFK timer resumed', 'info');
-            }
-        }
-        
         // Claim reward when timer reaches zero
         async function claimReward() {
             try {
+                if (dailyAttemptsRemaining <= 0) {
+                    showCooldownStatus();
+                    return;
+                }
+
                 // Show loading state
                 if (timerElement) {
                     timerElement.textContent = 'Claiming...';
@@ -705,22 +777,23 @@ if (afkData.lastAfk) {
                 const data = await response.json();
                 
                 if (data.success) {
-                    // Update balance display in this page
+                    // Update attempts remaining
+                    dailyAttemptsRemaining = Math.max(0, dailyAttemptsRemaining - 1);
+                    lastAfkTime = new Date();
+                    
+                    // Update balance displays
                     const balanceElement = document.getElementById('afk-balance');
                     if (balanceElement) {
                         balanceElement.textContent = data.balance;
                     }
                     
-                    // Update header balance (if it exists)
                     const headerBalance = document.getElementById('header-balance');
                     if (headerBalance) {
                         headerBalance.textContent = data.balance;
                     }
                     
-                    // Update balance in localStorage for cross-page consistency
                     localStorage.setItem('userCoins', data.balance);
                     
-                    // Also update via the coins service to ensure persistence
                     try {
                         await fetch('/api/coins/balance');
                     } catch (coinError) {
@@ -731,16 +804,27 @@ if (afkData.lastAfk) {
                     const confirmed = confirm(`Congratulations! You earned 2 credits! Your new balance is ${data.balance}. Click OK to continue.`);
                     
                     // Update AFK stats
-                    updateAfkStats(data);
+                    updateAfkStats({
+                        remainingAfk: dailyAttemptsRemaining,
+                        timeUntilNextAfk: 60000 // 1 minute cooldown
+                    });
                     
-                    // Always show 2 credits earned regardless of actual amount
+                    // Show success message
                     showNotification(`Earned 2 credits! Balance: ${data.balance}`, 'success');
                     
-                    // Start the timer again after confirmation
-                    startTimer();
+                    // Check if we can continue
+                    if (dailyAttemptsRemaining > 0) {
+                        checkAndStartTimer();
+                    } else {
+                        showCooldownStatus();
+                    }
                 } else {
-                    showNotification(data.error || 'Error claiming reward', 'error');
-                    startTimer();
+                    if (data.error === 'Daily limit reached') {
+                        showCooldownStatus();
+                    } else {
+                        showNotification(data.error || 'Error claiming reward', 'error');
+                        startTimer();
+                    }
                 }
             } catch (error) {
                 console.error('Error claiming reward:', error);
@@ -751,16 +835,21 @@ if (afkData.lastAfk) {
         
         // Function to update AFK stats display
         function updateAfkStats(data) {
-            // Update remaining AFK attempts if element exists
             const remainingAfkElement = document.querySelector('[data-afk-remaining]');
-            if (remainingAfkElement && data.remainingAfk !== undefined) {
+            if (remainingAfkElement && typeof data.remainingAfk !== 'undefined') {
                 remainingAfkElement.textContent = `${data.remainingAfk}/20`;
             }
             
-            // Update other stats as needed
             const nextAfkTimeElement = document.getElementById('next-afk-time');
-            if (nextAfkTimeElement && data.timeUntilNextAfk !== undefined) {
+            if (nextAfkTimeElement && typeof data.timeUntilNextAfk !== 'undefined') {
                 nextAfkTimeElement.textContent = `${Math.ceil(data.timeUntilNextAfk / 1000)}s`;
+            }
+
+            // Show/hide cooldown status
+            if (data.remainingAfk <= 0 && cooldownStatus) {
+                cooldownStatus.classList.remove('hidden');
+            } else if (cooldownStatus) {
+                cooldownStatus.classList.add('hidden');
             }
         }
         
@@ -795,40 +884,16 @@ if (afkData.lastAfk) {
             }, 5000);
         }
         
-        // Clean up on page unload
-        window.addEventListener('beforeunload', function() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
+        // Handle visibility change
+        function handleVisibilityChange() {
+            isVisible = document.visibilityState === 'visible';
+            
+            // When tab becomes visible again, show notification
+            if (isVisible) {
+                showNotification('AFK timer resumed', 'info');
+                checkAndStartTimer();
             }
-        });
-
-        // Set up ping/activity tracking to keep the session alive
-        function setupPing() {
-            // Send a ping every 30 seconds
-            setInterval(async function() {
-                if (!isVisible) return;
-                
-                try {
-                    const response = await fetch('/api/earn/ping', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    
-                    if (!response.ok) {
-                        console.error('Error sending ping:', response.statusText);
-                    }
-                } catch (error) {
-                    console.error('Failed to send ping:', error);
-                }
-            }, 30000); // 30 seconds
         }
-        
-        // Call setup ping on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            setupPing();
-        });
     </script>
 </body>
 </html>
