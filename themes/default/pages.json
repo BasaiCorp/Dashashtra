@@ -58,7 +58,8 @@
         "redeem": "redeem.ejs",
         "settings": "settings.ejs",
         "leaderboard": "leaderboard.ejs",
-        "team": "team.ejs"
+        "team": "team.ejs",
+        "pricing": "pricing.ejs"
     },
     "mustbeloggedin": [
         "/dashboard",
@@ -139,6 +140,9 @@
         },
         "team": {
             "title": "Team Sriyan - Sriyan Nodes"
+        },
+        "pricing": {
+            "title": "Pricing Plans - Sriyan Nodes"
         }
     }
 }

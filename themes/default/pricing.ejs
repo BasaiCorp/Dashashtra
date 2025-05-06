@@ -1,0 +1,583 @@
+<%
+// Set the current page for active menu highlighting
+const currentPage = 'pricing';
+
+// Set the page title
+const pageTitle = 'Pricing Plans - ' + (typeof extra !== 'undefined' && extra && extra.dashboard ? extra.dashboard.title : 'Dashboard');
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+  <link rel="icon" type="image/png" href="/assets/img/SriyanNodes_Logo.gif"/>
+  
+  <!-- Fonts and Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              50: '#fff5f5',
+              100: '#fee2e2',
+              200: '#fecaca',
+              300: '#fca5a5',
+              400: '#f87171',
+              500: '#ef4444',
+              600: '#dc2626',
+              700: '#b91c1c',
+              800: '#991b1b',
+              900: '#7f1d1d',
+              950: '#450a0a',
+            },
+            dark: {
+              base: '#0f0f12',
+              light: '#1a1a21',
+              lighter: '#24242e',
+              card: '#1a1a21'
+            }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-in-out',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 3s ease-in-out infinite',
+            'bounce-slow': 'bounce 3s infinite',
+            'gradient': 'gradient 8s ease infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            gradient: {
+              '0%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' },
+              '100%': { backgroundPosition: '0% 50%' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+  
+  <!-- Custom Styles -->
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1a1a21;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #b91c1c;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ef4444;
+    }
+    
+    /* Gradient animations */
+    .animate-gradient {
+      background-size: 200% 200%;
+      animation: gradient 8s ease infinite;
+    }
+    
+    .hero-gradient {
+      background: linear-gradient(135deg, #b91c1c, #ef4444, #f87171, #ef4444, #b91c1c);
+      background-size: 300% 300%;
+      animation: gradient 8s ease infinite;
+    }
+    
+    /* Testimonial slider animations */
+    .testimonial-slider-container {
+      position: relative;
+      width: 100%;
+      padding: 1rem 0;
+      overflow: hidden;
+    }
+    
+    .testimonial-track {
+      display: flex;
+      width: fit-content;
+      animation: scroll 40s linear infinite;
+    }
+    
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(calc(-400px * 5)); /* Make sure this matches the exact width of your 5 original cards */
+      }
+    }
+    
+    .animate-scroll {
+      animation: scroll 40s linear infinite;
+    }
+    
+    /* When the animation reaches the end, we immediately jump back to start without visual interruption */
+    .testimonial-track:hover {
+      animation-play-state: paused; /* Pause on hover for better user experience */
+    }
+    
+    .testimonial-card {
+      transition: all 0.3s ease;
+    }
+    
+    .testimonial-card:hover {
+      transform: translateY(-10px);
+    }
+    
+    /* Hide scrollbar for the testimonial slider */
+    .testimonial-slider-container::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .testimonial-slider-container {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    /* Accessibility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+    
+    /* Responsive grid */
+    .auto-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-gap: 1.5rem;
+    }
+
+    .n-img {
+      border-radius: 50%;
+    }
+    
+    /* Image loading */
+    .lazy-load {
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+    
+    .lazy-loaded {
+      opacity: 1;
+    }
+  </style>
+  
+  <style>
+    body {
+      background-color: #0f0f12;
+      color: #f5f5f7;
+      font-family: 'Poppins', sans-serif;
+      background-image: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.1) 0%, transparent 50%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Plan type chips styling */
+    .plan-type-chip {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .plan-type-chip::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, #ef4444, #f87171, #dc2626);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .plan-type-chip:hover::before,
+    .plan-type-chip.active::before {
+      opacity: 1;
+    }
+
+    .plan-type-chip .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Plan card hover effects */
+    .plan-card {
+      transition: all 0.3s ease;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Section transitions */
+    .plan-section {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .plan-section.hidden {
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+  <!-- Header/Navbar -->
+  <header class="sticky top-0 z-50 w-full backdrop-blur-md bg-dark-base/80 border-b border-dark-lighter">
+    <div class="container mx-auto px-4 md:px-6">
+      <nav class="flex items-center justify-between h-16 md:h-20">
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-2">
+          <img src="./assets/img/SriyanNodes_Logo.gif" alt="Sriyan Nodes Logo" class="h-10 w-10 n-img">
+          <span class="text-xl font-bold">Sriyan<span class="text-primary-500">Nodes</span></span>
+        </a>
+        
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center gap-6">
+          <a href="#features" class="text-gray-300 hover:text-white transition-colors">Features</a>
+          <a href="#pricing" class="text-gray-300 hover:text-white transition-colors">Pricing</a>
+          <a href="#status" class="text-gray-300 hover:text-white transition-colors">Status</a>
+          <a href="#resources" class="text-gray-300 hover:text-white transition-colors">FAQ</a>
+          <a href="#community" class="text-gray-300 hover:text-white transition-colors">Community</a>
+          <div class="relative group">
+            <button class="text-gray-300 hover:text-white transition-colors flex items-center gap-1">
+              Resources <i class="fas fa-chevron-down text-xs ml-1"></i>
+            </button>
+            <div class="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-dark-light py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+              <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-lighter">Documentation</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-lighter">Tutorials</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-lighter">API Reference</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-dark-lighter">Support Center</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Auth Buttons -->
+        <div class="hidden md:flex items-center gap-3">
+          <a href="/login" class="px-4 py-2 text-sm font-medium text-white hover:text-primary-300 transition-colors">Login</a>
+          <a href="/register" class="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-all">Sign Up</a>
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-dark-lighter">
+          <span class="sr-only">Open menu</span>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </nav>
+      
+      <!-- Mobile Menu (hidden by default) -->
+      <div id="mobile-menu" class="md:hidden hidden bg-dark-light rounded-lg mt-2 p-4">
+        <div class="flex flex-col space-y-3">
+          <a href="#features" class="text-gray-300 hover:text-white transition-colors py-2">Features</a>
+          <a href="#pricing" class="text-gray-300 hover:text-white transition-colors py-2">Pricing</a>
+          <a href="#status" class="text-gray-300 hover:text-white transition-colors py-2">Status</a>
+          <a href="#faq" class="text-gray-300 hover:text-white transition-colors py-2">FAQ</a>
+          <a href="#community" class="text-gray-300 hover:text-white transition-colors py-2">Community</a>
+          
+          <button id="mobile-resources-button" class="text-gray-300 hover:text-white transition-colors py-2 flex items-center justify-between">
+            Resources
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          
+          <div id="mobile-resources-dropdown" class="hidden pl-4 space-y-2 mt-1">
+            <a href="#" class="block py-2 text-sm text-gray-400 hover:text-white">Documentation</a>
+            <a href="#" class="block py-2 text-sm text-gray-400 hover:text-white">Tutorials</a>
+            <a href="#" class="block py-2 text-sm text-gray-400 hover:text-white">API Reference</a>
+            <a href="#" class="block py-2 text-sm text-gray-400 hover:text-white">Support Center</a>
+          </div>
+          
+          <div class="pt-4 border-t border-dark-lighter flex flex-col space-y-3">
+            <a href="/login" class="py-2 text-center text-white hover:text-primary-300 transition-colors">Login</a>
+            <a href="/register" class="py-2 text-center text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-all">Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="flex-grow">
+    <!-- Hero Section -->
+    <section class="py-16 relative overflow-hidden">
+      <div class="container mx-auto px-4">
+        <div class="text-center max-w-3xl mx-auto">
+          <h1 class="text-4xl md:text-5xl font-bold mb-6">Choose Your Perfect Plan</h1>
+          <p class="text-xl text-gray-400 mb-12">From basic hosting to enterprise solutions, we have the right plan for your needs</p>
+        </div>
+
+        <!-- Plan Type Navigation Chips -->
+        <div class="flex flex-wrap justify-center gap-4 mb-16">
+          <button class="plan-type-chip active bg-dark-light px-6 py-3 rounded-full" data-plan-type="cheap">
+            <div class="content flex items-center space-x-2">
+              <i class="fas fa-tag"></i>
+              <span>Cheap Plans</span>
+            </div>
+          </button>
+          <button class="plan-type-chip bg-dark-light px-6 py-3 rounded-full" data-plan-type="premium">
+            <div class="content flex items-center space-x-2">
+              <i class="fas fa-crown"></i>
+              <span>Premium Plans</span>
+            </div>
+          </button>
+          <button class="plan-type-chip bg-dark-light px-6 py-3 rounded-full" data-plan-type="vps">
+            <div class="content flex items-center space-x-2">
+              <i class="fas fa-server"></i>
+              <span>VPS Plans</span>
+            </div>
+          </button>
+          <button class="plan-type-chip bg-dark-light px-6 py-3 rounded-full" data-plan-type="development">
+            <div class="content flex items-center space-x-2">
+              <i class="fas fa-code"></i>
+              <span>Development Plans</span>
+            </div>
+          </button>
+          <button class="plan-type-chip bg-dark-light px-6 py-3 rounded-full" data-plan-type="hardware">
+            <div class="content flex items-center space-x-2">
+              <i class="fas fa-microchip"></i>
+              <span>Hardware Plans</span>
+            </div>
+          </button>
+          <button class="plan-type-chip bg-dark-light px-6 py-3 rounded-full" data-plan-type="mc">
+            <div class="content flex items-center space-x-2">
+              <i class="fas fa-cube"></i>
+              <span>MC Models</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Plan Sections -->
+        <!-- Cheap Plans Section -->
+        <div id="cheap-plans" class="plan-section">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold mb-4">Budget-Friendly Hosting Solutions</h2>
+            <p class="text-gray-400">Perfect for personal projects and small applications</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Plan cards will be added here -->
+          </div>
+        </div>
+
+        <!-- Premium Plans Section -->
+        <div id="premium-plans" class="plan-section hidden">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold mb-4">Premium Hosting Solutions</h2>
+            <p class="text-gray-400">Enhanced performance and priority support</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Plan cards will be added here -->
+          </div>
+        </div>
+
+        <!-- VPS Plans Section -->
+        <div id="vps-plans" class="plan-section hidden">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold mb-4">Virtual Private Servers</h2>
+            <p class="text-gray-400">Dedicated resources and full root access</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Plan cards will be added here -->
+          </div>
+        </div>
+
+        <!-- Development Plans Section -->
+        <div id="development-plans" class="plan-section hidden">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold mb-4">Development Environments</h2>
+            <p class="text-gray-400">Optimized for developers and testing</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Plan cards will be added here -->
+          </div>
+        </div>
+
+        <!-- Hardware Plans Section -->
+        <div id="hardware-plans" class="plan-section hidden">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold mb-4">Dedicated Hardware</h2>
+            <p class="text-gray-400">Physical servers with custom configurations</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Plan cards will be added here -->
+          </div>
+        </div>
+
+        <!-- MC Models Section -->
+        <div id="mc-plans" class="plan-section hidden">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold mb-4">Minecraft Hosting Models</h2>
+            <p class="text-gray-400">Specialized plans for Minecraft servers</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Plan cards will be added here -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark-base pt-16 pb-8 relative z-10">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
+        <!-- Company Info -->
+        <div>
+          <a href="/" class="flex items-center mb-6">
+            <img src="./assets/img/SriyanNodes_Logo.gif" alt="Sriyan Nodes" class="h-8">
+          </a>
+          <p class="text-gray-400 mb-6">High-performance cloud hosting optimized for Indian developers. Lightning-fast servers in Mumbai, Delhi, and Bangalore.</p>
+          <div class="flex space-x-4">
+            <a href="https://twitter.com/sriyannodes" class="text-gray-400 hover:text-primary-500 transition-colors">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
+              </svg>
+            </a>
+            <a href="https://github.com/sriyannodes" class="text-gray-400 hover:text-primary-500 transition-colors">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+              </svg>
+            </a>
+            <a href="https://www.linkedin.com/company/sriyannodes" class="text-gray-400 hover:text-primary-500 transition-colors">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill-rule="evenodd" d="M7.5 5.25a3 3 0 013-3h3a3 3 0 013 3v.205c.933.236 1.803.633 2.538 1.162a7.966 7.966 0 01-.353 1.67 5.989 5.989 0 00-1.176-.599c-1.011-.401-1.96-.401-3.009 0-1.047.4-2.136 1.309-3.01 3.035-1.398 2.795-1.494 5.535.083 6.552.88.565 2.081.451 3.412-.188.602-.289 1.216-.664 1.824-1.137a7.966 7.966 0 012.056.375 9.944 9.944 0 01-2.297 1.631c-1.626.77-3.45.998-5.003-.072-1.55-1.068-2.155-3.236-1.687-5.512.465-2.262 1.99-4.818 4.624-6.826.022-.018.047-.034.071-.051A3 3 0 017.5 5.25zm1.5 0a1.5 1.5 0 00-1.5 1.5v1.676c.649-.176 1.344-.293 2.072-.293h1.12a.5.5 0 01.5.5.5.5 0 01-.5.5h-1.12c-.665 0-1.308.112-1.912.291a9.978 9.978 0 00-1.255.656 8.978 8.978 0 011.735 4.673c.348 2.378.046 4.345-1.116 5.307-1.163.964-2.77.994-4.3.234A8.883 8.883 0 01.644 17.42l-.55.089A6 6 0 008.449 20.97c2.012.164 4.097-.231 5.864-1.078a11.439 11.439 0 003.913-3.039c.803-.938 1.433-1.948 1.858-2.938.426-.992.65-1.96.65-2.865 0-4.498-3.636-8.149-8.149-8.149H10.5a1.5 1.5 0 00-1.5 1.5z" clip-rule="evenodd" />
+              </svg>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Products -->
+        <div>
+          <h3 class="text-lg font-bold mb-6">Products</h3>
+          <ul class="space-y-4">
+            <li><a href="/vps" class="text-gray-400 hover:text-primary-500 transition-colors">VPS Hosting</a></li>
+            <li><a href="/dedicated" class="text-gray-400 hover:text-primary-500 transition-colors">Dedicated Servers</a></li>
+            <li><a href="/managed" class="text-gray-400 hover:text-primary-500 transition-colors">Managed Hosting</a></li>
+            <li><a href="/storage" class="text-gray-400 hover:text-primary-500 transition-colors">Object Storage</a></li>
+            <li><a href="/database" class="text-gray-400 hover:text-primary-500 transition-colors">Database Services</a></li>
+          </ul>
+        </div>
+        
+        <!-- Company -->
+        <div>
+          <h3 class="text-lg font-bold mb-6">Company</h3>
+          <ul class="space-y-4">
+            <li><a href="/about" class="text-gray-400 hover:text-primary-500 transition-colors">About Us</a></li>
+            <li><a href="/careers" class="text-gray-400 hover:text-primary-500 transition-colors">Careers</a></li>
+            <li><a href="/blog" class="text-gray-400 hover:text-primary-500 transition-colors">Blog</a></li>
+            <li><a href="/legal/privacy" class="text-gray-400 hover:text-primary-500 transition-colors">Privacy Policy</a></li>
+            <li><a href="/legal/terms" class="text-gray-400 hover:text-primary-500 transition-colors">Terms of Service</a></li>
+          </ul>
+        </div>
+        
+        <!-- Support -->
+        <div>
+          <h3 class="text-lg font-bold mb-6">Support</h3>
+          <ul class="space-y-4">
+            <li><a href="/contact" class="text-gray-400 hover:text-primary-500 transition-colors">Contact Us</a></li>
+            <li><a href="/support" class="text-gray-400 hover:text-primary-500 transition-colors">Support Center</a></li>
+            <li><a href="/status" class="text-gray-400 hover:text-primary-500 transition-colors">System Status</a></li>
+            <li><a href="/docs" class="text-gray-400 hover:text-primary-500 transition-colors">Documentation</a></li>
+            <li><a href="/api" class="text-gray-400 hover:text-primary-500 transition-colors">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="pt-8 border-t border-gray-800">
+        <div class="flex flex-col md:flex-row md:justify-between items-center">
+          <p class="text-gray-500 text-sm order-2 md:order-1 mt-4 md:mt-0">© 2024-2025 Sriyan Nodes. All rights reserved.</p>
+          <div class="flex items-center space-x-6 order-1 md:order-2">
+            <a href="/legal/privacy" class="text-gray-500 hover:text-gray-400 text-sm">Privacy Policy</a>
+            <a href="/legal/terms" class="text-gray-500 hover:text-gray-400 text-sm">Terms of Service</a>
+            <a href="/legal/cookies" class="text-gray-500 hover:text-gray-400 text-sm">Cookie Policy</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript for Mobile Menu Toggle -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileResourcesButton = document.getElementById('mobile-resources-button');
+      const mobileResourcesDropdown = document.getElementById('mobile-resources-dropdown');
+      
+      // Toggle mobile menu
+      mobileMenuButton.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+      });
+      
+      // Toggle resources dropdown
+      mobileResourcesButton.addEventListener('click', function() {
+        mobileResourcesDropdown.classList.toggle('hidden');
+      });
+    });
+  </script>
+
+  <!-- Plan Type Navigation Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const planTypeChips = document.querySelectorAll('.plan-type-chip');
+      const planSections = document.querySelectorAll('.plan-section');
+
+      function showPlanSection(planType) {
+        planSections.forEach(section => {
+          if (section.id === `${planType}-plans`) {
+            section.classList.remove('hidden');
+          } else {
+            section.classList.add('hidden');
+          }
+        });
+      }
+
+      planTypeChips.forEach(chip => {
+        chip.addEventListener('click', function() {
+          // Remove active class from all chips
+          planTypeChips.forEach(c => c.classList.remove('active'));
+          
+          // Add active class to clicked chip
+          this.classList.add('active');
+          
+          // Show corresponding plan section
+          const planType = this.getAttribute('data-plan-type');
+          showPlanSection(planType);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

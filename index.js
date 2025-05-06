@@ -579,6 +579,62 @@ app.get('/team', async (req, res) => {
     }
 });
 
+// Handle pricing route explicitly - MUST be defined before the catch-all route handler
+app.get('/pricing', async (req, res) => {
+    console.log('[PRICING] Processing request for pricing page');
+    
+    // Check if user is logged in
+    if (!req.session.userinfo || !req.session.pterodactyl) {
+        console.log('[PRICING] User not logged in, redirecting to login');
+        return res.redirect("/login");
+    }
+    
+    // Validate user session
+    try {
+        const user = await db.users.getUserById(req.session.userinfo.id);
+        
+        // Convert both IDs to strings for consistent comparison
+        const userPteroId = String(user.pterodactyl_id);
+        const sessionPteroId = String(req.session.pterodactyl.id);
+        
+        if (!user || userPteroId !== sessionPteroId) {
+            console.log('[PRICING] Invalid user session, redirecting to login');
+            req.session.destroy((err) => {
+                if (err) console.error("Error destroying session:", err);
+                return res.redirect("/login");
+            });
+            return;
+        }
+        
+        // Get theme and render pricing page
+        let theme = indexjs.get(req);
+        
+        // Find the correct template for the pricing page
+        let pricingTemplate = theme.settings.pages.pricing || "pricing.ejs";
+        console.log(`[PRICING] Using template: ${pricingTemplate}`);
+        
+        // Get render data from indexjs
+        const renderData = await eval(indexjs.renderdataeval);
+        
+        ejs.renderFile(
+            `./themes/${theme.name}/${pricingTemplate}`, 
+            renderData,
+            null,
+            function (err, str) {
+                if (err) {
+                    console.log(chalk.red(`[PRICING] Error rendering pricing page:`));
+                    console.log(err);
+                    return res.send("An error occurred while loading the pricing page. Please contact an administrator.");
+                }
+                res.send(str);
+            }
+        );
+    } catch (error) {
+        console.error('[PRICING] Error processing pricing page:', error);
+        return res.send("An error occurred while preparing data for the pricing page. Please try again.");
+    }
+});
+
 // Import API routes
 const serverRoutes = require('./api/servers.js');
 const { router: earnRouter } = require('./api/earn.js');
