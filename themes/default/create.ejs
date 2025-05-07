@@ -217,6 +217,67 @@ const pageTitle = 'Create New Server - ' + (typeof extra !== 'undefined' && extr
         .notification.show {
             transform: translateX(0);
         }
+
+		.resource-progress {
+			height: 8px;
+			background-color: rgba(45, 45, 53, 0.5);
+			border-radius: 4px;
+			margin-bottom: 10px;
+			overflow: hidden;
+		}
+		
+		.resource-progress-bar {
+			height: 100%;
+			border-radius: 4px;
+			transition: width 0.5s ease;
+		}
+		
+		.resource-progress-bar.ram {
+			background: linear-gradient(to right, #dc2626, #f87171);
+		}
+		
+		.resource-progress-bar.disk {
+			background: linear-gradient(to right, #10b981, #34d399);
+		}
+		
+		.resource-progress-bar.cpu {
+			background: linear-gradient(to right, #f59e0b, #fbbf24);
+		}
+		
+		.resource-progress-bar.servers {
+			background: linear-gradient(90deg, #9333ea 0%, #a855f7 100%);
+		}
+		
+		.resource-progress-bar.port {
+			background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+		}
+		
+		.resource-progress-bar.database {
+			background: linear-gradient(90deg, #14b8a6 0%, #2dd4bf 100%);
+		}
+		
+		.resource-progress-bar.backup {
+			background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+		}
+		
+		.resource-progress-bar.allocation {
+			background: linear-gradient(90deg, #f97316 0%, #fb923c 100%);
+		}
+		
+		.resource-stats {
+			display: flex;
+			justify-content: space-between;
+			font-size: 0.875rem;
+			color: #a1a1aa;
+		}
+		
+		.resource-icon {
+			transition: all 0.3s ease;
+		}
+		
+		.resource-card:hover .resource-icon {
+			transform: scale(1.1);
+		}
         
         /* Main layout wrapper */
         .dashboard-layout {
@@ -432,6 +493,10 @@ const pageTitle = 'Create New Server - ' + (typeof extra !== 'undefined' && extr
 		let disk = 0;
 		let cpu = 0;
 		let servers = 0;
+		let port = 0;
+		let database = 0;
+		let backup = 0;
+		let allocation = 0;
 		
 		if (pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data) {
 			servers = pterodactyl.relationships.servers.data.length;
@@ -440,6 +505,16 @@ const pageTitle = 'Create New Server - ' + (typeof extra !== 'undefined' && extr
 				ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
 				disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
 				cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
+				
+				// Count databases, allocations, backups, and ports if available in server attributes
+				if (pterodactyl.relationships.servers.data[i].attributes.feature_limits) {
+					database += (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.databases == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.databases : 0);
+					backup += (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.backups == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.backups : 0);
+					allocation += (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.allocations == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.allocations : 0);
+				}
+				
+				// Count ports (this is an estimate as ports aren't directly exposed)
+				port += 1; // Assume at least one port per server
 			}
 		}
 		
@@ -454,27 +529,55 @@ const pageTitle = 'Create New Server - ' + (typeof extra !== 'undefined' && extr
 			ram: 0,
 			disk: 0,
 			cpu: 0,
-			servers: 0
+			servers: 0,
+			port: 0,
+			database: 0,
+			backup: 0,
+			allocation: 0
 		};
+		
+		// Ensure all required properties exist in packageData
+		if (typeof packageData.port === 'undefined') packageData.port = 0;
+		if (typeof packageData.database === 'undefined') packageData.database = 0;
+		if (typeof packageData.backup === 'undefined') packageData.backup = 0;
+		if (typeof packageData.allocation === 'undefined') packageData.allocation = 0;
 		
 		// Calculate total resources (package + extra)
 		const extraData = typeof extraresources !== 'undefined' ? extraresources : {
 			ram: 0,
 			disk: 0,
 			cpu: 0,
-			servers: 0
+			servers: 0,
+			port: 0,
+			database: 0,
+			backup: 0,
+			allocation: 0
 		};
+		
+		// Ensure all required properties exist in extraData
+		if (typeof extraData.port === 'undefined') extraData.port = 0;
+		if (typeof extraData.database === 'undefined') extraData.database = 0;
+		if (typeof extraData.backup === 'undefined') extraData.backup = 0;
+		if (typeof extraData.allocation === 'undefined') extraData.allocation = 0;
 		
 		const totalRam = packageData.ram + extraData.ram;
 		const totalDisk = packageData.disk + extraData.disk;
 		const totalCpu = packageData.cpu + extraData.cpu;
 		const totalServers = packageData.servers + extraData.servers;
+		const totalPort = packageData.port + extraData.port;
+		const totalDatabase = packageData.database + extraData.database;
+		const totalBackup = packageData.backup + extraData.backup;
+		const totalAllocation = packageData.allocation + extraData.allocation;
 		
 		// Available resources
 		const availableRam = totalRam - ram;
 		const availableDisk = totalDisk - disk;
 		const availableCpu = totalCpu - cpu;
 		const availableServers = totalServers - servers;
+		const availablePort = totalPort - port;
+		const availableDatabase = totalDatabase - database;
+		const availableBackup = totalBackup - backup;
+		const availableAllocation = totalAllocation - allocation;
 		
 		// Calculate progress percentages with safety checks
 		const ramWidth = totalRam > 0 ? Math.min(100, Math.round((ram / totalRam) * 100)) : 0;
@@ -504,87 +607,223 @@ const pageTitle = 'Create New Server - ' + (typeof extra !== 'undefined' && extr
 				</div>
 
 				<!-- Resource Stats -->
+				<!-- Stats Cards -->
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-slide-up" style="animation-delay: 0.1s;">
 					<!-- RAM Card -->
-					<div class="gradient-border">
+					<div class="resource-card gradient-border">
 						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
 							<div class="flex items-center justify-between mb-4">
 								<div class="flex items-center">
-									<div class="w-12 h-12 rounded-lg bg-indigo-500/20 flex items-center justify-center mr-3">
-										<i class="fas fa-memory text-indigo-400 text-xl"></i>
+									<div class="resource-icon w-12 h-12 rounded-lg bg-primary-500/20 flex items-center justify-center mr-3">
+										<i class="fas fa-memory text-primary-400 text-xl"></i>
 									</div>
-									<div class="ml-4">
-										<h3 class="text-lg font-semibold text-white">Available RAM</h3>
-										<p class="text-gray-400 text-sm">Memory Resources</p>
+									<div>
+										<h3 class="text-lg font-medium">RAM</h3>
+										<p class="text-gray-400 text-sm">Memory Usage</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= availableRam %> <span class="text-gray-400 text-sm">/ <%= totalRam %> MB</span></span>
+								<div class="text-right">
+									<span class="text-2xl font-bold"><%= Math.round((ram / (packageData.ram + extraData.ram)) * 100) %>%</span>
+								</div>
 							</div>
-							<div class="progress-bar">
-								<div class="progress-bar-fill ram" style="width: <%= ramWidth %>%;"></div>
+							<div class="resource-progress">
+								<div class="resource-progress-bar ram" style="width: <%= Math.round((ram / (packageData.ram + extraData.ram)) * 100) %>%"></div>
+							</div>
+							<div class="resource-stats">
+								<span><%= ram %> MB used</span>
+								<span><%= packageData.ram + extraData.ram %> MB total</span>
 							</div>
 						</div>
 					</div>
 					
 					<!-- Disk Card -->
-					<div class="gradient-border">
+					<div class="resource-card gradient-border">
 						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
 							<div class="flex items-center justify-between mb-4">
 								<div class="flex items-center">
-									<div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mr-3">
+									<div class="resource-icon w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mr-3">
 										<i class="fas fa-hdd text-green-400 text-xl"></i>
 									</div>
-									<div class="ml-4">
-										<h3 class="text-lg font-semibold text-white">Available Disk</h3>
-										<p class="text-gray-400 text-sm">Storage Resources</p>
+									<div>
+										<h3 class="text-lg font-medium">Disk</h3>
+										<p class="text-gray-400 text-sm">Storage Usage</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= availableDisk %> <span class="text-gray-400 text-sm">/ <%= totalDisk %> MB</span></span>
+								<div class="text-right">
+									<span class="text-2xl font-bold"><%= Math.round((disk / (packageData.disk + extraData.disk)) * 100) %>%</span>
+								</div>
 							</div>
-							<div class="progress-bar">
-								<div class="progress-bar-fill disk" style="width: <%= diskWidth %>%;"></div>
+							<div class="resource-progress">
+								<div class="resource-progress-bar disk" style="width: <%= Math.round((disk / (packageData.disk + extraData.disk)) * 100) %>%"></div>
+							</div>
+							<div class="resource-stats">
+								<span><%= disk %> MB used</span>
+								<span><%= packageData.disk + extraData.disk %> MB total</span>
 							</div>
 						</div>
 					</div>
 					
 					<!-- CPU Card -->
-					<div class="gradient-border">
+					<div class="resource-card gradient-border">
 						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
 							<div class="flex items-center justify-between mb-4">
 								<div class="flex items-center">
-									<div class="w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center mr-3">
+									<div class="resource-icon w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center mr-3">
 										<i class="fas fa-microchip text-amber-400 text-xl"></i>
 									</div>
-									<div class="ml-4">
-										<h3 class="text-lg font-semibold text-white">Available CPU</h3>
-										<p class="text-gray-400 text-sm">Processor Resources</p>
+									<div>
+										<h3 class="text-lg font-medium">CPU</h3>
+										<p class="text-gray-400 text-sm">Processor Usage</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= availableCpu %> <span class="text-gray-400 text-sm">/ <%= totalCpu %>%</span></span>
+								<div class="text-right">
+									<span class="text-2xl font-bold"><%= Math.round((cpu / (packageData.cpu + extraData.cpu)) * 100) %>%</span>
+								</div>
 							</div>
-							<div class="progress-bar">
-								<div class="progress-bar-fill cpu" style="width: <%= cpuWidth %>%;"></div>
+							<div class="resource-progress">
+								<div class="resource-progress-bar cpu" style="width: <%= Math.round((cpu / (packageData.cpu + extraData.cpu)) * 100) %>%"></div>
+							</div>
+							<div class="resource-stats">
+								<span><%= cpu %>% used</span>
+								<span><%= packageData.cpu + extraData.cpu %>% total</span>
 							</div>
 						</div>
 					</div>
 					
 					<!-- Servers Card -->
-					<div class="gradient-border">
+					<div class="resource-card gradient-border">
 						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
 							<div class="flex items-center justify-between mb-4">
 								<div class="flex items-center">
-									<div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3">
+									<div class="resource-icon w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3">
 										<i class="fas fa-server text-purple-400 text-xl"></i>
 									</div>
-									<div class="ml-4">
-										<h3 class="text-lg font-semibold text-white">Available Servers</h3>
-										<p class="text-gray-400 text-sm">Server Slots</p>
+									<div>
+										<h3 class="text-lg font-medium">Servers</h3>
+										<p class="text-gray-400 text-sm">Active Instances</p>
 									</div>
 								</div>
-								<span class="text-xl font-bold text-white"><%= availableServers %> <span class="text-gray-400 text-sm">/ <%= totalServers %></span></span>
+								<div class="text-right">
+									<span class="text-2xl font-bold"><%= Math.round((servers / (packageData.servers + extraData.servers)) * 100) %>%</span>
+								</div>
 							</div>
-							<div class="progress-bar">
-								<div class="progress-bar-fill servers" style="width: <%= serversWidth %>%;"></div>
+							<div class="resource-progress">
+								<div class="resource-progress-bar servers" style="width: <%= Math.round((servers / (packageData.servers + extraData.servers)) * 100) %>%"></div>
+							</div>
+							<div class="resource-stats">
+								<span><%= servers %> used</span>
+								<span><%= packageData.servers + extraData.servers %> total</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Additional Resources Cards -->
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-slide-up" style="animation-delay: 0.2s;">
+					<!-- Port Card -->
+					<div class="resource-card gradient-border">
+						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center">
+									<div class="resource-icon w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center mr-3">
+										<i class="fas fa-plug text-blue-400 text-xl"></i>
+									</div>
+									<div>
+										<h3 class="text-lg font-medium">Ports</h3>
+										<p class="text-gray-400 text-sm">Connection Points</p>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-2xl font-bold"><%= totalPort > 0 ? Math.round((port / totalPort) * 100) : 0 %>%</span>
+								</div>
+							</div>
+							<div class="resource-progress">
+								<div class="resource-progress-bar port" style="width: <%= totalPort > 0 ? Math.round((port / totalPort) * 100) : 0 %>%"></div>
+							</div>
+							<div class="resource-stats">
+								<span><%= port %> used</span>
+								<span><%= totalPort %> total</span>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Database Card -->
+					<div class="resource-card gradient-border">
+						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center">
+									<div class="resource-icon w-12 h-12 rounded-lg bg-teal-500/20 flex items-center justify-center mr-3">
+										<i class="fas fa-database text-teal-400 text-xl"></i>
+									</div>
+									<div>
+										<h3 class="text-lg font-medium">Databases</h3>
+										<p class="text-gray-400 text-sm">Data Storage</p>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-2xl font-bold"><%= totalDatabase > 0 ? Math.round((database / totalDatabase) * 100) : 0 %>%</span>
+								</div>
+							</div>
+							<div class="resource-progress">
+								<div class="resource-progress-bar database" style="width: <%= totalDatabase > 0 ? Math.round((database / totalDatabase) * 100) : 0 %>%"></div>
+							</div>
+							<div class="resource-stats">
+								<span><%= database %> used</span>
+								<span><%= totalDatabase %> total</span>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Backup Card -->
+					<div class="resource-card gradient-border">
+						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center">
+									<div class="resource-icon w-12 h-12 rounded-lg bg-red-500/20 flex items-center justify-center mr-3">
+										<i class="fas fa-shield-alt text-red-400 text-xl"></i>
+									</div>
+									<div>
+										<h3 class="text-lg font-medium">Backups</h3>
+										<p class="text-gray-400 text-sm">Data Protection</p>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-2xl font-bold"><%= totalBackup > 0 ? Math.round((backup / totalBackup) * 100) : 0 %>%</span>
+								</div>
+							</div>
+							<div class="resource-progress">
+								<div class="resource-progress-bar backup" style="width: <%= totalBackup > 0 ? Math.round((backup / totalBackup) * 100) : 0 %>%"></div>
+							</div>
+							<div class="resource-stats">
+								<span><%= backup %> used</span>
+								<span><%= totalBackup %> total</span>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Allocation Card -->
+					<div class="resource-card gradient-border">
+						<div class="stat-card h-full bg-dark-card rounded-lg p-6">
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center">
+									<div class="resource-icon w-12 h-12 rounded-lg bg-orange-500/20 flex items-center justify-center mr-3">
+										<i class="fas fa-network-wired text-orange-400 text-xl"></i>
+									</div>
+									<div>
+										<h3 class="text-lg font-medium">Allocations</h3>
+										<p class="text-gray-400 text-sm">IP Addresses</p>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-2xl font-bold"><%= totalAllocation > 0 ? Math.round((allocation / totalAllocation) * 100) : 0 %>%</span>
+								</div>
+							</div>
+							<div class="resource-progress">
+								<div class="resource-progress-bar allocation" style="width: <%= totalAllocation > 0 ? Math.round((allocation / totalAllocation) * 100) : 0 %>%"></div>
+							</div>
+							<div class="resource-stats">
+								<span><%= allocation %> used</span>
+								<span><%= totalAllocation %> total</span>
 							</div>
 						</div>
 					</div>
@@ -722,6 +961,30 @@ const pageTitle = 'Create New Server - ' + (typeof extra !== 'undefined' && extr
 								<p class="form-helper">Available: <%= availableCpu %>%</p>
 							</div>
 						</div>
+						
+						<!-- Additional Resources -->
+						<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-4">
+							<div>
+								<label class="form-label">Ports</label>
+								<input type="number" name="port" class="form-input" min="1" max="<%= availablePort %>" value="1" required>
+								<p class="form-helper">Available: <%= availablePort %></p>
+							</div>
+							<div>
+								<label class="form-label">Databases</label>
+								<input type="number" name="database" class="form-input" min="0" max="<%= availableDatabase %>" value="0">
+								<p class="form-helper">Available: <%= availableDatabase %></p>
+							</div>
+							<div>
+								<label class="form-label">Backups</label>
+								<input type="number" name="backup" class="form-input" min="0" max="<%= availableBackup %>" value="0">
+								<p class="form-helper">Available: <%= availableBackup %></p>
+							</div>
+							<div>
+								<label class="form-label">Allocations</label>
+								<input type="number" name="allocation" class="form-input" min="0" max="<%= availableAllocation %>" value="0">
+								<p class="form-helper">Available: <%= availableAllocation %></p>
+							</div>
+						</div>
 
 						<!-- Server Location -->
 						<div class="mb-6">
@@ -739,6 +1002,17 @@ const pageTitle = 'Create New Server - ' + (typeof extra !== 'undefined' && extr
 							<p class="form-helper">Choose the region where your server will be hosted</p>
 						</div>
 
+						<!-- Hidden resource data for JavaScript validation -->
+						<div class="hidden">
+							<span id="availableRam" data-value="<%= availableRam %>"></span>
+							<span id="availableDisk" data-value="<%= availableDisk %>"></span>
+							<span id="availableCpu" data-value="<%= availableCpu %>"></span>
+							<span id="availablePort" data-value="<%= availablePort %>"></span>
+							<span id="availableDatabase" data-value="<%= availableDatabase %>"></span>
+							<span id="availableBackup" data-value="<%= availableBackup %>"></span>
+							<span id="availableAllocation" data-value="<%= availableAllocation %>"></span>
+						</div>
+						
 						<!-- Submit Button -->
 						<div class="flex justify-end mt-6">
 							<button type="submit" class="btn-primary">
@@ -772,12 +1046,62 @@ const pageTitle = 'Create New Server - ' + (typeof extra !== 'undefined' && extr
 					const ram = document.querySelector('input[name="ram"]').value;
 					const disk = document.querySelector('input[name="disk"]').value;
 					const cpu = document.querySelector('input[name="cpu"]').value;
+					const port = document.querySelector('input[name="port"]').value;
+					const database = document.querySelector('input[name="database"]').value;
+					const backup = document.querySelector('input[name="backup"]').value;
+					const allocation = document.querySelector('input[name="allocation"]').value;
 					const egg = document.querySelector('select[name="egg"]').value;
 					const location = document.querySelector('select[name="location"]').value;
 					
-					if (!name || !ram || !disk || !cpu || !egg || !location) {
+					if (!name || !ram || !disk || !cpu || !port || !egg || !location) {
 						e.preventDefault();
 						showNotification('error', 'Please fill in all required fields');
+						return false;
+					}
+					
+					// Get resource limits from data attributes
+					const availableRam = parseInt(document.getElementById('availableRam').dataset.value);
+					const availableDisk = parseInt(document.getElementById('availableDisk').dataset.value);
+					const availableCpu = parseInt(document.getElementById('availableCpu').dataset.value);
+					const availablePort = parseInt(document.getElementById('availablePort').dataset.value);
+					const availableDatabase = parseInt(document.getElementById('availableDatabase').dataset.value);
+					const availableBackup = parseInt(document.getElementById('availableBackup').dataset.value);
+					const availableAllocation = parseInt(document.getElementById('availableAllocation').dataset.value);
+					
+					// Validate resource limits
+					if (parseInt(ram) > availableRam) {
+						e.preventDefault();
+						showNotification('error', 'Not enough RAM available');
+						return false;
+					}
+					if (parseInt(disk) > availableDisk) {
+						e.preventDefault();
+						showNotification('error', 'Not enough Disk space available');
+						return false;
+					}
+					if (parseInt(cpu) > availableCpu) {
+						e.preventDefault();
+						showNotification('error', 'Not enough CPU available');
+						return false;
+					}
+					if (parseInt(port) > availablePort) {
+						e.preventDefault();
+						showNotification('error', 'Not enough Ports available');
+						return false;
+					}
+					if (parseInt(database) > availableDatabase) {
+						e.preventDefault();
+						showNotification('error', 'Not enough Databases available');
+						return false;
+					}
+					if (parseInt(backup) > availableBackup) {
+						e.preventDefault();
+						showNotification('error', 'Not enough Backups available');
+						return false;
+					}
+					if (parseInt(allocation) > availableAllocation) {
+						e.preventDefault();
+						showNotification('error', 'Not enough Allocations available');
 						return false;
 					}
 					

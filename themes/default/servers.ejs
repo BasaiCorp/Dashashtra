@@ -508,7 +508,7 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
                 <!-- Resource Stats -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-slide-up" style="animation-delay: 0.1s;">
                     <!-- RAM Card -->
-                    <div class="resource-card gradient-border">
+                    <div class="resource-card">
                         <div class="stat-card h-full bg-dark-card rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
@@ -521,8 +521,7 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <span class="text-2xl font-bold"><%= availableRam %></span>
-                                    <span class="text-gray-400 text-sm">/ <%= totalRam %> MB</span>
+                                    <span class="text-2xl font-bold"><%= Math.round((ram / totalRam) * 100) %>%</span>
                                 </div>
                             </div>
                             <div class="resource-progress">
@@ -536,7 +535,7 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
                     </div>
                     
                     <!-- Disk Card -->
-                    <div class="resource-card gradient-border">
+                    <div class="resource-card">
                         <div class="stat-card h-full bg-dark-card rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
@@ -563,7 +562,7 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
                     </div>
                     
                     <!-- CPU Card -->
-                    <div class="resource-card gradient-border">
+                    <div class="resource-card">
                         <div class="stat-card h-full bg-dark-card rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
@@ -590,7 +589,7 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
                     </div>
                     
                     <!-- Servers Card -->
-                    <div class="resource-card gradient-border">
+                    <div class="resource-card">
                         <div class="stat-card h-full bg-dark-card rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
@@ -617,7 +616,7 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
                     </div>
                     
                     <!-- Port Card -->
-                    <div class="resource-card gradient-border">
+                    <div class="resource-card">
                         <div class="stat-card h-full bg-dark-card rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
@@ -644,7 +643,7 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
                     </div>
                     
                     <!-- Database Card -->
-                    <div class="resource-card gradient-border">
+                    <div class="resource-card">
                         <div class="stat-card h-full bg-dark-card rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
@@ -671,7 +670,7 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
                     </div>
                     
                     <!-- Backup Card -->
-                    <div class="resource-card gradient-border">
+                    <div class="resource-card">
                         <div class="stat-card h-full bg-dark-card rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
@@ -698,7 +697,7 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
                     </div>
                     
                     <!-- Allocation Card -->
-                    <div class="resource-card gradient-border">
+                    <div class="resource-card">
                         <div class="stat-card h-full bg-dark-card rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">

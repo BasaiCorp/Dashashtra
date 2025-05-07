@@ -83,15 +83,19 @@ router.post('/servers/create', async (req, res) => {
         const ram = parseInt(req.body.ram);
         const disk = parseInt(req.body.disk);
         const cpu = parseInt(req.body.cpu);
+        const port = parseInt(req.body.port) || 1;
+        const database = parseInt(req.body.database) || 0;
+        const backup = parseInt(req.body.backup) || 0;
+        const allocation = parseInt(req.body.allocation) || 0;
         const location = req.body.location;
         const egg = req.body.egg; // Changed from type to egg to match the form
 
         // Log received data for debugging
-        console.log(`[SERVER CREATE] Received data: name=${name}, ram=${ram}, disk=${disk}, cpu=${cpu}, location=${location}, egg=${egg}`);
+        console.log(`[SERVER CREATE] Received data: name=${name}, ram=${ram}, disk=${disk}, cpu=${cpu}, port=${port}, database=${database}, backup=${backup}, allocation=${allocation}, location=${location}, egg=${egg}`);
 
         // Validate input
-        if (!name || isNaN(ram) || isNaN(disk) || isNaN(cpu) || !location || !egg) {
-            console.log('[SERVER CREATE] Missing variable:', { name, ram, disk, cpu, location, egg });
+        if (!name || isNaN(ram) || isNaN(disk) || isNaN(cpu) || isNaN(port) || !location || !egg) {
+            console.log('[SERVER CREATE] Missing variable:', { name, ram, disk, cpu, port, location, egg });
             return res.redirect('/create?err=MISSINGVARIABLE');
         }
 
@@ -101,6 +105,10 @@ router.post('/servers/create', async (req, res) => {
         let currentdisk = 0;
         let currentcpu = 0;
         let currentservers = 0;
+        let currentport = 0;
+        let currentdatabase = 0;
+        let currentbackup = 0;
+        let currentallocation = 0;
 
         const servers = req.session.pterodactyl.relationships.servers.data;
         for (let i = 0; i < servers.length; i++) {
@@ -108,6 +116,16 @@ router.post('/servers/create', async (req, res) => {
             currentram += server.limits.memory || 0;
             currentdisk += server.limits.disk || 0;
             currentcpu += server.limits.cpu || 0;
+            
+            // Count feature limits if available
+            if (server.feature_limits) {
+                currentdatabase += server.feature_limits.databases || 0;
+                currentbackup += server.feature_limits.backups || 0;
+                currentallocation += server.feature_limits.allocations || 0;
+            }
+            
+            // Count at least one port per server
+            currentport += 1;
         }
         currentservers = servers.length;
 
@@ -124,6 +142,10 @@ router.post('/servers/create', async (req, res) => {
         const totalDisk = packagedata.disk + extraResources.disk; 
         const totalCpu = packagedata.cpu + extraResources.cpu;
         const totalServers = packagedata.servers + extraResources.servers;
+        const totalPort = (packagedata.port || 0) + (extraResources.port || 0);
+        const totalDatabase = (packagedata.database || 0) + (extraResources.database || 0);
+        const totalBackup = (packagedata.backup || 0) + (extraResources.backup || 0);
+        const totalAllocation = (packagedata.allocation || 0) + (extraResources.allocation || 0);
 
         // Check if user has enough resources
         if (ram + currentram > totalRam) {
@@ -137,6 +159,18 @@ router.post('/servers/create', async (req, res) => {
         }
         if (currentservers >= totalServers) {
             return res.redirect('/create?err=SERVEREXCEED');
+        }
+        if (port + currentport > totalPort) {
+            return res.redirect(`/create?err=PORTEXCEED&err_port=${port}`);
+        }
+        if (database + currentdatabase > totalDatabase) {
+            return res.redirect(`/create?err=DATABASEEXCEED&err_database=${database}`);
+        }
+        if (backup + currentbackup > totalBackup) {
+            return res.redirect(`/create?err=BACKUPEXCEED&err_backup=${backup}`);
+        }
+        if (allocation + currentallocation > totalAllocation) {
+            return res.redirect(`/create?err=ALLOCATIONEXCEED&err_allocation=${allocation}`);
         }
 
         // Check minimum requirements
@@ -199,6 +233,10 @@ router.post('/servers/create', async (req, res) => {
                 ram: ram,
                 disk: disk, 
                 cpu: cpu,
+                port: port,
+                database: database,
+                backup: backup,
+                allocation: allocation,
                 location: location,
                 additionalEnvironment: additionalVars
             });

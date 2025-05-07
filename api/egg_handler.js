@@ -130,6 +130,10 @@ function createServerData(options) {
         ram,
         disk,
         cpu,
+        port = 1,
+        database = 0,
+        backup = 0,
+        allocation = 0,
         location,
         additionalEnvironment = {}
     } = options;
@@ -158,7 +162,11 @@ function createServerData(options) {
             io: 500,
             cpu: cpu
         },
-        feature_limits: eggInfo.feature_limits,
+        feature_limits: {
+            databases: database,
+            backups: backup,
+            allocations: allocation
+        },
         allocation: {
             default: 0
         }

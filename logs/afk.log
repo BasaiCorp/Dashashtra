@@ -555,3 +555,11 @@
 2025-05-07T08:43:59.297Z [checkAuth] Authentication successful for user ID: 1
 2025-05-07T08:43:59.297Z [EARN] User 1 requesting balance
 2025-05-07T08:43:59.297Z [EARN] User 1 balance check: 3197726
+2025-05-07T09:09:50.922Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T09:09:51.041Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T09:09:51.043Z [EARN] User 1 requesting balance
+2025-05-07T09:09:51.044Z [EARN] User 1 balance check: 3197576
+2025-05-07T09:23:25.056Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T09:23:25.211Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T09:23:25.292Z [EARN] User 1 requesting balance
+2025-05-07T09:23:25.311Z [EARN] User 1 balance check: 3197576
