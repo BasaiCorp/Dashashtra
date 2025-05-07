@@ -467,3 +467,91 @@
 2025-05-06T10:13:47.117Z [AFK] User 1 current balance: 3198274
 2025-05-06T10:13:47.126Z [AFK] Added 2 credits to user 1
 2025-05-06T10:13:47.126Z [AFK] User 1 new balance: 3198276
+2025-05-07T07:51:05.522Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T07:51:05.694Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T07:51:05.695Z [EARN] User 1 requesting balance
+2025-05-07T07:51:05.697Z [EARN] User 1 balance check: 3198276
+2025-05-07T07:53:56.273Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T07:53:56.328Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T07:53:56.328Z [EARN] User 1 requesting balance
+2025-05-07T07:53:56.329Z [EARN] User 1 balance check: 3198276
+2025-05-07T07:54:11.354Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T07:54:11.354Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T07:54:11.355Z [EARN] User 1 requesting balance
+2025-05-07T07:54:11.357Z [EARN] User 1 balance check: 3198276
+2025-05-07T07:54:23.009Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T07:54:23.009Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T07:54:23.009Z [EARN] User 1 requesting balance
+2025-05-07T07:54:23.010Z [EARN] User 1 balance check: 3198276
+2025-05-07T07:54:47.268Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T07:54:47.268Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T07:54:47.268Z [EARN] User 1 requesting balance
+2025-05-07T07:54:47.269Z [EARN] User 1 balance check: 3198276
+2025-05-07T07:55:50.918Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T07:55:50.919Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T07:55:50.919Z [EARN] User 1 requesting balance
+2025-05-07T07:55:50.920Z [EARN] User 1 balance check: 3198276
+2025-05-07T07:56:09.558Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T07:56:09.558Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T07:56:09.559Z [EARN] User 1 requesting balance
+2025-05-07T07:56:09.561Z [EARN] User 1 balance check: 3198276
+2025-05-07T07:56:59.043Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T07:56:59.043Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T07:56:59.043Z [EARN] User 1 requesting balance
+2025-05-07T07:56:59.044Z [EARN] User 1 balance check: 3198276
+2025-05-07T07:57:59.205Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T07:57:59.206Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T07:57:59.206Z [EARN] User 1 requesting balance
+2025-05-07T07:57:59.207Z [EARN] User 1 balance check: 3198276
+2025-05-07T07:58:06.861Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T07:58:06.862Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T07:58:06.862Z [EARN] User 1 requesting balance
+2025-05-07T07:58:06.865Z [EARN] User 1 balance check: 3198276
+2025-05-07T08:10:34.508Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T08:10:34.550Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T08:10:34.551Z [EARN] User 1 requesting balance
+2025-05-07T08:10:34.551Z [EARN] User 1 balance check: 3198276
+2025-05-07T08:11:17.376Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T08:11:17.376Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T08:11:17.377Z [EARN] User 1 requesting balance
+2025-05-07T08:11:17.378Z [EARN] User 1 balance check: 3198276
+2025-05-07T08:11:29.676Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T08:11:29.680Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T08:11:29.681Z [EARN] User 1 requesting balance
+2025-05-07T08:11:29.682Z [EARN] User 1 balance check: 3198276
+2025-05-07T08:11:52.857Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T08:11:52.857Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T08:11:52.860Z [EARN] User 1 requesting balance
+2025-05-07T08:11:52.862Z [EARN] User 1 balance check: 3198276
+2025-05-07T08:12:02.963Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T08:12:02.964Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T08:12:02.964Z [EARN] User 1 requesting balance
+2025-05-07T08:12:02.969Z [EARN] User 1 balance check: 3198276
+2025-05-07T08:12:11.725Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T08:12:11.725Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T08:12:11.726Z [EARN] User 1 requesting balance
+2025-05-07T08:12:11.728Z [EARN] User 1 balance check: 3198276
+2025-05-07T08:12:39.323Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T08:12:39.325Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T08:12:39.326Z [EARN] User 1 requesting balance
+2025-05-07T08:12:39.327Z [EARN] User 1 balance check: 3198276
+2025-05-07T08:12:44.425Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T08:12:44.425Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T08:12:44.425Z [EARN] User 1 requesting balance
+2025-05-07T08:12:44.426Z [EARN] User 1 balance check: 3198276
+2025-05-07T08:34:06.773Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T08:34:07.168Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T08:34:07.170Z [EARN] User 1 requesting balance
+2025-05-07T08:34:07.170Z [EARN] User 1 balance check: 3197976
+2025-05-07T08:34:12.706Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T08:34:12.706Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T08:34:12.706Z [EARN] User 1 requesting balance
+2025-05-07T08:34:12.707Z [EARN] User 1 balance check: 3197976
+2025-05-07T08:43:55.630Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T08:43:55.824Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T08:43:55.825Z [EARN] User 1 requesting balance
+2025-05-07T08:43:55.826Z [EARN] User 1 balance check: 3197726
+2025-05-07T08:43:59.297Z [checkAuth] Checking auth - Session exists: true
+2025-05-07T08:43:59.297Z [checkAuth] Authentication successful for user ID: 1
+2025-05-07T08:43:59.297Z [EARN] User 1 requesting balance
+2025-05-07T08:43:59.297Z [EARN] User 1 balance check: 3197726

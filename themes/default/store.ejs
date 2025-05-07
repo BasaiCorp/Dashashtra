@@ -340,7 +340,7 @@ const pageTitle = 'Resource Store - ' + (typeof settings !== 'undefined' && sett
 	<!-- Include Header Component -->
     <%- include('./components/header', { userData: userData, settings: settings, currentPage: currentPage }) %>
 
-	<div class="flex h-screen pt-16">
+	<div class="flex flex-col min-h-screen pt-16">
 		<!-- Include Sidebar Component -->
         <%- include('./components/sidebar', { userData: userData, settings: settings, currentPage: currentPage }) %>
 		
@@ -350,7 +350,7 @@ const pageTitle = 'Resource Store - ' + (typeof settings !== 'undefined' && sett
 		</button>
 
 		<!-- Main Content -->
-		<div class="p-4 sm:ml-64 pt-5 w-full main-content">
+		<div class="p-4 sm:ml-64 pt-5 pb-24 flex-grow main-content">
 			<div class="container mx-auto px-4 py-8">
 				<!-- Header -->
 				<div class="glass-card rounded-xl p-6 mb-8">
@@ -523,6 +523,158 @@ const pageTitle = 'Resource Store - ' + (typeof settings !== 'undefined' && sett
 								</div>
 							</div>
 							<button onclick="purchase('slot')" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
+								Purchase
+							</button>
+						</div>
+					</div>
+					
+					<!-- Port Package -->
+					<div class="resource-card bg-dark-card rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="port">
+						<div class="flex items-center justify-between mb-4">
+							<div class="p-3 rounded-lg bg-primary-500/20">
+								<i class="fas fa-plug text-2xl text-primary-400"></i>
+							</div>
+							<span class="px-2 py-1 text-xs font-semibold text-primary-400 bg-primary-500/20 rounded-full">Connectivity</span>
+						</div>
+						<h3 class="text-xl font-semibold text-white mb-2">Port Package</h3>
+						<p class="text-gray-400 text-sm mb-4">Add an additional port to your server for more connection options.</p>
+						<div class="space-y-2 mb-6">
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-primary-400 mr-2"></i>
+								<span class="text-gray-300">1 Additional Port</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-primary-400 mr-2"></i>
+								<span class="text-gray-300">Instant Activation</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-primary-400 mr-2"></i>
+								<span class="text-gray-300">Permanent Upgrade</span>
+							</div>
+						</div>
+						<div class="flex items-center justify-between">
+							<div>
+								<span class="text-sm text-gray-400">Price</span>
+								<div class="flex items-center">
+									<i class="fas fa-coins text-primary-400 mr-1"></i>
+									<span class="text-xl font-semibold text-white">150</span>
+								</div>
+							</div>
+							<button onclick="purchase('port')" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
+								Purchase
+							</button>
+						</div>
+					</div>
+
+					<!-- Database Package -->
+					<div class="resource-card bg-dark-card rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="database">
+						<div class="flex items-center justify-between mb-4">
+							<div class="p-3 rounded-lg bg-primary-500/20">
+								<i class="fas fa-database text-2xl text-primary-400"></i>
+							</div>
+							<span class="px-2 py-1 text-xs font-semibold text-primary-400 bg-primary-500/20 rounded-full">Data Storage</span>
+						</div>
+						<h3 class="text-xl font-semibold text-white mb-2">Database Package</h3>
+						<p class="text-gray-400 text-sm mb-4">Add a database to your server for data storage and management.</p>
+						<div class="space-y-2 mb-6">
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-primary-400 mr-2"></i>
+								<span class="text-gray-300">1 Database</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-primary-400 mr-2"></i>
+								<span class="text-gray-300">MySQL/MariaDB Support</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-primary-400 mr-2"></i>
+								<span class="text-gray-300">Permanent Upgrade</span>
+							</div>
+						</div>
+						<div class="flex items-center justify-between">
+							<div>
+								<span class="text-sm text-gray-400">Price</span>
+								<div class="flex items-center">
+									<i class="fas fa-coins text-primary-400 mr-1"></i>
+									<span class="text-xl font-semibold text-white">300</span>
+								</div>
+							</div>
+							<button onclick="purchase('database')" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
+								Purchase
+							</button>
+						</div>
+					</div>
+
+					<!-- Backup Package -->
+					<div class="resource-card bg-dark-card rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="backup">
+						<div class="flex items-center justify-between mb-4">
+							<div class="p-3 rounded-lg bg-primary-500/20">
+								<i class="fas fa-shield-alt text-2xl text-primary-400"></i>
+							</div>
+							<span class="px-2 py-1 text-xs font-semibold text-primary-400 bg-primary-500/20 rounded-full">Data Protection</span>
+						</div>
+						<h3 class="text-xl font-semibold text-white mb-2">Backup Package</h3>
+						<p class="text-gray-400 text-sm mb-4">Increase your server's backup limit for better data protection.</p>
+						<div class="space-y-2 mb-6">
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-primary-400 mr-2"></i>
+								<span class="text-gray-300">1 Backup Slot</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-primary-400 mr-2"></i>
+								<span class="text-gray-300">Automated Backup Support</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-primary-400 mr-2"></i>
+								<span class="text-gray-300">Permanent Upgrade</span>
+							</div>
+						</div>
+						<div class="flex items-center justify-between">
+							<div>
+								<span class="text-sm text-gray-400">Price</span>
+								<div class="flex items-center">
+									<i class="fas fa-coins text-primary-400 mr-1"></i>
+									<span class="text-xl font-semibold text-white">250</span>
+								</div>
+							</div>
+							<button onclick="purchase('backup')" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
+								Purchase
+							</button>
+						</div>
+					</div>
+
+					<!-- Allocation Package -->
+					<div class="resource-card bg-dark-card rounded-lg p-6 hover:bg-dark-lighter transition-colors duration-200" data-resource="allocation">
+						<div class="flex items-center justify-between mb-4">
+							<div class="p-3 rounded-lg bg-primary-500/20">
+								<i class="fas fa-network-wired text-2xl text-primary-400"></i>
+							</div>
+							<span class="px-2 py-1 text-xs font-semibold text-primary-400 bg-primary-500/20 rounded-full">Networking</span>
+						</div>
+						<h3 class="text-xl font-semibold text-white mb-2">Allocation Package</h3>
+						<p class="text-gray-400 text-sm mb-4">Add an additional IP allocation to your server.</p>
+						<div class="space-y-2 mb-6">
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-primary-400 mr-2"></i>
+								<span class="text-gray-300">1 IP Allocation</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-primary-400 mr-2"></i>
+								<span class="text-gray-300">Instant Activation</span>
+							</div>
+							<div class="flex items-center text-sm">
+								<i class="fas fa-check text-primary-400 mr-2"></i>
+								<span class="text-gray-300">Permanent Upgrade</span>
+							</div>
+						</div>
+						<div class="flex items-center justify-between">
+							<div>
+								<span class="text-sm text-gray-400">Price</span>
+								<div class="flex items-center">
+									<i class="fas fa-coins text-primary-400 mr-1"></i>
+									<span class="text-xl font-semibold text-white">200</span>
+								</div>
+							</div>
+							<button onclick="purchase('allocation')" class="bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg text-white font-medium transition-colors duration-200">
 								Purchase
 							</button>
 						</div>

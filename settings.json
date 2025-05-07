@@ -91,10 +91,14 @@
         "default": "default",
         "list": {
           "default": {
-            "ram": 1024,
-            "disk": 1024,
+            "ram": 2048,
+            "disk": 4096,
             "cpu": 100,
-            "servers": 1
+            "servers": 1,
+            "port": 1,
+            "database": 1,
+            "backup": 1,
+            "allocation": 1
           }
         }
       },
@@ -175,6 +179,18 @@
           },
           "servers": {
             "cost": 500
+          },
+          "port": {
+            "cost": 150
+          },
+          "database": {
+            "cost": 300
+          },
+          "backup": {
+            "cost": 250
+          },
+          "allocation": {
+            "cost": 200
           }
         }
       }

@@ -121,10 +121,39 @@ authDb.prepare(`CREATE TABLE IF NOT EXISTS "user_resources" (
     "disk" INTEGER DEFAULT 0,
     "cpu" INTEGER DEFAULT 0,
     "servers" INTEGER DEFAULT 0,
+    "port" INTEGER DEFAULT 0,
+    "database" INTEGER DEFAULT 0,
+    "backup" INTEGER DEFAULT 0,
+    "allocation" INTEGER DEFAULT 0,
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 )`).run();
+
+// Add missing columns to user_resources if they don't exist
+try {
+    // Check if columns exist before adding them
+    const resourceColumns = authDb.prepare("PRAGMA table_info(user_resources)").all();
+    const columnNames = resourceColumns.map(col => col.name);
+    
+    if (!columnNames.includes('port')) {
+        authDb.prepare('ALTER TABLE user_resources ADD COLUMN port INTEGER DEFAULT 0').run();
+    }
+    
+    if (!columnNames.includes('database')) {
+        authDb.prepare('ALTER TABLE user_resources ADD COLUMN database INTEGER DEFAULT 0').run();
+    }
+    
+    if (!columnNames.includes('backup')) {
+        authDb.prepare('ALTER TABLE user_resources ADD COLUMN backup INTEGER DEFAULT 0').run();
+    }
+    
+    if (!columnNames.includes('allocation')) {
+        authDb.prepare('ALTER TABLE user_resources ADD COLUMN allocation INTEGER DEFAULT 0').run();
+    }
+} catch (error) {
+    console.error('Error adding columns to user_resources table:', error);
+}
 
 // Create afk_data table
 authDb.prepare(`CREATE TABLE IF NOT EXISTS "afk_data" (
@@ -343,7 +372,17 @@ const resourceMethods = {
         // If no resources exist yet, create a default entry with zeros
         if (!result) {
             await this.initUserResources(userId);
-            return { user_id: userId, ram: 0, disk: 0, cpu: 0, servers: 0 };
+            return { 
+                user_id: userId, 
+                ram: 0, 
+                disk: 0, 
+                cpu: 0, 
+                servers: 0,
+                port: 0,
+                database: 0,
+                backup: 0,
+                allocation: 0
+            };
         }
         
         return result;
@@ -351,8 +390,9 @@ const resourceMethods = {
     
     async initUserResources(userId) {
         const stmt = authDb.prepare(`
-            INSERT OR IGNORE INTO user_resources (user_id, ram, disk, cpu, servers)
-            VALUES (?, 0, 0, 0, 0)
+            INSERT OR IGNORE INTO user_resources 
+            (user_id, ram, disk, cpu, servers, port, database, backup, allocation)
+            VALUES (?, 0, 0, 0, 0, 0, 0, 0, 0)
         `);
         return stmt.run(userId);
     },
@@ -368,6 +408,10 @@ const resourceMethods = {
                 disk = disk + ?,
                 cpu = cpu + ?,
                 servers = servers + ?,
+                port = port + ?,
+                database = database + ?,
+                backup = backup + ?,
+                allocation = allocation + ?,
                 updated_at = CURRENT_TIMESTAMP
             WHERE user_id = ?
         `);
@@ -377,6 +421,10 @@ const resourceMethods = {
             resourceData.disk || 0,
             resourceData.cpu || 0,
             resourceData.servers || 0,
+            resourceData.port || 0,
+            resourceData.database || 0,
+            resourceData.backup || 0,
+            resourceData.allocation || 0,
             userId
         );
     },
@@ -385,13 +433,17 @@ const resourceMethods = {
         // First ensure the user has a resource record
         await this.initUserResources(userId);
         
-        // Then set specific values
+        // Then set exact values
         const stmt = authDb.prepare(`
             UPDATE user_resources SET
                 ram = ?,
                 disk = ?,
                 cpu = ?,
                 servers = ?,
+                port = ?,
+                database = ?,
+                backup = ?,
+                allocation = ?,
                 updated_at = CURRENT_TIMESTAMP
             WHERE user_id = ?
         `);
@@ -401,6 +453,10 @@ const resourceMethods = {
             resourceData.disk || 0,
             resourceData.cpu || 0,
             resourceData.servers || 0,
+            resourceData.port || 0,
+            resourceData.database || 0,
+            resourceData.backup || 0,
+            resourceData.allocation || 0,
             userId
         );
     }

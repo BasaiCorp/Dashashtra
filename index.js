@@ -84,7 +84,11 @@ module.exports.renderdataeval =
           ram: 0,
           disk: 0,
           cpu: 0,
-          servers: 0
+          servers: 0,
+          port: 0,
+          database: 0,
+          backup: 0,
+          allocation: 0
         };
       }
     }

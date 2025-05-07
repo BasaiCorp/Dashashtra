@@ -252,7 +252,46 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
             transform: translateY(0);
         }
         
-        .progress-bar {
+        .resource-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .gradient-border {
+            position: relative;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+        
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 0.75rem;
+            padding: 2px;
+            background: linear-gradient(45deg, #ef4444, #f87171, #dc2626);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            z-index: 0;
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gradient-border:hover::before {
+            opacity: 1;
+        }
+        
+        .resource-progress {
             height: 8px;
             background-color: rgba(45, 45, 53, 0.5);
             border-radius: 4px;
@@ -260,26 +299,57 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
             overflow: hidden;
         }
         
-        .progress-bar-fill {
+        .resource-progress-bar {
             height: 100%;
             border-radius: 4px;
             transition: width 0.5s ease;
         }
         
-        .progress-bar-fill.ram {
-            background: linear-gradient(to right, #4f46e5, #818cf8);
+        .resource-progress-bar.ram {
+            background: linear-gradient(to right, #dc2626, #f87171);
         }
         
-        .progress-bar-fill.disk {
+        .resource-progress-bar.disk {
             background: linear-gradient(to right, #10b981, #34d399);
         }
         
-        .progress-bar-fill.cpu {
+        .resource-progress-bar.cpu {
             background: linear-gradient(to right, #f59e0b, #fbbf24);
         }
         
-        .progress-bar-fill.servers {
+        .resource-progress-bar.servers {
             background: linear-gradient(to right, #8b5cf6, #a78bfa);
+        }
+        
+        .resource-progress-bar.port {
+            background: linear-gradient(to right, #3b82f6, #60a5fa);
+        }
+        
+        .resource-progress-bar.database {
+            background: linear-gradient(to right, #14b8a6, #2dd4bf);
+        }
+        
+        .resource-progress-bar.backup {
+            background: linear-gradient(to right, #ef4444, #f87171);
+        }
+        
+        .resource-progress-bar.allocation {
+            background: linear-gradient(to right, #f97316, #fb923c);
+        }
+        
+        .resource-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: #a1a1aa;
+        }
+        
+        .resource-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .resource-card:hover .resource-icon {
+            transform: scale(1.1);
         }
         
         /* Mobile Responsive Styles */
@@ -310,6 +380,10 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
         let disk = 0;
         let cpu = 0;
         let servers = 0;
+        let port = 0;
+        let database = 0;
+        let backup = 0;
+        let allocation = 0;
         
         if (typeof pterodactyl !== 'undefined' && pterodactyl && pterodactyl.relationships && pterodactyl.relationships.servers && pterodactyl.relationships.servers.data) {
             servers = pterodactyl.relationships.servers.data.length;
@@ -318,6 +392,16 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
                 ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
                 disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
                 cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
+                
+                // Count databases, allocations, backups, and ports if available in server attributes
+                if (pterodactyl.relationships.servers.data[i].attributes.feature_limits) {
+                    database += (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.databases == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.databases : 0);
+                    backup += (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.backups == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.backups : 0);
+                    allocation += (typeof pterodactyl.relationships.servers.data[i].attributes.feature_limits.allocations == "number" ? pterodactyl.relationships.servers.data[i].attributes.feature_limits.allocations : 0);
+                }
+                
+                // Count ports (this is an estimate as ports aren't directly exposed)
+                port += 1; // Assume at least one port per server
             }
         }
         
@@ -338,33 +422,68 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
             ram: 0,
             disk: 0,
             cpu: 0,
-            servers: 0
+            servers: 0,
+            port: 0,
+            database: 0,
+            backup: 0,
+            allocation: 0
         };
+        
+        // Ensure all required properties exist in packageData
+        if (typeof packageData.port === 'undefined') packageData.port = 0;
+        if (typeof packageData.database === 'undefined') packageData.database = 0;
+        if (typeof packageData.backup === 'undefined') packageData.backup = 0;
+        if (typeof packageData.allocation === 'undefined') packageData.allocation = 0;
         
         // Calculate total resources (package + extra)
         const extraData = typeof extraresources !== 'undefined' ? extraresources : {
             ram: 0,
             disk: 0,
             cpu: 0,
-            servers: 0
+            servers: 0,
+            port: 0,
+            database: 0,
+            backup: 0,
+            allocation: 0
         };
         
         const totalRam = packageData.ram + extraData.ram;
         const totalDisk = packageData.disk + extraData.disk;
         const totalCpu = packageData.cpu + extraData.cpu;
         const totalServers = packageData.servers + extraData.servers;
+        const totalPort = packageData.port + extraData.port;
+        const totalDatabase = packageData.database + extraData.database;
+        const totalBackup = packageData.backup + extraData.backup;
+        const totalAllocation = packageData.allocation + extraData.allocation;
         
-        // Available resources
         const availableRam = totalRam - ram;
         const availableDisk = totalDisk - disk;
         const availableCpu = totalCpu - cpu;
         const availableServers = totalServers - servers;
+        const availablePort = totalPort - port;
+        const availableDatabase = totalDatabase - database;
+        const availableBackup = totalBackup - backup;
+        const availableAllocation = totalAllocation - allocation;
+        
+        // Ensure minimum values for totals to prevent division by zero
+        const minTotalRam = Math.max(1, totalRam);
+        const minTotalDisk = Math.max(1, totalDisk);
+        const minTotalCpu = Math.max(1, totalCpu);
+        const minTotalServers = Math.max(1, totalServers);
+        const minTotalPort = Math.max(1, totalPort);
+        const minTotalDatabase = Math.max(1, totalDatabase);
+        const minTotalBackup = Math.max(1, totalBackup);
+        const minTotalAllocation = Math.max(1, totalAllocation);
         
         // Calculate progress percentages
-        const ramWidth = totalRam > 0 ? Math.min(100, Math.round((ram / totalRam) * 100)) : 0;
-        const diskWidth = totalDisk > 0 ? Math.min(100, Math.round((disk / totalDisk) * 100)) : 0;
-        const cpuWidth = totalCpu > 0 ? Math.min(100, Math.round((cpu / totalCpu) * 100)) : 0;
-        const serversWidth = totalServers > 0 ? Math.min(100, Math.round((servers / totalServers) * 100)) : 0;
+        const ramWidth = Math.min(100, Math.max(0, (ram / minTotalRam) * 100));
+        const diskWidth = Math.min(100, Math.max(0, (disk / minTotalDisk) * 100));
+        const cpuWidth = Math.min(100, Math.max(0, (cpu / minTotalCpu) * 100));
+        const serversWidth = Math.min(100, Math.max(0, (servers / minTotalServers) * 100));
+        const portWidth = Math.min(100, Math.max(0, (port / minTotalPort) * 100));
+        const databaseWidth = Math.min(100, Math.max(0, (database / minTotalDatabase) * 100));
+        const backupWidth = Math.min(100, Math.max(0, (backup / minTotalBackup) * 100));
+        const allocationWidth = Math.min(100, Math.max(0, (allocation / minTotalAllocation) * 100));
     %>
 
     <!-- Notification Toast Container -->
@@ -373,12 +492,12 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
     <!-- Include Header Component -->
     <%- include('./components/header', { userData: userData, settings: settings, currentPage: currentPage }) %>
 
-    <div class="flex h-screen pt-16">
+    <div class="flex flex-col min-h-screen pt-16">
         <!-- Include Sidebar Component -->
         <%- include('./components/sidebar', { userData: userData, settings: settings, currentPage: currentPage }) %>
 
         <!-- Main Content -->
-        <div class="p-4 sm:ml-64 pt-5 w-full main-content">
+        <div class="p-4 sm:ml-64 pt-5 pb-24 flex-grow main-content">
             <div class="p-4">
                 <!-- Welcome Message -->
                 <div class="mb-8 glass-card p-6 rounded-xl animate-fade-in">
@@ -389,85 +508,218 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
                 <!-- Resource Stats -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-slide-up" style="animation-delay: 0.1s;">
                     <!-- RAM Card -->
-                    <div class="gradient-border">
+                    <div class="resource-card gradient-border">
                         <div class="stat-card h-full bg-dark-card rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 rounded-lg bg-indigo-500/20 flex items-center justify-center mr-3">
-                                        <i class="fas fa-memory text-indigo-400 text-xl"></i>
+                                    <div class="resource-icon w-12 h-12 rounded-lg bg-primary-500/20 flex items-center justify-center mr-3">
+                                        <i class="fas fa-memory text-primary-400 text-xl"></i>
                                     </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-semibold text-white">Available RAM</h3>
+                                    <div>
+                                        <h3 class="text-lg font-medium">RAM</h3>
                                         <p class="text-gray-400 text-sm">Memory Resources</p>
                                     </div>
                                 </div>
-                                <span class="text-xl font-bold text-white"><%= availableRam %> <span class="text-gray-400 text-sm">/ <%= totalRam %> MB</span></span>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold"><%= availableRam %></span>
+                                    <span class="text-gray-400 text-sm">/ <%= totalRam %> MB</span>
+                                </div>
                             </div>
-                            <div class="progress-bar">
-                                <div class="progress-bar-fill ram" style="width: <%= ramWidth %>%"></div>
+                            <div class="resource-progress">
+                                <div class="resource-progress-bar ram" style="width: <%= ramWidth %>%"></div>
+                            </div>
+                            <div class="resource-stats flex justify-between text-sm text-gray-400 mt-2">
+                                <span><%= ram %> MB used</span>
+                                <span><%= availableRam %> MB free</span>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Disk Card -->
-                    <div class="gradient-border">
+                    <div class="resource-card gradient-border">
                         <div class="stat-card h-full bg-dark-card rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mr-3">
+                                    <div class="resource-icon w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mr-3">
                                         <i class="fas fa-hdd text-green-400 text-xl"></i>
                                     </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-semibold text-white">Available Disk</h3>
-                                        <p class="text-gray-400 text-sm">Storage Resources</p>
+                                    <div>
+                                        <h3 class="text-lg font-medium">Disk</h3>
+                                        <p class="text-gray-400 text-sm">Storage Usage</p>
                                     </div>
                                 </div>
-                                <span class="text-xl font-bold text-white"><%= availableDisk %> <span class="text-gray-400 text-sm">/ <%= totalDisk %> MB</span></span>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold"><%= Math.round((disk / totalDisk) * 100) %>%</span>
+                                </div>
                             </div>
-                            <div class="progress-bar">
-                                <div class="progress-bar-fill disk" style="width: <%= diskWidth %>%"></div>
+                            <div class="resource-progress">
+                                <div class="resource-progress-bar disk" style="width: <%= Math.round((disk / totalDisk) * 100) %>%"></div>
+                            </div>
+                            <div class="resource-stats">
+                                <span><%= disk %> MB used</span>
+                                <span><%= totalDisk %> MB total</span>
                             </div>
                         </div>
                     </div>
                     
                     <!-- CPU Card -->
-                    <div class="gradient-border">
+                    <div class="resource-card gradient-border">
                         <div class="stat-card h-full bg-dark-card rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center mr-3">
+                                    <div class="resource-icon w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center mr-3">
                                         <i class="fas fa-microchip text-amber-400 text-xl"></i>
                                     </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-semibold text-white">Available CPU</h3>
-                                        <p class="text-gray-400 text-sm">Processor Resources</p>
+                                    <div>
+                                        <h3 class="text-lg font-medium">CPU</h3>
+                                        <p class="text-gray-400 text-sm">Processor Usage</p>
                                     </div>
                                 </div>
-                                <span class="text-xl font-bold text-white"><%= availableCpu %> <span class="text-gray-400 text-sm">/ <%= totalCpu %>%</span></span>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold"><%= Math.round((cpu / totalCpu) * 100) %>%</span>
+                                </div>
                             </div>
-                            <div class="progress-bar">
-                                <div class="progress-bar-fill cpu" style="width: <%= cpuWidth %>%"></div>
+                            <div class="resource-progress">
+                                <div class="resource-progress-bar cpu" style="width: <%= Math.round((cpu / totalCpu) * 100) %>%"></div>
+                            </div>
+                            <div class="resource-stats">
+                                <span><%= cpu %>% used</span>
+                                <span><%= totalCpu %>% total</span>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Servers Card -->
-                    <div class="gradient-border">
+                    <div class="resource-card gradient-border">
                         <div class="stat-card h-full bg-dark-card rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3">
+                                    <div class="resource-icon w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3">
                                         <i class="fas fa-server text-purple-400 text-xl"></i>
                                     </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-semibold text-white">Available Servers</h3>
-                                        <p class="text-gray-400 text-sm">Server Slots</p>
+                                    <div>
+                                        <h3 class="text-lg font-medium">Servers</h3>
+                                        <p class="text-gray-400 text-sm">Server Usage</p>
                                     </div>
                                 </div>
-                                <span class="text-xl font-bold text-white"><%= availableServers %> <span class="text-gray-400 text-sm">/ <%= totalServers %></span></span>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold"><%= Math.round((servers / totalServers) * 100) %>%</span>
+                                </div>
                             </div>
-                            <div class="progress-bar">
-                                <div class="progress-bar-fill servers" style="width: <%= serversWidth %>%"></div>
+                            <div class="resource-progress">
+                                <div class="resource-progress-bar servers" style="width: <%= Math.round((servers / totalServers) * 100) %>%"></div>
+                            </div>
+                            <div class="resource-stats">
+                                <span><%= servers %> used</span>
+                                <span><%= totalServers %> total</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Port Card -->
+                    <div class="resource-card gradient-border">
+                        <div class="stat-card h-full bg-dark-card rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="resource-icon w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center mr-3">
+                                        <i class="fas fa-plug text-blue-400 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-medium">Ports</h3>
+                                        <p class="text-gray-400 text-sm">Connection Points</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold"><%= totalPort > 0 ? Math.round((port / totalPort) * 100) : 0 %>%</span>
+                                </div>
+                            </div>
+                            <div class="resource-progress">
+                                <div class="resource-progress-bar port" style="width: <%= portWidth %>%"></div>
+                            </div>
+                            <div class="resource-stats">
+                                <span><%= port %> used</span>
+                                <span><%= totalPort %> total</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Database Card -->
+                    <div class="resource-card gradient-border">
+                        <div class="stat-card h-full bg-dark-card rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="resource-icon w-12 h-12 rounded-lg bg-teal-500/20 flex items-center justify-center mr-3">
+                                        <i class="fas fa-database text-teal-400 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-medium">Databases</h3>
+                                        <p class="text-gray-400 text-sm">Data Storage</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold"><%= totalDatabase > 0 ? Math.round((database / totalDatabase) * 100) : 0 %>%</span>
+                                </div>
+                            </div>
+                            <div class="resource-progress">
+                                <div class="resource-progress-bar database" style="width: <%= databaseWidth %>%"></div>
+                            </div>
+                            <div class="resource-stats">
+                                <span><%= database %> used</span>
+                                <span><%= totalDatabase %> total</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Backup Card -->
+                    <div class="resource-card gradient-border">
+                        <div class="stat-card h-full bg-dark-card rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="resource-icon w-12 h-12 rounded-lg bg-red-500/20 flex items-center justify-center mr-3">
+                                        <i class="fas fa-shield-alt text-red-400 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-medium">Backups</h3>
+                                        <p class="text-gray-400 text-sm">Data Protection</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold"><%= totalBackup > 0 ? Math.round((backup / totalBackup) * 100) : 0 %>%</span>
+                                </div>
+                            </div>
+                            <div class="resource-progress">
+                                <div class="resource-progress-bar backup" style="width: <%= backupWidth %>%"></div>
+                            </div>
+                            <div class="resource-stats">
+                                <span><%= backup %> used</span>
+                                <span><%= totalBackup %> total</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Allocation Card -->
+                    <div class="resource-card gradient-border">
+                        <div class="stat-card h-full bg-dark-card rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="resource-icon w-12 h-12 rounded-lg bg-orange-500/20 flex items-center justify-center mr-3">
+                                        <i class="fas fa-network-wired text-orange-400 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-medium">Allocations</h3>
+                                        <p class="text-gray-400 text-sm">IP Addresses</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold"><%= totalAllocation > 0 ? Math.round((allocation / totalAllocation) * 100) : 0 %>%</span>
+                                </div>
+                            </div>
+                            <div class="resource-progress">
+                                <div class="resource-progress-bar allocation" style="width: <%= allocationWidth %>%"></div>
+                            </div>
+                            <div class="resource-stats">
+                                <span><%= allocation %> used</span>
+                                <span><%= totalAllocation %> total</span>
                             </div>
                         </div>
                     </div>

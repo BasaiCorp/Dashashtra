@@ -67,6 +67,34 @@ router.get('/api/store/resources', checkAuth, async (req, res) => {
                 description: "Create an additional server to host more applications.",
                 amount: 1,
                 unit: "slot"
+            },
+            port: { 
+                cost: (storeSettings.port && storeSettings.port.cost) || 150,
+                name: "Port Package",
+                description: "Add an additional port to your server for more connection options.",
+                amount: 1,
+                unit: "port"
+            },
+            database: { 
+                cost: (storeSettings.database && storeSettings.database.cost) || 300,
+                name: "Database Package",
+                description: "Add a database to your server for data storage and management.",
+                amount: 1,
+                unit: "database"
+            },
+            backup: { 
+                cost: (storeSettings.backup && storeSettings.backup.cost) || 250,
+                name: "Backup Package",
+                description: "Increase your server's backup limit for better data protection.",
+                amount: 1,
+                unit: "backup"
+            },
+            allocation: { 
+                cost: (storeSettings.allocation && storeSettings.allocation.cost) || 200,
+                name: "Allocation Package",
+                description: "Add an additional IP allocation to your server.",
+                amount: 1,
+                unit: "allocation"
             }
         };
         
@@ -115,7 +143,11 @@ router.post('/api/store/purchase', checkAuth, async (req, res) => {
             ram: { amount: 1024, unit: 'MB' },     // 1024 MB per RAM package
             disk: { amount: 2048, unit: 'MB' },    // 2048 MB per disk package
             cpu: { amount: 100, unit: '%' },       // 100% per CPU package
-            servers: { amount: 1, unit: 'slot' }   // 1 server slot per package
+            servers: { amount: 1, unit: 'slot' },  // 1 server slot per package
+            port: { amount: 1, unit: 'port' },     // 1 port per package
+            database: { amount: 1, unit: 'db' },   // 1 database per package
+            backup: { amount: 1, unit: 'backup' }, // 1 backup slot per package
+            allocation: { amount: 1, unit: 'ip' }  // 1 IP allocation per package
         };
         
         // Validate resource type
@@ -155,7 +187,11 @@ router.post('/api/store/purchase', checkAuth, async (req, res) => {
             ram: 0,
             disk: 0,
             cpu: 0,
-            servers: 0
+            servers: 0,
+            port: 0,
+            database: 0,
+            backup: 0,
+            allocation: 0
         };
         
         // Set resource amount based on the resource definitions

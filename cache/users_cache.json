@@ -3188,7 +3188,7 @@
       "root_admin": false,
       "2fa": false,
       "created_at": "2025-04-28T15:16:50+00:00",
-      "updated_at": "2025-05-04T12:35:20+00:00",
+      "updated_at": "2025-05-07T07:33:31+00:00",
       "relationships": {
         "servers": {
           "object": "list",
@@ -5732,6 +5732,79 @@
         "servers": {
           "object": "list",
           "data": []
+        }
+      }
+    }
+  },
+  {
+    "object": "user",
+    "attributes": {
+      "id": 143,
+      "external_id": null,
+      "uuid": "76c78a24-7ff5-4a6c-a678-2d31443499c9",
+      "username": "lickweed",
+      "email": "vinayakyadav.business@gmail.com",
+      "first_name": "Lick",
+      "last_name": "Weed",
+      "language": "en",
+      "root_admin": false,
+      "2fa": false,
+      "created_at": "2025-05-07T07:42:13+00:00",
+      "updated_at": "2025-05-07T07:42:13+00:00",
+      "relationships": {
+        "servers": {
+          "object": "list",
+          "data": [
+            {
+              "object": "server",
+              "attributes": {
+                "id": 185,
+                "external_id": null,
+                "uuid": "c7702b0d-2ad4-4894-9cda-b1ab12cf2e69",
+                "identifier": "c7702b0d",
+                "name": "Redstone plan [ lickweed ]",
+                "description": "[ renew date - 7 June ]",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 6000,
+                  "swap": 0,
+                  "disk": 30000,
+                  "io": 500,
+                  "cpu": 150,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 3,
+                  "allocations": 3,
+                  "backups": 3
+                },
+                "user": 143,
+                "node": 9,
+                "allocation": 3710,
+                "nest": 1,
+                "egg": 1,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "IN",
+                    "P_SERVER_UUID": "c7702b0d-2ad4-4894-9cda-b1ab12cf2e69",
+                    "P_SERVER_ALLOCATION_LIMIT": 3
+                  }
+                },
+                "updated_at": "2025-05-07T07:43:41+00:00",
+                "created_at": "2025-05-07T07:43:30+00:00"
+              }
+            }
+          ]
         }
       }
     }
