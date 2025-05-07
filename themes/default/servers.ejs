@@ -753,10 +753,10 @@ const pageTitle = 'My Servers - ' + (typeof extra !== 'undefined' && extra && ex
                                                 </div>
                                             </div>
                                             <div class="flex space-x-2">
-                                                <a href="<%= settings.pterodactyl.domain %>/server/<%= server.attributes.identifier %>" target="_blank" class="p-2 bg-dark-lighter rounded-lg text-gray-400 hover:text-white transition-colors duration-200">
+                                                <a href="<%= settings.pterodactyl.domain %>/server/<%= server.attributes.identifier %>" target="_blank" class="p-2 w-10 h-10 flex justify-center items-center rounded-lg text-gray-400 hover:text-white transition-colors duration-200 resource-card bg-dark-card">
                                                     <i class="fas fa-external-link-alt"></i>
                                                 </a>
-                                                <button onclick="deleteServer('<%= server.attributes.identifier %>')" class="p-2 bg-dark-lighter rounded-lg text-red-400 hover:text-red-300 transition-colors duration-200">
+                                                <button onclick="deleteServer('<%= server.attributes.identifier %>')" class="p-2 w-10 h-10 rounded-lg text-red-400 hover:text-red-300 transition-colors duration-200 resource-card bg-dark-card">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </div>
