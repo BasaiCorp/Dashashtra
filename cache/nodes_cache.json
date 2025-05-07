@@ -316,7 +316,7 @@
                 "external_id": null,
                 "uuid": "552cd92e-cb52-4de1-bde9-7ee12f1dbc97",
                 "identifier": "552cd92e",
-                "name": "Atris SMP",
+                "name": "Yt server [ it's glint ]",
                 "description": "",
                 "status": null,
                 "suspended": false,
@@ -354,7 +354,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 2
                   }
                 },
-                "updated_at": "2025-05-05T16:14:35+00:00",
+                "updated_at": "2025-05-06T12:27:58+00:00",
                 "created_at": "2025-05-03T11:25:08+00:00"
               }
             },
@@ -12335,7 +12335,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 10
                   }
                 },
-                "updated_at": "2025-05-05T05:19:06+00:00",
+                "updated_at": "2025-05-07T06:16:13+00:00",
                 "created_at": "2025-04-30T16:36:59+00:00"
               }
             },
@@ -12346,8 +12346,8 @@
                 "external_id": null,
                 "uuid": "b063efbb-8bd5-4d85-8242-33969bb4b828",
                 "identifier": "b063efbb",
-                "name": "Invite Plan [ extrapresents ]",
-                "description": "renew date - 30 may 2025",
+                "name": "Invite Plan [ ExtraPresents ]",
+                "description": "renew date - 30 may 2025 | This server has been purchased by ExtraPresents",
                 "status": null,
                 "suspended": false,
                 "limits": {
@@ -12384,7 +12384,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 0
                   }
                 },
-                "updated_at": "2025-04-30T19:42:07+00:00",
+                "updated_at": "2025-05-07T05:28:17+00:00",
                 "created_at": "2025-04-30T17:38:37+00:00"
               }
             },
@@ -12567,7 +12567,7 @@
                 "egg": 1,
                 "container": {
                   "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
-                  "image": "ghcr.io/pterodactyl/yolks:java_17",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
                   "installed": 1,
                   "environment": {
                     "MINECRAFT_VERSION": "latest",
@@ -12580,7 +12580,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-05-03T16:18:06+00:00",
+                "updated_at": "2025-05-06T13:49:44+00:00",
                 "created_at": "2025-05-01T18:36:25+00:00"
               }
             },
@@ -12857,8 +12857,8 @@
       "created_at": "2025-05-01T10:49:50+00:00",
       "updated_at": "2025-05-03T12:08:11+00:00",
       "allocated_resources": {
-        "memory": 129884,
-        "disk": 386812
+        "memory": 131932,
+        "disk": 390908
       },
       "relationships": {
         "allocations": {
@@ -13059,7 +13059,7 @@
                 "alias": "fr1.sriyannodes.cloud",
                 "port": 25583,
                 "notes": null,
-                "assigned": true
+                "assigned": false
               }
             },
             {
@@ -21815,7 +21815,7 @@
                 "alias": "fr1.sriyannodes.cloud",
                 "port": 26379,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -22452,8 +22452,8 @@
                 "ip": "0.0.0.0",
                 "alias": "fr1.sriyannodes.cloud",
                 "port": 26437,
-                "notes": null,
-                "assigned": false
+                "notes": "fr1.sriyannodes.cloud",
+                "assigned": true
               }
             },
             {
@@ -23181,7 +23181,7 @@
                 },
                 "user": 3,
                 "node": 10,
-                "allocation": 5652,
+                "allocation": 6506,
                 "nest": 1,
                 "egg": 1,
                 "container": {
@@ -23199,7 +23199,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 4
                   }
                 },
-                "updated_at": "2025-05-04T06:57:10+00:00",
+                "updated_at": "2025-05-06T11:36:22+00:00",
                 "created_at": "2025-04-12T09:12:24+00:00"
               }
             },
@@ -24179,7 +24179,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 2
                   }
                 },
-                "updated_at": "2025-05-04T07:12:59+00:00",
+                "updated_at": "2025-05-07T03:43:13+00:00",
                 "created_at": "2025-05-04T07:11:12+00:00"
               }
             },
@@ -24292,6 +24292,55 @@
                 "updated_at": "2025-05-06T08:00:09+00:00",
                 "created_at": "2025-05-06T07:59:25+00:00"
               }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 183,
+                "external_id": null,
+                "uuid": "c98a6a39-537d-46b7-87b3-e55b3954806d",
+                "identifier": "c98a6a39",
+                "name": "ForzaMC",
+                "description": "",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 2048,
+                  "swap": -1,
+                  "disk": 4096,
+                  "io": 500,
+                  "cpu": 100,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 4,
+                  "allocations": 0,
+                  "backups": 4
+                },
+                "user": 141,
+                "node": 10,
+                "allocation": 6448,
+                "nest": 1,
+                "egg": 1,
+                "container": {
+                  "startup_command": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "1.21",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "FRANCE",
+                    "P_SERVER_UUID": "c98a6a39-537d-46b7-87b3-e55b3954806d",
+                    "P_SERVER_ALLOCATION_LIMIT": 0
+                  }
+                },
+                "updated_at": "2025-05-07T02:02:29+00:00",
+                "created_at": "2025-05-07T01:57:02+00:00"
+              }
             }
           ]
         }
@@ -24322,8 +24371,8 @@
       "created_at": "2025-05-05T11:38:39+00:00",
       "updated_at": "2025-05-05T11:38:39+00:00",
       "allocated_resources": {
-        "memory": 51252,
-        "disk": 223488
+        "memory": 57252,
+        "disk": 248488
       },
       "relationships": {
         "allocations": {
@@ -24381,7 +24430,7 @@
                 "alias": "in2.sriyannodes.cloud",
                 "port": 25570,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -24392,7 +24441,7 @@
                 "alias": "in2.sriyannodes.cloud",
                 "port": 25571,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -27384,7 +27433,7 @@
                 "alias": "in2.sriyannodes.cloud",
                 "port": 25843,
                 "notes": null,
-                "assigned": false
+                "assigned": true
               }
             },
             {
@@ -35428,7 +35477,7 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-05-05T12:47:07+00:00",
+                "updated_at": "2025-05-06T17:15:23+00:00",
                 "created_at": "2025-05-02T14:05:28+00:00"
               }
             },
@@ -35537,7 +35586,7 @@
                 "external_id": null,
                 "uuid": "f8996c31-fc60-4897-8c2c-cfcb032a5745",
                 "identifier": "f8996c31",
-                "name": "JAYDEEP_NETWORK",
+                "name": "Diamond plan [ Harmeet ]",
                 "description": "Renew date - 6 june",
                 "status": null,
                 "suspended": false,
@@ -35575,8 +35624,106 @@
                     "P_SERVER_ALLOCATION_LIMIT": 5
                   }
                 },
-                "updated_at": "2025-05-06T10:02:50+00:00",
+                "updated_at": "2025-05-06T18:00:51+00:00",
                 "created_at": "2025-05-06T09:50:27+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 182,
+                "external_id": null,
+                "uuid": "dd15f2c9-c0db-4ad8-a89b-916026e3f003",
+                "identifier": "dd15f2c9",
+                "name": "Coal plan [ krish22 ]",
+                "description": "Renew date - 6 june 2025",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 2000,
+                  "swap": 0,
+                  "disk": 10000,
+                  "io": 500,
+                  "cpu": 100,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 2,
+                  "allocations": 2,
+                  "backups": 2
+                },
+                "user": 140,
+                "node": 11,
+                "allocation": 6574,
+                "nest": 1,
+                "egg": 1,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "IN",
+                    "P_SERVER_UUID": "dd15f2c9-c0db-4ad8-a89b-916026e3f003",
+                    "P_SERVER_ALLOCATION_LIMIT": 2
+                  }
+                },
+                "updated_at": "2025-05-06T15:34:29+00:00",
+                "created_at": "2025-05-06T15:13:38+00:00"
+              }
+            },
+            {
+              "object": "server",
+              "attributes": {
+                "id": 184,
+                "external_id": null,
+                "uuid": "2b3e762f-4597-46df-947f-376772122f50",
+                "identifier": "2b3e762f",
+                "name": "Custom Plans [ ExtraPresents ]",
+                "description": "Renew Date - 7 june 2025 | Proxy server of bulletmc",
+                "status": null,
+                "suspended": false,
+                "limits": {
+                  "memory": 4000,
+                  "swap": 0,
+                  "disk": 15000,
+                  "io": 500,
+                  "cpu": 150,
+                  "threads": null,
+                  "oom_disabled": true
+                },
+                "feature_limits": {
+                  "databases": 3,
+                  "allocations": 3,
+                  "backups": 3
+                },
+                "user": 103,
+                "node": 11,
+                "allocation": 6575,
+                "nest": 1,
+                "egg": 1,
+                "container": {
+                  "startup_command": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                  "image": "ghcr.io/pterodactyl/yolks:java_21",
+                  "installed": 1,
+                  "environment": {
+                    "MINECRAFT_VERSION": "latest",
+                    "SERVER_JARFILE": "server.jar",
+                    "DL_PATH": "",
+                    "BUILD_NUMBER": "latest",
+                    "STARTUP": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
+                    "P_SERVER_LOCATION": "IN",
+                    "P_SERVER_UUID": "2b3e762f-4597-46df-947f-376772122f50",
+                    "P_SERVER_ALLOCATION_LIMIT": 3
+                  }
+                },
+                "updated_at": "2025-05-07T07:28:54+00:00",
+                "created_at": "2025-05-07T05:58:02+00:00"
               }
             }
           ]

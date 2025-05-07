@@ -580,6 +580,205 @@ const pageTitle = 'Pricing Plans - ' + (typeof extra !== 'undefined' && extra &&
           </div>
         </div>
 
+        <!-- Premium Plans Section -->
+        <div id="premium-plans" class="plan-section hidden">
+          <div class="text-center mb-12">
+            <div class="flex items-center justify-center gap-3 mb-4">
+              <i class="fas fa-cube text-yellow-400 animate-pulse text-2xl"></i>
+              <h2 class="text-3xl font-bold">Minecraft Premium Plans</h2>
+              <i class="fas fa-cube text-yellow-400 animate-pulse text-2xl"></i>
+            </div>
+            <p class="text-xl text-gray-400">High-performance Minecraft hosting solutions</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <!-- Basic Plan -->
+            <div class="plan-card bg-dark-light rounded-2xl p-6 border border-gray-800 hover:border-primary-500 transition-all">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold">Basic Plan</h3>
+                <i class="fas fa-seedling text-green-400"></i>
+              </div>
+              <div class="mb-6">
+                <div class="text-3xl font-bold mb-2">₹80 <span class="text-sm text-gray-400">/ month</span></div>
+              </div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center"><i class="fas fa-memory w-5 text-primary-500"></i><span>2GB RAM</span></li>
+                <li class="flex items-center"><i class="fas fa-microchip w-5 text-primary-500"></i><span>50% CPU</span></li>
+                <li class="flex items-center"><i class="fas fa-hdd w-5 text-primary-500"></i><span>10GB SSD</span></li>
+                <li class="flex items-center"><i class="fas fa-database w-5 text-primary-500"></i><span>2 MySQL Databases</span></li>
+                <li class="flex items-center"><i class="fas fa-save w-5 text-primary-500"></i><span>2 Backups</span></li>
+                <li class="flex items-center"><i class="fas fa-network-wired w-5 text-primary-500"></i><span>2 Dedicated Ports</span></li>
+                <li class="flex items-center"><i class="fas fa-shield-alt w-5 text-primary-500"></i><span>DDoS Protection</span></li>
+              </ul>
+              <a href="/register" class="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 rounded-lg text-center transition-colors">Get Started</a>
+            </div>
+
+            <!-- Premium Plan -->
+            <div class="plan-card bg-dark-light rounded-2xl p-6 border border-gray-800 hover:border-primary-500 transition-all">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold">Premium Plan</h3>
+                <i class="fas fa-gem text-blue-400"></i>
+              </div>
+              <div class="mb-6">
+                <div class="text-3xl font-bold mb-2">₹150 <span class="text-sm text-gray-400">/ month</span></div>
+              </div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center"><i class="fas fa-memory w-5 text-primary-500"></i><span>4GB RAM</span></li>
+                <li class="flex items-center"><i class="fas fa-microchip w-5 text-primary-500"></i><span>100% CPU</span></li>
+                <li class="flex items-center"><i class="fas fa-hdd w-5 text-primary-500"></i><span>20GB SSD</span></li>
+                <li class="flex items-center"><i class="fas fa-database w-5 text-primary-500"></i><span>5 MySQL Databases</span></li>
+                <li class="flex items-center"><i class="fas fa-save w-5 text-primary-500"></i><span>5 Backups</span></li>
+                <li class="flex items-center"><i class="fas fa-network-wired w-5 text-primary-500"></i><span>5 Dedicated Ports</span></li>
+                <li class="flex items-center"><i class="fas fa-shield-alt w-5 text-primary-500"></i><span>DDoS Protection</span></li>
+              </ul>
+              <a href="/register" class="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 rounded-lg text-center transition-colors">Get Started</a>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="plan-card bg-dark-light rounded-2xl p-6 border border-gray-800 hover:border-primary-500 transition-all">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold">Pro Plan</h3>
+                <i class="fas fa-bolt text-yellow-400"></i>
+              </div>
+              <div class="mb-6">
+                <div class="text-3xl font-bold mb-2">₹450 <span class="text-sm text-gray-400">/ month</span></div>
+              </div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center"><i class="fas fa-memory w-5 text-primary-500"></i><span>8GB RAM</span></li>
+                <li class="flex items-center"><i class="fas fa-microchip w-5 text-primary-500"></i><span>200% CPU</span></li>
+                <li class="flex items-center"><i class="fas fa-hdd w-5 text-primary-500"></i><span>40GB SSD</span></li>
+                <li class="flex items-center"><i class="fas fa-database w-5 text-primary-500"></i><span>10 MySQL Databases</span></li>
+                <li class="flex items-center"><i class="fas fa-save w-5 text-primary-500"></i><span>10 Backups</span></li>
+                <li class="flex items-center"><i class="fas fa-network-wired w-5 text-primary-500"></i><span>10 Dedicated Ports</span></li>
+                <li class="flex items-center"><i class="fas fa-shield-alt w-5 text-primary-500"></i><span>DDoS Protection</span></li>
+              </ul>
+              <a href="/register" class="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 rounded-lg text-center transition-colors">Get Started</a>
+            </div>
+
+            <!-- Advanced Plan -->
+            <div class="plan-card bg-dark-light rounded-2xl p-6 border border-gray-800 hover:border-primary-500 transition-all">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold">Advanced Plan</h3>
+                <i class="fas fa-fire text-orange-400"></i>
+              </div>
+              <div class="mb-6">
+                <div class="text-3xl font-bold mb-2">₹650 <span class="text-sm text-gray-400">/ month</span></div>
+              </div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center"><i class="fas fa-memory w-5 text-primary-500"></i><span>12GB RAM</span></li>
+                <li class="flex items-center"><i class="fas fa-microchip w-5 text-primary-500"></i><span>300% CPU</span></li>
+                <li class="flex items-center"><i class="fas fa-hdd w-5 text-primary-500"></i><span>60GB SSD</span></li>
+                <li class="flex items-center"><i class="fas fa-database w-5 text-primary-500"></i><span>15 MySQL Databases</span></li>
+                <li class="flex items-center"><i class="fas fa-save w-5 text-primary-500"></i><span>15 Backups</span></li>
+                <li class="flex items-center"><i class="fas fa-network-wired w-5 text-primary-500"></i><span>15 Dedicated Ports</span></li>
+                <li class="flex items-center"><i class="fas fa-shield-alt w-5 text-primary-500"></i><span>DDoS Protection</span></li>
+              </ul>
+              <a href="/register" class="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 rounded-lg text-center transition-colors">Get Started</a>
+            </div>
+
+            <!-- Elite Plan -->
+            <div class="plan-card bg-dark-light rounded-2xl p-6 border border-gray-800 hover:border-primary-500 transition-all">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold">Elite Plan</h3>
+                <i class="fas fa-crown text-yellow-500"></i>
+              </div>
+              <div class="mb-6">
+                <div class="text-3xl font-bold mb-2">₹1,100 <span class="text-sm text-gray-400">/ month</span></div>
+              </div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center"><i class="fas fa-memory w-5 text-primary-500"></i><span>24GB RAM</span></li>
+                <li class="flex items-center"><i class="fas fa-microchip w-5 text-primary-500"></i><span>400% CPU</span></li>
+                <li class="flex items-center"><i class="fas fa-hdd w-5 text-primary-500"></i><span>80GB SSD</span></li>
+                <li class="flex items-center"><i class="fas fa-database w-5 text-primary-500"></i><span>20 MySQL Databases</span></li>
+                <li class="flex items-center"><i class="fas fa-save w-5 text-primary-500"></i><span>20 Backups</span></li>
+                <li class="flex items-center"><i class="fas fa-network-wired w-5 text-primary-500"></i><span>20 Dedicated Ports</span></li>
+                <li class="flex items-center"><i class="fas fa-shield-alt w-5 text-primary-500"></i><span>DDoS Protection</span></li>
+              </ul>
+              <a href="/register" class="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 rounded-lg text-center transition-colors">Get Started</a>
+            </div>
+
+            <!-- Infinity Plan -->
+            <div class="plan-card bg-dark-light rounded-2xl p-6 border border-gray-800 hover:border-primary-500 transition-all">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold">Infinity Plan</h3>
+                <i class="fas fa-star text-purple-500"></i>
+              </div>
+              <div class="mb-6">
+                <div class="text-3xl font-bold mb-2">₹2,200 <span class="text-sm text-gray-400">/ month</span></div>
+              </div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center"><i class="fas fa-memory w-5 text-primary-500"></i><span>RAM: <i class="fas fa-infinity"></i></span></li>
+                <li class="flex items-center"><i class="fas fa-microchip w-5 text-primary-500"></i><span>CPU: <i class="fas fa-infinity"></i></span></li>
+                <li class="flex items-center"><i class="fas fa-hdd w-5 text-primary-500"></i><span>Disk: <i class="fas fa-infinity"></i> SSD</span></li>
+                <li class="flex items-center"><i class="fas fa-database w-5 text-primary-500"></i><span>50 MySQL Databases</span></li>
+                <li class="flex items-center"><i class="fas fa-save w-5 text-primary-500"></i><span>50 Backups</span></li>
+                <li class="flex items-center"><i class="fas fa-network-wired w-5 text-primary-500"></i><span>50 Dedicated Ports</span></li>
+                <li class="flex items-center"><i class="fas fa-shield-alt w-5 text-primary-500"></i><span>DDoS Protection</span></li>
+              </ul>
+              <a href="/register" class="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 rounded-lg text-center transition-colors">Get Started</a>
+            </div>
+          </div>
+
+          <!-- Features Included -->
+          <div class="bg-dark-light rounded-2xl p-8 border border-gray-800">
+            <div class="text-center mb-8">
+              <div class="flex items-center justify-center gap-2 mb-4">
+                <i class="fas fa-rocket text-primary-500"></i>
+                <h3 class="text-2xl font-bold">Premium Plans Features</h3>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <div class="flex items-center gap-3">
+                <i class="fas fa-microchip text-primary-500"></i>
+                <p class="text-lg">Intel® Xeon® Gold 5412U Processor</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <i class="fas fa-chart-line text-primary-500"></i>
+                <p class="text-lg">99.99% uptime</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <i class="fas fa-server text-primary-500"></i>
+                <p class="text-lg">Hosted on home server so there won't be any lag or ping issue</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <i class="fas fa-network-wired text-primary-500"></i>
+                <p class="text-lg">Different node & panel from <a href="#" class="text-primary-500 hover:underline">#1355107161297915932</a></p>
+              </div>
+              <div class="flex items-center gap-3">
+                <i class="fas fa-upload text-primary-500"></i>
+                <p class="text-lg">Upload file size up to 500MB</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <i class="fas fa-th-large text-primary-500"></i>
+                <p class="text-lg">Premium panel which includes:</p>
+              </div>
+              <div class="pl-8 space-y-2">
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-circle text-cyan-500 text-xs"></i>
+                  <p class="text-lg">Plugin Installer</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-circle text-cyan-500 text-xs"></i>
+                  <p class="text-lg">Subdomain Manager</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-circle text-cyan-500 text-xs"></i>
+                  <p class="text-lg">Server Properties Editor</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-circle text-cyan-500 text-xs"></i>
+                  <p class="text-lg">Schedules</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <i class="fas fa-gift text-primary-500"></i>
+                <p class="text-lg">Buying any plans above ₹300, with that you'll get a free premium plugin</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- VPS Plans Section -->
         <div id="vps-plans" class="plan-section hidden">
           <div class="text-center mb-12">
@@ -772,210 +971,106 @@ const pageTitle = 'Pricing Plans - ' + (typeof extra !== 'undefined' && extra &&
 
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Survival SMP -->
-            <div class="plan-card bg-dark-light rounded-2xl p-8 border border-gray-800 hover:border-primary-500 transition-all">
-              <div class="flex items-center gap-3 mb-6">
-                <i class="fas fa-book text-blue-400 text-xl"></i>
-                <h3 class="text-2xl font-bold">Survival SMP</h3>
+            <div class="plan-card bg-dark-light rounded-2xl p-6 border border-gray-800 hover:border-primary-500 transition-all">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold">Survival SMP</h3>
+                <i class="fas fa-tree text-green-500"></i>
               </div>
-              
               <div class="mb-6">
-                <div class="flex items-center gap-2 mb-4">
-                  <i class="fas fa-coins text-yellow-500"></i>
-                  <span class="text-xl">₹300 - ₹500</span>
-                </div>
-                <h4 class="text-lg font-semibold mb-3">Features:</h4>
-                <ul class="space-y-3">
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Rank system with perks and benefits</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Crates with exclusive rewards</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Kits for new players</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Lobby system for easy access</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Custom plugins for enhanced gameplay</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Regular updates and events</span>
-                  </li>
-                </ul>
+                <div class="text-3xl font-bold mb-2">₹300 - ₹500</div>
+                <div class="text-sm text-gray-400">Professional Development</div>
               </div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Rank system with perks</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Crates with rewards</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Kits for new players</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Lobby system</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Custom plugins</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Regular updates</span></li>
+              </ul>
+              <a href="https://discord.com/channels/1355107161033805834/1356960181438906428" class="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 rounded-lg text-center transition-colors">Contact Us</a>
             </div>
 
             <!-- Lifesteal SMP -->
-            <div class="plan-card bg-dark-light rounded-2xl p-8 border border-gray-800 hover:border-primary-500 transition-all">
-              <div class="flex items-center gap-3 mb-6">
-                <i class="fas fa-book text-blue-400 text-xl"></i>
-                <h3 class="text-2xl font-bold">Lifesteal SMP</h3>
+            <div class="plan-card bg-dark-light rounded-2xl p-6 border border-gray-800 hover:border-primary-500 transition-all">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold">Lifesteal SMP</h3>
+                <i class="fas fa-heart text-red-500"></i>
               </div>
-              
               <div class="mb-6">
-                <div class="flex items-center gap-2 mb-4">
-                  <i class="fas fa-coins text-yellow-500"></i>
-                  <span class="text-xl">₹400 - ₹800</span>
-                </div>
-                <h4 class="text-lg font-semibold mb-3">Features:</h4>
-                <ul class="space-y-3">
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Lifesteal mechanics for intense PvP combat</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Rank system with perks and benefits</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Crates with exclusive rewards</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Kits for new players</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Lobby system for easy access</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Custom plugins for enhanced gameplay</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Regular updates and events</span>
-                  </li>
-                </ul>
+                <div class="text-3xl font-bold mb-2">₹400 - ₹800</div>
+                <div class="text-sm text-gray-400">Professional Development</div>
               </div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Lifesteal PvP mechanics</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Rank system with perks</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Crates with rewards</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Kits for new players</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Lobby system</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Custom plugins</span></li>
+              </ul>
+              <a href="https://discord.com/channels/1355107161033805834/1356960181438906428" class="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 rounded-lg text-center transition-colors">Contact Us</a>
             </div>
 
             <!-- FFA Server -->
-            <div class="plan-card bg-dark-light rounded-2xl p-8 border border-gray-800 hover:border-primary-500 transition-all">
-              <div class="flex items-center gap-3 mb-6">
-                <i class="fas fa-book text-blue-400 text-xl"></i>
-                <h3 class="text-2xl font-bold">FFA Server</h3>
+            <div class="plan-card bg-dark-light rounded-2xl p-6 border border-gray-800 hover:border-primary-500 transition-all">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold">FFA Server</h3>
+                <i class="fas fa-crosshairs text-red-500"></i>
               </div>
-              
               <div class="mb-6">
-                <div class="flex items-center gap-2 mb-4">
-                  <i class="fas fa-coins text-yellow-500"></i>
-                  <span class="text-xl">₹350 - ₹700</span>
-                </div>
-                <h4 class="text-lg font-semibold mb-3">Features:</h4>
-                <ul class="space-y-3">
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>FFA game mode with instant respawn</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Rank system with perks and benefits</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Crates with exclusive rewards</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Kits for new players</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Lobby system for easy access</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Custom plugins for enhanced gameplay</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Regular updates and events</span>
-                  </li>
-                </ul>
+                <div class="text-3xl font-bold mb-2">₹350 - ₹700</div>
+                <div class="text-sm text-gray-400">Professional Development</div>
               </div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Multiple themed arenas</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Custom kits and abilities</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Leaderboard system</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Kill streak rewards</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Cosmetics and effects</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Custom plugins</span></li>
+              </ul>
+              <a href="https://discord.com/channels/1355107161033805834/1356960181438906428" class="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 rounded-lg text-center transition-colors">Contact Us</a>
             </div>
 
             <!-- Bedwars Server -->
-            <div class="plan-card bg-dark-light rounded-2xl p-8 border border-gray-800 hover:border-primary-500 transition-all">
-              <div class="flex items-center gap-3 mb-6">
-                <i class="fas fa-book text-blue-400 text-xl"></i>
-                <h3 class="text-2xl font-bold">Bedwars Server</h3>
+            <div class="plan-card bg-dark-light rounded-2xl p-6 border border-gray-800 hover:border-primary-500 transition-all">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold">Bedwars Server</h3>
+                <i class="fas fa-bed text-blue-500"></i>
               </div>
-              
               <div class="mb-6">
-                <div class="flex items-center gap-2 mb-4">
-                  <i class="fas fa-coins text-yellow-500"></i>
-                  <span class="text-xl">₹250 - ₹500</span>
-                </div>
-                <h4 class="text-lg font-semibold mb-3">Features:</h4>
-                <ul class="space-y-3">
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Bedwars game mode with team-based gameplay</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Rank system with perks and benefits</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Crates with exclusive rewards</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Kits for new players</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Lobby system for easy access</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Custom plugins for enhanced gameplay</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Regular updates and events</span>
-                  </li>
-                </ul>
+                <div class="text-3xl font-bold mb-2">₹250 - ₹500</div>
+                <div class="text-sm text-gray-400">Professional Development</div>
               </div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Team-based gameplay</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Rank system with perks</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Crates with rewards</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Kits for new players</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Lobby system</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Custom plugins</span></li>
+              </ul>
+              <a href="https://discord.com/channels/1355107161033805834/1356960181438906428" class="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 rounded-lg text-center transition-colors">Contact Us</a>
             </div>
 
             <!-- Proxy & Lobby -->
-            <div class="plan-card bg-dark-light rounded-2xl p-8 border border-gray-800 hover:border-primary-500 transition-all">
-              <div class="flex items-center gap-3 mb-6">
-                <i class="fas fa-book text-blue-400 text-xl"></i>
-                <h3 class="text-2xl font-bold">Proxy & Lobby</h3>
+            <div class="plan-card bg-dark-light rounded-2xl p-6 border border-gray-800 hover:border-primary-500 transition-all">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold">Proxy & Lobby</h3>
+                <i class="fas fa-network-wired text-blue-500"></i>
               </div>
-              
               <div class="mb-6">
-                <div class="flex items-center gap-2 mb-4">
-                  <i class="fas fa-coins text-yellow-500"></i>
-                  <span class="text-xl">₹100 - ₹200</span>
-                </div>
-                <p class="text-gray-400 mb-4">(add-on to any server plan)</p>
-                <h4 class="text-lg font-semibold mb-3">Features:</h4>
-                <ul class="space-y-3">
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Proxy system for seamless server switching</span>
-                  </li>
-                  <li class="flex items-center gap-2">
-                    <i class="fas fa-chevron-right text-primary-500"></i>
-                    <span>Customizable lobby with server selection and stats</span>
-                  </li>
-                </ul>
+                <div class="text-3xl font-bold mb-2">₹100 - ₹200</div>
+                <div class="text-sm text-gray-400">Add-on to any server plan</div>
               </div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Seamless server switching</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Customizable lobby</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Server selection menu</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Player stats display</span></li>
+              </ul>
+              <a href="https://discord.com/channels/1355107161033805834/1356960181438906428" class="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 rounded-lg text-center transition-colors">Contact Us</a>
             </div>
           </div>
 
@@ -994,11 +1089,124 @@ const pageTitle = 'Pricing Plans - ' + (typeof extra !== 'undefined' && extra &&
         <!-- Hardware Plans Section -->
         <div id="hardware-plans" class="plan-section hidden">
           <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold mb-4">Dedicated Hardware</h2>
-            <p class="text-gray-400">Physical servers with custom configurations</p>
+            <div class="flex items-center justify-center gap-3 mb-4">
+              <i class="fas fa-server text-primary-500 animate-pulse text-2xl"></i>
+              <h2 class="text-3xl font-bold">Dedicated Hardware</h2>
+              <i class="fas fa-server text-primary-500 animate-pulse text-2xl"></i>
+            </div>
+            <p class="text-xl text-gray-400">Enterprise-grade physical servers with custom configurations</p>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Plan cards will be added here -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <!-- Survival SMP -->
+            <div class="plan-card bg-dark-light rounded-2xl p-6 border border-gray-800 hover:border-primary-500 transition-all">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold">Survival SMP</h3>
+                <i class="fas fa-tree text-green-500"></i>
+              </div>
+              <div class="mb-6">
+                <div class="text-3xl font-bold mb-2">₹1,500 <span class="text-sm text-gray-400">starting from</span></div>
+                <div class="text-sm text-gray-400">Delivery: 3-5 days</div>
+              </div>
+              <ul class="space-y-3 mb-6">
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Custom world generation</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Economy system</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Land claiming</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Custom enchantments</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Player shops</span></li>
+                <li class="flex items-center"><i class="fas fa-check w-5 text-primary-500"></i><span>Discord integration</span></li>
+              </ul>
+              <a href="https://discord.com/channels/1355107161033805834/1356960181438906428" class="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 rounded-lg text-center transition-colors">Contact Us</a>
+            </div>
+
+            <!-- HP ProLiant DL380 G9 Server -->
+            <div class="plan-card bg-dark-light rounded-2xl p-8 border border-gray-800 hover:border-primary-500 transition-all">
+              <div class="flex items-center gap-3 mb-6">
+                <i class="fas fa-server text-blue-400 text-xl"></i>
+                <h3 class="text-2xl font-bold">HP ProLiant DL380 G9</h3>
+              </div>
+              
+              <div class="space-y-4 mb-8">
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-memory text-primary-500"></i>
+                  <span>128GB DDR4 RAM</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-microchip text-primary-500"></i>
+                  <span>2x Intel Xeon E5-2690 v4</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-cogs text-primary-500"></i>
+                  <span>28 cores/56 threads</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-hdd text-primary-500"></i>
+                  <span>2x 1.2TB SAS SSD + 4TB HDD</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-plug text-primary-500"></i>
+                  <span>Redundant 800W PSU</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-truck text-primary-500"></i>
+                  <span>All India delivery available!</span>
+                </div>
+              </div>
+
+              <div class="space-y-3 mb-6">
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-money-bill text-green-500"></i>
+                  <span class="text-xl">Price: ₹65,000 INR</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-tags text-primary-500"></i>
+                  <span>NEGOTIABLE</span>
+                </div>
+              </div>
+
+              <a href="/contact" class="block w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 rounded-lg text-center transition-colors text-lg">Contact Us</a>
+            </div>
+          </div>
+          
+          <!-- Hardware Benefits -->
+          <div class="bg-dark-light rounded-2xl p-8 border border-gray-800 mb-8">
+            <div class="text-center mb-8">
+              <div class="flex items-center justify-center gap-2 mb-4">
+                <i class="fas fa-check-circle text-primary-500"></i>
+                <h3 class="text-2xl font-bold">Hardware Benefits</h3>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-check text-primary-500"></i>
+                  <p class="text-lg">Enterprise-grade hardware for maximum reliability</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-check text-primary-500"></i>
+                  <p class="text-lg">Fully tested and verified components</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-check text-primary-500"></i>
+                  <p class="text-lg">Technical support and setup assistance</p>
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-check text-primary-500"></i>
+                  <p class="text-lg">Warranty and after-sales service</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-check text-primary-500"></i>
+                  <p class="text-lg">Custom configurations available on request</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <i class="fas fa-check text-primary-500"></i>
+                  <p class="text-lg">Nationwide shipping with secure packaging</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
