@@ -1,6 +1,6 @@
 {
   "name": "Dashashtra",
-  "version": "0.1.2",
+  "version": "1.2.37",
   "description": "A modern dashboard for Pterodactyl",
   "main": "index.js",
   "scripts": {
