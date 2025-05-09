@@ -1,4 +1,4 @@
-# Sriyan Nodes Dashboard
+# Dashashtra Dashboard
 
 A powerful and modern dashboard for managing server resources and hosting services. This proprietary dashboard allows users to efficiently manage and distribute resources across multiple servers on the Pterodactyl Panel, integrated with Discord OAuth2 for secure authentication.
 
@@ -13,9 +13,9 @@ A powerful and modern dashboard for managing server resources and hosting servic
 
 ## Proprietary Software
 
-This software is proprietary and confidential. All rights reserved © Sriyan Nodes.
+This software is proprietary and confidential. All rights reserved © Dashashtra.
 
-No part of this software may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of Sriyan Nodes.
+No part of this software may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of Dashashtra.
 
 ## Legal Notice
 
@@ -23,4 +23,4 @@ This software is protected by copyright law and international treaties. Unauthor
 
 ## Support
 
-For support inquiries, please contact the Sriyan Nodes support team.
+For support inquiries, please contact the Dashashtra support team.

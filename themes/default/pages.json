@@ -86,8 +86,8 @@
         "footerad": true,
         "faviconlink": "https://camo.githubusercontent.com/d2e9b4ddcf7618efa123961ae270f7eaa83362f8/68747470733a2f2f6d656469612e646973636f72646170702e6e65742f6174746163686d656e74732f3730363937303631373437313330333736312f3736383630363132323134373730383936382f707465726f64616374796c2d70616e656c2e706e67",
         "home": {
-            "name": "Sriyan Nodes",
-            "title": "Sriyan Nodes - Premium Game Server Hosting",
+            "name": "Dashashtra",
+            "title": "Dashashtra - Premium Game Server Hosting",
             "description": "Premium game server hosting with unbeatable performance, reliability, and support. Start your gaming journey today.",
             "buttontext": {
                 "loggedin": {
@@ -102,53 +102,53 @@
             }
         },
         "dashboard": {
-            "title": "Dashboard - Sriyan Nodes"
+            "title": "Dashboard - Dashashtra"
         },
         "servers": {
             "title": {
-                "list": "Servers - Sriyan Nodes",
-                "create": "Create Server - Sriyan Nodes",
-                "modify": "Modify Server - Sriyan Nodes"
+                "list": "Servers - Dashashtra",
+                "create": "Create Server - Dashashtra",
+                "modify": "Modify Server - Dashashtra"
             }
         },
         "login": {
-            "title": "Login - Sriyan Nodes"
+            "title": "Login - Dashashtra"
         },
         "register": {
-            "title": "Register - Sriyan Nodes"
+            "title": "Register - Dashashtra"
         },
         "admin": {
             "title": {
-                "default": "Admin - Sriyan Nodes",
+                "default": "Admin - Dashashtra",
                 "users": "Users Management - Admin",
                 "servers": "Servers Management - Admin",
-                "settings": "Admin Settings - Sriyan Nodes",
+                "settings": "Admin Settings - Dashashtra",
                 "redeem": "Redeem Codes - Admin"
             }
         },
         "store": {
-            "title": "Store - Sriyan Nodes"
+            "title": "Store - Dashashtra"
         },
         "arcio": {
-            "title": "AFK Page - Sriyan Nodes"
+            "title": "AFK Page - Dashashtra"
         },
         "redeem": {
-            "title": "Redeem - Sriyan Nodes"
+            "title": "Redeem - Dashashtra"
         },
         "error": {
-            "title": "Error - Sriyan Nodes"
+            "title": "Error - Dashashtra"
         },
         "maintenance": {
-            "title": "Maintenance - Sriyan Nodes"
+            "title": "Maintenance - Dashashtra"
         },
         "leaderboard": {
-            "title": "Leaderboard - Sriyan Nodes"
+            "title": "Leaderboard - Dashashtra"
         },
         "team": {
-            "title": "Team Sriyan - Sriyan Nodes"
+            "title": "Team Dash - Dashashtra"
         },
         "pricing": {
-            "title": "Pricing Plans - Sriyan Nodes"
+            "title": "Pricing Plans - Dashashtra"
         }
     }
 }

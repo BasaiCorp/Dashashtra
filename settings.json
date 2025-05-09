@@ -3,15 +3,15 @@
   "defaulttheme": "default",
   "auththeme": "custom",
   "website": {
-    "name": "Sriyan Nodes",
+    "name": "Dashashtra",
     "url": "http://localhost:3000",
     "port": 3000,
     "favicon": "https://cdn.discordapp.com/attachments/1234567890/1234567890/logo.png",
     "secret": "change this website session secret password, make sure to change this for your website's security"
   },
   "pterodactyl": {
-    "domain": "https://panel.sriyannodes.cloud",
-    "key": "ptla_c5cJRkS96OhmjcvrpemosakAVM7jPdn3mwW8UiE7zj0"
+    "domain": "https://panel.example.com",
+    "key": "api_key_here"
   },
   "database": "database.sqlite",
   "api": {
@@ -22,9 +22,9 @@
       },
       "bot": {
         "enabled": true,
-        "token": "MTM1MTAzOTU3OTM3Mjc4MTcxMA.Gr58UG.L9l6xOufNmdjQrA2jxORu0-0qKVrDArA1yxDTo",
+        "token": "bot_token_here",
         "guildId": "1338843953520443407",
-        "prefix": "fn!",
+        "prefix": "Dashashtra!",
         "joinguild": {
           "_comment": "The Discord bot must be in these servers and have invite permissions.",
           "enabled": false,
@@ -70,8 +70,8 @@
       "oauth2": {
         "_comment": "Go to https://discord.dev/ and create an application to set these up.",
         "id": "1351039579372781710",
-        "secret": "pcmnRi3Edk5ZHg6xO1wP4bqdIpWvjtHE",
-        "link": "https://client.sriyannodes.fun",
+        "secret": "bot secrect here",
+        "link": "https://client.example.com",
         "callbackpath": "/auth/discord/callback",
         "prompt": true,
         "ip": {
@@ -215,7 +215,7 @@
   "discord": {
     "client_id": "1351039579372781710",
     "client_secret": "pcmnRi3Edk5ZHg6xO1wP4bqdIpWvjtHE",
-    "callback_url": "https://client.sriyannodes.fun/auth/discord/callback",
+    "callback_url": "https://client.Dashashtra.fun/auth/discord/callback",
     "guild_id": "1338843953520443407"
   }
 }

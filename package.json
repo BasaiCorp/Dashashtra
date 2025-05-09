@@ -1,7 +1,7 @@
 {
-  "name": "sriyannodes",
+  "name": "Dashashtra",
   "version": "0.1.2",
-  "description": "A modern Discord bot dashboard for Pterodactyl",
+  "description": "A modern dashboard for Pterodactyl",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

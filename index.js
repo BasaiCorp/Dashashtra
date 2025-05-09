@@ -21,15 +21,15 @@ const defaultthemesettings = {
   mustbeadmin: [],
   variables: {
     home: {
-      name: "Sriyan Nodes",
-      title: "Sriyan Nodes - Premium Game Server Hosting",
+      name: "Dashashtra",
+      title: "Dashashtra - Premium Game Server Hosting",
       description: "Premium game server hosting with unbeatable performance, reliability, and support. Start your gaming journey today."
     },
     store: {
-      title: "Store - Sriyan Nodes"
+      title: "Store - Dashashtra"
     },
     error: {
-      title: "Error - Sriyan Nodes"
+      title: "Error - Dashashtra"
     }
   }
 };
