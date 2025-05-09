@@ -2,7 +2,8 @@
 
 **Dashashtra** is a powerful, secure, and modern dashboard for managing server resources and hosting services. It is designed for hosting providers, developers, and server administrators who demand performance, simplicity, and full control.
 
-Developed and maintained by **Prathmesh**  
+Developed and maintained by **Prathmesh** 
+Main Team is **Team Umbraix** 
 A product of **Basai Corporation** | Proudly Indian
 
 ---
